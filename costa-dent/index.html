@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costa Dent | Clínica Dental en Melipilla</title>
+<meta name="description" content="Clínica dental Costa Dent en el Strip Center de Melipilla: limpieza, blanqueamiento, ortodoncia, implantes, endodoncia y urgencias dentales. Agenda tu hora online.">
+<!-- Maqueta de propuesta: no indexar hasta que el cliente la apruebe -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Costa Dent · Clínica Dental Melipilla">
+<meta property="og:description" content="Limpieza, blanqueamiento, ortodoncia e implantes en Melipilla.">
+<meta name="theme-color" content="#0369a1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230369a1'/%3E%3Cpath d='M22 14c-6 0-9 4-9 9 0 6 3 9 4 14 1 6 2 13 5 13s3-8 10-8 7 8 10 8 4-7 5-13c1-5 4-8 4-14 0-5-3-9-9-9-4 0-6 2-10 2s-6-2-10-2z' fill='white'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  "name": "Clínica Dental Costa Dent",
+  "telephone": "+56954139506",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Vicuña Mackenna 0856, locales 13 y 14, Strip Center",
+    "addressLocality": "Melipilla",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  }
+}
+</script>
+<style>
+:root{
+  --blue-950:#082f49;
+  --blue-900:#0c4a6e;
+  --blue-800:#075985;
+  --blue-700:#0369a1;
+  --blue-600:#0284c7;
+  --blue-100:#e0f2fe;
+  --blue-50:#f0f9ff;
+  --mint:#34d399;
+  --mint-50:#ecfdf5;
+  --coral:#f43f5e;
+  --amber:#f59e0b;
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:#e2e8f0;
+  --radius:22px;
+  --shadow:0 18px 40px -20px rgba(8,47,73,.3);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit}
+button{font:inherit}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 20px}
+.icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.icon-fill{fill:currentColor;stroke:none}
+
+.ph{position:relative;overflow:hidden;background:linear-gradient(145deg,var(--blue-100),var(--mint-50))}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+
+.demo{background:var(--ink);color:#cbd5e1;font-size:13px;text-align:center;padding:7px 16px}
+.demo b{color:#fff}
+
+header.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--blue-600),var(--blue-800));color:#fff;display:grid;place-items:center}
+.logo-text{line-height:1.05}
+.logo-text strong{display:block;font-size:20px;font-weight:800;letter-spacing:-.02em}
+.logo-text strong span{color:var(--blue-600)}
+.logo-text small{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+nav.main{display:none;gap:26px;font-weight:600;font-size:15px}
+nav.main a{text-decoration:none;color:var(--muted)}
+nav.main a:hover{color:var(--blue-700)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:14px;padding:14px 22px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease,box-shadow .15s ease;white-space:nowrap;font-size:16px}
+.btn:hover{transform:translateY(-1px)}
+.btn .icon{width:20px;height:20px}
+.btn-primary{background:var(--blue-700);color:#fff;box-shadow:0 10px 22px -10px rgba(3,105,161,.8)}
+.btn-primary:hover{background:var(--blue-800)}
+.btn-ghost{background:#fff;color:var(--blue-900);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--blue-600)}
+.btn-wa{background:#16a34a;color:#fff}
+.btn-wa:hover{background:#15803d}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-sm{padding:9px 16px;font-size:14px;border-radius:12px}
+header .btn-sm span{display:none}
+
+/* Hero */
+.hero{background:radial-gradient(1200px 500px at 90% -10%,var(--blue-100),transparent),linear-gradient(180deg,var(--blue-50),#fff);padding:40px 0 60px;overflow:hidden}
+.hero .wrap{display:grid;gap:40px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-size:14px;font-weight:700;color:var(--blue-900)}
+.pill i{font-style:normal;background:var(--mint-50);color:#047857;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800}
+.hero h1{font-size:clamp(36px,6.4vw,60px);line-height:1.04;letter-spacing:-.035em;margin:18px 0 16px;font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--blue-600),#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(17px,2.2vw,19px);color:var(--muted);margin:0 0 28px;max-width:540px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.checks{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;font-weight:700;font-size:15px;color:var(--blue-950)}
+.checks span{display:inline-flex;align-items:center;gap:8px}
+.checks .icon{width:20px;height:20px;color:#059669}
+.hero-media{position:relative;max-width:540px;width:100%;margin:0 auto}
+.hero-media .ph{aspect-ratio:1/1;border-radius:40% 40% 32px 32px / 30% 30% 32px 32px;box-shadow:0 40px 80px -30px rgba(3,105,161,.5)}
+.float-card{position:absolute;background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:12px 14px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;line-height:1.2}
+.float-card small{display:block;font-weight:600;color:var(--muted);font-size:12px}
+.float-card .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none}
+.fc-1{left:-8px;top:14%}
+.fc-1 .ic{background:var(--mint-50);color:#047857}
+.fc-2{right:-8px;bottom:10%}
+.fc-2 .ic{background:var(--blue-100);color:var(--blue-800)}
+
+section{padding:76px 0}
+.section-head{max-width:680px;margin:0 0 38px}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.kicker{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-600)}
+h2{font-size:clamp(28px,4.6vw,44px);line-height:1.08;letter-spacing:-.03em;margin:8px 0 12px;font-weight:800}
+.section-head p{color:var(--muted);font-size:18px;margin:0}
+.bg-soft{background:var(--blue-50)}
+
+/* Tratamientos */
+.treat{display:grid;gap:14px}
+.t-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s ease,transform .15s ease}
+.t-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.t-card .ph{aspect-ratio:16/10}
+.t-body{padding:20px 22px 22px}
+.t-body h3{margin:0 0 6px;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.t-body p{margin:0;color:var(--muted);font-size:15px}
+.minis{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:14px}
+.mini{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 16px;display:flex;gap:12px;align-items:flex-start}
+.mini .ic{width:42px;height:42px;border-radius:12px;background:var(--blue-50);color:var(--blue-700);display:grid;place-items:center;flex:none}
+.mini b{display:block;font-size:15.5px;line-height:1.3}
+.mini span{font-size:13.5px;color:var(--muted);line-height:1.4;display:block}
+
+/* ¿Qué te pasa? */
+.finder{display:grid;gap:18px}
+.situations{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sit{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;border:2px solid var(--line);border-radius:18px;padding:16px 14px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s ease,box-shadow .15s ease}
+.sit:hover{border-color:var(--blue-600)}
+.sit:focus-visible{outline:3px solid var(--blue-600);outline-offset:2px}
+.sit .emo{font-size:26px;line-height:1}
+.sit b{font-size:15.5px;font-weight:700;line-height:1.3}
+.sit[aria-pressed="true"]{border-color:var(--blue-700);background:var(--blue-50);box-shadow:0 0 0 4px var(--blue-100)}
+.result{background:#fff;border-radius:26px;border:1px solid var(--line);box-shadow:var(--shadow);padding:28px 24px;display:flex;flex-direction:column;gap:14px;min-height:280px;justify-content:center}
+.result .tag{align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--blue-50);color:var(--blue-800)}
+.result .tag.urg{background:#fff1f2;color:#be123c}
+.result .tag.soon{background:#fffbeb;color:#b45309}
+.result .tag.ok{background:var(--mint-50);color:#047857}
+.result h3{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.result p{margin:0;color:var(--muted)}
+.result ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.result li{display:flex;gap:10px;font-weight:600;font-size:15px}
+.result li .icon{width:18px;height:18px;color:#059669;margin-top:3px}
+.note{font-size:13px;color:var(--muted);margin-top:14px}
+
+/* Pasos */
+.steps{display:grid;gap:14px;counter-reset:s}
+.step{background:#fff;border-radius:var(--radius);padding:24px;border:1px solid var(--line)}
+.step::before{counter-increment:s;content:"0" counter(s);display:block;font-size:34px;font-weight:800;color:var(--blue-100);-webkit-text-stroke:1.5px var(--blue-600);letter-spacing:-.02em;margin-bottom:10px;line-height:1}
+.step h3{margin:0 0 6px;font-size:18px;font-weight:800}
+.step p{margin:0;color:var(--muted);font-size:15px}
+
+/* Miedo al dentista */
+.calm{background:linear-gradient(135deg,var(--blue-900),var(--blue-950));color:#fff;border-radius:30px;overflow:hidden;display:grid}
+.calm .txt{padding:36px 26px}
+.calm .kicker{color:#7dd3fc}
+.calm h2{color:#fff}
+.calm p{color:#bae6fd;font-size:17.5px;margin:0 0 20px}
+.calm ul{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:10px}
+.calm li{display:flex;gap:10px;font-weight:600}
+.calm li .icon{color:var(--mint);width:20px;height:20px;margin-top:2px}
+.calm .ph{min-height:260px}
+
+/* Pago */
+.pay{display:grid;gap:14px}
+.pay-item{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;gap:14px;align-items:flex-start}
+.pay-item .ic{width:46px;height:46px;border-radius:14px;background:var(--mint-50);color:#047857;display:grid;place-items:center;flex:none}
+.pay-item h3{margin:0 0 4px;font-size:17px;font-weight:800}
+.pay-item p{margin:0;color:var(--muted);font-size:15px}
+.tbd{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px dashed #f59e0b;padding:2px 8px;border-radius:999px;margin-top:6px}
+
+/* Equipo */
+.team{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.member{text-align:center;background:#fff;border:1px solid var(--line);border-radius:22px;padding:18px 12px}
+.member .ph{width:96px;height:96px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;color:var(--blue-700)}
+.member .ph .icon{width:40px;height:40px;opacity:.6}
+.member b{display:block;font-size:15.5px}
+.member span{font-size:13.5px;color:var(--muted)}
+
+/* Ubicación */
+.location{display:grid;gap:22px}
+.location>*{min-width:0}
+.map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:300px;background:var(--blue-50)}
+.map iframe{width:100%;height:100%;min-height:300px;border:0;display:block}
+.info-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.info-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.info-row:first-child{padding-top:0}
+.info-row:last-child{border-bottom:0;padding-bottom:0}
+.info-row .ic{width:42px;height:42px;border-radius:12px;background:var(--blue-50);color:var(--blue-700);display:grid;place-items:center;flex:none}
+.info-row b{display:block;font-size:15px}
+.info-row span,.info-row a{color:var(--muted);text-decoration:none;font-size:15.5px;overflow-wrap:anywhere}
+.info-row a:hover{color:var(--blue-700)}
+
+/* FAQ */
+.faq{max-width:780px;margin:0 auto;display:grid;gap:12px}
+details{background:#fff;border:1px solid var(--line);border-radius:16px;padding:0 20px}
+details[open]{border-color:var(--blue-100);box-shadow:var(--shadow)}
+summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary .icon{color:var(--blue-700);transition:transform .2s ease}
+details[open] summary .icon{transform:rotate(180deg)}
+details p{margin:0 0 18px;color:var(--muted)}
+
+/* CTA final */
+.final{border-radius:30px;overflow:hidden;display:grid;background:linear-gradient(135deg,var(--blue-700),var(--blue-900));color:#fff}
+.final .txt{padding:40px 26px}
+.final h2{color:#fff}
+.final p{color:#e0f2fe;font-size:18px;margin:0 0 24px}
+.final .ph{min-height:240px}
+.final .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+
+footer{background:var(--blue-950);color:#94a3b8;padding:40px 0 110px;font-size:15px}
+footer .wrap{display:grid;gap:24px}
+footer strong{color:#fff}
+footer a{color:#cbd5e1;text-decoration:none}
+footer a:hover{color:#fff}
+.social{display:flex;gap:10px}
+.social a{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.social .icon{width:20px;height:20px}
+.foot-small{font-size:13px;border-top:1px solid rgba(255,255,255,.1);padding-top:18px}
+
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border-top:1px solid var(--line);box-shadow:0 -10px 30px -12px rgba(0,0,0,.18);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.mbar a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;font-size:12.5px;font-weight:700;padding:6px 4px;border-radius:12px;color:var(--ink)}
+.mbar a .icon{width:22px;height:22px}
+.mbar .wa{color:#15803d}
+.mbar .book{background:var(--blue-700);color:#fff}
+.wa-float{display:none}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (min-width:640px){
+  .treat{grid-template-columns:repeat(2,1fr)}
+  .minis{grid-template-columns:repeat(2,1fr)}
+  .situations{grid-template-columns:repeat(3,1fr)}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .pay{grid-template-columns:repeat(3,1fr)}
+  .team{grid-template-columns:repeat(4,1fr)}
+  header .btn-sm span{display:inline}
+}
+@media (min-width:900px){
+  nav.main{display:flex}
+  .hero{padding:64px 0 90px}
+  .hero .wrap{grid-template-columns:1.05fr .95fr;gap:56px}
+  section{padding:96px 0}
+  .treat{grid-template-columns:repeat(4,1fr)}
+  .minis{grid-template-columns:repeat(4,1fr)}
+  .finder{grid-template-columns:1.25fr .75fr;align-items:start}
+  .result{position:sticky;top:100px;padding:34px}
+  .steps{grid-template-columns:repeat(4,1fr)}
+  .calm{grid-template-columns:1.1fr .9fr}
+  .calm .txt{padding:56px}
+  .location{grid-template-columns:1.2fr .8fr}
+  .final{grid-template-columns:1.1fr .9fr}
+  .final .txt{padding:56px}
+  footer{padding-bottom:40px}
+  footer .wrap{grid-template-columns:2fr 1fr 1fr}
+  .mbar{display:none}
+  .wa-float{position:fixed;right:18px;bottom:18px;z-index:50;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(37,211,102,.8);transition:transform .15s ease}
+  .wa-float:hover{transform:scale(1.06)}
+  .wa-float svg{width:32px;height:32px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-tooth" viewBox="0 0 24 24"><path d="M7 3C4.5 3 3 5 3 7.5c0 3 1.5 4.5 2 7 .5 3 1 6.5 2.5 6.5S9.5 17 12 17s3 4 4.5 4 2-3.5 2.5-6.5c.5-2.5 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol>
+  <symbol id="i-baby" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M3 21a9 9 0 0 1 18 0M10 8h.01M14 8h.01"/></symbol>
+  <symbol id="i-align" viewBox="0 0 24 24"><path d="M3 8h18M3 16h18"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10.5" y="5" width="3" height="6" rx="1"/><rect x="16" y="5" width="3" height="6" rx="1"/><rect x="5" y="13" width="3" height="6" rx="1"/><rect x="10.5" y="13" width="3" height="6" rx="1"/><rect x="16" y="13" width="3" height="6" rx="1"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
+</svg>
+
+<div class="demo">Propuesta de diseño · <b>maqueta de muestra</b>, no es el sitio oficial · fotos referenciales</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Costa Dent, inicio">
+      <span class="logo-mark"><svg class="icon"><use href="#i-tooth"/></svg></span>
+      <span class="logo-text"><strong>Costa<span>Dent</span></strong><small>Clínica dental · Melipilla</small></span>
+    </a>
+    <nav class="main" aria-label="Principal">
+      <a href="#tratamientos">Tratamientos</a>
+      <a href="#que-te-pasa">¿Qué te pasa?</a>
+      <a href="#primera-consulta">Primera consulta</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" href="https://agendapro.com/mp/cl/pl/clinica-dental-costa-dent-limitada-melipilla/36715" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Agendar<span>&nbsp;hora</span></a>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <span class="pill"><i>Strip Center</i>Av. Vicuña Mackenna 0856</span>
+        <h1 id="hero-title">Vuelve a sonreír <em>sin miedo</em></h1>
+        <p class="lead">Clínica dental en Melipilla para toda la familia. Limpieza, blanqueamiento, ortodoncia, implantes y endodoncia, con presupuesto claro antes de empezar y una atención tranquila, sin apuros.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://agendapro.com/mp/cl/pl/clinica-dental-costa-dent-limitada-melipilla/36715" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Agendar evaluación</a>
+          <a class="btn btn-ghost" href="#que-te-pasa">¿Qué tratamiento necesito?</a>
+        </div>
+        <div class="checks">
+          <span><svg class="icon"><use href="#i-check"/></svg>Presupuesto por escrito</span>
+          <span><svg class="icon"><use href="#i-check"/></svg>Niños y adultos</span>
+          <span><svg class="icon"><use href="#i-check"/></svg>Agenda online</span>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="ph"><img src="https://images.pexels.com/photos/6627574/pexels-photo-6627574.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Paciente sonriendo en el sillón dental mientras se mira en un espejo" fetchpriority="high" onerror="this.remove()"></div>
+        <div class="float-card fc-1"><span class="ic"><svg class="icon"><use href="#i-smile"/></svg></span><span>Blanqueamiento<small>Resultados visibles</small></span></div>
+        <div class="float-card fc-2"><span class="ic"><svg class="icon"><use href="#i-doc"/></svg></span><span>Presupuesto claro<small>Antes de empezar</small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tratamientos" aria-labelledby="treat-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Tratamientos</span>
+        <h2 id="treat-title">Todo para tu salud dental, en un mismo lugar</h2>
+        <p>Desde una limpieza de rutina hasta reemplazar un diente que falta.</p>
+      </div>
+      <div class="treat reveal">
+        <article class="t-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Dentista conversando con un paciente en el sillón" loading="lazy" onerror="this.remove()"></div>
+          <div class="t-body"><h3>Limpieza y prevención</h3><p>Destartraje, pulido y control para evitar caries y problemas de encías.</p></div>
+        </article>
+        <article class="t-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/6627574/pexels-photo-6627574.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Paciente sonriendo tras su tratamiento" loading="lazy" onerror="this.remove()"></div>
+          <div class="t-body"><h3>Blanqueamiento</h3><p>Aclara varios tonos tus dientes de forma segura y supervisada.</p></div>
+        </article>
+        <article class="t-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/6528861/pexels-photo-6528861.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Dentista revisando los dientes de una paciente" loading="lazy" onerror="this.remove()"></div>
+          <div class="t-body"><h3>Ortodoncia</h3><p>Brackets para alinear tus dientes y mejorar tu mordida.</p></div>
+        </article>
+        <article class="t-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Atención dental a un paciente adulto" loading="lazy" onerror="this.remove()"></div>
+          <div class="t-body"><h3>Implantes</h3><p>Reemplaza dientes perdidos con una solución fija y natural.</p></div>
+        </article>
+      </div>
+      <div class="minis reveal">
+        <div class="mini"><span class="ic"><svg class="icon"><use href="#i-tooth"/></svg></span><div><b>Endodoncia</b><span>Tratamiento de conducto para salvar tu diente.</span></div></div>
+        <div class="mini"><span class="ic"><svg class="icon"><use href="#i-shield"/></svg></span><div><b>Tapaduras</b><span>Resinas del color de tu diente.</span></div></div>
+        <div class="mini"><span class="ic"><svg class="icon"><use href="#i-baby"/></svg></span><div><b>Odontopediatría</b><span>Atención para los más pequeños.</span></div></div>
+        <div class="mini"><span class="ic"><svg class="icon"><use href="#i-align"/></svg></span><div><b>Prótesis</b><span>Fijas y removibles.</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="que-te-pasa" class="bg-soft" aria-labelledby="find-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Orientación rápida</span>
+        <h2 id="find-title">¿Qué te está pasando?</h2>
+        <p>Toca lo que más se parece a tu caso y te contamos qué tratamiento podría servirte y qué tan pronto deberías venir.</p>
+      </div>
+      <div class="finder reveal">
+        <div class="situations" id="situations">
+          <button type="button" class="sit" aria-pressed="false" data-k="dolor"><span class="emo">😣</span><b>Me duele una muela</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="roto"><span class="emo">🦷</span><b>Se me quebró un diente</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="encias"><span class="emo">🩸</span><b>Me sangran las encías</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="blanco"><span class="emo">✨</span><b>Quiero dientes más blancos</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="chuecos"><span class="emo">😬</span><b>Tengo los dientes chuecos</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="falta"><span class="emo">🕳️</span><b>Me falta un diente</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="nino"><span class="emo">🧒</span><b>Es para mi hijo o hija</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="control"><span class="emo">📅</span><b>Hace tiempo no voy al dentista</b></button>
+          <button type="button" class="sit" aria-pressed="false" data-k="sensible"><span class="emo">🧊</span><b>Siento sensibilidad al frío</b></button>
+        </div>
+        <div class="result" id="result" aria-live="polite">
+          <span class="tag">Tu orientación</span>
+          <h3>Elige una opción</h3>
+          <p>Te respondemos al tiro, sin compromiso.</p>
+        </div>
+      </div>
+      <p class="note">Orientación general. El diagnóstico lo hace el dentista en la evaluación.</p>
+    </div>
+  </section>
+
+  <section id="primera-consulta" aria-labelledby="first-title">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="kicker">Tu primera consulta</span>
+        <h2 id="first-title">Así es venir por primera vez</h2>
+      </div>
+      <div class="steps reveal">
+        <article class="step"><h3>Agenda online</h3><p>Elige día y hora desde el celular, o escríbenos por WhatsApp si prefieres.</p></article>
+        <article class="step"><h3>Evaluación</h3><p>Revisamos tu boca con calma y te explicamos lo que vemos, con palabras simples.</p></article>
+        <article class="step"><h3>Presupuesto por escrito</h3><p>Sabes cuánto cuesta cada etapa antes de empezar. Sin cobros sorpresa.</p></article>
+        <article class="step"><h3>Tratamiento a tu ritmo</h3><p>Planificamos las sesiones según tus tiempos y tu bolsillo.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-labelledby="calm-title">
+    <div class="wrap">
+      <div class="calm reveal">
+        <div class="txt">
+          <span class="kicker">¿Te da nervio el dentista?</span>
+          <h2 id="calm-title">Es más común de lo que crees. Vamos con calma.</h2>
+          <p>Muchos pacientes llegan después de años sin venir por miedo. Aquí nadie te va a retar.</p>
+          <ul>
+            <li><svg class="icon"><use href="#i-check"/></svg>Te explicamos cada paso antes de hacerlo</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Levantas la mano y paramos</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Anestesia cuidadosa para que no sientas dolor</li>
+          </ul>
+          <a class="btn btn-wa" href="https://wa.me/56954139506?text=Hola%2C%20me%20da%20un%20poco%20de%20nervio%20ir%20al%20dentista%20y%20quiero%20consultar" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Consultar sin compromiso</a>
+        </div>
+        <div class="ph"><img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Dentista y paciente sonriendo durante un control" loading="lazy" onerror="this.remove()"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-soft" aria-labelledby="pay-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Formas de pago</span>
+        <h2 id="pay-title">Un tratamiento que puedes pagar</h2>
+      </div>
+      <div class="pay reveal">
+        <div class="pay-item"><span class="ic"><svg class="icon"><use href="#i-card"/></svg></span><div><h3>Tarjetas y cuotas</h3><p>Débito, crédito y transferencia. Paga tu tratamiento en cuotas.</p><span class="tbd">Confirmar con la clínica</span></div></div>
+        <div class="pay-item"><span class="ic"><svg class="icon"><use href="#i-doc"/></svg></span><div><h3>Pago por etapas</h3><p>En tratamientos largos pagas cada etapa a medida que avanzamos.</p></div></div>
+        <div class="pay-item"><span class="ic"><svg class="icon"><use href="#i-shield"/></svg></span><div><h3>Convenios</h3><p>Descuentos para empresas, instituciones y grupos familiares.</p><span class="tbd">Lista de convenios</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="team-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Equipo</span>
+        <h2 id="team-title">Quién te va a atender</h2>
+      </div>
+      <div class="team reveal">
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Cirujano dentista</b><span>Director clínico</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Ortodoncista</b><span>Brackets</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Endodoncista</b><span>Conductos</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Asistente dental</b><span>Recepción</span><br><span class="tbd">Foto y nombre</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ubicacion" class="bg-soft" aria-labelledby="loc-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Ubicación</span>
+        <h2 id="loc-title">En el Strip Center de Vicuña Mackenna</h2>
+        <p>Fácil de llegar, en plena avenida Vicuña Mackenna.</p>
+      </div>
+      <div class="location reveal">
+        <div class="map">
+          <iframe title="Mapa: Av. Vicuña Mackenna 0856, Melipilla" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Av.%20Vicu%C3%B1a%20Mackenna%200856%2C%20Melipilla%2C%20Chile&z=16&output=embed"></iframe>
+        </div>
+        <div class="info-card">
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-pin"/></svg></span><div><b>Dirección</b><a href="https://www.google.com/maps/dir/?api=1&destination=Av.+Vicu%C3%B1a+Mackenna+0856+Melipilla" target="_blank" rel="noopener">Av. Vicuña Mackenna 0856, locales 13 y 14, Strip Center, Melipilla</a></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-clock"/></svg></span><div><b>Horario</b><span class="tbd">Confirmar horario</span></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-phone"/></svg></span><div><b>Teléfono / WhatsApp</b><a href="tel:+56954139506">+56 9 5413 9506</a></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="kicker">Preguntas frecuentes</span>
+        <h2 id="faq-title">Resolvemos tus dudas</h2>
+      </div>
+      <div class="faq reveal">
+        <details><summary>¿Atienden urgencias dentales?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Sí. Si tienes dolor fuerte, hinchazón o se te quebró un diente, escríbenos por WhatsApp y te buscamos la hora más pronta posible. <span class="tbd">Confirmar con la clínica</span></p></details>
+        <details><summary>¿Cuánto cuesta la evaluación?<svg class="icon"><use href="#i-chev"/></svg></summary><p>En la evaluación revisamos tu boca y te entregamos un presupuesto por escrito. <span class="tbd">Confirmar valor con la clínica</span></p></details>
+        <details><summary>¿Cuánto dura un tratamiento de ortodoncia?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Depende de cada caso, pero suele durar entre 12 y 24 meses. En la evaluación te damos un tiempo estimado para tu caso.</p></details>
+        <details><summary>¿El blanqueamiento daña los dientes?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Hecho por un dentista y con los productos adecuados es seguro. Antes revisamos que no tengas caries ni sensibilidad que haya que tratar primero.</p></details>
+        <details><summary>¿Desde qué edad pueden venir los niños?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Se recomienda la primera visita cuando aparecen los primeros dientes, o a más tardar al año de edad.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-label="Agendar">
+    <div class="wrap">
+      <div class="final reveal">
+        <div class="txt">
+          <h2>Tu sonrisa merece atención</h2>
+          <p>Agenda tu evaluación online o escríbenos. Te esperamos en el Strip Center de Melipilla.</p>
+          <div class="cta-row">
+            <a class="btn btn-ghost" style="background:#fff;color:var(--blue-900);border-color:#fff" href="https://agendapro.com/mp/cl/pl/clinica-dental-costa-dent-limitada-melipilla/36715" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Agendar hora</a>
+            <a class="btn btn-ghost" href="https://wa.me/56954139506?text=Hola%2C%20quiero%20agendar%20una%20evaluaci%C3%B3n%20dental" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>WhatsApp</a>
+          </div>
+        </div>
+        <div class="ph"><img src="https://images.pexels.com/photos/6627574/pexels-photo-6627574.jpeg?auto=compress&cs=tinysrgb&w=900" alt="" loading="lazy" onerror="this.remove()"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong style="font-size:18px">Clínica Dental Costa Dent</strong>
+      <p style="margin:8px 0 16px">Salud dental para toda la familia en Melipilla.</p>
+      <div class="social">
+        <a href="https://www.instagram.com/costadentmelipilla/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-ig"/></svg></a>
+        <a href="https://www.facebook.com/costadent83/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#i-fb"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <strong>Contacto</strong>
+      <p style="margin:8px 0 0">Av. Vicuña Mackenna 0856<br>Locales 13 y 14, Strip Center<br><a href="tel:+56954139506">+56 9 5413 9506</a></p>
+    </div>
+    <div>
+      <strong>Enlaces</strong>
+      <p style="margin:8px 0 0"><a href="#tratamientos">Tratamientos</a><br><a href="#que-te-pasa">¿Qué te pasa?</a><br><a href="#ubicacion">Ubicación</a></p>
+    </div>
+    <div class="foot-small">© 2026 Clínica Dental Costa Dent · Maqueta de propuesta · Fotos referenciales de Pexels</div>
+  </div>
+</footer>
+
+<nav class="mbar" aria-label="Acciones rápidas">
+  <a href="tel:+56954139506"><svg class="icon"><use href="#i-phone"/></svg>Llamar</a>
+  <a class="wa" href="https://wa.me/56954139506?text=Hola%2C%20quiero%20hacer%20una%20consulta%20dental" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>WhatsApp</a>
+  <a class="book" href="https://agendapro.com/mp/cl/pl/clinica-dental-costa-dent-limitada-melipilla/36715" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Agendar</a>
+</nav>
+
+<a class="wa-float" href="https://wa.me/56954139506?text=Hola%2C%20quiero%20hacer%20una%20consulta%20dental" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="icon-fill" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+
+<script>
+(function () {
+  // ¿Qué te pasa? — orientación por situación
+  var WA = "https://wa.me/56954139506?text=";
+  var BOOK = "https://agendapro.com/mp/cl/pl/clinica-dental-costa-dent-limitada-melipilla/36715";
+  var DATA = {
+    dolor:    { tag: "urg",  t: "Lo antes posible", h: "Evaluación de urgencia", p: "Un dolor de muela puede venir de una caries profunda o una infección. Mientras antes lo veamos, más fácil es salvar el diente.", li: ["Radiografía y diagnóstico", "Alivio del dolor el mismo día", "Si es necesario, endodoncia"], msg: "Hola, tengo dolor de muela y necesito una hora lo antes posible" },
+    roto:     { tag: "urg",  t: "Esta semana", h: "Reparación con resina o corona", p: "Un diente quebrado queda más débil y puede doler con el frío o al masticar. Conviene repararlo pronto.", li: ["Resina del color de tu diente", "Corona si la fractura es grande", "Revisión del nervio"], msg: "Hola, se me quebró un diente y quiero una hora" },
+    encias:   { tag: "soon", t: "Pronto", h: "Limpieza y control de encías", p: "El sangrado suele ser señal de gingivitis. Con una limpieza profesional y buena higiene normalmente se revierte.", li: ["Destartraje y pulido", "Evaluación periodontal", "Técnica de cepillado"], msg: "Hola, me sangran las encías y quiero una limpieza" },
+    blanco:   { tag: "ok",   t: "Cuando quieras", h: "Blanqueamiento dental", p: "Aclara varios tonos tus dientes. Antes hacemos una limpieza y revisamos que no haya caries.", li: ["Limpieza previa", "Blanqueamiento supervisado", "Indicaciones para mantener el color"], msg: "Hola, quiero información sobre blanqueamiento dental" },
+    chuecos:  { tag: "ok",   t: "Cuando quieras", h: "Ortodoncia", p: "Alinear los dientes mejora cómo se ven y también la mordida y la limpieza. Nunca es tarde para empezar.", li: ["Evaluación y radiografías", "Plan y tiempo estimado", "Brackets y controles mensuales"], msg: "Hola, quiero información sobre ortodoncia" },
+    falta:    { tag: "soon", t: "Pronto", h: "Implante o prótesis", p: "Cuando falta un diente, los vecinos se mueven y el hueso se pierde con el tiempo. Hay soluciones fijas y removibles.", li: ["Evaluación del hueso", "Implante, puente o prótesis", "Presupuesto por etapas"], msg: "Hola, me falta un diente y quiero saber sobre implantes o prótesis" },
+    nino:     { tag: "ok",   t: "Control", h: "Odontopediatría", p: "Una primera visita tranquila para que tu hijo o hija le pierda el miedo al dentista y prevenir caries desde temprano.", li: ["Revisión y limpieza", "Flúor y sellantes", "Consejos para la casa"], msg: "Hola, quiero una hora dental para mi hijo/a" },
+    control:  { tag: "ok",   t: "Control", h: "Evaluación completa y limpieza", p: "Lo ideal es un control cada 6 meses. Si hace tiempo no vienes, partimos con una evaluación general sin retos.", li: ["Revisión completa", "Limpieza profesional", "Plan de tratamiento si hace falta"], msg: "Hola, hace tiempo que no voy al dentista y quiero una evaluación" },
+    sensible: { tag: "soon", t: "Pronto", h: "Evaluación de sensibilidad", p: "Puede ser desgaste del esmalte, encías retraídas o una caries. Hay tratamientos simples que alivian mucho.", li: ["Diagnóstico de la causa", "Barniz desensibilizante", "Resinas si hay desgaste"], msg: "Hola, tengo sensibilidad al frío y quiero una evaluación" }
+  };
+  var result = document.getElementById("result");
+  document.getElementById("situations").addEventListener("click", function (e) {
+    var b = e.target.closest(".sit");
+    if (!b) return;
+    document.querySelectorAll("#situations .sit").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    var d = DATA[b.dataset.k];
+    result.innerHTML =
+      '<span class="tag ' + d.tag + '">' + d.t + '</span>' +
+      '<h3>' + d.h + '</h3><p>' + d.p + '</p>' +
+      '<ul>' + d.li.map(function (x) { return '<li><svg class="icon"><use href="#i-check"/></svg>' + x + '</li>'; }).join("") + '</ul>' +
+      '<div class="cta-row">' +
+      (d.tag === "urg"
+        ? '<a class="btn btn-coral" href="' + WA + encodeURIComponent(d.msg) + '" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Pedir hora urgente</a>'
+        : '<a class="btn btn-primary" href="' + BOOK + '" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Agendar</a><a class="btn btn-ghost" href="' + WA + encodeURIComponent(d.msg) + '" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Consultar</a>') +
+      '</div>';
+    if (window.innerWidth < 900) result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  // Animación al hacer scroll
+  var els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buddha Sushi | Sushi y delivery en Melipilla</title>
+<meta name="description" content="Buddha Sushi en San Miguel 593, Melipilla: rolls, handrolls, promos y gohan. Delivery, retiro en local y consumo en el lugar. Arma tu pedido y envíalo por WhatsApp.">
+<!-- Maqueta de propuesta: no indexar hasta que el cliente la apruebe -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Buddha Sushi · Melipilla">
+<meta property="og:description" content="Arma tu pedido de sushi y envíalo por WhatsApp. Delivery y retiro en Melipilla.">
+<meta name="theme-color" content="#140d0b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23b91c1c'/%3E%3Ccircle cx='32' cy='32' r='16' fill='%23fff7ed'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23fb923c'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Buddha Sushi",
+  "servesCuisine": ["Sushi", "Japonesa"],
+  "telephone": "+56959043474",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "San Miguel 593",
+    "addressLocality": "Melipilla",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  }
+}
+</script>
+<style>
+:root{
+  --bg:#140d0b;
+  --bg-2:#1e1512;
+  --bg-3:#2a1e1a;
+  --red:#dc2626;
+  --red-700:#b91c1c;
+  --salmon:#fb923c;
+  --gold:#e9b949;
+  --rice:#fff7ed;
+  --muted:#bfaea5;
+  --line:#3a2b25;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:130px}
+body{margin:0;font-family:"Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--rice);line-height:1.55;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit}
+button,input,textarea{font:inherit}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 20px}
+.icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.icon-fill{fill:currentColor;stroke:none}
+.jp{font-family:"Shippori Mincho",serif}
+
+.ph{position:relative;overflow:hidden;background:linear-gradient(145deg,#3b1f18,#140d0b)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+
+.demo{background:var(--rice);color:#1c1917;font-size:13px;text-align:center;padding:7px 16px}
+.demo b{font-weight:800}
+
+header.top{position:sticky;top:0;z-index:40;background:rgba(20,13,11,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:44px;height:44px;border-radius:50%;background:var(--red);display:grid;place-items:center;position:relative}
+.logo-mark::before{content:"";width:22px;height:22px;border-radius:50%;background:var(--rice);box-shadow:inset 0 0 0 6px var(--rice),inset 0 0 0 11px var(--salmon)}
+.logo-text{line-height:1}
+.logo-text strong{display:block;font-family:"Shippori Mincho",serif;font-size:22px;font-weight:800;letter-spacing:.02em}
+.logo-text small{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+nav.main{display:none;gap:26px;font-weight:500;font-size:15px}
+nav.main a{text-decoration:none;color:var(--muted)}
+nav.main a:hover{color:var(--rice)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:14px 24px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease;white-space:nowrap;font-size:16px}
+.btn:hover{transform:translateY(-1px)}
+.btn .icon{width:20px;height:20px}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-700)}
+.btn-line{background:transparent;color:var(--rice);border-color:#57443c}
+.btn-line:hover{border-color:var(--gold);color:var(--gold)}
+.btn-wa{background:#16a34a;color:#fff}
+.btn-wa:hover{background:#15803d}
+.btn-sm{padding:9px 16px;font-size:14px}
+.cart-btn{position:relative}
+.cart-btn .count{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:999px;background:var(--gold);color:#1c1917;font-size:12px;font-weight:800;display:grid;place-items:center;padding:0 5px}
+.cart-btn .count:empty{display:none}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:0}
+.hero .wrap{position:relative;display:grid;gap:30px;padding-top:44px;padding-bottom:60px;align-items:center}
+.hero::before{content:"仏";position:absolute;right:-40px;top:-60px;font-family:"Shippori Mincho",serif;font-size:420px;line-height:1;color:rgba(220,38,38,.07);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--gold)}
+.hero h1{font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(44px,8vw,86px);line-height:1;letter-spacing:-.01em;margin:16px 0 18px}
+.hero h1 em{font-style:normal;color:var(--salmon)}
+.hero p.lead{font-size:clamp(17px,2.2vw,19px);color:var(--muted);max-width:520px;margin:0 0 28px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.modes{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.modes span{display:inline-flex;align-items:center;gap:8px;background:var(--bg-2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:600;font-size:14.5px}
+.modes .icon{width:18px;height:18px;color:var(--salmon)}
+.hero-media{position:relative;max-width:560px;width:100%;margin:0 auto}
+.hero-media .ph{aspect-ratio:1/1;border-radius:50%;box-shadow:0 0 0 10px var(--bg-2),0 0 0 11px var(--line),0 40px 90px -30px rgba(220,38,38,.55)}
+.sticker{position:absolute;background:var(--gold);color:#1c1917;border-radius:50%;width:112px;height:112px;display:grid;place-items:center;text-align:center;font-weight:800;line-height:1.05;font-size:15px;transform:rotate(-12deg);right:0;top:4%;box-shadow:0 14px 30px -12px rgba(0,0,0,.6)}
+.sticker b{display:block;font-size:30px}
+.followers{position:absolute;left:0;bottom:6%;background:var(--rice);color:#1c1917;border-radius:16px;padding:10px 14px;display:flex;gap:10px;align-items:center;font-weight:700;font-size:14px;line-height:1.2;box-shadow:0 14px 30px -12px rgba(0,0,0,.6)}
+.followers small{display:block;font-weight:500;color:#57534e;font-size:12px}
+.followers .icon{color:var(--red)}
+
+section{padding:76px 0}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h2{font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(34px,5.4vw,56px);line-height:1.05;margin:10px 0 14px}
+.section-head{max-width:700px;margin:0 0 30px}
+.section-head p{color:var(--muted);font-size:18px;margin:0}
+
+/* Carta */
+.tabs{position:sticky;top:68px;z-index:30;background:var(--bg);padding:12px 0;margin-bottom:18px;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{all:unset;cursor:pointer;flex:none;padding:9px 16px;border-radius:999px;border:1px solid var(--line);font-weight:600;font-size:15px;color:var(--muted);transition:background .15s ease,color .15s ease}
+.tab:hover{color:var(--rice)}
+.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tab[aria-selected="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.menu-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+.cat{margin-bottom:34px}
+.cat h3{font-family:"Shippori Mincho",serif;font-size:28px;font-weight:800;margin:0 0 14px;display:flex;align-items:baseline;gap:12px}
+.cat h3 small{font-family:"Outfit",sans-serif;font-size:14px;font-weight:500;color:var(--muted)}
+.items{display:grid;gap:12px}
+.item{display:grid;grid-template-columns:96px 1fr;gap:14px;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:12px;align-items:center}
+.item .ph{width:96px;height:96px;border-radius:14px}
+.item h4{margin:0 0 2px;font-size:17px;font-weight:700;line-height:1.25}
+.item p{margin:0 0 8px;color:var(--muted);font-size:14px;line-height:1.4}
+.item-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.price{font-weight:800;font-size:17px;color:var(--gold)}
+.qty{display:flex;align-items:center;gap:0;background:var(--bg-3);border-radius:999px;overflow:hidden}
+.qty button{all:unset;cursor:pointer;width:36px;height:36px;display:grid;place-items:center;font-size:20px;font-weight:700;color:var(--rice)}
+.qty button:hover{background:#3a2b25}
+.qty button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.qty span{min-width:22px;text-align:center;font-weight:800}
+.add{all:unset;cursor:pointer;background:var(--red);color:#fff;border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px}
+.add:hover{background:var(--red-700)}
+.add:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.tag-hot{display:inline-block;background:var(--red);color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:2px}
+.tbd{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px dashed #f59e0b;padding:2px 8px;border-radius:999px}
+
+/* Pedido */
+.cart{background:var(--rice);color:#1c1917;border-radius:24px;padding:24px 20px;display:flex;flex-direction:column;gap:14px}
+.cart h3{font-family:"Shippori Mincho",serif;font-size:28px;margin:0;font-weight:800}
+.cart-list{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-height:260px;overflow:auto}
+.cart-list li{display:flex;justify-content:space-between;gap:10px;font-size:15px;border-bottom:1px dashed #e7d8c9;padding-bottom:8px}
+.cart-list li b{font-weight:700;white-space:nowrap}
+.cart-list .empty{color:#78716c;border:0}
+.mode-toggle{display:grid;grid-template-columns:1fr 1fr;background:#f1e4d6;border-radius:999px;padding:4px}
+.mode-toggle button{all:unset;cursor:pointer;text-align:center;padding:9px;border-radius:999px;font-weight:700;font-size:14.5px;color:#57534e}
+.mode-toggle button:focus-visible{outline:2px solid var(--red)}
+.mode-toggle button[aria-pressed="true"]{background:#fff;color:#1c1917;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.cart label{font-size:13px;font-weight:600;color:#57534e;display:block;margin-bottom:4px}
+.cart input,.cart textarea{width:100%;border:2px solid #e7d8c9;border-radius:12px;padding:10px 12px;font-size:16px;background:#fff;color:#1c1917;resize:vertical}
+.cart input:focus,.cart textarea:focus{outline:none;border-color:var(--red)}
+.totals{display:grid;gap:4px;font-size:15px}
+.totals div{display:flex;justify-content:space-between}
+.totals .grand{font-size:20px;font-weight:800;border-top:2px solid #1c1917;padding-top:8px;margin-top:4px}
+.cart .btn-wa[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.cart small.note{color:#78716c;font-size:12.5px}
+
+/* Cómo pedir */
+.how{display:grid;gap:14px}
+.how-item{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;gap:14px;align-items:flex-start}
+.how-item .n{font-family:"Shippori Mincho",serif;font-size:36px;font-weight:800;color:var(--red);line-height:1}
+.how-item h3{margin:0 0 4px;font-size:18px}
+.how-item p{margin:0;color:var(--muted);font-size:15px}
+
+/* Galería */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gallery .ph{border-radius:16px;aspect-ratio:1/1}
+.gallery .ph:first-child{grid-column:span 2;aspect-ratio:16/9}
+
+/* Ubicación */
+.location{display:grid;gap:20px}
+.location>*{min-width:0}
+.map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:300px;background:var(--bg-2)}
+.map iframe{width:100%;height:100%;min-height:300px;border:0;display:block}
+.info-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.info-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.info-row:first-child{padding-top:0}
+.info-row:last-child{border-bottom:0;padding-bottom:0}
+.info-row .ic{width:42px;height:42px;border-radius:12px;background:var(--red);color:#fff;display:grid;place-items:center;flex:none}
+.info-row b{display:block;font-size:15px}
+.info-row span,.info-row a{color:var(--muted);text-decoration:none;font-size:15.5px;overflow-wrap:anywhere}
+.info-row a:hover{color:var(--gold)}
+
+/* FAQ */
+.faq{max-width:800px;display:grid;gap:12px}
+details{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:0 20px}
+details[open]{border-color:#6b4f44}
+summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary .icon{color:var(--gold);transition:transform .2s ease}
+details[open] summary .icon{transform:rotate(180deg)}
+details p{margin:0 0 18px;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);color:var(--muted);padding:40px 0 120px;font-size:15px}
+footer .wrap{display:grid;gap:24px}
+footer strong{color:var(--rice)}
+footer a{color:var(--rice);text-decoration:none}
+footer a:hover{color:var(--gold)}
+.social{display:flex;gap:10px}
+.social a{width:40px;height:40px;border-radius:12px;background:var(--bg-3);display:grid;place-items:center}
+.social .icon{width:20px;height:20px}
+.foot-small{font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+
+/* Barra de pedido en celular */
+.cartbar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--red);color:#fff;border-radius:999px;padding:10px 10px 10px 20px;text-decoration:none;font-weight:700;box-shadow:0 16px 36px -12px rgba(220,38,38,.8);transform:translateY(140%);transition:transform .25s ease}
+.cartbar.show{transform:none}
+.cartbar span.go{background:#fff;color:var(--red-700);border-radius:999px;padding:8px 16px;font-size:14px}
+.wa-float{display:none}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (min-width:640px){
+  .items{grid-template-columns:repeat(2,1fr)}
+  .how{grid-template-columns:repeat(3,1fr)}
+  .gallery{grid-template-columns:repeat(4,1fr)}
+  .gallery .ph:first-child{grid-row:span 2;aspect-ratio:auto}
+}
+@media (min-width:900px){
+  nav.main{display:flex}
+  .hero .wrap{grid-template-columns:1fr 1fr;gap:56px;padding-top:70px;padding-bottom:90px}
+  section{padding:100px 0}
+  .menu-layout{grid-template-columns:1fr 360px;align-items:start}
+  .items{grid-template-columns:1fr}
+  .cart{position:sticky;top:140px;padding:28px}
+  .location{grid-template-columns:1.2fr .8fr}
+  footer{padding-bottom:40px}
+  footer .wrap{grid-template-columns:2fr 1fr 1fr}
+  .cartbar{display:none}
+  .wa-float{position:fixed;right:18px;bottom:18px;z-index:50;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(37,211,102,.8);transition:transform .15s ease}
+  .wa-float:hover{transform:scale(1.06)}
+  .wa-float svg{width:32px;height:32px}
+}
+@media (min-width:1100px){
+  .items{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></symbol>
+  <symbol id="i-bike" viewBox="0 0 24 24"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h2l3 11.5M5.5 17.5 9 9h6l-3.5 8.5M9 9 7.5 6H5"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1-5h16l1 5M3 9h18M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12v9h14v-9M10 21v-5h4v5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 9 0 0 1-18 0zM7 21h10M12 3v4M8 5l1 3M16 5l-1 3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
+</svg>
+
+<div class="demo">Propuesta de diseño · <b>maqueta de muestra</b>, no es el sitio oficial · fotos y precios referenciales</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Buddha Sushi, inicio">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span class="logo-text"><strong>Buddha Sushi</strong><small>Melipilla</small></span>
+    </a>
+    <nav class="main" aria-label="Principal">
+      <a href="#carta">Carta</a>
+      <a href="#como-pedir">Cómo pedir</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+    <a class="btn btn-red btn-sm cart-btn" href="#pedido"><svg class="icon"><use href="#i-bag"/></svg>Mi pedido<span class="count" data-count></span></a>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Sushi · San Miguel 593</span>
+        <h1 id="hero-title">El sushi que <em>Melipilla</em> ya conoce</h1>
+        <p class="lead">Rolls, handrolls, gohan y promos para compartir. Elige de la carta, arma tu pedido y nos llega directo al WhatsApp. Delivery, retiro o para comer aquí.</p>
+        <div class="cta-row">
+          <a class="btn btn-red" href="#carta"><svg class="icon"><use href="#i-bag"/></svg>Ver la carta y pedir</a>
+          <a class="btn btn-line" href="tel:+56959043474"><svg class="icon"><use href="#i-phone"/></svg>+56 9 5904 3474</a>
+        </div>
+        <div class="modes">
+          <span><svg class="icon"><use href="#i-bike"/></svg>Delivery</span>
+          <span><svg class="icon"><use href="#i-bag"/></svg>Retiro</span>
+          <span><svg class="icon"><use href="#i-store"/></svg>En el local</span>
+        </div>
+      </div>
+      <div class="hero-media">
+        <div class="ph"><img src="https://images.pexels.com/photos/7245468/pexels-photo-7245468.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Tabla de rolls y nigiris variados" fetchpriority="high" onerror="this.remove()"></div>
+        <div class="sticker"><span><b>Promos</b>para compartir</span></div>
+        <div class="followers"><svg class="icon icon-fill"><use href="#i-heart"/></svg><span>+21 mil seguidores<small>en Instagram</small></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="carta" aria-labelledby="menu-title" style="padding-top:40px">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">La carta</span>
+        <h2 id="menu-title">Arma tu pedido</h2>
+        <p>Agrega lo que quieras y envía el pedido por WhatsApp con un toque. <span class="tbd">Carta y precios de ejemplo</span></p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Categorías">
+        <button class="tab" role="tab" aria-selected="true" data-go="cat-promos">Promos</button>
+        <button class="tab" role="tab" aria-selected="false" data-go="cat-rolls">Rolls</button>
+        <button class="tab" role="tab" aria-selected="false" data-go="cat-hand">Handrolls</button>
+        <button class="tab" role="tab" aria-selected="false" data-go="cat-gohan">Gohan</button>
+        <button class="tab" role="tab" aria-selected="false" data-go="cat-entradas">Entradas</button>
+        <button class="tab" role="tab" aria-selected="false" data-go="cat-bebidas">Bebidas</button>
+      </div>
+      <div class="menu-layout">
+        <div id="menu"></div>
+        <aside class="cart" id="pedido" aria-labelledby="cart-title">
+          <h3 id="cart-title">Tu pedido</h3>
+          <ul class="cart-list" id="cart-list"><li class="empty">Aún no agregas nada.</li></ul>
+          <div class="mode-toggle" role="group" aria-label="Tipo de entrega">
+            <button type="button" aria-pressed="true" data-mode="delivery">Delivery</button>
+            <button type="button" aria-pressed="false" data-mode="retiro">Retiro en local</button>
+          </div>
+          <div id="addr-wrap"><label for="addr">Dirección de entrega</label><input id="addr" type="text" placeholder="Calle, número y sector" autocomplete="street-address"></div>
+          <div><label for="obs">Comentarios</label><textarea id="obs" rows="2" placeholder="Ej: sin sésamo, palillos extra"></textarea></div>
+          <div class="totals">
+            <div><span>Subtotal</span><span id="t-sub">$0</span></div>
+            <div id="t-del-row"><span>Delivery</span><span>Según sector</span></div>
+            <div class="grand"><span>Total</span><span id="t-total">$0</span></div>
+          </div>
+          <a class="btn btn-wa" id="send" href="#" target="_blank" rel="noopener" aria-disabled="true"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Enviar pedido por WhatsApp</a>
+          <small class="note">Te confirmamos el pedido y el tiempo de entrega por WhatsApp.</small>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-pedir" style="padding-top:0" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Cómo pedir</span>
+        <h2 id="how-title">Tan fácil como tres pasos</h2>
+      </div>
+      <div class="how reveal">
+        <div class="how-item"><span class="n">1</span><div><h3>Elige de la carta</h3><p>Agrega promos, rolls y lo que se te antoje.</p></div></div>
+        <div class="how-item"><span class="n">2</span><div><h3>Delivery o retiro</h3><p>Escribe tu dirección o pasa a buscarlo a San Miguel 593.</p></div></div>
+        <div class="how-item"><span class="n">3</span><div><h3>Envía por WhatsApp</h3><p>Te llega el pedido listo y te confirmamos al tiro.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-labelledby="gal-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Hecho al momento</span>
+        <h2 id="gal-title">Fresco, en cada pieza</h2>
+        <p><span class="tbd">Reemplazar por fotos reales de Buddha Sushi</span></p>
+      </div>
+      <div class="gallery reveal">
+        <div class="ph"><img src="https://images.pexels.com/photos/8951109/pexels-photo-8951109.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Sushiman preparando un roll de salmón" loading="lazy" onerror="this.remove()"></div>
+        <div class="ph"><img src="https://images.pexels.com/photos/271715/pexels-photo-271715.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Nigiri de salmón tomado con palillos" loading="lazy" onerror="this.remove()"></div>
+        <div class="ph"><img src="https://images.pexels.com/photos/17308502/pexels-photo-17308502.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rolls fritos con salsa" loading="lazy" onerror="this.remove()"></div>
+        <div class="ph"><img src="https://images.pexels.com/photos/343870/pexels-photo-343870.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Plato de sushi con soya, wasabi y jengibre" loading="lazy" onerror="this.remove()"></div>
+        <div class="ph"><img src="https://images.pexels.com/photos/8951087/pexels-photo-8951087.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Preparación de un roll con mango" loading="lazy" onerror="this.remove()"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ubicacion" style="padding-top:0" aria-labelledby="loc-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Ubicación</span>
+        <h2 id="loc-title">San Miguel 593, Melipilla</h2>
+      </div>
+      <div class="location reveal">
+        <div class="map">
+          <iframe title="Mapa: San Miguel 593, Melipilla" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=San%20Miguel%20593%2C%20Melipilla%2C%20Chile&z=17&output=embed"></iframe>
+        </div>
+        <div class="info-card">
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-pin"/></svg></span><div><b>Dirección</b><a href="https://www.google.com/maps/dir/?api=1&destination=San+Miguel+593+Melipilla" target="_blank" rel="noopener">San Miguel 593, Melipilla</a></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-clock"/></svg></span><div><b>Horario</b><span class="tbd">Confirmar horario</span></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-phone"/></svg></span><div><b>Pedidos / WhatsApp</b><a href="tel:+56959043474">+56 9 5904 3474</a></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-bike"/></svg></span><div><b>Delivery</b><span>Melipilla y alrededores</span><br><span class="tbd">Confirmar sectores y valor</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Preguntas frecuentes</span>
+        <h2 id="faq-title">Antes de pedir</h2>
+      </div>
+      <div class="faq reveal">
+        <details><summary>¿Hasta dónde llega el delivery?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Repartimos en Melipilla y sectores cercanos. El valor depende de la distancia y te lo confirmamos por WhatsApp. <span class="tbd">Confirmar sectores</span></p></details>
+        <details><summary>¿Cuánto demora mi pedido?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Preparamos todo al momento. Te avisamos el tiempo estimado al confirmar tu pedido.</p></details>
+        <details><summary>¿Puedo cambiar ingredientes?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Sí, déjalo en comentarios al armar tu pedido (por ejemplo sin sésamo o sin queso crema) y lo vemos contigo.</p></details>
+        <details><summary>¿Cómo pago?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Transferencia, efectivo o tarjeta. <span class="tbd">Confirmar medios de pago</span></p></details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong style="font-size:18px">Buddha Sushi</strong>
+      <p style="margin:8px 0 16px">Sushi y delivery en Melipilla.</p>
+      <div class="social">
+        <a href="https://www.instagram.com/buddhasushimelipilla/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-ig"/></svg></a>
+        <a href="https://www.facebook.com/buddhasushimelipilla/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#i-fb"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <strong>Contacto</strong>
+      <p style="margin:8px 0 0">San Miguel 593, Melipilla<br><a href="tel:+56959043474">+56 9 5904 3474</a></p>
+    </div>
+    <div>
+      <strong>Enlaces</strong>
+      <p style="margin:8px 0 0"><a href="#carta">Carta</a><br><a href="#como-pedir">Cómo pedir</a><br><a href="#ubicacion">Ubicación</a></p>
+    </div>
+    <div class="foot-small">© 2026 Buddha Sushi · Maqueta de propuesta · Fotos referenciales de Pexels · Precios de ejemplo</div>
+  </div>
+</footer>
+
+<a class="cartbar" id="cartbar" href="#pedido"><span id="cb-text">0 productos · $0</span><span class="go">Ver pedido</span></a>
+
+<a class="wa-float" href="https://wa.me/56959043474?text=Hola%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="icon-fill" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+
+<script>
+(function () {
+  var PX = function (id, w) { return "https://images.pexels.com/photos/" + id + "/pexels-photo-" + id + ".jpeg?auto=compress&cs=tinysrgb&w=" + (w || 300); };
+  // Carta de ejemplo: se reemplaza por la carta real del local
+  var MENU = [
+    { id: "cat-promos", name: "Promos", sub: "Para compartir", items: [
+      { k: "p30", n: "Promo 30 piezas", d: "3 rolls a elección: envuelto en palta, en sésamo y tempura.", p: 13990, img: "246747", hot: true },
+      { k: "p50", n: "Promo 50 piezas", d: "5 rolls variados, ideal para 3 o 4 personas.", p: 21990, img: "29161607", hot: true },
+      { k: "p80", n: "Promo 80 piezas", d: "8 rolls + gyozas. Para la junta.", p: 32990, img: "7245468" }
+    ]},
+    { id: "cat-rolls", name: "Rolls", sub: "10 piezas", items: [
+      { k: "r1", n: "Buddha roll", d: "Salmón, queso crema y cebollín, envuelto en palta.", p: 6490, img: "3147493" },
+      { k: "r2", n: "Acevichado", d: "Camarón furai y palta, cubierto con salmón y salsa acevichada.", p: 6990, img: "24604661" },
+      { k: "r3", n: "Tempura roll", d: "Pollo teriyaki y queso crema, frito en panko.", p: 5990, img: "17308502" },
+      { k: "r4", n: "California", d: "Kanikama, palta y pepino, en sésamo.", p: 4990, img: "343870" }
+    ]},
+    { id: "cat-hand", name: "Handrolls", sub: "Cono de nori", items: [
+      { k: "h1", n: "Handroll salmón", d: "Salmón, queso crema y palta.", p: 3490, img: "29934978" },
+      { k: "h2", n: "Handroll camarón", d: "Camarón furai, queso crema y cebollín.", p: 3290, img: "29934978" }
+    ]},
+    { id: "cat-gohan", name: "Gohan", sub: "Bowls de arroz", items: [
+      { k: "g1", n: "Gohan salmón", d: "Arroz de sushi, salmón, palta, pepino y sésamo.", p: 7490, img: "8951087" },
+      { k: "g2", n: "Gohan pollo teriyaki", d: "Arroz, pollo teriyaki, palta y cebollín.", p: 6490, img: "8951109" }
+    ]},
+    { id: "cat-entradas", name: "Entradas", sub: "", items: [
+      { k: "e1", n: "Gyozas (6)", d: "De cerdo o verduras, con salsa ponzu.", p: 4290, img: "9210" },
+      { k: "e2", n: "Sashimi salmón (9)", d: "Cortes de salmón fresco.", p: 6990, img: "271715" },
+      { k: "e3", n: "Arrollados primavera (4)", d: "Crujientes, con salsa agridulce.", p: 3490, img: "9210" }
+    ]},
+    { id: "cat-bebidas", name: "Bebidas", sub: "", items: [
+      { k: "b1", n: "Bebida lata", d: "Coca-Cola, Sprite o Fanta.", p: 1290, img: "" },
+      { k: "b2", n: "Agua mineral", d: "Con o sin gas.", p: 1090, img: "" }
+    ]}
+  ];
+  var cart = {}; var ITEMS = {};
+  var money = function (n) { return "$" + n.toLocaleString("es-CL"); };
+
+  // Pintar la carta
+  var html = "";
+  MENU.forEach(function (c) {
+    html += '<div class="cat" id="' + c.id + '"><h3>' + c.name + (c.sub ? " <small>" + c.sub + "</small>" : "") + '</h3><div class="items">';
+    c.items.forEach(function (it) {
+      ITEMS[it.k] = it;
+      html += '<article class="item"><div class="ph">' + (it.img ? '<img src="' + PX(it.img) + '" alt="" loading="lazy" onerror="this.remove()">' : "") + '</div><div>' +
+        '<h4>' + it.n + (it.hot ? '<span class="tag-hot">Top</span>' : "") + '</h4><p>' + it.d + '</p>' +
+        '<div class="item-foot"><span class="price">' + money(it.p) + '</span><span data-ctrl="' + it.k + '"></span></div></div></article>';
+    });
+    html += "</div></div>";
+  });
+  document.getElementById("menu").innerHTML = html;
+
+  function ctrl(k) {
+    var q = cart[k] || 0;
+    return q
+      ? '<span class="qty"><button type="button" data-dec="' + k + '" aria-label="Quitar uno">−</button><span>' + q + '</span><button type="button" data-inc="' + k + '" aria-label="Agregar uno">+</button></span>'
+      : '<button type="button" class="add" data-inc="' + k + '">Agregar</button>';
+  }
+  document.getElementById("menu").addEventListener("click", function (e) {
+    var inc = e.target.closest("[data-inc]"), dec = e.target.closest("[data-dec]");
+    if (inc) cart[inc.dataset.inc] = (cart[inc.dataset.inc] || 0) + 1;
+    else if (dec) { cart[dec.dataset.dec]--; if (cart[dec.dataset.dec] <= 0) delete cart[dec.dataset.dec]; }
+    else return;
+    render();
+  });
+
+  var mode = "delivery";
+  document.querySelectorAll(".mode-toggle button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      mode = b.dataset.mode;
+      document.querySelectorAll(".mode-toggle button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+      render();
+    });
+  });
+  var addr = document.getElementById("addr"), obs = document.getElementById("obs");
+  addr.addEventListener("input", render); obs.addEventListener("input", render);
+
+  function render() {
+    document.querySelectorAll("[data-ctrl]").forEach(function (el) { el.innerHTML = ctrl(el.dataset.ctrl); });
+    var keys = Object.keys(cart), sub = 0, count = 0, lines = [];
+    var list = keys.map(function (k) {
+      var it = ITEMS[k], q = cart[k]; sub += it.p * q; count += q;
+      lines.push(q + " x " + it.n + " (" + money(it.p * q) + ")");
+      return "<li><span>" + q + " × " + it.n + "</span><b>" + money(it.p * q) + "</b></li>";
+    });
+    document.getElementById("cart-list").innerHTML = list.length ? list.join("") : '<li class="empty">Aún no agregas nada.</li>';
+    document.getElementById("t-sub").textContent = money(sub);
+    document.getElementById("t-total").textContent = money(sub) + (mode === "delivery" && sub ? " + envío" : "");
+    document.getElementById("t-del-row").style.display = mode === "delivery" ? "" : "none";
+    document.getElementById("addr-wrap").style.display = mode === "delivery" ? "" : "none";
+    document.querySelectorAll("[data-count]").forEach(function (el) { el.textContent = count || ""; });
+
+    var bar = document.getElementById("cartbar");
+    bar.classList.toggle("show", count > 0);
+    document.getElementById("cb-text").textContent = count + (count === 1 ? " producto · " : " productos · ") + money(sub);
+
+    var send = document.getElementById("send");
+    if (!count) { send.setAttribute("aria-disabled", "true"); send.href = "#"; return; }
+    send.removeAttribute("aria-disabled");
+    var msg = "Hola Buddha Sushi, quiero hacer un pedido:\n" + lines.map(function (l) { return "• " + l; }).join("\n") +
+      "\nSubtotal: " + money(sub) +
+      "\n" + (mode === "delivery" ? "Delivery a: " + (addr.value.trim() || "(te indico la dirección)") : "Retiro en local") +
+      (obs.value.trim() ? "\nComentarios: " + obs.value.trim() : "");
+    send.href = "https://wa.me/56959043474?text=" + encodeURIComponent(msg);
+  }
+  render();
+
+  // Pestañas de categorías
+  var tabs = document.querySelectorAll(".tab");
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () {
+      document.getElementById(t.dataset.go).scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+  if ("IntersectionObserver" in window) {
+    var catIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) tabs.forEach(function (t) { t.setAttribute("aria-selected", t.dataset.go === en.target.id ? "true" : "false"); });
+      });
+    }, { rootMargin: "-140px 0px -60% 0px" });
+    document.querySelectorAll(".cat").forEach(function (c) { catIO.observe(c); });
+  }
+
+  // Animación al hacer scroll
+  var els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>

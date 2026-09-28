@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 Stars Barber Shop | Barbería en Melipilla</title>
+<meta name="description" content="5 Stars Barber Shop en Serrano 619, Melipilla: cortes clásicos, fade, perfilado de barba y afeitado con toalla caliente. Reserva tu hora online.">
+<!-- Maqueta de propuesta: no indexar hasta que el cliente la apruebe -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="5 Stars Barber Shop · Melipilla">
+<meta property="og:description" content="Cortes, fade y barba con toalla caliente en el centro de Melipilla.">
+<meta name="theme-color" content="#0c0a09">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0a09'/%3E%3Cpath d='M32 10l6 13 14 2-10 10 2 14-12-7-12 7 2-14-10-10 14-2z' fill='%23d4a24c'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BarberShop",
+  "name": "5 Stars Barber Shop",
+  "telephone": "+56972179249",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Serrano 619, local G",
+    "addressLocality": "Melipilla",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "openingHoursSpecification": [
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "11:00", "closes": "19:00"}
+  ]
+}
+</script>
+<style>
+:root{
+  --bg:#0c0a09;
+  --bg-2:#1c1917;
+  --bg-3:#292524;
+  --gold:#d4a24c;
+  --gold-2:#e8c07a;
+  --gold-dark:#a47a2c;
+  --cream:#faf6ef;
+  --ink:#1c1917;
+  --muted:#a8a29e;
+  --muted-dark:#57534e;
+  --line:#2f2a26;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:#f5f5f4;line-height:1.6;-webkit-font-smoothing:antialiased}
+img,svg{display:block}
+a{color:inherit}
+button{font:inherit}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 20px}
+.icon{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.icon-fill{fill:currentColor;stroke:none}
+.display{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;letter-spacing:.02em;line-height:.95}
+
+.ph{position:relative;overflow:hidden;background:linear-gradient(145deg,#3a2f22,#1c1917)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+
+.demo{background:var(--gold);color:#1c1917;font-size:13px;text-align:center;padding:7px 16px;font-weight:500}
+.demo b{font-weight:800}
+
+header.top{position:sticky;top:0;z-index:40;background:rgba(12,10,9,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:42px;height:42px;border-radius:50%;border:2px solid var(--gold);color:var(--gold);display:grid;place-items:center}
+.logo-mark .icon{width:22px;height:22px}
+.logo-text{font-family:"Bebas Neue",Impact,sans-serif;font-size:26px;letter-spacing:.04em;line-height:1}
+.logo-text span{color:var(--gold)}
+nav.main{display:none;gap:26px;font-weight:700;font-size:15px}
+nav.main a{text-decoration:none;color:var(--muted)}
+nav.main a:hover{color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;text-decoration:none;border-radius:999px;padding:14px 24px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease;white-space:nowrap;font-size:16px}
+.btn:hover{transform:translateY(-1px)}
+.btn .icon{width:20px;height:20px}
+.btn-gold{background:var(--gold);color:#1c1917}
+.btn-gold:hover{background:var(--gold-2)}
+.btn-line{background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+.btn-line:hover{border-color:var(--gold);color:var(--gold)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-sm{padding:9px 16px;font-size:14px}
+
+.status{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--muted)}
+.status i{width:9px;height:9px;border-radius:50%;background:#78716c;flex:none}
+.status.open{color:#86efac}
+.status.open i{background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+
+/* Hero */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;overflow:hidden}
+.hero .bgimg{position:absolute;inset:0}
+.hero .bgimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,10,9,.35) 0%,rgba(12,10,9,.55) 45%,rgba(12,10,9,.97) 100%)}
+.hero .wrap{position:relative;padding-top:120px;padding-bottom:56px}
+.stars-row{display:flex;gap:4px;color:var(--gold);margin-bottom:14px}
+.stars-row .icon{width:22px;height:22px}
+.hero h1{font-size:clamp(64px,15vw,150px);margin:0 0 10px}
+.hero h1 span{color:var(--gold)}
+.hero p.lead{font-size:clamp(17px,2.2vw,20px);color:#d6d3d1;max-width:560px;margin:0 0 26px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:26px;font-weight:700;font-size:15px;color:#d6d3d1}
+.hero-meta span{display:inline-flex;align-items:center;gap:8px}
+.hero-meta .icon{width:18px;height:18px;color:var(--gold)}
+
+section{padding:76px 0}
+.kicker{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h2{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:clamp(44px,7vw,72px);line-height:.95;letter-spacing:.02em;margin:10px 0 14px}
+.section-head{max-width:700px;margin:0 0 38px}
+.section-head p{color:var(--muted);font-size:18px;margin:0}
+.light{background:var(--cream);color:var(--ink)}
+.light .section-head p{color:var(--muted-dark)}
+.light .kicker{color:var(--gold-dark)}
+
+/* Marquee */
+.marquee{background:var(--gold);color:#1c1917;overflow:hidden;padding:12px 0;white-space:nowrap}
+.marquee-track{display:inline-flex;gap:40px;animation:scroll 28s linear infinite;font-family:"Bebas Neue",Impact,sans-serif;font-size:26px;letter-spacing:.06em}
+.marquee-track span{display:inline-flex;align-items:center;gap:40px}
+.marquee-track span::after{content:"★"}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Servicios */
+.menu{display:grid;gap:14px}
+.menu-card{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.menu-card .ph{aspect-ratio:4/3}
+.menu-body{padding:20px 20px 22px}
+.menu-body h3{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:32px;letter-spacing:.03em;margin:0 0 4px;line-height:1}
+.menu-body p{margin:0 0 14px;color:var(--muted);font-size:15px}
+.menu-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.menu-list li{display:flex;align-items:baseline;gap:8px;font-size:15px}
+.menu-list li::after{content:"";order:2;flex:1;border-bottom:1px dotted #57534e}
+.menu-list li b{order:3;color:var(--gold);font-weight:800}
+.menu-list li span{order:1}
+.tbd{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px dashed #f59e0b;padding:2px 8px;border-radius:999px}
+
+/* Arma tu servicio */
+.builder{display:grid;gap:18px}
+.b-panel{background:#fff;border:1px solid #e7e5e4;border-radius:24px;padding:26px 22px}
+.b-step{margin-bottom:22px}
+.b-step:last-child{margin-bottom:0}
+.b-step h3{margin:0 0 10px;font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-dark);display:flex;align-items:center;gap:10px}
+.b-step h3 i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--gold);display:grid;place-items:center;font-size:13px;letter-spacing:0}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;border:2px solid #e7e5e4;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:2px;transition:border-color .15s ease,background .15s ease}
+.opt:hover{border-color:var(--gold)}
+.opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.opt b{font-size:16px;font-weight:800;color:var(--ink)}
+.opt small{font-size:13px;color:var(--muted-dark)}
+.opt[aria-pressed="true"]{border-color:var(--ink);background:var(--ink)}
+.opt[aria-pressed="true"] b{color:var(--gold)}
+.opt[aria-pressed="true"] small{color:#d6d3d1}
+.summary{background:var(--ink);color:#fff;border-radius:24px;padding:28px 24px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.summary::after{content:"★";position:absolute;right:-10px;top:-40px;font-size:220px;color:rgba(212,162,76,.08);line-height:1}
+.summary h3{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:36px;margin:0;letter-spacing:.03em;line-height:1}
+.summary ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;position:relative;z-index:1}
+.summary li{display:flex;gap:10px;align-items:center;font-weight:700}
+.summary li .icon{width:18px;height:18px;color:var(--gold)}
+.summary .empty{color:var(--muted)}
+.time{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border-radius:14px;padding:12px 14px;font-weight:700;position:relative;z-index:1}
+.time .icon{color:var(--gold)}
+.summary .btn{position:relative;z-index:1}
+.note{font-size:13px;color:var(--muted-dark);margin:14px 0 0}
+
+/* Galería */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gallery .ph{border-radius:14px;aspect-ratio:3/4}
+.gallery .ph:nth-child(1){grid-column:span 2;aspect-ratio:16/10}
+.gallery figcaption{position:absolute;left:10px;bottom:10px;background:rgba(12,10,9,.8);color:var(--gold);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:800}
+.ig-cta{margin-top:22px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;color:var(--muted)}
+
+/* Por qué */
+.why{display:grid;gap:14px}
+.why-item{border-top:2px solid var(--gold);padding-top:18px}
+.why-item b{display:block;font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;font-size:30px;letter-spacing:.03em;line-height:1;margin-bottom:6px}
+.why-item p{margin:0;color:var(--muted);font-size:15.5px}
+
+/* Equipo */
+.team{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.member .ph{aspect-ratio:1/1;border-radius:18px;margin-bottom:10px;display:grid;place-items:center;color:var(--gold);background:var(--bg-3)}
+.member .ph .icon{width:44px;height:44px;opacity:.6}
+.member b{display:block;font-size:16px}
+.member span{font-size:14px;color:var(--muted)}
+
+/* Ubicación */
+.location{display:grid;gap:20px}
+.location>*{min-width:0}
+.map{border-radius:var(--radius);overflow:hidden;border:1px solid #e7e5e4;min-height:300px;background:#f5f5f4}
+.map iframe{width:100%;height:100%;min-height:300px;border:0;display:block}
+.info-card{background:#fff;border:1px solid #e7e5e4;border-radius:var(--radius);padding:24px}
+.info-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #e7e5e4}
+.info-row:first-child{padding-top:0}
+.info-row:last-child{border-bottom:0;padding-bottom:0}
+.info-row .ic{width:42px;height:42px;border-radius:12px;background:var(--ink);color:var(--gold);display:grid;place-items:center;flex:none}
+.info-row b{display:block;font-size:15px}
+.info-row span,.info-row a{color:var(--muted-dark);text-decoration:none;font-size:15.5px;overflow-wrap:anywhere}
+.hours{width:100%;border-collapse:collapse;font-size:15px;color:var(--muted-dark)}
+.hours td{padding:2px 0}
+.hours td:last-child{text-align:right;font-weight:700;color:var(--ink)}
+
+/* FAQ */
+.faq{max-width:780px;display:grid;gap:12px}
+details{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:0 20px}
+details[open]{border-color:var(--gold-dark)}
+summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:800;font-size:17px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary .icon{color:var(--gold);transition:transform .2s ease}
+details[open] summary .icon{transform:rotate(180deg)}
+details p{margin:0 0 18px;color:var(--muted)}
+
+/* CTA final */
+.final{position:relative;border-radius:28px;overflow:hidden;min-height:360px;display:flex;align-items:flex-end}
+.final .ph{position:absolute;inset:0}
+.final .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,10,9,.95),rgba(12,10,9,.55))}
+.final .txt{position:relative;padding:40px 26px;max-width:620px}
+.final p{color:#d6d3d1;font-size:18px;margin:0 0 24px}
+
+footer{border-top:1px solid var(--line);color:var(--muted);padding:40px 0 110px;font-size:15px}
+footer .wrap{display:grid;gap:24px}
+footer strong{color:#fff}
+footer a{color:#d6d3d1;text-decoration:none}
+footer a:hover{color:var(--gold)}
+.social{display:flex;gap:10px}
+.social a{width:40px;height:40px;border-radius:12px;background:var(--bg-3);display:grid;place-items:center}
+.social .icon{width:20px;height:20px}
+.foot-small{font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+
+.mbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(3,1fr);background:var(--bg-2);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+.mbar a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;font-size:12.5px;font-weight:800;padding:6px 4px;border-radius:12px;color:#e7e5e4}
+.mbar a .icon{width:22px;height:22px}
+.mbar .wa{color:#4ade80}
+.mbar .book{background:var(--gold);color:#1c1917}
+.wa-float{display:none}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (min-width:640px){
+  .menu{grid-template-columns:repeat(3,1fr)}
+  .gallery{grid-template-columns:repeat(4,1fr)}
+  .gallery .ph:nth-child(1){grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+  .why{grid-template-columns:repeat(2,1fr)}
+  .team{grid-template-columns:repeat(4,1fr)}
+  .opts{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:900px){
+  nav.main{display:flex}
+  section{padding:100px 0}
+  .builder{grid-template-columns:1.5fr 1fr;align-items:start}
+  .b-panel{padding:34px}
+  .summary{position:sticky;top:96px;padding:34px}
+  .why{grid-template-columns:repeat(4,1fr);gap:28px}
+  .location{grid-template-columns:1.2fr .8fr}
+  .final .txt{padding:60px}
+  footer{padding-bottom:40px}
+  footer .wrap{grid-template-columns:2fr 1fr 1fr}
+  .mbar{display:none}
+  .wa-float{position:fixed;right:18px;bottom:18px;z-index:50;width:60px;height:60px;border-radius:50%;background:#25d366;color:#fff;display:grid;place-items:center;box-shadow:0 12px 28px -8px rgba(37,211,102,.8);transition:transform .15s ease}
+  .wa-float:hover{transform:scale(1.06)}
+  .wa-float svg{width:32px;height:32px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-scissors" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></symbol>
+</svg>
+
+<div class="demo">Propuesta de diseño · <b>maqueta de muestra</b>, no es el sitio oficial · fotos referenciales</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="5 Stars Barber Shop, inicio">
+      <span class="logo-mark"><svg class="icon icon-fill"><use href="#i-star"/></svg></span>
+      <span class="logo-text">5 Stars <span>Barber</span></span>
+    </a>
+    <nav class="main" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#arma">Arma tu servicio</a>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+    <a class="btn btn-gold btn-sm" href="https://agendapro.com/mp/cl/pl/5-stars-barber-shop-melipilla/36615" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Reservar</a>
+  </div>
+</header>
+
+<main id="inicio">
+
+  <section class="hero" aria-labelledby="hero-title" style="padding:0">
+    <div class="bgimg ph"><img src="https://images.pexels.com/photos/1813272/pexels-photo-1813272.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Barberos cortando el pelo a dos clientes" fetchpriority="high" onerror="this.remove()"></div>
+    <div class="wrap">
+      <div class="stars-row" aria-hidden="true">
+        <svg class="icon icon-fill"><use href="#i-star"/></svg><svg class="icon icon-fill"><use href="#i-star"/></svg><svg class="icon icon-fill"><use href="#i-star"/></svg><svg class="icon icon-fill"><use href="#i-star"/></svg><svg class="icon icon-fill"><use href="#i-star"/></svg>
+      </div>
+      <h1 id="hero-title" class="display">Tu corte, <span>cinco estrellas</span></h1>
+      <p class="lead">Barbería en el centro de Melipilla. Cortes clásicos, fade, perfilado de barba y afeitado con toalla caliente. Reserva en segundos y llega directo a la silla.</p>
+      <div class="cta-row">
+        <a class="btn btn-gold" href="https://agendapro.com/mp/cl/pl/5-stars-barber-shop-melipilla/36615" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Reservar hora</a>
+        <a class="btn btn-line" href="#arma"><svg class="icon"><use href="#i-scissors"/></svg>Arma tu servicio</a>
+      </div>
+      <div class="hero-meta">
+        <span class="status" data-status><i></i><span>Horario de atención</span></span>
+        <span><svg class="icon"><use href="#i-pin"/></svg>Serrano 619, local G</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Fade</span><span>Corte clásico</span><span>Barba con toalla caliente</span><span>Diseños</span><span>Cortes de niño</span><span>Perfilado de cejas</span>
+      <span>Fade</span><span>Corte clásico</span><span>Barba con toalla caliente</span><span>Diseños</span><span>Cortes de niño</span><span>Perfilado de cejas</span>
+    </div>
+  </div>
+
+  <section id="servicios" aria-labelledby="svc-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Servicios</span>
+        <h2 id="svc-title">Lo que hacemos mejor</h2>
+        <p>Precios claros antes de sentarte. Sin sorpresas al pagar.</p>
+      </div>
+      <div class="menu reveal">
+        <article class="menu-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/1836983/pexels-photo-1836983.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Barbero cortando el pelo a un cliente" loading="lazy" onerror="this.remove()"></div>
+          <div class="menu-body">
+            <h3>Cortes</h3>
+            <p>Con máquina y tijera, terminados a navaja.</p>
+            <ul class="menu-list">
+              <li><span>Corte clásico</span><b>$—</b></li>
+              <li><span>Fade / degradado</span><b>$—</b></li>
+              <li><span>Corte + diseño</span><b>$—</b></li>
+              <li><span>Corte niño</span><b>$—</b></li>
+            </ul>
+          </div>
+        </article>
+        <article class="menu-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/6007400/pexels-photo-6007400.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Barbero perfilando la barba de un cliente con toalla caliente" loading="lazy" onerror="this.remove()"></div>
+          <div class="menu-body">
+            <h3>Barba</h3>
+            <p>Perfilado, rebaje y afeitado tradicional.</p>
+            <ul class="menu-list">
+              <li><span>Perfilado de barba</span><b>$—</b></li>
+              <li><span>Barba con toalla caliente</span><b>$—</b></li>
+              <li><span>Afeitado clásico</span><b>$—</b></li>
+            </ul>
+          </div>
+        </article>
+        <article class="menu-card">
+          <div class="ph"><img src="https://images.pexels.com/photos/4625615/pexels-photo-4625615.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Primer plano de un barbero trabajando una barba" loading="lazy" onerror="this.remove()"></div>
+          <div class="menu-body">
+            <h3>Combos</h3>
+            <p>El servicio completo, a mejor precio.</p>
+            <ul class="menu-list">
+              <li><span>Corte + barba</span><b>$—</b></li>
+              <li><span>Corte + barba + cejas</span><b>$—</b></li>
+              <li><span>Padre e hijo</span><b>$—</b></li>
+            </ul>
+          </div>
+        </article>
+      </div>
+      <p class="note" style="color:var(--muted)"><span class="tbd">Precios a completar con la barbería</span></p>
+    </div>
+  </section>
+
+  <section id="arma" class="light" aria-labelledby="build-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Arma tu servicio</span>
+        <h2 id="build-title">¿Qué te hacemos hoy?</h2>
+        <p>Elige tu corte, tu barba y los extras. Te decimos cuánto demora y lo reservas en un toque.</p>
+      </div>
+      <div class="builder reveal">
+        <div class="b-panel">
+          <div class="b-step">
+            <h3><i>1</i>Corte</h3>
+            <div class="opts" data-group="corte" data-single>
+              <button type="button" class="opt" aria-pressed="false" data-name="Corte clásico" data-min="30"><b>Clásico</b><small>Tijera y máquina</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Fade" data-min="40"><b>Fade</b><small>Degradado a piel</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Fade con diseño" data-min="50"><b>Con diseño</b><small>Líneas o figuras</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="" data-min="0"><b>Sin corte</b><small>Solo barba</small></button>
+            </div>
+          </div>
+          <div class="b-step">
+            <h3><i>2</i>Barba</h3>
+            <div class="opts" data-group="barba" data-single>
+              <button type="button" class="opt" aria-pressed="false" data-name="Perfilado de barba" data-min="15"><b>Perfilado</b><small>Contornos limpios</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Barba con toalla caliente" data-min="25"><b>Toalla caliente</b><small>Rebaje y navaja</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Afeitado clásico" data-min="25"><b>Afeitado</b><small>A navaja</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="" data-min="0"><b>Sin barba</b><small>Solo corte</small></button>
+            </div>
+          </div>
+          <div class="b-step">
+            <h3><i>3</i>Extras</h3>
+            <div class="opts" data-group="extras">
+              <button type="button" class="opt" aria-pressed="false" data-name="Perfilado de cejas" data-min="5"><b>Cejas</b><small>Perfilado</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Lavado" data-min="5"><b>Lavado</b><small>Con masaje</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Mascarilla facial" data-min="10"><b>Mascarilla</b><small>Limpieza facial</small></button>
+              <button type="button" class="opt" aria-pressed="false" data-name="Corte de niño adicional" data-min="30"><b>+ Niño</b><small>Vienen juntos</small></button>
+            </div>
+          </div>
+        </div>
+        <aside class="summary" aria-live="polite">
+          <span class="kicker">Tu servicio</span>
+          <h3 id="sum-title">Elige tu corte</h3>
+          <ul id="sum-list"><li class="empty">Aún no eliges nada.</li></ul>
+          <div class="time"><svg class="icon"><use href="#i-clock"/></svg><span id="sum-time">Duración aproximada: —</span></div>
+          <a class="btn btn-gold" id="sum-wa" href="https://wa.me/56972179249" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Pedir hora por WhatsApp</a>
+          <a class="btn btn-line" href="https://agendapro.com/mp/cl/pl/5-stars-barber-shop-melipilla/36615" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Reservar online</a>
+        </aside>
+      </div>
+      <p class="note">Los tiempos son aproximados y pueden variar según el largo y tipo de pelo.</p>
+    </div>
+  </section>
+
+  <section id="trabajos" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Trabajos</span>
+        <h2 id="work-title">Salen de aquí así</h2>
+        <p>Una muestra de lo que hacemos todos los días en la silla.</p>
+      </div>
+      <div class="gallery reveal">
+        <figure class="ph" style="margin:0"><img src="https://images.pexels.com/photos/1112393/pexels-photo-1112393.jpeg?auto=compress&cs=tinysrgb&w=1100" alt="Cliente con barba recién arreglada en la barbería" loading="lazy" onerror="this.remove()"><figcaption>Barba</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="https://images.pexels.com/photos/6007395/pexels-photo-6007395.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Barbero perfilando una barba con navaja" loading="lazy" onerror="this.remove()"><figcaption>Navaja</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="https://images.pexels.com/photos/897262/pexels-photo-897262.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Hombre recibiendo un afeitado" loading="lazy" onerror="this.remove()"><figcaption>Afeitado</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="https://images.pexels.com/photos/1836983/pexels-photo-1836983.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Corte de pelo con máquina" loading="lazy" onerror="this.remove()"><figcaption>Fade</figcaption></figure>
+        <figure class="ph" style="margin:0"><img src="https://images.pexels.com/photos/4625615/pexels-photo-4625615.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Detalle de perfilado de barba" loading="lazy" onerror="this.remove()"><figcaption>Detalle</figcaption></figure>
+      </div>
+      <div class="ig-cta reveal">
+        <span>Fotos referenciales. Aquí irían los trabajos reales de la barbería.</span>
+        <span class="tbd">Fotos del local y cortes reales</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-label="Por qué elegirnos">
+    <div class="wrap">
+      <div class="why reveal">
+        <div class="why-item"><b>Reserva online</b><p>Eliges barbero y hora desde el celular. Sin esperar tu turno sentado.</p></div>
+        <div class="why-item"><b>Toalla caliente</b><p>El ritual de barbería de siempre, con productos de calidad.</p></div>
+        <div class="why-item"><b>En el centro</b><p>Serrano 619, a pasos de la plaza de Melipilla.</p></div>
+        <div class="why-item"><b>Para toda la familia</b><p>Cortes para niños y combo padre e hijo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-labelledby="team-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">El equipo</span>
+        <h2 id="team-title">Tus barberos</h2>
+      </div>
+      <div class="team reveal">
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Barbero</b><span>Fade y diseños</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Barbero</b><span>Barba y navaja</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Barbero</b><span>Cortes clásicos</span><br><span class="tbd">Foto y nombre</span></div>
+        <div class="member"><div class="ph"><svg class="icon"><use href="#i-user"/></svg></div><b>Barbero</b><span>Niños</span><br><span class="tbd">Foto y nombre</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ubicacion" class="light" aria-labelledby="loc-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Ubicación y horario</span>
+        <h2 id="loc-title">Te esperamos en Serrano 619</h2>
+        <span class="status" data-status style="background:#fff;border-color:#e7e5e4"><i></i><span>Horario de atención</span></span>
+      </div>
+      <div class="location reveal">
+        <div class="map">
+          <iframe title="Mapa: Serrano 619, Melipilla" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Serrano%20619%2C%20Melipilla%2C%20Chile&z=17&output=embed"></iframe>
+        </div>
+        <div class="info-card">
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-pin"/></svg></span><div><b>Dirección</b><a href="https://www.google.com/maps/dir/?api=1&destination=Serrano+619+Melipilla" target="_blank" rel="noopener">Serrano 619, local G, Melipilla</a></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-clock"/></svg></span><div style="flex:1"><b>Horario</b>
+            <table class="hours"><tr><td>Lunes a sábado</td><td>11:00 – 19:00</td></tr><tr><td>Domingo</td><td>Cerrado</td></tr></table></div></div>
+          <div class="info-row"><span class="ic"><svg class="icon"><use href="#i-phone"/></svg></span><div><b>Teléfono / WhatsApp</b><a href="tel:+56972179249">+56 9 7217 9249</a></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Preguntas frecuentes</span>
+        <h2 id="faq-title">Antes de venir</h2>
+      </div>
+      <div class="faq reveal">
+        <details><summary>¿Tengo que reservar o puedo llegar?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Puedes llegar, pero con reserva te aseguras tu hora y no esperas. Reservar online toma menos de un minuto.</p></details>
+        <details><summary>¿Cuánto demora un corte con barba?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Entre 45 minutos y una hora, según el corte y el largo de la barba. Usa el armador de servicio de arriba para ver una estimación.</p></details>
+        <details><summary>¿Atienden niños?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Sí, hacemos cortes de niño y tenemos combo padre e hijo.</p></details>
+        <details><summary>¿Qué medios de pago aceptan?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Efectivo, débito, crédito y transferencia. <span class="tbd">Confirmar con la barbería</span></p></details>
+        <details><summary>¿Qué pasa si llego tarde?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Avísanos por WhatsApp. Si el atraso es grande, puede que tengamos que moverte a la siguiente hora disponible para no atrasar al resto.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0" aria-label="Reservar">
+    <div class="wrap">
+      <div class="final reveal">
+        <div class="ph"><img src="https://images.pexels.com/photos/6007400/pexels-photo-6007400.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="txt">
+          <h2>Tu próximo corte, cinco estrellas</h2>
+          <p>Reserva online o escríbenos por WhatsApp. Te esperamos de lunes a sábado.</p>
+          <div class="cta-row">
+            <a class="btn btn-gold" href="https://agendapro.com/mp/cl/pl/5-stars-barber-shop-melipilla/36615" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Reservar hora</a>
+            <a class="btn btn-line" href="https://wa.me/56972179249?text=Hola%2C%20quiero%20reservar%20una%20hora" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <strong style="font-size:18px">5 Stars Barber Shop</strong>
+      <p style="margin:8px 0 16px">Barbería en el centro de Melipilla.</p>
+      <div class="social">
+        <a href="https://www.facebook.com/p/5-Stars-Barber-Shop-100064118677560/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon"><use href="#i-fb"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <strong>Contacto</strong>
+      <p style="margin:8px 0 0">Serrano 619, local G<br>Melipilla<br><a href="tel:+56972179249">+56 9 7217 9249</a></p>
+    </div>
+    <div>
+      <strong>Enlaces</strong>
+      <p style="margin:8px 0 0"><a href="#servicios">Servicios</a><br><a href="#arma">Arma tu servicio</a><br><a href="#ubicacion">Ubicación</a></p>
+    </div>
+    <div class="foot-small">© 2026 5 Stars Barber Shop · Maqueta de propuesta · Fotos referenciales de Pexels</div>
+  </div>
+</footer>
+
+<nav class="mbar" aria-label="Acciones rápidas">
+  <a href="tel:+56972179249"><svg class="icon"><use href="#i-phone"/></svg>Llamar</a>
+  <a class="wa" href="https://wa.me/56972179249?text=Hola%2C%20quiero%20reservar%20una%20hora" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>WhatsApp</a>
+  <a class="book" href="https://agendapro.com/mp/cl/pl/5-stars-barber-shop-melipilla/36615" target="_blank" rel="noopener"><svg class="icon"><use href="#i-cal"/></svg>Reservar</a>
+</nav>
+
+<a class="wa-float" href="https://wa.me/56972179249?text=Hola%2C%20quiero%20reservar%20una%20hora" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="icon-fill" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+
+<script>
+(function () {
+  // Horario (hora de Chile). Días: 0 = domingo … 6 = sábado. Tramos en minutos.
+  var HOURS = { 0: [], 1: [[660, 1140]], 2: [[660, 1140]], 3: [[660, 1140]], 4: [[660, 1140]], 5: [[660, 1140]], 6: [[660, 1140]] };
+  var DAYS = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  var NAMES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  function fmt(m) { return Math.floor(m / 60) + ":" + String(m % 60).padStart(2, "0"); }
+  function nowInChile() {
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Santiago", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+      var o = {}; parts.forEach(function (p) { o[p.type] = p.value; });
+      return { day: DAYS[o.weekday], min: (+o.hour) * 60 + (+o.minute) };
+    } catch (e) {
+      var d = new Date(); return { day: d.getDay(), min: d.getHours() * 60 + d.getMinutes() };
+    }
+  }
+  function status() {
+    var n = nowInChile(), today = HOURS[n.day] || [];
+    for (var i = 0; i < today.length; i++) {
+      if (n.min >= today[i][0] && n.min < today[i][1]) return { open: true, text: "Abierto ahora · cierra a las " + fmt(today[i][1]) };
+      if (n.min < today[i][0]) return { open: false, text: "Cerrado · abre hoy a las " + fmt(today[i][0]) };
+    }
+    for (var k = 1; k <= 7; k++) {
+      var d = (n.day + k) % 7;
+      if (HOURS[d].length) return { open: false, text: "Cerrado · abre " + (k === 1 ? "mañana" : "el " + NAMES[d]) + " a las " + fmt(HOURS[d][0][0]) };
+    }
+    return { open: false, text: "Cerrado" };
+  }
+  var s = status();
+  document.querySelectorAll("[data-status]").forEach(function (el) {
+    el.classList.add(s.open ? "open" : "closed");
+    el.querySelector("span").textContent = s.text;
+  });
+
+  // Arma tu servicio
+  var list = document.getElementById("sum-list");
+  var title = document.getElementById("sum-title");
+  var time = document.getElementById("sum-time");
+  var wa = document.getElementById("sum-wa");
+  document.querySelectorAll(".opts").forEach(function (group) {
+    group.addEventListener("click", function (e) {
+      var opt = e.target.closest(".opt");
+      if (!opt) return;
+      var on = opt.getAttribute("aria-pressed") !== "true";
+      if (group.hasAttribute("data-single")) {
+        group.querySelectorAll(".opt").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+      }
+      opt.setAttribute("aria-pressed", on ? "true" : "false");
+      update();
+    });
+  });
+  function update() {
+    var items = [], mins = 0;
+    document.querySelectorAll('.opt[aria-pressed="true"]').forEach(function (o) {
+      if (o.dataset.name) items.push(o.dataset.name);
+      mins += +o.dataset.min;
+    });
+    if (!items.length) {
+      title.textContent = "Elige tu corte";
+      list.innerHTML = '<li class="empty">Aún no eliges nada.</li>';
+      time.textContent = "Duración aproximada: —";
+      wa.href = "https://wa.me/56972179249";
+      return;
+    }
+    title.textContent = items.length === 1 ? "Buena elección" : "Servicio completo";
+    list.innerHTML = items.map(function (t) { return '<li><svg class="icon"><use href="#i-check"/></svg>' + t + '</li>'; }).join("");
+    time.textContent = "Duración aproximada: " + (mins >= 60 ? Math.floor(mins / 60) + " h " + (mins % 60 ? (mins % 60) + " min" : "") : mins + " min");
+    wa.href = "https://wa.me/56972179249?text=" + encodeURIComponent("Hola, quiero reservar una hora para: " + items.join(", ") + ". ¿Qué horas tienen disponibles?");
+  }
+
+  // Animación al hacer scroll
+  var els = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window)) { els.forEach(function (el) { el.classList.add("in"); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
