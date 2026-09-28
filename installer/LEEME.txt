@@ -1,0 +1,29 @@
+PUNTO DE VENTA - GUIA RAPIDA
+============================
+
+COMPUTADORA PRINCIPAL (SERVIDOR)
+- Abra "Punto de Venta" desde el escritorio.
+- La primera vez entre con el usuario: admin (sin contraseña).
+  Luego cambie la contraseña en Configuración -> Cajeros y permisos.
+- Esta computadora debe estar encendida para que las demás cajas funcionen.
+  El servidor se enciende solo al iniciar Windows.
+- Sus datos se guardan en C:\ProgramData\PuntoDeVenta\datos
+  (se crea un respaldo automático al iniciar y cada 6 horas).
+
+OTRAS CAJAS (CONECTADAS POR WI-FI)
+- Conecte la computadora a la MISMA red Wi-Fi que la principal (no necesita internet).
+- En la principal vea la dirección en: Configuración -> Red y cajas
+  (por ejemplo http://192.168.1.10:8080).
+- Instale este programa y elija "CAJA conectada a la computadora principal",
+  o simplemente abra esa dirección en Chrome o Edge.
+
+CARGAR LOS PRODUCTOS DESDE ELEVENTA
+- En eleventa: Productos -> Exportar a Excel (o Inventario -> Reporte de inventario -> Exportar).
+- En este programa: F3 Productos -> Importar -> elija el archivo -> Importar.
+
+TECLAS PRINCIPALES
+F1 Ventas   F2 Clientes   F3 Productos   F4 Inventario
+En ventas: F10 Buscar, F11 Mayoreo, F12 Cobrar, INS Varios, Ctrl+P Artículo común,
+DEL Borrar artículo, F5 Cambiar ticket, F6 Ticket pendiente, F7 Entradas, F8 Salidas,
+F9 Verificador de precios, + / - cambiar cantidad, 3*CODIGO para vender 3 piezas.
+Al cobrar: F1 Cobrar e imprimir, F2 Cobrar sin imprimir.

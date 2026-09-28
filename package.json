@@ -1,0 +1,14 @@
+{
+  "name": "punto-de-venta",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Punto de venta para uso personal: ventas, inventario compartido en red local, clientes con crédito, corte de caja e importación desde Excel.",
+  "scripts": {
+    "start": "node puntoventa/server/server.js",
+    "test": "node tests/e2e.test.js",
+    "instalador": "bash installer/build.sh"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
