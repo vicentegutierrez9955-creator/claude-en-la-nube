@@ -139,6 +139,23 @@ h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(
 .bg-soft{background:var(--navy-50)}
 .bg-paper{background:var(--paper)}
 
+/* Fondos: cuadrícula tipo hoja contable, puntos y luces suaves en azul rey */
+section{position:relative;isolation:isolate}
+section::before,section::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hero::before{background-image:linear-gradient(rgba(29,78,216,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(29,78,216,.08) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 70% 35%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 80% 70% at 70% 35%,#000 20%,transparent 75%)}
+.hero::after{background:radial-gradient(520px 420px at 88% 18%,rgba(59,110,245,.22),transparent 70%),radial-gradient(460px 380px at 0% 90%,rgba(59,110,245,.14),transparent 70%)}
+.bg-soft{background:linear-gradient(180deg,var(--navy-50),#e6eeff)}
+.bg-soft::before{background-image:radial-gradient(rgba(29,78,216,.16) 1.2px,transparent 1.6px);background-size:22px 22px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 65%);mask-image:linear-gradient(180deg,#000,transparent 65%)}
+.bg-paper::before{background-image:repeating-linear-gradient(180deg,transparent 0 31px,rgba(29,78,216,.06) 31px 32px);-webkit-mask-image:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);mask-image:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent)}
+.glow-r::after{background:radial-gradient(560px 420px at 100% 0%,rgba(59,110,245,.13),transparent 70%),radial-gradient(420px 320px at 0% 100%,rgba(59,110,245,.08),transparent 70%)}
+.glow-l::after{background:radial-gradient(560px 420px at 0% 10%,rgba(59,110,245,.13),transparent 70%),radial-gradient(420px 320px at 100% 100%,rgba(59,110,245,.08),transparent 70%)}
+.bg-deep{background:radial-gradient(900px 520px at 90% -10%,rgba(59,110,245,.55),transparent 60%),radial-gradient(700px 420px at -10% 110%,rgba(59,110,245,.35),transparent 60%),linear-gradient(160deg,var(--navy-950),#12308f);color:#fff}
+.bg-deep::before{background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:36px 36px;-webkit-mask-image:radial-gradient(ellipse 70% 80% at 50% 40%,#000 25%,transparent 80%);mask-image:radial-gradient(ellipse 70% 80% at 50% 40%,#000 25%,transparent 80%)}
+.bg-deep .kicker{color:#a9c2ff}
+.bg-deep .section-head h2{color:#fff}
+.bg-deep .section-head p{color:#c9d8ff}
+.bg-deep .svc-item{color:var(--ink);border-color:transparent;box-shadow:0 20px 40px -24px rgba(0,0,0,.6)}
+
 /* ¿Para quién? */
 .who{display:grid;gap:14px}
 .who-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
@@ -175,6 +192,7 @@ h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(
 .due.soon .count b{color:#b45309}
 .due.urgent .count b{color:var(--red)}
 .note{font-size:13px;color:var(--muted);margin-top:14px}
+.bg-deep .note{color:#c9d8ff}
 
 /* Arma tu consulta */
 .quiz{display:grid;gap:18px}
@@ -232,6 +250,9 @@ h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(
 .quote h2{color:#fff;margin:6px 0 10px}
 .quote p{margin:0;color:#dbe6ff;font-size:17px;max-width:560px}
 .quote .kicker{color:#bcd0ff}
+.quote{position:relative;overflow:hidden;isolation:isolate;box-shadow:0 30px 60px -30px rgba(23,57,168,.7)}
+.quote::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:30px 30px;-webkit-mask-image:linear-gradient(90deg,transparent 10%,#000 80%);mask-image:linear-gradient(90deg,transparent 10%,#000 80%)}
+.quote::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(420px 300px at 95% 0%,rgba(96,140,255,.5),transparent 70%)}
 .btn-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
 .btn-light:hover{border-color:#fff}
 
@@ -434,7 +455,7 @@ footer a:hover{color:#fff}
     </div>
   </section>
 
-  <section id="servicios" aria-labelledby="svc-title">
+  <section id="servicios" class="bg-deep" aria-labelledby="svc-title">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="kicker">Servicios</span>
@@ -465,7 +486,7 @@ footer a:hover{color:#fff}
     </div>
   </section>
 
-  <section id="consulta" aria-labelledby="quiz-title">
+  <section id="consulta" class="glow-r" aria-labelledby="quiz-title">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="kicker">Arma tu consulta</span>
@@ -533,7 +554,7 @@ footer a:hover{color:#fff}
     </div>
   </section>
 
-  <section aria-labelledby="about-title">
+  <section class="glow-l" aria-labelledby="about-title">
     <div class="wrap about">
       <div class="portrait reveal">
         <div><svg class="icon"><use href="#i-user"/></svg><span class="tbd">Aquí va la foto real del contador</span></div>
@@ -569,7 +590,7 @@ footer a:hover{color:#fff}
     </div>
   </section>
 
-  <section id="faq" aria-labelledby="faq-title">
+  <section id="faq" class="glow-r" aria-labelledby="faq-title">
     <div class="wrap">
       <div class="section-head center reveal">
         <span class="kicker">Preguntas frecuentes</span>
