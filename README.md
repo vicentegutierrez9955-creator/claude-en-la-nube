@@ -31,3 +31,14 @@ de WhatsApp ya escrito:
 
 Precios, horarios, fotos y equipo que no se pudieron confirmar están marcados en amarillo.
 En Buddha Sushi la carta y los precios son de ejemplo.
+
+## Asesorías Contables JC (sitio real, en borrador)
+
+Carpeta `asesorias-contables-jc/`. Es un contador auditor con más de 20 años de experiencia,
+oficina en Manso 725, Melipilla, WhatsApp +56 9 9101 7048.
+
+- Calendario tributario que calcula los próximos vencimientos (F29, Previred, Operación Renta).
+- "Arma tu consulta": el cliente marca su caso y se arma el mensaje de WhatsApp.
+- Faltan (en amarillo): foto y nombre completo, precios de los planes, horario, correo y la
+  confirmación de los servicios. Al publicarla de verdad hay que quitar el aviso de borrador
+  y el `noindex`.
