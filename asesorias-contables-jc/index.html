@@ -227,18 +227,13 @@ h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(
 .stat span{font-size:13px;font-weight:600;color:var(--muted)}
 .tbd{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#92400e;background:#fef3c7;border:1px dashed #f59e0b;padding:2px 8px;border-radius:999px}
 
-/* Planes */
-.plans{display:grid;gap:14px}
-.plan{background:#fff;border:1px solid var(--line);border-radius:22px;padding:28px 24px;display:flex;flex-direction:column;gap:12px}
-.plan.hot{border:2px solid var(--acc-600);position:relative}
-.plan.hot::before{content:"Más pedido";position:absolute;top:-12px;left:22px;background:var(--acc-600);color:#fff;font-size:12px;font-weight:800;padding:3px 12px;border-radius:999px}
-.plan h3{margin:0;font-size:20px;font-weight:800}
-.plan .for{margin:0;color:var(--muted);font-size:15px}
-.price{font-family:"DM Serif Display",Georgia,serif;font-size:40px;line-height:1;color:var(--navy-900)}
-.price small{font-family:"Inter",sans-serif;font-size:15px;color:var(--muted);font-weight:600}
-.plan ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;flex:1}
-.plan li{display:flex;gap:10px;font-size:15px}
-.plan li .icon{width:18px;height:18px;color:var(--acc-600);margin-top:3px}
+/* Presupuesto */
+.quote{background:linear-gradient(135deg,var(--navy-800),var(--navy-950));color:#fff;border-radius:26px;padding:36px 26px;display:grid;gap:22px;align-items:center}
+.quote h2{color:#fff;margin:6px 0 10px}
+.quote p{margin:0;color:#dbe6ff;font-size:17px;max-width:560px}
+.quote .kicker{color:#bcd0ff}
+.btn-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.5)}
+.btn-light:hover{border-color:#fff}
 
 /* FAQ */
 .faq{max-width:800px;margin:0 auto;display:grid;gap:12px}
@@ -291,7 +286,6 @@ footer a:hover{color:#fff}
   .svc{grid-template-columns:repeat(2,1fr)}
   .cal{grid-template-columns:repeat(3,1fr)}
   .steps{grid-template-columns:repeat(2,1fr)}
-  .plans{grid-template-columns:repeat(3,1fr)}
   .opts{grid-template-columns:repeat(3,minmax(0,1fr))}
   header .btn-sm span{display:inline}
 }
@@ -311,6 +305,7 @@ footer a:hover{color:#fff}
   .about{grid-template-columns:.8fr 1.2fr;gap:56px}
   .contact{grid-template-columns:1fr 1fr}
   .final{padding:44px}
+  .quote{grid-template-columns:1.4fr auto;padding:48px 52px}
   footer{padding-bottom:36px}
   footer .wrap{grid-template-columns:2fr 1fr 1fr}
   .mbar{display:none}
@@ -361,7 +356,7 @@ footer a:hover{color:#fff}
     <nav class="main" aria-label="Principal">
       <a href="#servicios">Servicios</a>
       <a href="#vencimientos">Vencimientos</a>
-      <a href="#planes">Planes</a>
+      <a href="#consulta">Consulta</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <a class="btn btn-wa btn-sm" href="https://wa.me/56991017048?text=Hola%2C%20quiero%20hacer%20una%20consulta%20contable" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>WhatsApp<span>&nbsp;directo</span></a>
@@ -375,7 +370,7 @@ footer a:hover{color:#fff}
       <div>
         <span class="pill"><i></i>Contador auditor · más de 20 años de experiencia</span>
         <h1 id="hero-title">Tus impuestos al día, <em>sin enredos</em></h1>
-        <p class="lead">Desde mi oficina en Melipilla llevo la contabilidad de pymes, emprendedores e independientes. IVA mensual, Operación Renta, sueldos e inicio de actividades, explicado en simple y con un precio fijo que sabes desde el primer día.</p>
+        <p class="lead">Desde mi oficina en Melipilla llevo la contabilidad de pymes, emprendedores e independientes. IVA mensual, Operación Renta, sueldos e inicio de actividades, explicado en simple y con un presupuesto claro antes de empezar.</p>
         <div class="cta-row">
           <a class="btn btn-wa" href="https://wa.me/56991017048?text=Hola%2C%20quiero%20cotizar%20la%20contabilidad%20de%20mi%20negocio" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Cotizar por WhatsApp</a>
           <a class="btn btn-ghost" href="#consulta">¿Qué necesito?</a>
@@ -383,7 +378,7 @@ footer a:hover{color:#fff}
         <div class="checks">
           <span><svg class="icon"><use href="#i-check"/></svg>Oficina en Manso 725</span>
           <span><svg class="icon"><use href="#i-check"/></svg>Online o presencial</span>
-          <span><svg class="icon"><use href="#i-check"/></svg>Precio fijo mensual</span>
+          <span><svg class="icon"><use href="#i-check"/></svg>Atención personalizada</span>
         </div>
       </div>
       <div class="hero-media">
@@ -528,7 +523,7 @@ footer a:hover{color:#fff}
       <div class="steps reveal">
         <article class="step"><h3>Me escribes</h3><p>Por WhatsApp me cuentas tu caso. Sin formularios eternos.</p></article>
         <article class="step"><h3>Revisamos tu situación</h3><p>Veo cómo estás con el SII y te digo qué hay que hacer, sin letra chica.</p></article>
-        <article class="step"><h3>Precio fijo</h3><p>Te paso un valor mensual claro. Sabes cuánto pagas desde el primer día.</p></article>
+        <article class="step"><h3>Te cotizo</h3><p>Te preparo un presupuesto según tu caso, antes de empezar.</p></article>
         <article class="step"><h3>Te olvidas</h3><p>Me encargo de declarar a tiempo y te aviso de lo que necesito.</p></article>
       </div>
       <div class="band reveal">
@@ -558,50 +553,17 @@ footer a:hover{color:#fff}
     </div>
   </section>
 
-  <section id="planes" class="bg-paper" aria-labelledby="plans-title">
+  <section id="cotiza" class="bg-paper" aria-labelledby="quote-title">
     <div class="wrap">
-      <div class="section-head center reveal">
-        <span class="kicker">Planes</span>
-        <h2 id="plans-title">Un precio claro para cada etapa</h2>
-        <p>Valores mensuales de referencia. Te confirmo el precio exacto después de revisar tu caso.</p>
-      </div>
-      <div class="plans reveal">
-        <div class="plan">
-          <h3>Emprende</h3>
-          <p class="for">Independientes y negocios que recién parten, sin trabajadores.</p>
-          <div class="price">$— <small>/ mes</small></div>
-          <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Declaración mensual de IVA (F29)</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Operación Renta incluida</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Consultas por WhatsApp</li>
-          </ul>
-          <span class="tbd">Precio a definir</span>
-          <a class="btn btn-ghost" href="https://wa.me/56991017048?text=Hola%2C%20me%20interesa%20el%20plan%20Emprende" target="_blank" rel="noopener">Me interesa</a>
+      <div class="quote reveal">
+        <div>
+          <span class="kicker">Presupuesto</span>
+          <h2 id="quote-title">Cada caso es distinto</h2>
+          <p>No trabajo con planes cerrados. Reviso tu situación y te cotizo solo lo que necesitas, sin pagar por servicios que no usas.</p>
         </div>
-        <div class="plan hot">
-          <h3>Pyme</h3>
-          <p class="for">Negocios en marcha con hasta 5 trabajadores.</p>
-          <div class="price">$— <small>/ mes</small></div>
-          <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Contabilidad completa</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>F29, renta y balances</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Sueldos y Previred</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Resumen mensual en simple</li>
-          </ul>
-          <span class="tbd">Precio a definir</span>
-          <a class="btn btn-wa" href="https://wa.me/56991017048?text=Hola%2C%20me%20interesa%20el%20plan%20Pyme" target="_blank" rel="noopener">Me interesa</a>
-        </div>
-        <div class="plan">
-          <h3>Empresa</h3>
-          <p class="for">Más de 5 trabajadores o varias sucursales.</p>
-          <div class="price">A medida</div>
-          <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Todo lo del plan Pyme</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Asesoría tributaria</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Reunión mensual</li>
-          </ul>
-          <span class="tbd">Confirmar alcance</span>
-          <a class="btn btn-ghost" href="https://wa.me/56991017048?text=Hola%2C%20quiero%20cotizar%20para%20mi%20empresa" target="_blank" rel="noopener">Cotizar</a>
+        <div class="cta-row">
+          <a class="btn btn-wa" href="https://wa.me/56991017048?text=Hola%2C%20quiero%20un%20presupuesto%20para%20mi%20caso" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="#i-wa"/></svg>Pedir presupuesto</a>
+          <a class="btn btn-light" href="#consulta">Arma tu consulta</a>
         </div>
       </div>
     </div>
@@ -614,7 +576,7 @@ footer a:hover{color:#fff}
         <h2 id="faq-title">Lo que más me preguntan</h2>
       </div>
       <div class="faq reveal">
-        <details><summary>¿Cuánto cobra un contador al mes?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Depende de cuántos documentos emites y si tienes trabajadores. Por eso primero reviso tu caso y te doy un precio fijo mensual, sin cobros sorpresa.</p></details>
+        <details><summary>¿Cuánto cobra un contador al mes?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Depende de cuántos documentos emites y si tienes trabajadores. Por eso primero reviso tu caso y te preparo un presupuesto a tu medida, antes de empezar.</p></details>
         <details><summary>¿Atiendes online o tengo que ir a una oficina?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Como prefieras. Casi todo se puede hacer online por WhatsApp y correo, y si prefieres nos juntamos en mi oficina en Manso 725, Melipilla.</p></details>
         <details><summary>Estoy atrasado con el SII, ¿me puedes ayudar?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Sí. Revisamos qué declaraciones faltan, calculamos multas e intereses y vemos si conviene pedir un convenio de pago. Mientras antes, mejor.</p></details>
         <details><summary>¿Qué necesito para empezar?<svg class="icon"><use href="#i-chev"/></svg></summary><p>Tu RUT, tu clave del SII y, si ya tienes negocio, tus facturas o boletas. Te digo exactamente qué más hace falta según tu caso.</p></details>
@@ -658,7 +620,7 @@ footer a:hover{color:#fff}
     </div>
     <div>
       <strong>Enlaces</strong>
-      <p style="margin:8px 0 0"><a href="#servicios">Servicios</a><br><a href="#vencimientos">Vencimientos</a><br><a href="#planes">Planes</a></p>
+      <p style="margin:8px 0 0"><a href="#servicios">Servicios</a><br><a href="#vencimientos">Vencimientos</a><br><a href="#consulta">Consulta</a></p>
     </div>
     <div class="foot-small">© 2026 Asesorías Contables JC · Fotos referenciales de Pexels</div>
   </div>
