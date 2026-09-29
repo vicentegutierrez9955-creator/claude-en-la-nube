@@ -35,10 +35,12 @@ En Buddha Sushi la carta y los precios son de ejemplo.
 ## Asesorías Contables JC (sitio real, en borrador)
 
 Carpeta `asesorias-contables-jc/`. Es un contador auditor con más de 20 años de experiencia,
-oficina en Manso 725, Melipilla, WhatsApp +56 9 9101 7048.
+oficina en Manso 725-B, Melipilla, WhatsApp +56 9 9101 7048, correo
+asesoriascontablesjc956@gmail.com. Servicios, colores y logo sacados de su cartel
+(barras celestes, marco amarillo, flechas naranjas; el logo es una recreación en SVG).
 
 - Calendario tributario que calcula los próximos vencimientos (F29, Previred, Operación Renta).
 - "Arma tu consulta": el cliente marca su caso y se arma el mensaje de WhatsApp.
-- Faltan (en amarillo): foto y nombre completo, horario, correo y la
-  confirmación de los servicios. Al publicarla de verdad hay que quitar el aviso de borrador
+- Faltan (en amarillo): foto y nombre completo, y horario. Idealmente, el archivo
+  original del logo. Al publicarla de verdad hay que quitar el aviso de borrador
   y el `noindex`.
