@@ -12,6 +12,8 @@ web y productos digitales
 | Active Gym (gimnasio) (Melipilla) | `active-gym/` | https://plantillas-omega.vercel.app/active-gym |
 | ST Motor (taller mecánico) (Melipilla) | `st-motor/` | https://plantillas-omega.vercel.app/st-motor |
 | Buddha Sushi (sushi y delivery) (Melipilla) | `buddha-sushi/` | https://plantillas-omega.vercel.app/buddha-sushi |
+| Gustavo Parra Podología (Estación Central) | `gustavo-parra-podologia/` | https://plantillas-omega.vercel.app/gustavo-parra-podologia |
+| Centro Veterinario PetCare (Puente Alto) | `petcare-puente-alto/` | https://plantillas-omega.vercel.app/petcare-puente-alto |
 
 Son páginas estáticas de una sola página (HTML + CSS, sin build). Llevan un aviso
 de "maqueta de muestra" y `noindex` para que Google no las indexe antes de que el
@@ -44,3 +46,12 @@ asesoriascontablesjc956@gmail.com. Servicios, colores y logo sacados de su carte
 - Faltan (en amarillo): foto y nombre completo, y horario. Idealmente, el archivo
   original del logo. Al publicarla de verdad hay que quitar el aviso de borrador
   y el `noindex`.
+
+### Tercera tanda (Santiago)
+
+- **Gustavo Parra Podología:** "¿Qué te está molestando?" (uña encarnada, callos, hongos, pie diabético…),
+  día preferido y aviso de "abierto ahora" según la hora de Chile.
+- **Centro Veterinario PetCare:** "¿Qué le pasa a tu mascota?" (perro o gato + síntoma) que recomienda la
+  especialidad; si es una urgencia cambia a rojo y muestra "Llamar ahora".
+- Estas dos cargan `styles.css` aparte con ruta absoluta (`/carpeta/styles.css`), porque la URL no termina en `/`.
+
