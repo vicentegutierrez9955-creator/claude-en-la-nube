@@ -39,10 +39,10 @@ button{font:inherit}
 header.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo-mark{width:46px;height:46px;display:block;flex:none}
+.logo-mark{width:62px;height:38px;display:block;flex:none}
 .logo-mark svg{width:100%;height:100%}
 .logo-text{line-height:1.1}
-.logo-text strong{display:block;font-size:18px;font-weight:800;letter-spacing:-.01em}
+.logo-text strong{display:block;font-family:"Montserrat","Inter",sans-serif;font-size:15px;font-weight:800;letter-spacing:.01em;text-transform:uppercase;color:#2a3142}
 .logo-text small{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 nav.main{display:none;gap:26px;font-weight:600;font-size:15px}
 nav.main a{text-decoration:none;color:var(--muted)}
@@ -206,6 +206,8 @@ section::before,section::after{content:"";position:absolute;inset:0;z-index:-1;p
 .about{display:grid;gap:30px;align-items:center}
 .portrait{aspect-ratio:4/5;border-radius:24px;background:linear-gradient(160deg,var(--navy-100),var(--acc-50));display:grid;place-items:center;color:var(--navy-800);text-align:center;padding:20px;max-width:420px;width:100%;margin:0 auto}
 .portrait .icon{width:64px;height:64px;opacity:.5;margin:0 auto 12px}
+.portrait.has-photo{padding:0;overflow:hidden;box-shadow:0 30px 60px -30px rgba(19,72,120,.55);position:relative}
+.portrait.has-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .about p{color:var(--muted);font-size:17px}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
 .stat{background:var(--navy-50);border-radius:14px;padding:16px 10px;text-align:center}
@@ -271,6 +273,11 @@ footer a:hover{color:#fff}
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
+@media (max-width:520px){
+  .logo-mark{width:50px;height:31px}
+  .logo-text strong{font-size:13px;line-height:1.15}
+  .logo-text small{display:none}
+}
 @media (min-width:640px){
   .who{grid-template-columns:repeat(2,1fr)}
   .svc{grid-template-columns:repeat(2,1fr)}

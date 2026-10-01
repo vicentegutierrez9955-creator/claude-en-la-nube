@@ -43,8 +43,11 @@ asesoriascontablesjc956@gmail.com. Servicios, colores y logo sacados de su carte
 
 - Calendario tributario que calcula los próximos vencimientos (F29, Previred, Operación Renta).
 - "Arma tu consulta": el cliente marca su caso y se arma el mensaje de WhatsApp.
-- Faltan (en amarillo): foto y nombre completo, y horario. Idealmente, el archivo
-  original del logo. Al publicarla de verdad hay que quitar el aviso de borrador
+- Datos confirmados por el contador: Juan Carlos Vilches, contador auditor; ex encargado de
+  Control de la Municipalidad de San Pedro; lunes a viernes de 9:00 a 15:00 (con hora);
+  presencial o por videollamada; cobra por trámite o mensualidad; primera consulta gratis
+  (se usa como gancho principal). Sin datos pendientes en amarillo.
+- Falta: ficha de Google Maps, dominio propio y, al lanzar, quitar el `noindex`. Al publicarla de verdad hay que quitar el aviso de borrador
   y el `noindex`.
 
 ### Tercera tanda (Santiago)
