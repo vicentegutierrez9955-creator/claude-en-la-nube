@@ -1,0 +1,44 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "asesoriascontables-jc.cl" }],
+      "destination": "/asesorias-contables-jc"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.asesoriascontables-jc.cl" }],
+      "destination": "/asesorias-contables-jc"
+    },
+    {
+      "source": "/barrio/:paso",
+      "destination": "/barrio"
+    },
+    {
+      "source": "/premium/:paso",
+      "destination": "/premium"
+    },
+    {
+      "source": "/urbana/:paso",
+      "destination": "/urbana"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
+}
