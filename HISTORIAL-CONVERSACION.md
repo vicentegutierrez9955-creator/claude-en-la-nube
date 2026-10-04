@@ -27,7 +27,13 @@
 - Se agregó **Transferir datos desde eleventa** (Configuración): productos y clientes con saldos desde los Excel de eleventa.
 - Nota: el pedido original de las mermas no estaba en esta conversación, así que se armó según el uso habitual. Si el usuario quiere algo distinto, hay que ajustarlo.
 
+## Versiones 1.1.1 a 1.2.0
+- 1.1.1: se arregló el inicio de sesión (el nombre de la caja era obligatorio y no se veía; `admin`/`admin` la primera vez).
+- 1.1.2: el instalador cierra bien el servidor anterior (antes fallaba con "Error abriendo archivo para escritura: node.exe").
+- 1.2.0: **Configuración → Base de datos** carga la base completa de eleventa (`PDVDATA.FDB`) con el Firebird 2.5 incluido.
+
 ## Estado / próximos pasos
+- Probar la carga del PDVDATA.FDB real del suegro: confirmar que se reconocen el límite y el saldo de los clientes.
 - Falta probar el instalador en un Windows real.
 - Falta probar la importación con un archivo real exportado de eleventa.
 - No incluido: facturación electrónica (CFDI), recargas, pago de servicios, báscula conectada.

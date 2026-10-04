@@ -24,7 +24,7 @@ Todo el texto de la interfaz y la documentación va en **español**.
 
 ## Funciones agregadas en la versión 1.1.0
 - **Mermas** (F4 Inventario → Mermas): `Store.registrarMerma` guarda un movimiento `movinv` de tipo `merma`, con `motivo` y `costoTotal`, más su reporte.
-- **Transferir datos desde eleventa** (Configuración): asistente que importa productos (`Importar.abrir`) y clientes con saldos (`Importar.clientes` → `Store.importarClientes`).
+- Importación de clientes con saldos desde Excel (`Importar.clientes` → `Store.importarClientes`).
 
 ## Versión 1.1.1 (arreglo del inicio de sesión)
 - Antes, la caja exigía escribir un nombre en un campo fácil de pasar por alto, y no dejaba entrar. Ahora el
@@ -40,6 +40,19 @@ Todo el texto de la interfaz y la documentación va en **español**.
   que `node.exe` se pueda abrir para escritura y, si sigue bloqueado, explica qué hacer.
 - `server.js`: si el puerto está ocupado por otra versión, le pide que se cierre (`/api/apagar-local`,
   sólo desde 127.0.0.1) y toma su lugar.
+
+## Versión 1.2.0: base de datos completa de eleventa
+- Configuración → **Base de datos** (antes "Transferir datos desde eleventa"): botón para cargar `PDVDATA.FDB`,
+  más una zona donde se arrastran varios archivos y se reconoce solo de qué tipo es cada uno (`Importar.tipoArchivo`).
+- `puntoventa/server/eleventa.js`: copia el `.FDB`, enciende el Firebird 2.5 incluido (`$INSTDIR\firebird`, copiado a
+  `datos/firebird-motor` porque necesita escribir en él) en `127.0.0.1:30550`, lee con `server/vendor/node-firebird`
+  (MPL-2.0, sin dependencias), reconoce tablas y columnas por alias (`PRODUCTOS`, `DEPARTAMENTOS`, `CLIENTES`;
+  `CODIGO`, `DESCRIPCION`, `PCOSTO`, `PFINAL`/`PVENTA`, `MAYOREO`, `DINVENTARIO`, `DINVMINIMO`, `DINVMAXIMO`,
+  `TVENTA`, `USA_INVENTARIO`, `DEPT`, `ELIMINADO_EN`...) y devuelve filas para `importarProductos`/`importarClientes`.
+- API: `/api/eleventa/buscar`, `/api/eleventa/leer-ruta`, `/api/eleventa/subir` (permiso de configuración).
+- Pruebas: `source tests/preparar-firebird-linux.sh && npm test` usa `tests/fixtures/PDVDATA-ejemplo.FDB`.
+- Nota: los nombres reales de columnas de clientes en eleventa (límite y saldo) no están confirmados. Si no se
+  encuentra el saldo, se avisa en la vista previa.
 
 ## Atajos (igual que eleventa)
 F1 Ventas, F2 Clientes, F3 Productos, F4 Inventario. En ventas: F10 Buscar, F11 Mayoreo, F12 Cobrar,

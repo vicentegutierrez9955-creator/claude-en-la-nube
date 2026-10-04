@@ -13,6 +13,7 @@ const assert = require('node:assert/strict');
 let chromium;
 try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require(path.join(require('node:child_process').execSync('npm root -g').toString().trim(), 'playwright'))); }
 
+const TOP = '#modal-root > .modal-back:last-child';
 const PORT = 8190 + Math.floor(Math.random() * 500);
 const BASE = `http://localhost:${PORT}`;
 const DATA = fs.mkdtempSync(path.join(os.tmpdir(), 'pv-test-'));
@@ -36,10 +37,10 @@ async function login(page, caja, usuario = 'admin', password = '') {
   await page.click('#login-form button[type=submit]');
   // primera vez: ofrece crear contraseña del administrador (se deja para después)
   await page.waitForSelector('.modal');
-  if (await page.isVisible('.modal >> text=Cree su contraseña')) { await page.click('.modal [data-no]'); await page.waitForSelector('.modal >> text=Iniciar turno'); }
+  if (await page.isVisible('.modal >> text=Cree su contraseña')) { await page.click(TOP + ' [data-no]'); await page.waitForSelector('.modal >> text=Iniciar turno'); }
   // ventana de fondo de caja
   await page.fill('.modal input[name=fondo]', '500');
-  await page.click('.modal [data-ok]');
+  await page.click(TOP + ' [data-ok]');
   await page.waitForSelector('[data-code]');
 }
 
@@ -73,9 +74,9 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c1.setInputFiles('[data-file]', xlsxPath);
     await c1.waitForSelector('[data-prev] tr');
     assert.match(await c1.textContent('[data-resumen]'), /3.*producto/);
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForSelector('.modal >> text=Productos nuevos: 3');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     assert.equal(await c1.locator('[data-list] tr').count(), 3);
 
     /* ---- Caja 2 se conecta y ve el mismo catálogo ---- */
@@ -127,7 +128,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     assert.equal(await c1.locator('[data-tabs] button').count(), 2);
     await c1.keyboard.press('Control+p');
     await c1.fill('.modal input[name=precio]', '5');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     assert.equal(await c1.textContent('[data-total]'), '$5.00');
     await c1.keyboard.press('F5');
     assert.equal(await c1.textContent('[data-total]'), '$18.00');
@@ -138,7 +139,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c1.fill('.modal input[name=nombre]', 'Juan Pérez');
     await c1.check('.modal input[name=credito]');
     await c1.fill('.modal input[name=limite]', '1000');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForFunction(() => Store.clientes.length === 1);
     await c1.keyboard.press('F1');
     await c1.keyboard.press('F12');
@@ -166,7 +167,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c1.press('[data-code]', 'Enter');
     await c1.fill('.modal input[name=cantidad]', '2');
     await c1.selectOption('.modal select[name=motivo]', 'Vencido / caducado');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForSelector('[data-rec] >> text=$20.00');
     assert.equal(await c1.evaluate(() => Store.findProducto('7502').existencia), 9);
     await c1.waitForSelector('.stat >> text=$20.00');
@@ -188,11 +189,11 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c1.click('#mainnav [data-screen=corte]');
     await c1.click('[data-corte]');
     await c1.fill('.modal input[name=contado]', '570');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForSelector('.modal >> text=Diferencia: -$4.00');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForSelector('.modal >> text=Nuevo turno');
-    await c1.click('.modal [data-no]');
+    await c1.click(TOP + ' [data-no]');
     assert.equal(await c1.evaluate(() => Store.turno), null);
     // la Caja 2 sigue con su turno abierto
     assert.ok(await c2.evaluate(() => Store.turno && Store.turno.caja === 'Caja 2'));
@@ -205,7 +206,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c3.fill('#login-form input[name=password]', '1234');
     await c3.fill('#login-form input[name=caja]', 'Caja 3');
     await c3.click('#login-form button[type=submit]');
-    await c3.waitForSelector('.modal >> text=Iniciar turno'); await c3.click('.modal [data-no]');
+    await c3.waitForSelector('.modal >> text=Iniciar turno'); await c3.click(TOP + ' [data-no]');
     assert.equal(await c3.isVisible('#mainnav [data-screen=productos]'), false);
     const denied = await c3.evaluate(() => Store.movimientoCaja('salida', 50, 'robo').then(() => 'ok', e => e.message));
     assert.match(denied, /permiso/);
@@ -228,15 +229,26 @@ async function login(page, caja, usuario = 'admin', password = '') {
     ]);
     const wbC = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wbC, wsC, 'Clientes');
     fs.writeFileSync(cliPath, XLSX.write(wbC, { type: 'buffer', bookType: 'xlsx' }));
+    // Configuración → Base de datos: se arrastran a la vez el Excel de clientes y uno de productos
+    const prodPath = path.join(DATA, 'productos2.csv');
+    fs.writeFileSync(prodPath, 'Código;Descripción;Precio Costo;Precio Venta;Departamento;Existencia\n7504;JABON DE BARRA;10;15;LIMPIEZA;12\n');
     await c1.click('#mainnav [data-screen=configuracion]');
-    await c1.click('[data-tab=transferir]');
-    await c1.click('[data-cli]');
-    await c1.setInputFiles('.modal [data-file]', cliPath);
+    await c1.click('[data-tab=basedatos]');
+    await c1.setInputFiles('[data-files]', [cliPath, prodPath]);
+    await c1.waitForSelector('.modal >> text=Importar clientes desde Excel');
     await c1.waitForSelector('.modal [data-prev] tr');
     assert.match(await c1.textContent('.modal [data-resumen]'), /2<\/b> nuevos|2 nuevos/);
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
     await c1.waitForSelector('.modal >> text=Nuevos: 2');
-    await c1.click('.modal [data-ok]');
+    await c1.click(TOP + ' [data-ok]');
+    // luego se abre solo el importador de productos con el segundo archivo
+    await c1.waitForSelector('.modal >> text=Importar productos desde Excel');
+    await c1.waitForSelector('.modal [data-prev] tr');
+    await c1.click(TOP + ' [data-ok]');
+    await c1.waitForSelector('.modal >> text=Productos nuevos: 1');
+    await c1.click(TOP + ' [data-ok]');
+    assert.equal(await c1.evaluate(() => Store.findProducto('7504').existencia), 12);
+    assert.match(await c1.textContent('[data-log]'), /clientes[\s\S]*productos/);
     const cli = await c1.evaluate(() => Object.fromEntries(Store.clientes.map(c => [c.nombre, [c.saldo, c.limite, c.credito]])));
     assert.deepEqual(cli['María López'], [120.5, 500, true]);
     assert.deepEqual(cli['Pedro Soto'], [0, 0, true]);
@@ -245,13 +257,37 @@ async function login(page, caja, usuario = 'admin', password = '') {
     const abonoM = await c1.evaluate(() => Store.abonar(Store.clientes.find(c => c.nombre === 'María López').id, 20.5, 'efectivo'));
     assert.equal(abonoM.cliente.saldo, 100);
 
+    /* ---- Cargar la base de datos COMPLETA de eleventa (PDVDATA.FDB) ---- */
+    if (process.env.PV_FIREBIRD_DIR) {
+      await c1.click('#mainnav [data-screen=configuracion]');
+      await c1.click('[data-tab=basedatos]');
+      await c1.setInputFiles('[data-fdb-file]', path.join(__dirname, 'fixtures', 'PDVDATA-ejemplo.FDB'));
+      await c1.waitForSelector('.modal >> text=Base de datos de eleventa encontrada', { timeout: 30000 });
+      assert.match(await c1.textContent('.modal .stats'), /Productos\s*4[\s\S]*Departamentos\s*3[\s\S]*Clientes\s*2/);
+      assert.match(await c1.textContent('.modal'), /Se omiten 1 producto/);
+      await c1.click(TOP + ' [data-ok]');
+      await c1.waitForSelector('.modal >> text=¡Base de datos cargada!', { timeout: 30000 });
+      await c1.click(TOP + ' [data-ok]');
+      const fb = await c1.evaluate(() => ({ frijol: Store.findProducto('FRIJOL'), bolsa: Store.findProducto('BOLSA'), viejo: Store.findProducto('VIEJO1'), maria: Store.clientes.find(c => U.norm(c.nombre) === 'maria lopez') }));
+      assert.equal(fb.frijol.existencia, 50.75);
+      assert.equal(fb.frijol.tipoVenta, 'G');
+      assert.equal(fb.frijol.departamento, 'GRANOS Y SEMILLAS');
+      assert.equal(fb.frijol.mayoreo, 32);
+      assert.equal(fb.bolsa.descripcion, 'BOLSA DE REGALO ÑANDÚ');
+      assert.equal(fb.bolsa.usaInventario, false);
+      assert.equal(fb.viejo, undefined);
+      assert.equal(fb.maria.saldo, 120.5);
+      await c2.waitForFunction(() => Store.findProducto('7501055300075') && Store.findProducto('7501055300075').existencia === 24, null, { timeout: 5000 });
+      console.log('   ✓ base completa de eleventa (PDVDATA.FDB)');
+    } else console.log('   (se omite la prueba de PDVDATA.FDB: falta PV_FIREBIRD_DIR; use tests/preparar-firebird-linux.sh)');
+
     /* ---- Recorrer todas las pantallas sin errores ---- */
     for (const s of ['ventas', 'clientes', 'productos', 'inventario', 'configuracion', 'corte', 'reportes']) {
       await c1.click(`#mainnav [data-screen=${s}]`);
       await c1.waitForTimeout(150);
     }
     for (const t of ['mermas', 'bajos', 'reporte', 'movimientos', 'kardex']) { await c1.click('#mainnav [data-screen=inventario]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(100); }
-    for (const t of ['ticket', 'cajeros', 'general', 'transferir', 'red', 'respaldos']) { await c1.click('#mainnav [data-screen=configuracion]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(150); }
+    for (const t of ['basedatos', 'ticket', 'cajeros', 'general', 'red', 'respaldos']) { await c1.click('#mainnav [data-screen=configuracion]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(150); }
     for (const g of ['cajero', 'caja', 'departamento', 'forma', 'hora', 'productos', 'tickets']) { await c1.click('#mainnav [data-screen=reportes]'); await c1.selectOption('[data-g]', g); await c1.waitForTimeout(150); }
     await c1.screenshot({ path: path.join(DATA, 'reportes.png'), fullPage: true });
 

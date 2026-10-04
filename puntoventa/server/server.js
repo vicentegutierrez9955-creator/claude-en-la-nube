@@ -30,7 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = process.env.PV_DATA_DIR ? path.resolve(process.env.PV_DATA_DIR) : path.join(ROOT, 'datos');
 const BACKUP_DIR = path.join(DATA_DIR, 'respaldos');
 const PORT = Number(process.env.PORT) || 8080;
-const VERSION = '1.1.2';
+const VERSION = '1.2.0';
 fs.mkdirSync(BACKUP_DIR, { recursive: true });
 
 /* ------------------------------------------------------------------ */
@@ -379,6 +379,43 @@ async function handleApi(req, res, url) {
     if (req.method === 'POST') return send(req, res, 200, { archivo: await backup('manual') });
     const files = fs.readdirSync(BACKUP_DIR).filter(f => f.endsWith('.json')).sort().reverse();
     return send(req, res, 200, { carpeta: BACKUP_DIR, archivos: files.map(f => ({ nombre: f, bytes: fs.statSync(path.join(BACKUP_DIR, f)).size })) });
+  }
+  /* ---- Base de datos completa de eleventa (PDVDATA.FDB) ---- */
+  if (p.startsWith('/api/eleventa/')) {
+    if (!allowed(session, 'configuracion')) return send(req, res, 403, { error: 'Sólo un administrador puede cargar la base de datos.' });
+    const Eleventa = require('./eleventa.js');
+    const opciones = { root: ROOT, dataDir: DATA_DIR };
+    try {
+      if (p === '/api/eleventa/buscar') return send(req, res, 200, { encontrados: Eleventa.buscar() });
+      if (p === '/api/eleventa/leer-ruta' && req.method === 'POST') {
+        const b = await readBody(req, 100000);
+        const ruta = String(b.ruta || '');
+        if (!/\.fdb$/i.test(ruta) || !fs.existsSync(ruta)) return send(req, res, 400, { error: 'No se encontró el archivo de eleventa en esa ubicación.' });
+        return send(req, res, 200, await Eleventa.leer(ruta, opciones));
+      }
+      if (p === '/api/eleventa/subir' && req.method === 'POST') {
+        const dir = path.join(DATA_DIR, 'tmp-eleventa');
+        fs.mkdirSync(dir, { recursive: true });
+        const archivo = path.join(dir, `subido-${Date.now()}.FDB`);
+        try {
+          await new Promise((resolve, reject) => {
+            const out = fs.createWriteStream(archivo);
+            let size = 0;
+            req.on('data', (c) => { size += c.length; if (size > 8 * 1024 * 1024 * 1024) { req.destroy(); reject(new Error('Archivo demasiado grande')); } });
+            req.pipe(out);
+            out.on('finish', resolve);
+            out.on('error', reject);
+            req.on('error', reject);
+          });
+          return send(req, res, 200, await Eleventa.leer(archivo, opciones));
+        } finally {
+          fs.rmSync(archivo, { force: true });
+        }
+      }
+    } catch (e) {
+      return send(req, res, 400, { error: e.message || String(e) });
+    }
+    return send(req, res, 404, { error: 'No encontrado' });
   }
   if (p === '/api/red') {
     return send(req, res, 200, { direcciones: lanAddresses().map(ip => `http://${ip}:${PORT}`), cajasConectadas: listeners.size, turnosAbiertos: [...openTurnos.values()] });

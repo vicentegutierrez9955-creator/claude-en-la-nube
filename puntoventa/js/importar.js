@@ -129,7 +129,7 @@ const Importar = {
     return { filas: out, errores };
   },
 
-  async abrir() {
+  async abrir(archivo) {
     const m = UI.modal({
       title: 'Importar productos desde Excel o CSV', size: 'xwide',
       body: `<div class="dropzone" data-drop>
@@ -204,13 +204,14 @@ const Importar = {
       btn.disabled = true; btn.textContent = 'Importando...';
       try {
         const r = await Store.importarProductos(filas, { actualizarExistentes: m.q('[data-exist]').value === 'actualizar', sumarExistencia: m.q('[data-sumar]').value === 'sumar' });
-        m.close(r);
         await UI.alert(`Importación terminada.\n\nProductos nuevos: ${r.nuevos}\nProductos actualizados: ${r.actualizados}\nOmitidos: ${r.omitidos}${r.errores.length ? `\n\nCon errores (${r.errores.length}):\n${r.errores.slice(0, 15).join('\n')}` : ''}`, 'Importar productos');
+        m.close(r);
       } catch (e) {
         btn.disabled = false; btn.textContent = 'Importar productos';
         UI.alert('Error al importar: ' + e.message);
       }
     };
+    if (archivo) cargar(archivo);
     return m.done;
   },
 
@@ -226,7 +227,7 @@ const Importar = {
     { k: 'notas', label: 'Notas', alias: ['notas', 'observaciones', 'comentarios', 'nota'] },
   ],
 
-  async clientes() {
+  async clientes(archivo) {
     const C = Importar.CAMPOS_CLIENTES;
     const m = UI.modal({
       title: 'Importar clientes desde Excel o CSV', size: 'xwide',
@@ -307,10 +308,37 @@ const Importar = {
       const btn = m.q('[data-ok]'); btn.disabled = true; btn.textContent = 'Importando...';
       try {
         const r = await Store.importarClientes(filas, { actualizarExistentes: m.q('[data-exist]').value === 'actualizar' });
-        m.close(r);
         await UI.alert(`Importación de clientes terminada.\n\nNuevos: ${r.nuevos}\nActualizados: ${r.actualizados}\nOmitidos: ${r.omitidos}${r.errores.length ? `\n\nCon errores (${r.errores.length}):\n${r.errores.slice(0, 15).join('\n')}` : ''}`, 'Importar clientes');
+        m.close(r);
       } catch (e) { btn.disabled = false; btn.textContent = 'Importar clientes'; UI.alert('Error al importar: ' + e.message); }
     };
+    if (archivo) cargar(archivo);
     return m.done;
+  },
+
+  /* Reconoce qué contiene un archivo: productos, clientes, respaldo de este programa o la base interna de eleventa */
+  async tipoArchivo(file) {
+    const ext = file.name.toLowerCase().split('.').pop();
+    if (['fdb', 'gdb', 'fbk'].includes(ext)) return { tipo: 'fdb' };
+    if (ext === 'json') {
+      try { const dump = JSON.parse(await U.readFileAsText(file)); if (dump && dump.app === 'puntoventa' && dump.data) return { tipo: 'respaldo', dump }; } catch (e) { /* no es JSON válido */ }
+      return { tipo: 'desconocido' };
+    }
+    let wb;
+    try { wb = await Importar.leerArchivo(file); } catch (e) { return { tipo: 'desconocido' }; }
+    const puntaje = (campos) => {
+      let mejor = 0;
+      for (const n of wb.SheetNames) {
+        const aoa = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: '' }).slice(0, 25);
+        for (const row of aoa) {
+          const keys = (row || []).map(U.normKey);
+          mejor = Math.max(mejor, campos.reduce((t, c) => t + (keys.some(k => c.alias.includes(k)) ? (c.req ? 2 : 1) : 0), 0));
+        }
+      }
+      return mejor;
+    };
+    const p = puntaje(Importar.CAMPOS), c = puntaje(Importar.CAMPOS_CLIENTES);
+    if (p < 3 && c < 3) return { tipo: 'desconocido' };
+    return { tipo: p >= c ? 'productos' : 'clientes' };
   },
 };

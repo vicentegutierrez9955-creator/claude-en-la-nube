@@ -18,8 +18,10 @@ jobs:
         run: |
           npm install --no-save playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Pruebas de punta a punta (dos cajas conectadas)
-        run: node tests/e2e.test.js
+      - name: Pruebas de punta a punta (dos cajas conectadas + base de eleventa)
+        run: |
+          source tests/preparar-firebird-linux.sh
+          node tests/e2e.test.js
 
   instalador:
     runs-on: ubuntu-latest

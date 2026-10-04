@@ -9,7 +9,7 @@ Unicode true
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.1.2"
+  !define VERSION "1.2.0"
 !endif
 !define APPNAME "Punto de Venta"
 !define REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuntoDeVenta"
@@ -123,6 +123,9 @@ FunctionEnd
   nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $$_.Name -eq 'node.exe' -and $$_.ExecutablePath -like '$INSTDIR\*' } | ForEach-Object { Stop-Process -Id $$_.ProcessId -Force -ErrorAction SilentlyContinue }"`
   Pop $0
   ${EnableX64FSRedirection}
+  ; El lector de bases de eleventa (Firebird) que corre desde la carpeta de datos
+  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $$_.Name -eq 'fbserver.exe' -and $$_.ExecutablePath -like '*\PuntoDeVenta\*' } | ForEach-Object { Stop-Process -Id $$_.ProcessId -Force -ErrorAction SilentlyContinue }"`
+  Pop $0
   ; Respaldo: el servidor abierto con ventana (ServidorConVentana.cmd)
   nsExec::Exec `"$SYSDIR\cmd.exe" /c taskkill /F /FI "IMAGENAME eq node.exe" /FI "WINDOWTITLE eq Punto de Venta - Servidor"`
   Pop $0

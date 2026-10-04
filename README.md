@@ -10,7 +10,7 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 
 ## Instalación en Windows
 
-1. Descargue `PuntoDeVenta-Instalador-1.1.2.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
+1. Descargue `PuntoDeVenta-Instalador-1.2.0.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
 2. En la **computadora principal** ejecute el instalador y elija **"Computadora PRINCIPAL (servidor)"**.
    - Se abre el acceso directo **Punto de Venta** en el escritorio.
    - El servidor se enciende solo cada vez que inicia Windows.
@@ -26,15 +26,26 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 
 El acceso directo abre el programa como aplicación, sin barra del navegador, y con **impresión directa** (`--kiosk-printing`) a la impresora predeterminada de Windows. Configure su impresora de tickets como predeterminada.
 
-## Transferir la base de datos desde eleventa
+## Cargar la base de datos completa de eleventa
 
-En **Configuración → Transferir datos desde eleventa** hay un asistente paso a paso:
+En **Configuración → Base de datos → Cargar la base de datos completa de eleventa**:
+
+- **Buscar eleventa en la computadora principal**: encuentra solo el `PDVDATA.FDB` (por ejemplo en `C:\Program Files (x86)\AbarrotesPDV\db\`).
+- **Elegir archivo PDVDATA.FDB…**: para un archivo copiado con una memoria USB desde otra computadora. Funciona desde cualquier caja.
+
+Antes de cargar, el programa muestra una vista previa con productos, departamentos, clientes, saldo por cobrar y valor del inventario. Se cargan los precios (`PFINAL`/`PVENTA`), el costo, el mayoreo, las existencias, el mínimo y el máximo, el tipo de venta (unidad o granel), si usa inventario y el departamento. De los clientes se cargan el límite de crédito y el saldo. Los productos eliminados en eleventa se omiten. El historial de ventas de eleventa no se copia.
+
+Cómo funciona: el instalador incluye **Firebird 2.5** (el mismo motor que usa eleventa). El programa lo enciende sólo mientras lee una **copia** del archivo, escuchando únicamente en `127.0.0.1:30550`, y lo apaga al terminar. El archivo original de eleventa nunca se modifica.
+
+## Otras formas de transferir datos
+
+En **Configuración → Base de datos** también se pueden arrastrar archivos de Excel o CSV (se reconoce solo si son productos o clientes) o una copia completa de este programa:
 
 1. **Productos, precios, existencias y departamentos**: en eleventa, *F3 Productos → Exportar* y luego **Importar productos** aquí.
 2. **Clientes y saldos de crédito**: en eleventa, *F2 Clientes → Exportar...* y luego **Importar clientes** aquí. Se cargan el nombre, el teléfono, la dirección, el límite de crédito ("Sin límite" incluido) y el **saldo actual** de cada cliente.
 3. Revise el inventario y el reporte de saldos.
 
-Se puede repetir sin duplicar nada: lo que ya existe se actualiza. No se lee directamente el archivo interno de eleventa (`PDVDATA.FDB`, de Firebird) porque eso exige instalar programas extra. Por eso se usan los archivos de Excel que el mismo eleventa exporta.
+Se puede repetir sin duplicar nada: lo que ya existe se actualiza.
 
 Para mover **todo** (incluido el historial de ventas y cortes) entre dos instalaciones de este programa, use *Configuración → Respaldos*.
 

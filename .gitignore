@@ -4,3 +4,4 @@ installer/stage/
 installer/cache/
 puntoventa/datos/
 *.log
+.firebird-pruebas/

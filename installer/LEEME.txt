@@ -19,9 +19,12 @@ OTRAS CAJAS (CONECTADAS POR WI-FI)
 - Instale este programa y elija "CAJA conectada a la computadora principal",
   o simplemente abra esa dirección en Chrome o Edge.
 
-CARGAR LOS PRODUCTOS DESDE ELEVENTA
-- En eleventa: Productos -> Exportar a Excel (o Inventario -> Reporte de inventario -> Exportar).
-- En este programa: F3 Productos -> Importar -> elija el archivo -> Importar.
+CARGAR LA BASE DE DATOS DE ELEVENTA (productos, existencias, departamentos y clientes)
+- Cierre eleventa.
+- En este programa: Configuración -> Base de datos -> "Buscar eleventa en la computadora principal".
+- Si eleventa está en otra computadora: copie PDVDATA.FDB con una memoria USB
+  (normalmente en C:\Program Files (x86)\AbarrotesPDV\db) y use "Elegir archivo PDVDATA.FDB".
+- Revise la vista previa y presione "Cargar todo a este programa".
 
 TECLAS PRINCIPALES
 F1 Ventas   F2 Clientes   F3 Productos   F4 Inventario

@@ -7,7 +7,7 @@ const Configuracion = {
 
   render(el) {
     Configuracion.el = el;
-    const tabs = [['negocio', 'Datos del negocio'], ['ticket', 'Ticket e impresora'], ['cajeros', 'Cajeros y permisos'], ['general', 'Opciones generales'], ['transferir', 'Transferir datos desde eleventa'], ['red', 'Red y cajas'], ['respaldos', 'Respaldos']];
+    const tabs = [['negocio', 'Datos del negocio'], ['basedatos', 'Base de datos'], ['ticket', 'Ticket e impresora'], ['cajeros', 'Cajeros y permisos'], ['general', 'Opciones generales'], ['red', 'Red y cajas'], ['respaldos', 'Respaldos']];
     el.innerHTML = `<div class="panel"><div class="tabs">${tabs.map(([k, n]) => `<button data-tab="${k}" class="${k === Configuracion.tab ? 'active' : ''}">${n}</button>`).join('')}</div><div data-body></div></div>`;
     el.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { Configuracion.tab = b.dataset.tab; Configuracion.render(el); });
     Configuracion[Configuracion.tab](el.querySelector('[data-body]'));
@@ -145,20 +145,170 @@ const Configuracion = {
     };
   },
 
-  transferir(box) {
-    const paso = (n, titulo, html, boton, data) => `<div class="panel"><h3>Paso ${n}. ${titulo}</h3>${html}${boton ? `<div class="toolbar" style="margin-top:8px"><button class="primary" data-${data}>${boton}</button></div>` : ''}</div>`;
-    box.innerHTML = `<div style="max-width:900px">
-      <p>Pase toda la información de eleventa a este programa en pocos minutos. No hace falta escribir los productos ni los clientes uno por uno.</p>
-      <div class="stats"><div class="stat"><div class="k">Productos en este programa</div><div class="v">${Store.productos.length}</div></div><div class="stat"><div class="k">Departamentos</div><div class="v">${Store.departamentos.length}</div></div><div class="stat"><div class="k">Clientes</div><div class="v">${Store.clientes.length}</div></div><div class="stat"><div class="k">Saldo por cobrar</div><div class="v">${U.money(U.sum(Store.clientes, c => c.saldo))}</div></div></div>
-      ${paso(1, 'Productos, precios, existencias y departamentos', `<ol><li>En eleventa entre a <b>F3 Productos</b> y presione <b>Exportar</b> (o <b>F4 Inventario → Reporte de inventario → Exportar a Excel</b>).</li><li>Guarde el archivo en una memoria USB o en el escritorio.</li><li>Aquí presione el botón y elija ese archivo. Los departamentos se crean solos.</li></ol>`, 'Importar productos', 'prod')}
-      ${paso(2, 'Clientes y lo que deben (créditos)', `<ol><li>En eleventa entre a <b>F2 Clientes</b> y presione <b>Exportar...</b> (abajo a la izquierda).</li><li>Aquí presione el botón y elija ese archivo. Se cargan nombre, teléfono, dirección, límite de crédito y <b>saldo actual</b> de cada cliente.</li></ol>`, 'Importar clientes', 'cli')}
-      ${paso(3, 'Revisar', `<ul><li>Revise algunas existencias en <b>F4 Inventario → Reporte de inventario</b>.</li><li>Revise el total por cobrar en <b>F2 Clientes → Reporte de saldos</b> y compárelo con el de eleventa.</li><li>Cree sus cajeros en <b>Configuración → Cajeros y permisos</b> y ajuste el ticket.</li></ul>`)}
-      ${paso(4, 'Pasar datos de este programa a otra computadora', `<p>Para mover <b>todo</b> (productos, ventas, clientes, cortes y cajeros) de una instalación de este programa a otra, use <b>Respaldos → Descargar respaldo</b> en la computadora vieja y <b>Restaurar desde archivo</b> en la nueva.</p>`, 'Ir a Respaldos', 'resp')}
-      <p class="muted small">Puede repetir los pasos 1 y 2 las veces que quiera: los productos y clientes que ya existen se actualizan, no se duplican.</p></div>`;
-    const refrescar = () => { if (App.current === 'configuracion' && Configuracion.tab === 'transferir') Configuracion.render(Configuracion.el); };
-    box.querySelector('[data-prod]').onclick = async () => { await Importar.abrir(); refrescar(); };
-    box.querySelector('[data-cli]').onclick = async () => { await Importar.clientes(); refrescar(); };
-    box.querySelector('[data-resp]').onclick = () => { Configuracion.tab = 'respaldos'; Configuracion.render(Configuracion.el); };
+  /* ---------- Base de datos: agregar (importar) toda la información ---------- */
+  async basedatos(box) {
+    box.innerHTML = `<div style="max-width:980px">
+      <h2 style="margin-top:0">Agregar base de datos</h2>
+      <div class="panel" style="border:2px solid var(--brand);background:var(--brand-soft)">
+        <h3 style="margin-top:0">Cargar la base de datos completa de eleventa</h3>
+        <p>Pasa de una sola vez <b>todos los productos</b> (precios, existencias, mínimos y máximos), <b>los departamentos</b> y <b>los clientes con su crédito</b> desde el archivo de eleventa <b>PDVDATA.FDB</b>. El archivo de eleventa no se modifica.</p>
+        <div class="toolbar">
+          <button class="primary big" data-fdb-buscar>Buscar eleventa en la computadora principal</button>
+          <label class="btn big" style="cursor:pointer">Elegir archivo PDVDATA.FDB…<input type="file" data-fdb-file accept=".fdb,.FDB" class="hidden"></label>
+        </div>
+        <p class="muted small">Si eleventa está instalado en la computadora principal, use "Buscar". Si el archivo está en otra computadora, cópielo con una memoria USB; normalmente está en <b>C:\\Program Files (x86)\\AbarrotesPDV\\db\\PDVDATA.FDB</b>. Cierre eleventa antes de cargarlo.</p>
+      </div>
+      <h3>O agregue archivos de Excel / CSV</h3>
+      <div class="dropzone" data-drop>
+        <p style="font-size:16px"><b>Arrastre aquí los archivos de su base de datos</b><br><span class="muted">Productos y clientes exportados de eleventa (Excel o CSV), o un respaldo de este programa (.json). Puede elegir varios archivos a la vez.</span></p>
+        <label class="btn primary" style="display:inline-flex;cursor:pointer;background:var(--brand);color:#fff;border-color:var(--brand-dark)">Elegir archivos…<input type="file" data-files multiple accept=".xlsx,.xls,.csv,.txt,.ods,.json,.fdb" class="hidden"></label>
+      </div>
+      <div data-log style="margin:10px 0"></div>
+      <div class="stats"><div class="stat"><div class="k">Productos</div><div class="v">${Store.productos.length}</div></div><div class="stat"><div class="k">Departamentos</div><div class="v">${Store.departamentos.length}</div></div><div class="stat"><div class="k">Clientes</div><div class="v">${Store.clientes.length}</div></div><div class="stat"><div class="k">Saldo por cobrar</div><div class="v">${U.money(U.sum(Store.clientes, c => c.saldo))}</div></div><div class="stat"><div class="k">Valor del inventario (costo)</div><div class="v">${U.money(U.sum(Store.productos.filter(p => p.usaInventario), p => Math.max(p.existencia, 0) * p.costo))}</div></div></div>
+      <div class="grid2" style="align-items:start">
+        <div class="panel"><h3>Cómo sacar los datos de eleventa</h3>
+          <ol><li><b>Productos</b> (precios, existencias, departamentos): en eleventa entre a <b>F3 Productos → Exportar</b>, o a <b>F4 Inventario → Reporte de inventario → Exportar a Excel</b>.</li>
+          <li><b>Clientes</b> (límite de crédito y lo que deben): en eleventa entre a <b>F2 Clientes → Exportar...</b>.</li>
+          <li>Copie esos archivos con una memoria USB y arrástrelos al recuadro de arriba.</li></ol>
+          <p class="muted small">Puede volver a cargarlos cuando quiera: lo que ya existe se actualiza y no se duplica.</p>
+          <div class="toolbar"><button class="secondary" data-prod>Importar sólo productos</button><button class="secondary" data-cli>Importar sólo clientes</button><button class="secondary" data-plant>Plantilla de productos</button></div></div>
+        <div class="panel"><h3>Copia completa de esta base de datos</h3>
+          <p>Para pasar <b>todo</b> (productos, ventas, clientes, cortes y cajeros) a otra computadora con este programa, descargue una copia aquí y arrástrela al recuadro en la otra computadora.</p>
+          <div class="toolbar"><button class="primary" data-down>Descargar copia completa</button><button class="secondary" data-xp>Exportar productos a Excel</button><button class="secondary" data-xc>Exportar clientes a Excel</button></div>
+          <p class="muted small" data-ubic>Ubicación de los datos: cargando…</p></div>
+      </div></div>`;
+    const log = box.querySelector('[data-log]');
+    const linea = (txt, cls = '') => log.insertAdjacentHTML('beforeend', `<p class="${cls}" style="margin:4px 0">${txt}</p>`);
+    const procesar = async (files) => {
+      log.innerHTML = '';
+      for (const file of files) {
+        const nombre = U.esc(file.name);
+        const t = await Importar.tipoArchivo(file);
+        if (t.tipo === 'productos') { linea(`📦 <b>${nombre}</b>: productos`); await Importar.abrir(file); }
+        else if (t.tipo === 'clientes') { linea(`👥 <b>${nombre}</b>: clientes`); await Importar.clientes(file); }
+        else if (t.tipo === 'respaldo') { linea(`💾 <b>${nombre}</b>: copia completa de este programa`); await Configuracion.restaurarRespaldo(t.dump); }
+        else if (t.tipo === 'fdb') { linea(`🗄️ <b>${nombre}</b>: base de datos completa de eleventa`); await Configuracion.cargarEleventa(() => Configuracion.subirFdb(file)); }
+        else linea(`⚠️ <b>${nombre}</b>: no se reconocieron columnas de productos ni de clientes. Ábralo con "Importar sólo productos" o "Importar sólo clientes" y elija las columnas a mano.`, 'warn');
+      }
+      const stats = box.querySelector('.stats');
+      if (stats && App.current === 'configuracion') {
+        const vals = [Store.productos.length, Store.departamentos.length, Store.clientes.length, U.money(U.sum(Store.clientes, c => c.saldo)), U.money(U.sum(Store.productos.filter(p => p.usaInventario), p => Math.max(p.existencia, 0) * p.costo))];
+        stats.querySelectorAll('.v').forEach((v, i) => { v.textContent = vals[i]; });
+      }
+    };
+    const drop = box.querySelector('[data-drop]');
+    drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('over'); };
+    drop.ondragleave = () => drop.classList.remove('over');
+    drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove('over'); procesar([...e.dataTransfer.files]); };
+    box.querySelector('[data-files]').onchange = (e) => { const f = [...e.target.files]; e.target.value = ''; procesar(f); };
+    box.querySelector('[data-fdb-buscar]').onclick = () => Configuracion.cargarEleventa(Configuracion.buscarFdb);
+    box.querySelector('[data-fdb-file]').onchange = (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) Configuracion.cargarEleventa(() => Configuracion.subirFdb(f)); };
+    box.querySelector('[data-prod]').onclick = () => Importar.abrir();
+    box.querySelector('[data-cli]').onclick = () => Importar.clientes();
+    box.querySelector('[data-plant]').onclick = () => Importar.plantilla();
+    box.querySelector('[data-down]').onclick = () => Configuracion.descargarRespaldo();
+    box.querySelector('[data-xp]').onclick = () => Importar.exportar(Store.productos);
+    box.querySelector('[data-xc]').onclick = () => U.exportXlsx('clientes.xlsx', Store.clientes.map(c => ({ Nombre: c.nombre, Telefono: c.telefono || '', Email: c.email || '', Direccion: c.direccion || '', RFC: c.rfc || '', 'Limite de credito': c.credito ? (c.limite > 0 ? c.limite : 'Sin limite') : 0, 'Saldo actual': c.saldo })), 'Clientes');
+    try {
+      const r = await Remote.get('/api/respaldos');
+      const ult = r.archivos[0];
+      box.querySelector('[data-ubic]').textContent = `Ubicación de los datos: ${r.carpeta.replace(/[\\/]respaldos$/, '')}${ult ? ` · Último respaldo automático: ${ult.nombre}` : ''}`;
+    } catch (e) { box.querySelector('[data-ubic]').textContent = ''; }
+  },
+
+  /* ---------- Base completa de eleventa (PDVDATA.FDB) ---------- */
+  esperando(texto) {
+    const m = UI.modal({ title: 'Cargando base de datos', body: `<p data-t style="font-size:16px">${U.esc(texto)}</p><div style="height:10px;background:var(--line);border-radius:5px;overflow:hidden"><div data-bar style="height:100%;width:5%;background:var(--brand);transition:width .2s"></div></div><p class="muted small">No cierre el programa.</p>`, dismissable: false });
+    m.q('[data-close]').classList.add('hidden');
+    m.set = (t, pct) => { m.q('[data-t]').textContent = t; if (pct != null) m.q('[data-bar]').style.width = Math.max(5, Math.min(100, pct)) + '%'; };
+    return m;
+  },
+  subirFdb(file, espera) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/eleventa/subir');
+      xhr.setRequestHeader('X-Token', Remote.token || '');
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.upload.onprogress = (e) => { if (e.lengthComputable && espera) espera.set(`Enviando el archivo (${Math.round(e.loaded / 1048576)} de ${Math.round(e.total / 1048576)} MB)…`, e.loaded / e.total * 70); };
+      xhr.upload.onload = () => { if (espera) espera.set('Leyendo productos, departamentos y clientes…', 85); };
+      xhr.onload = () => {
+        let body = null; try { body = JSON.parse(xhr.responseText); } catch (e) { /* sin JSON */ }
+        if (xhr.status === 200) resolve(body); else reject(new Error((body && body.error) || `Error del servidor (${xhr.status})`));
+      };
+      xhr.onerror = () => reject(new Error('Se perdió la conexión con el servidor mientras se enviaba el archivo.'));
+      xhr.send(file);
+    });
+  },
+  async buscarFdb(espera) {
+    espera.set('Buscando eleventa en la computadora principal…', 20);
+    const { encontrados } = await Remote.get('/api/eleventa/buscar');
+    if (!encontrados.length) throw new Error('No se encontró eleventa (PDVDATA.FDB) en la computadora principal.\n\nSi eleventa está en otra computadora, copie el archivo PDVDATA.FDB con una memoria USB (normalmente está en C:\\Program Files (x86)\\AbarrotesPDV\\db) y use "Elegir archivo PDVDATA.FDB…".');
+    let ruta = encontrados[0].ruta;
+    if (encontrados.length > 1) {
+      espera.el.classList.add('hidden');
+      const r = await UI.form('Se encontró más de una base de eleventa', [{ name: 'ruta', label: 'Elija cuál cargar', type: 'select', value: ruta, options: encontrados.sort((a, b) => b.modificado - a.modificado).map(x => ({ value: x.ruta, label: `${x.ruta} — ${(x.bytes / 1048576).toFixed(1)} MB — modificado ${U.fmtDateTime(x.modificado)}` })) }]);
+      espera.el.classList.remove('hidden');
+      if (!r) return null;
+      ruta = r.ruta;
+    }
+    espera.set('Leyendo productos, departamentos y clientes…', 60);
+    return Remote.post('/api/eleventa/leer-ruta', { ruta });
+  },
+  async cargarEleventa(obtener) {
+    const espera = Configuracion.esperando('Preparando…');
+    let data;
+    try { data = await obtener(espera); }
+    catch (e) { espera.close(); return UI.alert(e.message, 'No se pudo cargar la base de datos'); }
+    espera.close();
+    if (!data) return;
+    await Configuracion.vistaPreviaEleventa(data);
+    if (App.current === 'configuracion' && Configuracion.tab === 'basedatos') Configuracion.render(Configuracion.el);
+  },
+  vistaPreviaEleventa(data) {
+    const { productos, clientes, resumen, avisos } = data;
+    const nuevosP = productos.filter(p => !Store.findProducto(p.codigo)).length;
+    const deuda = U.sum(clientes, c => c.saldo || 0);
+    const valor = U.sum(productos.filter(p => p.usaInventario), p => Math.max(p.existencia || 0, 0) * p.costo);
+    const m = UI.modal({
+      title: 'Base de datos de eleventa encontrada', size: 'xwide',
+      body: `<div class="stats"><div class="stat"><div class="k">Productos</div><div class="v">${productos.length}</div></div><div class="stat"><div class="k">Departamentos</div><div class="v">${data.departamentos.length}</div></div><div class="stat"><div class="k">Clientes</div><div class="v">${clientes.length}</div></div><div class="stat"><div class="k">Saldo por cobrar</div><div class="v">${U.money(deuda)}</div></div><div class="stat"><div class="k">Valor del inventario (costo)</div><div class="v">${U.money(valor)}</div></div></div>
+        <p>${nuevosP} producto(s) nuevos y ${productos.length - nuevosP} que ya existen en este programa.${resumen.eliminados ? ` Se omiten ${resumen.eliminados} producto(s) que estaban eliminados en eleventa.` : ''}${resumen.ventasHistoricas ? ` El historial de ventas de eleventa (${resumen.ventasHistoricas} tickets) no se copia.` : ''}</p>
+        ${avisos.length ? `<div class="panel" style="background:var(--warn-soft)">${avisos.map(a => `<p class="warn" style="margin:4px 0">⚠️ ${U.esc(a)}</p>`).join('')}</div>` : ''}
+        <div class="grid2"><label>Si el producto o cliente ya existe<select data-exist><option value="actualizar">Actualizarlo con los datos de eleventa</option><option value="omitir">Dejarlo como está</option></select></label>
+        <label>Existencias de eleventa<select data-sumar><option value="reemplazar">Reemplazan la existencia actual</option><option value="sumar">Se suman a la existencia actual</option></select></label></div>
+        <div class="table-wrap" style="max-height:38vh"><table class="grid"><thead><tr><th>Código</th><th>Descripción</th><th>Departamento</th><th class="num">Costo</th><th class="num">Precio</th><th class="num">Mayoreo</th><th class="num">Existencia</th><th>Tipo</th></tr></thead><tbody>${productos.slice(0, 200).map(p => `<tr><td>${U.esc(p.codigo)}</td><td>${U.esc(p.descripcion)}</td><td>${U.esc(p.departamento || '')}</td><td class="num">${U.money(p.costo)}</td><td class="num">${U.money(p.precio)}</td><td class="num">${p.mayoreo ? U.money(p.mayoreo) : ''}</td><td class="num">${p.usaInventario ? U.qty(p.existencia || 0) : '—'}</td><td>${p.tipoVenta === 'G' ? 'Granel' : 'Unidad'}</td></tr>`).join('')}</tbody></table></div>
+        ${productos.length > 200 ? `<p class="muted small">Se muestran 200 de ${productos.length} productos.</p>` : ''}
+        <details><summary class="muted small">Detalles técnicos</summary><pre class="small" style="white-space:pre-wrap">${U.esc(JSON.stringify({ tablaProductos: resumen.tablaProductos, columnasProductos: resumen.columnasProductos, tablaClientes: resumen.tablaClientes, columnasClientes: resumen.columnasClientes, precio: resumen.precioUsado }, null, 1))}</pre></details>`,
+      footer: `<button class="secondary" data-no>Cancelar</button><button class="primary big" data-ok>Cargar todo a este programa</button>`,
+    });
+    m.q('[data-no]').onclick = () => m.close(null);
+    m.q('[data-ok]').onclick = async () => {
+      const actualizar = m.q('[data-exist]').value === 'actualizar', sumar = m.q('[data-sumar]').value === 'sumar';
+      m.close(true);
+      const espera = Configuracion.esperando('Cargando productos…');
+      try {
+        espera.set(`Cargando ${productos.length} productos…`, 30);
+        const rp = await Store.importarProductos(productos.map((p, i) => ({ ...p, _fila: i + 1 })), { actualizarExistentes: actualizar, sumarExistencia: sumar });
+        espera.set(`Cargando ${clientes.length} clientes…`, 75);
+        const rc = clientes.length ? await Store.importarClientes(clientes.map((c, i) => ({ ...c, _fila: i + 1 })), { actualizarExistentes: actualizar }) : { nuevos: 0, actualizados: 0, omitidos: 0, errores: [] };
+        espera.close();
+        const errores = [...rp.errores, ...rc.errores];
+        await UI.alert(`¡Base de datos cargada!\n\nProductos nuevos: ${rp.nuevos}\nProductos actualizados: ${rp.actualizados}\nClientes nuevos: ${rc.nuevos}\nClientes actualizados: ${rc.actualizados}${errores.length ? `\n\nCon errores (${errores.length}):\n${errores.slice(0, 15).join('\n')}` : ''}`, 'Base de datos de eleventa');
+      } catch (e) { espera.close(); UI.alert('Error al cargar: ' + e.message); }
+    };
+    return m.done;
+  },
+
+  async descargarRespaldo() {
+    try { const dump = await Remote.get('/api/respaldo'); U.download(`respaldo-puntoventa-${U.today()}.json`, JSON.stringify(dump), 'application/json'); }
+    catch (e) { UI.alert(e.message); }
+  },
+  async restaurarRespaldo(dump) {
+    if (!dump || dump.app !== 'puntoventa' || !dump.data) return UI.alert('El archivo no es un respaldo válido.');
+    const n = `${(dump.data.productos || []).length} productos, ${(dump.data.ventas || []).length} ventas, ${(dump.data.clientes || []).length} clientes`;
+    if (!await UI.confirm(`¿Cargar la copia del ${dump.exportado ? U.fmtDateTime(Date.parse(dump.exportado)) : '?'} (${n})?\nToda la información actual será reemplazada en TODAS las cajas.`, { danger: true, ok: 'Cargar copia' })) return;
+    try { await Remote.call('restaurar', [dump]); await UI.alert('Base de datos cargada. Vuelva a iniciar sesión.'); App.logout(); }
+    catch (ex) { UI.alert(ex.message); }
   },
 
   async red(box) {
@@ -205,19 +355,13 @@ const Configuracion = {
         box.querySelector('[data-list]').innerHTML = `<p class="muted small">Carpeta en el servidor: ${U.esc(r.carpeta)}</p><div class="table-wrap" style="max-height:30vh"><table class="grid"><thead><tr><th>Archivo</th><th class="num">Tamaño</th></tr></thead><tbody>${r.archivos.map(a => `<tr><td>${U.esc(a.nombre)}</td><td class="num">${(a.bytes / 1024).toFixed(0)} KB</td></tr>`).join('')}</tbody></table></div>`;
       } catch (e) { box.querySelector('[data-list]').innerHTML = `<p class="bad">${U.esc(e.message)}</p>`; }
     };
-    box.querySelector('[data-down]').onclick = async () => {
-      try { const dump = await Remote.get('/api/respaldo'); U.download(`respaldo-puntoventa-${U.today()}.json`, JSON.stringify(dump), 'application/json'); }
-      catch (e) { UI.alert(e.message); }
-    };
+    box.querySelector('[data-down]').onclick = () => Configuracion.descargarRespaldo();
     box.querySelector('[data-now]').onclick = async () => { try { const r = await Remote.post('/api/respaldos'); UI.toast('Respaldo creado: ' + r.archivo, 'ok'); lista(); } catch (e) { UI.alert(e.message); } };
     box.querySelector('[data-rest]').onchange = async (e) => {
       const file = e.target.files[0]; if (!file) return;
       let dump;
       try { dump = JSON.parse(await U.readFileAsText(file)); } catch (ex) { return UI.alert('El archivo no es un respaldo válido.'); }
-      const n = dump && dump.data ? `${(dump.data.productos || []).length} productos, ${(dump.data.ventas || []).length} ventas, ${(dump.data.clientes || []).length} clientes` : '';
-      if (!await UI.confirm(`¿Restaurar el respaldo del ${dump.exportado ? U.fmtDateTime(Date.parse(dump.exportado)) : '?'} (${n})?\nToda la información actual será reemplazada en TODAS las cajas.`, { danger: true, ok: 'Restaurar' })) return;
-      try { await Remote.call('restaurar', [dump]); await UI.alert('Respaldo restaurado. Vuelva a iniciar sesión.'); App.logout(); }
-      catch (ex) { UI.alert(ex.message); }
+      await Configuracion.restaurarRespaldo(dump);
     };
     box.querySelector('[data-wipe]').onclick = async () => {
       if (!await UI.confirm('¿Borrar TODA la información? Esta acción afecta a todas las cajas.', { danger: true, ok: 'Sí, borrar todo' })) return;
