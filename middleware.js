@@ -16,6 +16,12 @@ export default function middleware(request) {
 
   const url = new URL(request.url);
   const path = url.pathname;
+  // Verificación de Google Search Console (con y sin .html, por cleanUrls)
+  if (path === '/google89224c002784d4bb.html' || path === '/google89224c002784d4bb') {
+    return new Response('google-site-verification: google89224c002784d4bb.html', {
+      headers: { 'content-type': 'text/html; charset=utf-8' },
+    });
+  }
   if (REWRITES[path]) {
     return new Response(null, {
       headers: { 'x-middleware-rewrite': new URL(REWRITES[path], url).toString() },
