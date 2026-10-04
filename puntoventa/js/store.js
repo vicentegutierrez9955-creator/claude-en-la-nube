@@ -310,6 +310,25 @@ const Store = {
     Store._applyTouched(touched);
   },
 
+  /* Merma: producto que se pierde (vencido, dañado, robo, consumo interno...). Descuenta inventario y guarda el costo perdido. */
+  MOTIVOS_MERMA: ['Vencido / caducado', 'Dañado / roto', 'Robo / faltante', 'Consumo interno', 'Degustación / muestra', 'Mal estado / descompuesto', 'Otro'],
+  async registrarMerma(prodId, cantidad, motivo, nota) {
+    const p = Store.byId.get(prodId);
+    const q = U.round3(U.num(cantidad));
+    if (!p) throw new Error('Producto no encontrado.');
+    if (!(q > 0)) throw new Error('Indique una cantidad mayor a cero.');
+    if (p.tipoVenta !== 'P' && !p.usaInventario) throw new Error(`"${p.descripcion}" no utiliza inventario.`);
+    motivo = Store.MOTIVOS_MERMA.includes(motivo) ? motivo : 'Otro';
+    const ops = [], touched = new Map();
+    Store._stockChange(ops, touched, prodId, -q, 'merma', motivo + (nota ? ' - ' + nota : ''));
+    let costo = 0;
+    for (const o of ops) if (o.store === 'movinv') { o.value.motivo = motivo; o.value.costoTotal = U.round2(-o.value.cantidad * o.value.costo); costo += o.value.costoTotal; }
+    Store._commitTouched(ops, touched);
+    await DB.batch(ops);
+    Store._applyTouched(touched);
+    return { costo: U.round2(costo), existencia: p.tipoVenta === 'P' ? null : Store.byId.get(prodId).existencia };
+  },
+
   /* Importación masiva: filas ya normalizadas */
   async importarProductos(rows, { actualizarExistentes = true, sumarExistencia = false } = {}) {
     const ops = [];
@@ -554,6 +573,45 @@ const Store = {
     if (c && Math.abs(c.saldo) > 0.005) throw new Error('No se puede eliminar un cliente con saldo pendiente.');
     await DB.del('clientes', id);
     Store.clientes = Store.clientes.filter(x => x.id !== id);
+  },
+
+  /* Importación masiva de clientes (por ejemplo, el archivo que exporta eleventa).
+     filas: [{ nombre, telefono, direccion, email, rfc, limite, sinLimite, saldo, notas }] */
+  async importarClientes(rows, { actualizarExistentes = true } = {}) {
+    const ops = [];
+    let nuevos = 0, actualizados = 0, omitidos = 0;
+    const errores = [], vistos = new Set(), cambiados = [];
+    const ts = Date.now();
+    for (const [i, r] of rows.entries()) {
+      const nombre = String(r.nombre || '').trim();
+      if (!nombre) { errores.push(`Fila ${r._fila || i + 2}: falta el nombre`); continue; }
+      const key = U.norm(nombre);
+      if (vistos.has(key)) { errores.push(`Fila ${r._fila || i + 2}: cliente repetido en el archivo (${nombre})`); continue; }
+      vistos.add(key);
+      const orig = Store.clientes.find(c => U.norm(c.nombre) === key);
+      if (orig && !actualizarExistentes) { omitidos++; continue; }
+      const v = { ...(orig || { id: Store.nextId('clientes'), creado: ts, saldo: 0, credito: false, limite: 0 }), nombre };
+      for (const k of ['telefono', 'direccion', 'email', 'rfc', 'notas']) if (r[k] !== undefined && String(r[k]).trim() !== '') v[k] = String(r[k]).trim();
+      if (r.limite !== undefined) { v.limite = U.round2(Math.max(0, U.num(r.limite))); if (v.limite > 0) v.credito = true; }
+      if (r.sinLimite) { v.credito = true; v.limite = 0; }
+      if (r.saldo !== undefined) {
+        const nuevo = U.round2(U.num(r.saldo));
+        const diff = U.round2(nuevo - (orig ? orig.saldo : 0));
+        if (nuevo > 0) v.credito = true;
+        if (Math.abs(diff) > 0.005) {
+          v.saldo = nuevo;
+          ops.push({ store: 'movcredito', op: 'put', value: { id: Store.nextId('movcredito'), ts, clienteId: v.id, tipo: diff > 0 ? 'cargo' : 'ajuste', monto: Math.abs(diff), ventaId: null, nota: orig ? 'Ajuste de saldo (transferencia de datos)' : 'Saldo inicial (transferido de eleventa)', usuario: Store.user ? Store.user.nombre : '', saldo: nuevo } });
+        }
+      }
+      ops.push({ store: 'clientes', op: 'put', value: v });
+      cambiados.push([orig, v]);
+      if (orig) actualizados++; else nuevos++;
+    }
+    ops.push(Store.seqOp('clientes'), Store.seqOp('movcredito'));
+    await DB.batch(ops);
+    for (const [orig, v] of cambiados) { if (orig) Object.assign(orig, v); else Store.clientes.push(v); }
+    Store.clientes.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    return { nuevos, actualizados, omitidos, errores };
   },
 
   /* Abono: si ventaId se indica, se aplica a ese ticket; si no, a los más antiguos */

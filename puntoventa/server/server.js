@@ -30,7 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = process.env.PV_DATA_DIR ? path.resolve(process.env.PV_DATA_DIR) : path.join(ROOT, 'datos');
 const BACKUP_DIR = path.join(DATA_DIR, 'respaldos');
 const PORT = Number(process.env.PORT) || 8080;
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 fs.mkdirSync(BACKUP_DIR, { recursive: true });
 
 /* ------------------------------------------------------------------ */
@@ -163,6 +163,7 @@ const METHODS = {
   abonar: { perm: 'creditos' },
   guardarCliente: { perm: 'clientes' },
   eliminarCliente: { perm: 'clientes' },
+  importarClientes: { perm: 'clientes' },
   guardarProducto: { perm: 'productos' },
   actualizarVarios: { perm: 'productos' },
   eliminarProducto: { perm: 'productos' },
@@ -172,6 +173,7 @@ const METHODS = {
   guardarDepartamento: { perm: 'productos' },
   eliminarDepartamento: { perm: 'productos' },
   movimientoInventario: { perm: 'inventario' },
+  registrarMerma: { perm: 'inventario' },
   guardarUsuario: { perm: 'configuracion' },
   eliminarUsuario: { perm: 'configuracion' },
   guardarConfig: {

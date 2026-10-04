@@ -7,7 +7,7 @@ const Configuracion = {
 
   render(el) {
     Configuracion.el = el;
-    const tabs = [['negocio', 'Datos del negocio'], ['ticket', 'Ticket e impresora'], ['cajeros', 'Cajeros y permisos'], ['general', 'Opciones generales'], ['red', 'Red y cajas'], ['respaldos', 'Respaldos']];
+    const tabs = [['negocio', 'Datos del negocio'], ['ticket', 'Ticket e impresora'], ['cajeros', 'Cajeros y permisos'], ['general', 'Opciones generales'], ['transferir', 'Transferir datos desde eleventa'], ['red', 'Red y cajas'], ['respaldos', 'Respaldos']];
     el.innerHTML = `<div class="panel"><div class="tabs">${tabs.map(([k, n]) => `<button data-tab="${k}" class="${k === Configuracion.tab ? 'active' : ''}">${n}</button>`).join('')}</div><div data-body></div></div>`;
     el.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { Configuracion.tab = b.dataset.tab; Configuracion.render(el); });
     Configuracion[Configuracion.tab](el.querySelector('[data-body]'));
@@ -143,6 +143,22 @@ const Configuracion = {
       c.pedirFondo = E.pedirFondo.checked;
       Configuracion.guardar();
     };
+  },
+
+  transferir(box) {
+    const paso = (n, titulo, html, boton, data) => `<div class="panel"><h3>Paso ${n}. ${titulo}</h3>${html}${boton ? `<div class="toolbar" style="margin-top:8px"><button class="primary" data-${data}>${boton}</button></div>` : ''}</div>`;
+    box.innerHTML = `<div style="max-width:900px">
+      <p>Pase toda la información de eleventa a este programa en pocos minutos. No hace falta escribir los productos ni los clientes uno por uno.</p>
+      <div class="stats"><div class="stat"><div class="k">Productos en este programa</div><div class="v">${Store.productos.length}</div></div><div class="stat"><div class="k">Departamentos</div><div class="v">${Store.departamentos.length}</div></div><div class="stat"><div class="k">Clientes</div><div class="v">${Store.clientes.length}</div></div><div class="stat"><div class="k">Saldo por cobrar</div><div class="v">${U.money(U.sum(Store.clientes, c => c.saldo))}</div></div></div>
+      ${paso(1, 'Productos, precios, existencias y departamentos', `<ol><li>En eleventa entre a <b>F3 Productos</b> y presione <b>Exportar</b> (o <b>F4 Inventario → Reporte de inventario → Exportar a Excel</b>).</li><li>Guarde el archivo en una memoria USB o en el escritorio.</li><li>Aquí presione el botón y elija ese archivo. Los departamentos se crean solos.</li></ol>`, 'Importar productos', 'prod')}
+      ${paso(2, 'Clientes y lo que deben (créditos)', `<ol><li>En eleventa entre a <b>F2 Clientes</b> y presione <b>Exportar...</b> (abajo a la izquierda).</li><li>Aquí presione el botón y elija ese archivo. Se cargan nombre, teléfono, dirección, límite de crédito y <b>saldo actual</b> de cada cliente.</li></ol>`, 'Importar clientes', 'cli')}
+      ${paso(3, 'Revisar', `<ul><li>Revise algunas existencias en <b>F4 Inventario → Reporte de inventario</b>.</li><li>Revise el total por cobrar en <b>F2 Clientes → Reporte de saldos</b> y compárelo con el de eleventa.</li><li>Cree sus cajeros en <b>Configuración → Cajeros y permisos</b> y ajuste el ticket.</li></ul>`)}
+      ${paso(4, 'Pasar datos de este programa a otra computadora', `<p>Para mover <b>todo</b> (productos, ventas, clientes, cortes y cajeros) de una instalación de este programa a otra, use <b>Respaldos → Descargar respaldo</b> en la computadora vieja y <b>Restaurar desde archivo</b> en la nueva.</p>`, 'Ir a Respaldos', 'resp')}
+      <p class="muted small">Puede repetir los pasos 1 y 2 las veces que quiera: los productos y clientes que ya existen se actualizan, no se duplican.</p></div>`;
+    const refrescar = () => { if (App.current === 'configuracion' && Configuracion.tab === 'transferir') Configuracion.render(Configuracion.el); };
+    box.querySelector('[data-prod]').onclick = async () => { await Importar.abrir(); refrescar(); };
+    box.querySelector('[data-cli]').onclick = async () => { await Importar.clientes(); refrescar(); };
+    box.querySelector('[data-resp]').onclick = () => { Configuracion.tab = 'respaldos'; Configuracion.render(Configuracion.el); };
   },
 
   async red(box) {

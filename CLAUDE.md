@@ -22,6 +22,10 @@ Todo el texto de la interfaz y la documentación va en **español**.
 - Cada computadora es una "caja" (nombre guardado en `localStorage`), con su propio turno y corte.
 - `puntoventa/vendor/`: SheetJS 0.18.5 (Excel) y JsBarcode (etiquetas), incluidos para funcionar sin internet.
 
+## Funciones agregadas en la versión 1.1.0
+- **Mermas** (F4 Inventario → Mermas): `Store.registrarMerma` guarda un movimiento `movinv` de tipo `merma`, con `motivo` y `costoTotal`, más su reporte.
+- **Transferir datos desde eleventa** (Configuración): asistente que importa productos (`Importar.abrir`) y clientes con saldos (`Importar.clientes` → `Store.importarClientes`).
+
 ## Atajos (igual que eleventa)
 F1 Ventas, F2 Clientes, F3 Productos, F4 Inventario. En ventas: F10 Buscar, F11 Mayoreo, F12 Cobrar,
 INS Varios, Ctrl+P Artículo común (o código `0`), DEL Borrar, F5 Cambiar ticket, F6 Ticket pendiente,

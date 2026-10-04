@@ -1,7 +1,7 @@
-/* F4 Inventario: agregar, ajustes, bajos en inventario, reporte, movimientos, kardex */
+/* F4 Inventario: agregar, ajustes, mermas, bajos en inventario, reporte, movimientos, kardex */
 'use strict';
 
-const TIPOS_MOV = { venta: 'Venta', entrada: 'Entrada (agregar)', ajuste: 'Ajuste', devolucion: 'Devolución', cancelacion: 'Cancelación', importacion: 'Importación', alta: 'Alta de producto', precio: 'Cambio de precio' };
+const TIPOS_MOV = { venta: 'Venta', entrada: 'Entrada (agregar)', ajuste: 'Ajuste', devolucion: 'Devolución', cancelacion: 'Cancelación', merma: 'Merma', importacion: 'Importación', alta: 'Alta de producto', precio: 'Cambio de precio' };
 
 const Inventario = {
   el: null,
@@ -10,14 +10,14 @@ const Inventario = {
 
   render(el) {
     Inventario.el = el;
-    const tabs = [['agregar', 'Agregar'], ['ajustes', 'Ajustes'], ['bajos', 'Productos bajos en inventario'], ['reporte', 'Reporte de inventario'], ['movimientos', 'Reporte de movimientos'], ['kardex', 'Kardex']];
+    const tabs = [['agregar', 'Agregar'], ['ajustes', 'Ajustes'], ['mermas', 'Mermas'], ['bajos', 'Productos bajos en inventario'], ['reporte', 'Reporte de inventario'], ['movimientos', 'Reporte de movimientos'], ['kardex', 'Kardex']];
     el.innerHTML = `<div class="panel"><div class="tabs">${tabs.map(([k, n]) => `<button data-tab="${k}" class="${k === Inventario.tab ? 'active' : ''}">${n}</button>`).join('')}</div><div data-body></div></div>`;
     el.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => { Inventario.tab = b.dataset.tab; Inventario.render(el); Inventario.focus(); });
     Inventario[Inventario.tab](el.querySelector('[data-body]'));
   },
   focus() { const i = Inventario.el && Inventario.el.querySelector('[data-code], [data-focus]'); if (i && !UI.modals.length) i.focus(); },
   onKey(e) {
-    if (e.key === 'F10' && ['agregar', 'ajustes', 'kardex'].includes(Inventario.tab)) { Inventario.buscar(); return true; }
+    if (e.key === 'F10' && ['agregar', 'ajustes', 'mermas', 'kardex'].includes(Inventario.tab)) { Inventario.buscar(); return true; }
     return false;
   },
   onDataChange() { if (App.current === 'inventario' && ['bajos', 'reporte'].includes(Inventario.tab) && !UI.modals.length) Inventario.render(Inventario.el); },
@@ -83,7 +83,7 @@ const Inventario = {
 
   /* ---------- Ajustes ---------- */
   ajustes(box) {
-    box.innerHTML = `<p class="muted">Corrija la existencia por conteo físico, merma, robo, caducidad o errores de captura. El motivo aparece en los reportes.</p><div data-rec></div>`;
+    box.innerHTML = `<p class="muted">Corrija la existencia por conteo físico o errores de captura. Para producto vencido, dañado, robado o de consumo interno use la pestaña <b>Mermas</b>, así queda registrado cuánto dinero se perdió.</p><div data-rec></div>`;
     Inventario.codigoForm(box, (p) => Inventario.dialogoAjuste(p), 'Producto a ajustar:');
   },
   async dialogoAjuste(p) {
@@ -91,7 +91,7 @@ const Inventario = {
     const r = await UI.form(`Ajustar inventario: ${p.descripcion}`, [
       { name: 'modo', label: 'Tipo de ajuste', type: 'select', value: 'nueva', options: [{ value: 'nueva', label: 'Indicar la cantidad real que hay' }, { value: 'quitar', label: 'Disminuir (sacar) una cantidad' }, { value: 'sumar', label: 'Aumentar una cantidad' }] },
       { name: 'cantidad', label: `Cantidad (existencia actual: ${U.qty(p.existencia)})`, type: 'number', step: 'any', autofocus: true, required: true, cls: 'cobro-input' },
-      { name: 'motivo', label: 'Motivo', type: 'select', value: 'Conteo físico', options: ['Conteo físico', 'Merma', 'Producto dañado', 'Caducidad', 'Robo', 'Consumo interno', 'Error de captura', 'Otro'].map(x => ({ value: x, label: x })) },
+      { name: 'motivo', label: 'Motivo', type: 'select', value: 'Conteo físico', options: ['Conteo físico', 'Error de captura', 'Otro'].map(x => ({ value: x, label: x })) },
       { name: 'nota', label: 'Comentario' },
     ], { ok: 'Ajustar' });
     if (!r) return Inventario.focus();
@@ -104,6 +104,62 @@ const Inventario = {
       UI.toast(`Ajuste registrado. "${x.descripcion}" ahora tiene ${U.qty(x.existencia)}`, 'ok');
       const rec = Inventario.el.querySelector('[data-rec]');
       if (rec) rec.insertAdjacentHTML('afterbegin', `<p>${U.fmtTime(Date.now())} · ${U.esc(x.descripcion)}: ${delta > 0 ? '+' : ''}${U.qty(delta)} (${U.esc(r.motivo)}) → existencia ${U.qty(x.existencia)}</p>`);
+    } catch (e) { UI.alert(e.message); }
+    Inventario.focus();
+  },
+
+  /* ---------- Mermas ---------- */
+  mermas(box) {
+    box.innerHTML = `<p class="muted">Registre el producto que se pierde: vencido, dañado, robado, consumo interno o muestras. Se descuenta del inventario y queda el costo de lo perdido.</p>
+      <div data-rec></div>
+      <h3 style="margin-top:14px">Reporte de mermas</h3>
+      <div class="row">${UI.rangoFechas('mm', U.firstOfMonth(), U.today())}<label>Motivo<select data-mot><option value="">Todos</option>${Store.MOTIVOS_MERMA.map(m => `<option>${U.esc(m)}</option>`).join('')}</select></label>
+        <label style="max-width:260px">Departamento<select data-dep><option value="">Todos</option>${Store.departamentos.map(d => `<option>${U.esc(d.nombre)}</option>`).join('')}</select></label>
+        <button class="primary" data-go>Consultar</button><button class="secondary" data-x>Exportar a Excel</button><button class="secondary" data-p>Imprimir</button></div>
+      <div data-res style="margin-top:10px"></div>`;
+    Inventario.codigoForm(box, (p) => Inventario.dialogoMerma(p), 'Producto a dar de baja por merma:');
+    let rows = [];
+    const go = async () => {
+      const from = U.startOfDay(box.querySelector('[data-mm-from]').value), to = U.endOfDay(box.querySelector('[data-mm-to]').value);
+      const mot = box.querySelector('[data-mot]').value, dep = box.querySelector('[data-dep]').value;
+      rows = (await DB.range('movinv', 'ts', from, to)).filter(m => m.tipo === 'merma' && (!mot || m.motivo === mot) && (!dep || (Store.byId.get(m.productoId) || {}).departamento === dep)).sort((a, b) => b.ts - a.ts);
+      const costo = (m) => m.costoTotal ?? U.round2(-m.cantidad * m.costo);
+      const total = U.sum(rows, costo);
+      const porMotivo = [...U.groupBy(rows, m => m.motivo || 'Otro')].map(([k, l]) => [k, U.sum(l, costo)]).sort((a, b) => b[1] - a[1]);
+      const porProd = [...U.groupBy(rows, m => m.productoId)].map(([, l]) => ({ d: l[0].descripcion, q: -U.sum(l, m => m.cantidad), c: U.sum(l, costo) })).sort((a, b) => b.c - a.c).slice(0, 10);
+      const max = Math.max(1, ...porMotivo.map(x => x[1]));
+      box.querySelector('[data-res]').innerHTML = `<div class="stats"><div class="stat"><div class="k">Dinero perdido (a costo)</div><div class="v bad">${U.money(total)}</div></div><div class="stat"><div class="k">Registros de merma</div><div class="v">${rows.length}</div></div><div class="stat"><div class="k">Productos distintos</div><div class="v">${new Set(rows.map(m => m.productoId)).size}</div></div></div>
+        <div class="grid2" style="align-items:start;margin-bottom:12px"><div class="panel"><h3>Por motivo</h3><div class="chart-bars">${porMotivo.map(([k, v]) => `<div class="bar-row"><span>${U.esc(k)}</span><div class="bar" style="width:${(v / max * 100).toFixed(1)}%;background:var(--bad)"></div><span class="right">${U.money(v)}</span></div>`).join('') || '<p class="muted">Sin mermas</p>'}</div></div>
+        <div class="panel"><h3>Productos con más merma</h3><table class="grid"><tbody>${porProd.map(x => `<tr><td>${U.esc(x.d)}</td><td class="num">${U.qty(x.q)}</td><td class="num">${U.money(x.c)}</td></tr>`).join('') || '<tr><td class="muted">Sin mermas</td></tr>'}</tbody></table></div></div>
+        <div class="table-wrap" style="max-height:calc(100vh - 520px);min-height:160px"><table class="grid" data-t><thead><tr><th>Fecha</th><th>Código</th><th>Producto</th><th>Motivo</th><th class="num">Cantidad</th><th class="num">Costo unit.</th><th class="num">Pérdida</th><th>Detalle</th><th>Usuario</th></tr></thead><tbody>${rows.slice(0, 3000).map(m => `<tr><td class="nowrap">${U.fmtDateTime(m.ts)}</td><td>${U.esc(m.codigo)}</td><td>${U.esc(m.descripcion)}</td><td>${U.esc(m.motivo || '')}</td><td class="num">${U.qty(-m.cantidad)}</td><td class="num">${U.money(m.costo)}</td><td class="num bad">${U.money(costo(m))}</td><td>${U.esc(Inventario.detalleMerma(m))}</td><td>${U.esc(m.usuario)}</td></tr>`).join('') || '<tr><td colspan="9" class="muted center">Sin mermas en el periodo</td></tr>'}</tbody><tfoot><tr><td colspan="6">Total perdido</td><td class="num">${U.money(total)}</td><td colspan="2"></td></tr></tfoot></table></div>`;
+      Inventario.mermasRows = rows;
+    };
+    box.querySelector('[data-go]').onclick = go;
+    box.querySelector('[data-mot]').onchange = go;
+    box.querySelector('[data-dep]').onchange = go;
+    box.querySelector('[data-x]').onclick = () => U.exportXlsx('mermas.xlsx', rows.map(m => ({ Fecha: U.fmtDateTime(m.ts), Codigo: m.codigo, Producto: m.descripcion, Motivo: m.motivo || '', Cantidad: -m.cantidad, 'Costo unitario': m.costo, 'Perdida': m.costoTotal ?? U.round2(-m.cantidad * m.costo), Detalle: Inventario.detalleMerma(m), Usuario: m.usuario })), 'Mermas');
+    box.querySelector('[data-p]').onclick = () => { const t = box.querySelector('[data-t]'); if (t) Print.reporte('Reporte de mermas', t.outerHTML, `${box.querySelector('[data-mm-from]').value} a ${box.querySelector('[data-mm-to]').value}`); };
+    Inventario.recargarMermas = go;
+    go();
+  },
+  detalleMerma(m) { const n = m.nota || ''; return m.motivo && n.startsWith(m.motivo) ? n.slice(m.motivo.length).replace(/^ - /, '') : n; },
+  async dialogoMerma(p) {
+    if (p.tipoVenta !== 'P' && !p.usaInventario) { UI.alert(`"${p.descripcion}" no utiliza inventario. Actívelo en F3 Productos → Modificar.`); return; }
+    const r = await UI.form(`Merma: ${p.descripcion}`, [
+      { name: 'cantidad', label: p.tipoVenta === 'P' ? 'Cantidad de paquetes perdidos' : `Cantidad perdida (hay ${U.qty(p.existencia)})`, type: 'number', step: 'any', autofocus: true, required: true, cls: 'cobro-input' },
+      { name: 'motivo', label: 'Motivo', type: 'select', value: Store.MOTIVOS_MERMA[0], options: Store.MOTIVOS_MERMA.map(x => ({ value: x, label: x })) },
+      { name: 'nota', label: 'Comentario (opcional)' },
+    ], { ok: 'Registrar merma', note: `Costo del producto: ${U.money(Store.costoProducto(p))} por unidad.` });
+    if (!r) return Inventario.focus();
+    const q = U.round3(U.num(r.cantidad));
+    if (!(q > 0)) { UI.toast('Cantidad inválida', 'bad'); return Inventario.focus(); }
+    try {
+      const res = await Store.registrarMerma(p.id, q, r.motivo, r.nota);
+      const x = Store.byId.get(p.id);
+      UI.toast(`Merma registrada: ${U.qty(q)} de "${x.descripcion}" (${U.money(res.costo)} perdidos)`, 'ok');
+      const rec = Inventario.el.querySelector('[data-rec]');
+      if (rec) rec.insertAdjacentHTML('afterbegin', `<p>${U.fmtTime(Date.now())} · ${U.esc(x.descripcion)}: -${U.qty(q)} (${U.esc(r.motivo)}) · pérdida <b class="bad">${U.money(res.costo)}</b>${x.usaInventario ? ` · quedan ${U.qty(x.existencia)}` : ''}</p>`);
+      if (Inventario.tab === 'mermas' && App.current === 'inventario' && Inventario.recargarMermas) Inventario.recargarMermas();
     } catch (e) { UI.alert(e.message); }
     Inventario.focus();
   },

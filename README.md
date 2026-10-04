@@ -10,7 +10,7 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 
 ## Instalación en Windows
 
-1. Descargue `PuntoDeVenta-Instalador-1.0.0.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
+1. Descargue `PuntoDeVenta-Instalador-1.1.0.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
 2. En la **computadora principal** ejecute el instalador y elija **"Computadora PRINCIPAL (servidor)"**.
    - Se abre el acceso directo **Punto de Venta** en el escritorio.
    - El servidor se enciende solo cada vez que inicia Windows.
@@ -23,6 +23,18 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 > Recomendación: fije la IP de la computadora principal en el módem (reserva DHCP) para que la dirección no cambie.
 
 El acceso directo abre el programa como aplicación, sin barra del navegador, y con **impresión directa** (`--kiosk-printing`) a la impresora predeterminada de Windows. Configure su impresora de tickets como predeterminada.
+
+## Transferir la base de datos desde eleventa
+
+En **Configuración → Transferir datos desde eleventa** hay un asistente paso a paso:
+
+1. **Productos, precios, existencias y departamentos**: en eleventa, *F3 Productos → Exportar* y luego **Importar productos** aquí.
+2. **Clientes y saldos de crédito**: en eleventa, *F2 Clientes → Exportar...* y luego **Importar clientes** aquí. Se cargan el nombre, el teléfono, la dirección, el límite de crédito ("Sin límite" incluido) y el **saldo actual** de cada cliente.
+3. Revise el inventario y el reporte de saldos.
+
+Se puede repetir sin duplicar nada: lo que ya existe se actualiza. No se lee directamente el archivo interno de eleventa (`PDVDATA.FDB`, de Firebird) porque eso exige instalar programas extra. Por eso se usan los archivos de Excel que el mismo eleventa exporta.
+
+Para mover **todo** (incluido el historial de ventas y cortes) entre dos instalaciones de este programa, use *Configuración → Respaldos*.
 
 ## Cargar los productos desde eleventa
 
@@ -41,7 +53,7 @@ Acepta `.xlsx`, `.xls` y `.csv` (con `,` `;` o tabulador, en UTF-8 o Windows-125
 | **Cobro (F12)** | Efectivo con cambio, tarjeta, vales, mixto (tarjeta + vales + efectivo), crédito con anticipo y límite; F1 cobrar e imprimir, F2 cobrar sin imprimir |
 | **F2 Clientes** | Alta, modificación y baja, crédito con o sin límite, abonos repartidos en los tickets más antiguos o en uno elegido, estado de cuenta imprimible, reporte de saldos, exportar a Excel |
 | **F3 Productos** | Alta y modificación (costo, % ganancia, precio, mayoreo, mayoreo automático por cantidad, departamento, inventario mín./máx.), unidad, granel o paquete, departamentos, **promociones** (precio por rango de cantidad, "N por $X", % con vigencia), **actualizar varios a la vez**, ventas por periodo, importar/exportar Excel, etiquetas con código de barras |
-| **F4 Inventario** | Agregar mercancía (actualizando costo y precios), ajustes con motivo, productos bajos en inventario con compra sugerida, reporte de inventario valuado, reporte de movimientos, **kardex** por producto |
+| **F4 Inventario** | Agregar mercancía (actualizando costo y precios), ajustes con motivo, **mermas** (vencido, dañado, robo, consumo interno, muestras) con el dinero perdido y su reporte por motivo, producto y departamento, productos bajos en inventario con compra sugerida, reporte de inventario valuado, reporte de movimientos, **kardex** por producto |
 | **Corte** | Corte por caja/turno con fondo, dinero esperado vs. contado (faltante/sobrante), ventas por forma de pago y por departamento, ganancia, entradas y salidas; corte del día de todas las cajas; historial y reimpresión |
 | **Reportes** | Ventas y ganancia por día, cajero, caja, departamento, forma de pago, hora; productos más vendidos; listado de tickets; gráfica; exportar e imprimir |
 | **Configuración** | Datos del negocio, ticket (encabezado, pie, logo, 58/80 mm, copias, vista previa), cajeros con permisos, impuestos, moneda, reglas de venta, red y cajas, respaldos (descargar, restaurar, borrar todo) |

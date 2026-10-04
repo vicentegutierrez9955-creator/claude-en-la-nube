@@ -52,7 +52,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     const c2 = await ctx2.newPage();
     for (const p of [c1, c2]) {
       p.on('pageerror', e => errors.push(e.message));
-      p.on('console', m => { if (m.type() === 'error' && !/401/.test(m.text())) errors.push(m.text()); });
+      p.on('console', m => { if (m.type() === 'error' && !/40[01]/.test(m.text())) errors.push(m.text()); });
       await p.addInitScript(() => { window.print = () => { window.__printed = (window.__printed || 0) + 1; }; });
     }
 
@@ -157,6 +157,22 @@ async function login(page, caja, usuario = 'admin', password = '') {
     const kardex = await c1.evaluate(async () => (await DB.byIndex('movinv', 'productoId', Store.findProducto('7502').id)).map(m => m.tipo));
     assert.deepEqual(kardex.sort(), ['entrada', 'importacion', 'precio', 'venta'].sort());
 
+    /* ---- Mermas: pantalla F4 → Mermas, registro y reporte ---- */
+    await c1.keyboard.press('F4');
+    await c1.click('[data-tab=mermas]');
+    await c1.fill('[data-code]', '7502');
+    await c1.press('[data-code]', 'Enter');
+    await c1.fill('.modal input[name=cantidad]', '2');
+    await c1.selectOption('.modal select[name=motivo]', 'Vencido / caducado');
+    await c1.click('.modal [data-ok]');
+    await c1.waitForSelector('[data-rec] >> text=$20.00');
+    assert.equal(await c1.evaluate(() => Store.findProducto('7502').existencia), 9);
+    await c1.waitForSelector('.stat >> text=$20.00');
+    assert.match(await c1.textContent('[data-t] tbody'), /Vencido \/ caducado/);
+    await c2.waitForFunction(() => Store.findProducto('7502').existencia === 9, null, { timeout: 5000 });
+    const sinPermiso = await c1.evaluate(() => Store.registrarMerma(Store.findProducto('7502').id, 0, 'Otro').then(() => 'ok', e => e.message));
+    assert.match(sinPermiso, /mayor a cero/);
+
     /* ---- Devolución parcial ---- */
     const dev = await c1.evaluate(() => Store.devolver(1, [{ idx: 0, cantidad: 1 }], 'no le gustó'));
     assert.equal(dev.dev.efectivo, 18);
@@ -200,13 +216,40 @@ async function login(page, caja, usuario = 'admin', password = '') {
     assert.equal(rows.length, 3);
     assert.equal(rows.find(x => x['Código'] === '7501').Existencia, 15);
 
+    /* ---- Transferir clientes con saldos desde un Excel de eleventa ---- */
+    const cliPath = path.join(DATA, 'clientes.xlsx');
+    const wsC = XLSX.utils.aoa_to_sheet([
+      ['Nombre', 'Dirección', 'Teléfono', 'Límite de Crédito', 'Saldo Actual', 'Fecha Último Abono'],
+      ['María López', 'Calle 1', '555-1234', '500', '$120.50', ''],
+      ['Pedro Soto', '', '555-9999', 'Sin límite', 0, ''],
+      ['Juan Pérez', '', '', 1000, 30, ''],
+    ]);
+    const wbC = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wbC, wsC, 'Clientes');
+    fs.writeFileSync(cliPath, XLSX.write(wbC, { type: 'buffer', bookType: 'xlsx' }));
+    await c1.click('#mainnav [data-screen=configuracion]');
+    await c1.click('[data-tab=transferir]');
+    await c1.click('[data-cli]');
+    await c1.setInputFiles('.modal [data-file]', cliPath);
+    await c1.waitForSelector('.modal [data-prev] tr');
+    assert.match(await c1.textContent('.modal [data-resumen]'), /2<\/b> nuevos|2 nuevos/);
+    await c1.click('.modal [data-ok]');
+    await c1.waitForSelector('.modal >> text=Nuevos: 2');
+    await c1.click('.modal [data-ok]');
+    const cli = await c1.evaluate(() => Object.fromEntries(Store.clientes.map(c => [c.nombre, [c.saldo, c.limite, c.credito]])));
+    assert.deepEqual(cli['María López'], [120.5, 500, true]);
+    assert.deepEqual(cli['Pedro Soto'], [0, 0, true]);
+    assert.deepEqual(cli['Juan Pérez'], [30, 1000, true]);
+    await c2.waitForFunction(() => Store.clientes.length === 3, null, { timeout: 5000 });
+    const abonoM = await c1.evaluate(() => Store.abonar(Store.clientes.find(c => c.nombre === 'María López').id, 20.5, 'efectivo'));
+    assert.equal(abonoM.cliente.saldo, 100);
+
     /* ---- Recorrer todas las pantallas sin errores ---- */
     for (const s of ['ventas', 'clientes', 'productos', 'inventario', 'configuracion', 'corte', 'reportes']) {
       await c1.click(`#mainnav [data-screen=${s}]`);
       await c1.waitForTimeout(150);
     }
-    for (const t of ['bajos', 'reporte', 'movimientos', 'kardex']) { await c1.click('#mainnav [data-screen=inventario]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(100); }
-    for (const t of ['ticket', 'cajeros', 'general', 'red', 'respaldos']) { await c1.click('#mainnav [data-screen=configuracion]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(150); }
+    for (const t of ['mermas', 'bajos', 'reporte', 'movimientos', 'kardex']) { await c1.click('#mainnav [data-screen=inventario]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(100); }
+    for (const t of ['ticket', 'cajeros', 'general', 'transferir', 'red', 'respaldos']) { await c1.click('#mainnav [data-screen=configuracion]'); await c1.click(`[data-tab=${t}]`); await c1.waitForTimeout(150); }
     for (const g of ['cajero', 'caja', 'departamento', 'forma', 'hora', 'productos', 'tickets']) { await c1.click('#mainnav [data-screen=reportes]'); await c1.selectOption('[data-g]', g); await c1.waitForTimeout(150); }
     await c1.screenshot({ path: path.join(DATA, 'reportes.png'), fullPage: true });
 

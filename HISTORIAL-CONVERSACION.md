@@ -22,6 +22,11 @@
 - Prueba de punta a punta (`tests/e2e.test.js`) con dos cajas simultáneas: pasa.
 - Código subido a GitHub: `vicentegutierrez9955-creator/claude-en-la-nube`, rama `claude/admiring-cerf-tzi8sm`.
 
+## Versión 1.1.0
+- Se agregó **Mermas** (F4 Inventario → Mermas): registro con motivo y reporte del dinero perdido.
+- Se agregó **Transferir datos desde eleventa** (Configuración): productos y clientes con saldos desde los Excel de eleventa.
+- Nota: el pedido original de las mermas no estaba en esta conversación, así que se armó según el uso habitual. Si el usuario quiere algo distinto, hay que ajustarlo.
+
 ## Estado / próximos pasos
 - Falta probar el instalador en un Windows real.
 - Falta probar la importación con un archivo real exportado de eleventa.

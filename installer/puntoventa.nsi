@@ -9,7 +9,7 @@ Unicode true
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.0"
+  !define VERSION "1.1.0"
 !endif
 !define APPNAME "Punto de Venta"
 !define REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuntoDeVenta"

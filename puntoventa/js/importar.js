@@ -58,20 +58,20 @@ const Importar = {
     return XLSX.read(await U.readFileAsArrayBuffer(file), { type: 'array', cellDates: false });
   },
 
-  detectarEncabezado(aoa) {
+  detectarEncabezado(aoa, campos = Importar.CAMPOS) {
     let best = { row: 0, score: -1 };
     for (let r = 0; r < Math.min(aoa.length, 25); r++) {
       const keys = (aoa[r] || []).map(U.normKey);
-      const score = Importar.CAMPOS.reduce((s, c) => s + (keys.some(k => c.alias.includes(k)) ? 1 : 0), 0);
+      const score = campos.reduce((s, c) => s + (keys.some(k => c.alias.includes(k)) ? 1 : 0), 0);
       if (score > best.score) best = { row: r, score };
     }
     return best.row;
   },
-  autoMapa(headers) {
+  autoMapa(headers, campos = Importar.CAMPOS) {
     const keys = headers.map(U.normKey);
     const mapa = {};
     const usados = new Set();
-    for (const c of Importar.CAMPOS) {
+    for (const c of campos) {
       for (const a of c.alias) {
         const i = keys.findIndex((k, idx) => k === a && !usados.has(idx));
         if (i > -1) { mapa[c.k] = i; usados.add(i); break; }
@@ -210,6 +210,106 @@ const Importar = {
         btn.disabled = false; btn.textContent = 'Importar productos';
         UI.alert('Error al importar: ' + e.message);
       }
+    };
+    return m.done;
+  },
+
+  /* ---------- Clientes (archivo "Exportar clientes" de eleventa) ---------- */
+  CAMPOS_CLIENTES: [
+    { k: 'nombre', label: 'Nombre', req: true, alias: ['nombre', 'cliente', 'nombrecliente', 'nombredelcliente', 'razonsocial', 'nombrecompleto'] },
+    { k: 'telefono', label: 'Teléfono', alias: ['telefono', 'tel', 'telefonos', 'celular', 'movil', 'telefono1'] },
+    { k: 'direccion', label: 'Dirección', alias: ['direccion', 'domicilio', 'calle', 'direccioncompleta'] },
+    { k: 'email', label: 'Correo', alias: ['email', 'correo', 'correoelectronico', 'mail', 'emailfacturacion'] },
+    { k: 'rfc', label: 'RFC / RUT', alias: ['rfc', 'rut', 'nit', 'cuit'] },
+    { k: 'limite', label: 'Límite de crédito', alias: ['limitedecredito', 'limitecredito', 'limite', 'credito', 'creditomaximo'] },
+    { k: 'saldo', label: 'Saldo actual (lo que debe)', alias: ['saldoactual', 'saldo', 'adeudo', 'debe', 'saldopendiente', 'deuda'] },
+    { k: 'notas', label: 'Notas', alias: ['notas', 'observaciones', 'comentarios', 'nota'] },
+  ],
+
+  async clientes() {
+    const C = Importar.CAMPOS_CLIENTES;
+    const m = UI.modal({
+      title: 'Importar clientes desde Excel o CSV', size: 'xwide',
+      body: `<div class="dropzone" data-drop><p><b>Arrastre aquí el archivo de clientes</b><br><span class="muted">En eleventa: F2 Clientes → Exportar... (incluye límite de crédito y saldo actual).</span></p><input type="file" data-file accept=".xlsx,.xls,.csv,.txt,.ods"></div>
+        <div data-paso2 class="hidden">
+          <div class="row"><label style="max-width:260px">Hoja<select data-hoja></select></label><label style="max-width:200px">Fila de encabezados<input type="number" min="1" data-hrow></label>
+          <label>Si el cliente ya existe (mismo nombre)<select data-exist><option value="actualizar">Actualizar sus datos y saldo</option><option value="omitir">Dejarlo como está</option></select></label></div>
+          <h3>Relacione cada dato con la columna de su archivo</h3><div class="grid4 map-table" data-map></div>
+          <h3>Vista previa</h3><p data-resumen></p>
+          <div class="table-wrap" style="max-height:30vh"><table class="grid"><thead><tr><th>Fila</th><th>Nombre</th><th>Teléfono</th><th>Dirección</th><th class="num">Límite</th><th class="num">Saldo</th><th>Estado</th></tr></thead><tbody data-prev></tbody></table></div>
+          <p class="error small" data-errs></p></div>`,
+      footer: `<button class="secondary" data-no>Cancelar</button><button class="primary" data-ok disabled>Importar clientes</button>`,
+    });
+    let wb = null, aoa = [], headerRow = 0, mapa = {}, filas = [];
+    const cel = (row, k) => (mapa[k] === undefined ? undefined : row[mapa[k]]);
+    const construir = () => {
+      const out = [], errs = [];
+      for (let r = headerRow + 1; r < aoa.length; r++) {
+        const row = aoa[r] || [];
+        if (!row.some(x => String(x ?? '').trim() !== '')) continue;
+        const nombre = String(cel(row, 'nombre') ?? '').trim();
+        if (!nombre) { errs.push(`Fila ${r + 1}: falta el nombre`); continue; }
+        const f = { _fila: r + 1, nombre };
+        for (const k of ['telefono', 'direccion', 'email', 'rfc', 'notas']) { const v = cel(row, k); if (v !== undefined && String(v).trim() !== '') f[k] = String(v).trim(); }
+        const lim = cel(row, 'limite');
+        if (lim !== undefined && String(lim).trim() !== '') {
+          if (/sin\s*l[ií]mite|ilimitado/i.test(String(lim))) f.sinLimite = true;
+          else { const n = U.num(lim, NaN); if (isFinite(n)) f.limite = n; else errs.push(`Fila ${r + 1}: límite no numérico ("${lim}")`); }
+        }
+        const sal = cel(row, 'saldo');
+        if (sal !== undefined && String(sal).trim() !== '') { const n = U.num(sal, NaN); if (isFinite(n)) f.saldo = n; else errs.push(`Fila ${r + 1}: saldo no numérico ("${sal}")`); }
+        out.push(f);
+      }
+      return { out, errs };
+    };
+    const preview = () => {
+      const { out, errs } = construir();
+      filas = out;
+      const nuevos = filas.filter(f => !Store.clientes.some(c => U.norm(c.nombre) === U.norm(f.nombre))).length;
+      const deuda = U.sum(filas, f => f.saldo || 0);
+      m.q('[data-resumen]').innerHTML = `<b>${filas.length}</b> cliente(s): <b>${nuevos}</b> nuevos y <b>${filas.length - nuevos}</b> que ya existen. Saldo total por cobrar en el archivo: <b>${U.money(deuda)}</b>.`;
+      m.q('[data-prev]').innerHTML = filas.slice(0, 100).map(f => `<tr><td>${f._fila}</td><td>${U.esc(f.nombre)}</td><td>${U.esc(f.telefono || '')}</td><td>${U.esc(f.direccion || '')}</td><td class="num">${f.sinLimite ? 'Sin límite' : f.limite ?? ''}</td><td class="num">${f.saldo ?? ''}</td><td>${Store.clientes.some(c => U.norm(c.nombre) === U.norm(f.nombre)) ? '<span class="tag warn">Existe</span>' : '<span class="tag ok">Nuevo</span>'}</td></tr>`).join('');
+      const all = [...(mapa.nombre === undefined ? ['Falta elegir la columna Nombre'] : []), ...errs];
+      m.q('[data-errs]').innerHTML = all.slice(0, 30).map(U.esc).join('<br>');
+      m.q('[data-ok]').disabled = !filas.length || mapa.nombre === undefined;
+      m.q('[data-ok]').textContent = `Importar ${filas.length} clientes`;
+    };
+    const encabezados = () => {
+      const headers = (aoa[headerRow] || []).map((h, i) => String(h || `Columna ${i + 1}`));
+      mapa = Importar.autoMapa(headers, C);
+      m.q('[data-map]').innerHTML = C.map(c => `<label>${U.esc(c.label)}${c.req ? ' *' : ''}<select data-k="${c.k}"><option value="">— No importar —</option>${headers.map((h, i) => `<option value="${i}" ${mapa[c.k] === i ? 'selected' : ''}>${U.esc(h)}</option>`).join('')}</select></label>`).join('');
+      m.qa('[data-k]').forEach(s => s.onchange = () => { mapa[s.dataset.k] = s.value === '' ? undefined : +s.value; preview(); });
+      preview();
+    };
+    const hoja = () => {
+      aoa = XLSX.utils.sheet_to_json(wb.Sheets[m.q('[data-hoja]').value], { header: 1, raw: true, defval: '' });
+      headerRow = Importar.detectarEncabezado(aoa, C);
+      m.q('[data-hrow]').value = headerRow + 1;
+      encabezados();
+    };
+    const cargar = async (file) => {
+      if (!file) return;
+      try { wb = await Importar.leerArchivo(file); } catch (e) { return UI.alert('No se pudo leer el archivo: ' + e.message); }
+      m.q('[data-hoja]').innerHTML = wb.SheetNames.map(n => `<option>${U.esc(n)}</option>`).join('');
+      m.q('[data-drop] p').innerHTML = `<b>Archivo:</b> ${U.esc(file.name)}`;
+      m.q('[data-paso2]').classList.remove('hidden');
+      hoja();
+    };
+    const drop = m.q('[data-drop]');
+    m.q('[data-file]').onchange = (e) => cargar(e.target.files[0]);
+    drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('over'); };
+    drop.ondragleave = () => drop.classList.remove('over');
+    drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove('over'); cargar(e.dataTransfer.files[0]); };
+    m.q('[data-hoja]').onchange = hoja;
+    m.q('[data-hrow]').onchange = () => { headerRow = Math.max(0, (parseInt(m.q('[data-hrow]').value, 10) || 1) - 1); encabezados(); };
+    m.q('[data-no]').onclick = () => m.close(null);
+    m.q('[data-ok]').onclick = async () => {
+      const btn = m.q('[data-ok]'); btn.disabled = true; btn.textContent = 'Importando...';
+      try {
+        const r = await Store.importarClientes(filas, { actualizarExistentes: m.q('[data-exist]').value === 'actualizar' });
+        m.close(r);
+        await UI.alert(`Importación de clientes terminada.\n\nNuevos: ${r.nuevos}\nActualizados: ${r.actualizados}\nOmitidos: ${r.omitidos}${r.errores.length ? `\n\nCon errores (${r.errores.length}):\n${r.errores.slice(0, 15).join('\n')}` : ''}`, 'Importar clientes');
+      } catch (e) { btn.disabled = false; btn.textContent = 'Importar clientes'; UI.alert('Error al importar: ' + e.message); }
     };
     return m.done;
   },

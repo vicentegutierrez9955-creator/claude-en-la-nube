@@ -6,7 +6,7 @@
   'registrarVenta', 'devolver', 'movimientoCaja', 'abrirTurno', 'cerrarTurno', 'abonar',
   'guardarCliente', 'eliminarCliente', 'guardarProducto', 'actualizarVarios', 'eliminarProducto',
   'importarProductos', 'guardarPromocion', 'eliminarPromocion', 'movimientoInventario',
-  'guardarUsuario', 'eliminarUsuario', 'guardarDepartamento', 'eliminarDepartamento',
+  'guardarUsuario', 'eliminarUsuario', 'guardarDepartamento', 'eliminarDepartamento', 'registrarMerma', 'importarClientes',
 ].forEach(name => { Store[name] = (...args) => Remote.call(name, args); });
 
 Store.asegurarTurno = async () => { if (!Store.turno) await Store.abrirTurno(0); return Store.turno; };
