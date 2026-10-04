@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel de clientes</title>
+<meta name="theme-color" content="#0f1b2d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6feb'/%3E%3Cpath d='M9 22V10h5a4 4 0 0 1 0 8h-5M18 22h5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/panel/styles.css">
+</head>
+<body>
+
+<section id="login" class="login" hidden>
+  <form id="login-form" class="login-card">
+    <div class="brand"><span class="brand-mark">P</span><b>Panel de clientes</b></div>
+    <p class="muted">Entra con tu nombre y la clave del equipo.</p>
+    <label>Tu nombre<input id="login-nombre" autocomplete="name" required maxlength="40" placeholder="Ej: Vicente"></label>
+    <label>Clave del equipo<input id="login-clave" type="password" autocomplete="current-password" required></label>
+    <p id="login-error" class="error" role="alert" hidden></p>
+    <button class="btn btn-primary" type="submit">Entrar</button>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <div class="wrap top-in">
+      <div class="brand"><span class="brand-mark">P</span><b>Panel de clientes</b></div>
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab" data-tab="resumen" aria-current="page">Resumen</button>
+        <button class="tab" data-tab="clientes">Clientes</button>
+        <button class="tab" data-tab="pagos">Pagos</button>
+        <button class="tab" data-tab="ajustes">Ajustes</button>
+      </nav>
+      <div class="who"><span id="usuario"></span><button id="salir" class="link">Salir</button></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="tab-resumen" class="tab-panel">
+      <div class="kpis" id="kpis"></div>
+      <div class="section-head"><h2>Avisos</h2><span class="muted" id="sync"></span></div>
+      <div id="avisos" class="list"></div>
+    </section>
+
+    <section id="tab-clientes" class="tab-panel" hidden>
+      <div class="section-head">
+        <h2>Clientes</h2>
+        <div class="row">
+          <input id="buscar" type="search" placeholder="Buscar cliente…" aria-label="Buscar cliente">
+          <button id="nuevo" class="btn btn-primary">+ Nuevo cliente</button>
+        </div>
+      </div>
+      <div id="clientes" class="grid"></div>
+    </section>
+
+    <section id="tab-pagos" class="tab-panel" hidden>
+      <div class="section-head"><h2>Pagos recibidos</h2><span class="muted" id="pagos-total"></span></div>
+      <div id="pagos" class="list"></div>
+    </section>
+
+    <section id="tab-ajustes" class="tab-panel" hidden>
+      <div class="card">
+        <h2>Datos de transferencia</h2>
+        <p class="muted">Se agregan al mensaje de WhatsApp cuando cobras.</p>
+        <textarea id="transferencia" rows="5" placeholder="Banco, tipo de cuenta, número, RUT, nombre y correo"></textarea>
+        <button id="guardar-transferencia" class="btn btn-primary">Guardar</button>
+      </div>
+      <div class="card">
+        <h2>Correos de aviso</h2>
+        <p class="muted">Cada mañana el panel revisa los cobros y dominios. Si algo vence en 7, 3 o 1 día, hoy o está atrasado, manda un correo. Los lunes manda un resumen de lo que viene.</p>
+        <button id="probar-correo" class="btn">Enviar correo de prueba</button>
+        <p id="correo-estado" class="muted" role="status"></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg" class="dlg"><div id="dlg-body"></div></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script type="module" src="/panel/app.js"></script>
+</body>
+</html>

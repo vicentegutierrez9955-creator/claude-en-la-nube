@@ -5,12 +5,22 @@
   "rewrites": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "asesoriascontables-jc.cl" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "asesoriascontables-jc.cl"
+        }
+      ],
       "destination": "/asesorias-contables-jc"
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www.asesoriascontables-jc.cl" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.asesoriascontables-jc.cl"
+        }
+      ],
       "destination": "/asesorias-contables-jc"
     },
     {
@@ -39,6 +49,25 @@
           "value": "strict-origin-when-cross-origin"
         }
       ]
+    },
+    {
+      "source": "/(panel|api/panel)(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/panel/correo",
+      "schedule": "0 12 * * *"
     }
   ]
 }
