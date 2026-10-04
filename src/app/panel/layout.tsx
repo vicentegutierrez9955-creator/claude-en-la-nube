@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/auth";
+import { isAdminEmail, requireUser } from "@/lib/auth";
 import { BRAND } from "@/lib/brand";
 import { db } from "@/lib/db";
 import { logout } from "../auth-actions";
@@ -27,9 +27,16 @@ export default async function PanelLayout({ children }: { children: React.ReactN
             </Link>
             <span className="ml-2 text-sm text-gray-500">· {user.business.name}</span>
           </div>
-          <form action={logout}>
-            <button className="text-sm text-gray-600 hover:text-gray-900">Salir</button>
-          </form>
+          <div className="flex items-center gap-4">
+            {isAdminEmail(user.email) && (
+              <Link href="/admin" className="text-sm font-semibold text-brand-700 hover:underline">
+                Administración
+              </Link>
+            )}
+            <form action={logout}>
+              <button className="text-sm text-gray-600 hover:text-gray-900">Salir</button>
+            </form>
+          </div>
         </div>
         <nav className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4">
           {NAV.map(([href, label]) => (

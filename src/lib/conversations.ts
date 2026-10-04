@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { Prisma, type Channel } from "@prisma/client";
 import { runAgentTurn, type CreateMessage } from "./agent/run";
+import { aiBudgetExceeded, modelFor, recordAiUsage } from "./ai-usage";
 import { db } from "./db";
 import { isMenuCommand, runMenuBot, saveMenuState, type MenuState } from "./menu-bot";
 import { sendToCustomer } from "./messaging";
@@ -81,7 +82,9 @@ export async function processConversation(conversationId: string, createMessage?
       let conversation = await loadConversation(conversationId);
       if (await skipIfHuman(conversation, pending)) return;
 
-      const mode = conversation.business.botMode;
+      // Si la tienda pasó su tope mensual de IA, atiende solo el menú (sin costo).
+      const configured = conversation.business.botMode;
+      const mode = configured !== "MENU" && (await aiBudgetExceeded(conversation.business)) ? "MENU" : configured;
       if (mode === "IA") {
         await runAi(conversation, pending, createMessage);
         continue;
@@ -181,6 +184,8 @@ async function runAi(conversation: LoadedConversation, pending: PendingMessage[]
     const faqs = await db.faqEntry.findMany({ where: { businessId: conversation.businessId }, orderBy: { position: "asc" } });
     const result = await runAgentTurn({
       business: conversation.business,
+      model: modelFor(conversation.business),
+      onResponse: (response) => recordAiUsage(conversation.businessId, conversationId, response),
       faqs,
       history,
       userText: parts.join("\n"),

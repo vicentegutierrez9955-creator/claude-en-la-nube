@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { monthlyAiSummary, usdToClp } from "@/lib/ai-usage";
 import { formatCLP } from "@/lib/format";
 
 export default async function PanelHome() {
@@ -10,12 +11,13 @@ export default async function PanelHome() {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
-  const [byStatus, needsHuman, salesToday, productCount, b] = await Promise.all([
+  const [byStatus, needsHuman, salesToday, productCount, b, ai] = await Promise.all([
     db.order.groupBy({ by: ["status"], where: { businessId }, _count: true }),
     db.conversation.count({ where: { businessId, needsHuman: true } }),
     db.order.aggregate({ where: { businessId, paidAt: { gte: startOfDay } }, _sum: { total: true }, _count: true }),
     db.product.count({ where: { businessId } }),
     db.business.findUniqueOrThrow({ where: { id: businessId } }),
+    monthlyAiSummary(businessId),
   ]);
   const count = (s: string) => byStatus.find((x) => x.status === s)?._count ?? 0;
 
@@ -33,6 +35,7 @@ export default async function PanelHome() {
     { label: "Por preparar (pagados)", value: count("PAGADO") + count("ETIQUETA_LISTA"), href: "/panel/pedidos?estado=por-despachar" },
     { label: "Chats que necesitan a alguien", value: needsHuman, href: "/panel/conversaciones" },
   ];
+  const overLimit = b.aiMonthlyLimitUsd > 0 && ai.costUsd >= b.aiMonthlyLimitUsd;
 
   return (
     <>
@@ -54,6 +57,20 @@ export default async function PanelHome() {
             <div key={c.label}>{body}</div>
           );
         })}
+      </div>
+
+      <div className="card mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <div>
+          <span className="font-semibold">Uso de IA este mes:</span> {formatCLP(usdToClp(ai.costUsd))} en {ai.conversations}{" "}
+          {ai.conversations === 1 ? "conversación" : "conversaciones"}
+          {b.aiMonthlyLimitUsd > 0 && <span className="text-gray-500"> · tope del plan {formatCLP(usdToClp(b.aiMonthlyLimitUsd))}</span>}
+          {b.botMode === "MENU" && <span className="text-gray-500"> · estás en modo Solo menú (sin costo de IA)</span>}
+        </div>
+        {overLimit && (
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+            Llegaste al tope: el bot atiende solo con menú hasta fin de mes
+          </span>
+        )}
       </div>
 
       {setup.some((s) => !s.done) && (

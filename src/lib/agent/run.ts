@@ -16,6 +16,20 @@ export const defaultCreateMessage: CreateMessage = (params) => {
 const MAX_STEPS = 10;
 type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 
+// Parámetros según el modelo: Haiku 4.5 no acepta "effort" ni el fallback del servidor.
+export function modelParams(
+  model: string,
+): Pick<Anthropic.Beta.MessageCreateParamsNonStreaming, "model" | "output_config" | "betas" | "fallbacks"> {
+  if (model.startsWith("claude-haiku")) return { model };
+  return {
+    model,
+    output_config: { effort: (process.env.AI_EFFORT as Effort | undefined) ?? "medium" },
+    // Si un clasificador de seguridad rechaza la solicitud, la API reintenta con el modelo recomendado.
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+  };
+}
+
 export type AgentTurnResult = {
   history: Anthropic.Beta.BetaMessageParam[];
   reply: string | null;
@@ -30,7 +44,10 @@ export async function runAgentTurn(opts: {
   history: Anthropic.Beta.BetaMessageParam[];
   userText: string;
   ctx: ToolContext;
+  model: string;
   createMessage?: CreateMessage;
+  // Se llama con cada respuesta de la IA (para registrar el consumo).
+  onResponse?: (response: Anthropic.Beta.BetaMessage) => Promise<void>;
 }): Promise<AgentTurnResult> {
   const createMessage = opts.createMessage ?? defaultCreateMessage;
   const history = [...opts.history, { role: "user" as const, content: opts.userText }];
@@ -38,17 +55,14 @@ export async function runAgentTurn(opts: {
 
   for (let step = 0; step < MAX_STEPS; step++) {
     const response = await createMessage({
-      model: process.env.CLAUDE_MODEL ?? "claude-opus-5-5",
+      ...modelParams(opts.model),
       max_tokens: 16000,
       system,
       tools: TOOL_DEFINITIONS,
       messages: history,
       cache_control: { type: "ephemeral" },
-      output_config: { effort: (process.env.CLAUDE_EFFORT as Effort | undefined) ?? "medium" },
-      // Si un clasificador de seguridad rechaza la solicitud, la API reintenta con el modelo recomendado.
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
     });
+    await opts.onResponse?.(response);
 
     // Se guarda el contenido completo (incluye bloques de razonamiento) y el historial solo crece al final.
     history.push({ role: "assistant", content: response.content as Anthropic.Beta.BetaContentBlockParam[] });

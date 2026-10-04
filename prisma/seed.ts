@@ -99,6 +99,23 @@ async function main() {
     if (i < 2) await markOrderPaid(order.id, null);
   }
 
+  // Consumo de IA de ejemplo (para ver el medidor en el panel y en /admin)
+  for (let i = 0; i < 12; i++) {
+    await db.aiUsage.create({
+      data: {
+        businessId: business.id,
+        conversationId: `demo-${i % 4}`,
+        model: "claude-haiku-4-5",
+        inputTokens: 4000,
+        cacheReadTokens: 6000,
+        cacheWriteTokens: 1000,
+        outputTokens: 300,
+        costUsd: (4000 * 1 + 1000 * 1.25 + 6000 * 0.1 + 300 * 5) / 1_000_000,
+      },
+    });
+  }
+  await db.business.update({ where: { id: business.id }, data: { aiModel: "claude-haiku-4-5", aiMonthlyLimitUsd: 10 } });
+
   console.log("Listo. Entra con demo@pedidosaltoque.cl / demo1234");
 }
 

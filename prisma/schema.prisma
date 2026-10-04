@@ -44,6 +44,9 @@ model Business {
   // IA: la IA atiende toda la conversación
   botMode         BotMode @default(MENU)
   welcomeMessage  String  @default("")
+  // Modelo de IA y tope de gasto mensual: los define el administrador del SaaS.
+  aiModel           String? // null = modelo por defecto (CLAUDE_MODEL)
+  aiMonthlyLimitUsd Float   @default(0) // 0 = sin tope
   botInstructions String  @default("")
   // Emitir la etiqueta automáticamente cuando se confirma el pago
   autoCreateShipment Boolean @default(true)
@@ -56,6 +59,24 @@ model Business {
   customers     Customer[]
   conversations Conversation[]
   orders        Order[]
+  aiUsage       AiUsage[]
+}
+
+// Una fila por cada llamada a la IA, para medir el costo real de cada tienda.
+model AiUsage {
+  id               String   @id @default(cuid())
+  businessId       String
+  business         Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  conversationId   String?
+  model            String
+  inputTokens      Int
+  cacheReadTokens  Int
+  cacheWriteTokens Int
+  outputTokens     Int
+  costUsd          Float
+  createdAt        DateTime @default(now())
+
+  @@index([businessId, createdAt])
 }
 
 enum BotMode {

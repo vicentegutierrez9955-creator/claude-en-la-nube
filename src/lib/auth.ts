@@ -57,3 +57,18 @@ export async function requireUser() {
   if (!user) redirect("/login");
   return user;
 }
+
+// Administradores del SaaS (tú): correos separados por coma en ADMIN_EMAILS.
+export function isAdminEmail(email: string): boolean {
+  return (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(email.toLowerCase());
+}
+
+export async function requireAdmin() {
+  const user = await requireUser();
+  if (!isAdminEmail(user.email)) redirect("/panel");
+  return user;
+}
