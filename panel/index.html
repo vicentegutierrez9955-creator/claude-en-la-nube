@@ -29,6 +29,7 @@
       <nav class="tabs" aria-label="Secciones">
         <button class="tab" data-tab="resumen" aria-current="page">Resumen</button>
         <button class="tab" data-tab="clientes">Clientes</button>
+        <button class="tab" data-tab="trabajos">Trabajos</button>
         <button class="tab" data-tab="pagos">Pagos</button>
         <button class="tab" data-tab="ajustes">Ajustes</button>
       </nav>
@@ -52,6 +53,14 @@
         </div>
       </div>
       <div id="clientes" class="grid"></div>
+    </section>
+
+    <section id="tab-trabajos" class="tab-panel" hidden>
+      <div class="section-head">
+        <h2>Trabajos realizados</h2>
+        <button id="nuevo-trabajo" class="btn btn-primary">+ Anotar trabajo</button>
+      </div>
+      <div id="trabajos" class="list"></div>
     </section>
 
     <section id="tab-pagos" class="tab-panel" hidden>

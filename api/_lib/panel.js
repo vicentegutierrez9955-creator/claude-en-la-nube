@@ -1,6 +1,6 @@
 // Utilidades del panel de clientes: sesión, almacenamiento (Vercel Blob privado) y correo (Resend).
 import { createHmac, timingSafeEqual } from 'node:crypto';
-import { get, put, BlobPreconditionFailedError, BlobNotFoundError } from '@vercel/blob';
+import { get, head, put, BlobPreconditionFailedError, BlobNotFoundError } from '@vercel/blob';
 
 const DATA_PATH = 'panel/datos.json';
 const COOKIE = 'panel_sesion';
@@ -57,10 +57,19 @@ export async function leerDatos() {
   if (process.env.PANEL_STORE === 'memory') {
     return memoria.texto ? { data: JSON.parse(memoria.texto), etag: memoria.etag } : { data: null, etag: null };
   }
+  // El ETag que acepta `ifMatch` es el de la API (head); el de la descarga viene entre comillas.
+  // Se comparan sin comillas para asegurar que el contenido leído es el de esa versión.
+  const limpio = (e) => String(e || '').replace(/^W\//, '').replace(/"/g, '');
   try {
-    const r = await get(DATA_PATH, { access: 'private', useCache: false });
-    if (!r || r.statusCode !== 200) return { data: null, etag: null };
-    return { data: JSON.parse(await new Response(r.stream).text()), etag: r.blob.etag };
+    let ultimo;
+    for (let intento = 0; intento < 3; intento++) {
+      const info = await head(DATA_PATH);
+      const r = await get(DATA_PATH, { access: 'private', useCache: false });
+      if (!r || r.statusCode !== 200) return { data: null, etag: null };
+      ultimo = { data: JSON.parse(await new Response(r.stream).text()), etag: info.etag };
+      if (limpio(r.blob.etag) === limpio(info.etag)) break;
+    }
+    return ultimo;
   } catch (e) {
     if (e instanceof BlobNotFoundError) return { data: null, etag: null };
     throw e;

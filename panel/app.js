@@ -125,6 +125,7 @@ function render() {
   renderResumen();
   renderClientes();
   renderPagos();
+  renderTrabajos();
   const t = $('#transferencia');
   if (document.activeElement !== t) t.value = estado.data.config?.transferencia || '';
   const a = estado.data.actualizado;
@@ -226,6 +227,65 @@ function renderPagos() {
   }
 }
 
+// ---------- trabajos ----------
+const ESTADO_T = { hecho: 'ok', 'en curso': 'pronto', pendiente: 'mes' };
+const trabajos = (clienteId) => (estado.data.trabajos || [])
+  .filter((t) => clienteId === undefined || t.clienteId === clienteId)
+  .sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)) || String(b.id).localeCompare(String(a.id)));
+
+function renderTrabajos() {
+  const cont = $('#trabajos');
+  cont.replaceChildren();
+  const lista = trabajos();
+  if (!lista.length) { cont.append(h('div', { class: 'empty' }, 'Todavía no hay trabajos anotados.')); return; }
+  for (const t of lista) {
+    const c = t.clienteId ? cliente(t.clienteId) : null;
+    const links = (t.links || []).filter((l) => urlSegura(l.url));
+    cont.append(h('div', { class: 'item', style: 'align-items:flex-start' },
+      badge(ESTADO_T[t.estado] || 'ok', t.estado || 'hecho'),
+      h('div', { class: 'main' },
+        h('b', {}, t.titulo),
+        h('small', {}, [c?.negocio || t.cliente || 'Interno', t.por].filter(Boolean).join(' · ')),
+        t.detalle ? h('p', { class: 'muted', style: 'margin:6px 0 0;white-space:pre-wrap;font-size:14px' }, t.detalle) : null,
+        links.length ? h('div', { class: 'chips', style: 'margin-top:8px' }, links.map((l) => h('a', { class: 'btn btn-sm', href: urlSegura(l.url), target: '_blank', rel: 'noopener' }, l.nombre || 'Abrir'))) : null,
+      ),
+      h('div', { class: 'when' }, fechaLarga(t.fecha)),
+      h('div', { class: 'acts' },
+        c ? h('button', { class: 'btn btn-sm', onclick: () => detalle(c.id) }, 'Ver cliente') : null,
+        h('button', {
+          class: 'btn btn-sm btn-danger',
+          onclick: () => confirm('¿Borrar este trabajo?') && cambiar((d) => { d.trabajos = (d.trabajos || []).filter((x) => x.id !== t.id); }, 'Trabajo borrado'),
+        }, 'Borrar'),
+      ),
+    ));
+  }
+}
+
+function formularioTrabajo() {
+  const sel = h('select', {}, h('option', { value: '' }, 'Interno / otro'), estado.data.clientes.map((c) => h('option', { value: c.id }, c.negocio)));
+  const titulo = h('input', { required: true, placeholder: 'Ej: Página web nueva' });
+  const detalleT = h('textarea', { rows: 4, placeholder: 'Qué se hizo' });
+  const estadoT = h('select', {}, ['hecho', 'en curso', 'pendiente'].map((v) => h('option', { value: v }, v)));
+  const fecha = h('input', { type: 'date', value: hoy() });
+  abrir('Anotar trabajo', null, h('div', { class: 'form' },
+    h('label', {}, 'Cliente', sel), h('label', {}, 'Fecha', fecha), h('label', { class: 'full' }, 'Trabajo *', titulo),
+    h('label', {}, 'Estado', estadoT), h('label', { class: 'full' }, 'Detalle', detalleT)), [
+    h('button', { class: 'btn', onclick: cerrar }, 'Cancelar'),
+    h('button', {
+      class: 'btn btn-primary',
+      onclick: async () => {
+        if (!titulo.value.trim()) { titulo.focus(); return; }
+        const ok = await cambiar((d) => {
+          d.trabajos = d.trabajos || [];
+          d.trabajos.push({ id: idNuevo('t'), clienteId: sel.value || null, cliente: '', fecha: fecha.value || hoy(), titulo: titulo.value.trim(), detalle: detalleT.value.trim(), estado: estadoT.value, links: [], por: estado.usuario });
+        }, 'Trabajo anotado');
+        if (ok) cerrar();
+      },
+    }, 'Guardar'),
+  ]);
+  titulo.focus();
+}
+
 // ---------- diálogos ----------
 function abrir(titulo, subtitulo, contenido, pie) {
   $('#dlg-body').replaceChildren(
@@ -275,6 +335,8 @@ function detalle(id) {
     )) : null,
     accesos.length ? h('div', { class: 'blk' }, h('h3', {}, 'Accesos rápidos'), h('div', { class: 'chips' }, accesos.map((a) => h('a', { class: 'btn btn-sm', href: urlSegura(a.url), target: '_blank', rel: 'noopener' }, a.nombre || 'Abrir')))) : null,
     c.notas ? h('div', { class: 'blk' }, h('h3', {}, 'Notas'), h('p', { style: 'white-space:pre-wrap;margin:0' }, c.notas)) : null,
+    trabajos(id).length ? h('div', { class: 'blk' }, h('h3', {}, 'Trabajos realizados'), h('table', { class: 'table' },
+      trabajos(id).map((t) => h('tr', {}, h('td', { style: 'white-space:nowrap' }, fechaLarga(t.fecha)), h('td', {}, t.titulo), h('td', {}, badge(ESTADO_T[t.estado] || 'ok', t.estado || 'hecho')))))) : null,
     h('div', { class: 'blk' }, h('h3', {}, 'Pagos de este cliente'), pagos.length
       ? h('table', { class: 'table' }, pagos.map((p) => h('tr', {}, h('td', {}, fechaLarga(p.fecha)), h('td', {}, p.concepto), h('td', {}, pesos(p.monto)), h('td', { class: 'muted' }, p.por || ''))))
       : h('p', { class: 'muted', style: 'margin:0' }, 'Sin pagos registrados.')),
@@ -449,6 +511,7 @@ $('#salir').addEventListener('click', async () => { await api('/api/panel/login'
 for (const b of document.querySelectorAll('.tab')) b.addEventListener('click', () => { pestana = b.dataset.tab; render(); });
 $('#buscar').addEventListener('input', renderClientes);
 $('#nuevo').addEventListener('click', () => formulario(null));
+$('#nuevo-trabajo').addEventListener('click', formularioTrabajo);
 $('#guardar-transferencia').addEventListener('click', () => {
   const t = $('#transferencia').value.trim();
   cambiar((d) => { d.config = { ...(d.config || {}), transferencia: t }; }, 'Datos de transferencia guardados');
