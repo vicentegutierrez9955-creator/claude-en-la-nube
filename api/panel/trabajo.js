@@ -27,8 +27,9 @@ export default {
       const id = texto(t.id, 60) || `t-${Date.now().toString(36)}`;
       if (d.trabajos.some((x) => x.id === id)) return json({ ok: true, id, repetido: true });
       const clienteId = d.clientes.some((c) => c.id === t.clienteId) ? t.clienteId : null;
+      const prospectoId = (d.prospectos || []).some((x) => x.id === t.prospectoId) ? t.prospectoId : null;
       d.trabajos.push({
-        id, clienteId, cliente: clienteId ? '' : texto(t.cliente, 80), fecha, titulo,
+        id, clienteId, prospectoId, cliente: clienteId || prospectoId ? '' : texto(t.cliente, 80), fecha, titulo,
         detalle: texto(t.detalle, 2000), estado: ['hecho', 'en curso', 'pendiente'].includes(t.estado) ? t.estado : 'hecho',
         links, por: texto(t.por, 40) || 'Claude',
       });

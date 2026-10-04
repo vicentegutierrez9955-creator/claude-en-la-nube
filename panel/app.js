@@ -1,11 +1,13 @@
 import {
   avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro,
 } from '/panel/alertas.js';
+import { iniciarProspectos } from '/panel/prospectos.js';
 
 const $ = (s) => document.querySelector(s);
 const ETIQUETA = { atrasado: 'Atrasado', pronto: 'Pronto', mes: 'Este mes', ok: 'Al día' };
 let estado = { data: null, etag: null, usuario: '' };
 let pestana = 'resumen';
+let prospectos = null;
 
 // ---------- utilidades ----------
 function h(tag, props, ...hijos) {
@@ -124,6 +126,7 @@ function render() {
   for (const s of document.querySelectorAll('.tab-panel')) s.hidden = s.id !== `tab-${pestana}`;
   renderResumen();
   renderClientes();
+  prospectos?.render();
   renderPagos();
   renderTrabajos();
   const t = $('#transferencia');
@@ -232,6 +235,7 @@ const ESTADO_T = { hecho: 'ok', 'en curso': 'pronto', pendiente: 'mes' };
 const trabajos = (clienteId) => (estado.data.trabajos || [])
   .filter((t) => clienteId === undefined || t.clienteId === clienteId)
   .sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)) || String(b.id).localeCompare(String(a.id)));
+const trabajosDe = ({ prospectoId }) => trabajos().filter((t) => t.prospectoId === prospectoId);
 
 function renderTrabajos() {
   const cont = $('#trabajos');
@@ -245,7 +249,7 @@ function renderTrabajos() {
       badge(ESTADO_T[t.estado] || 'ok', t.estado || 'hecho'),
       h('div', { class: 'main' },
         h('b', {}, t.titulo),
-        h('small', {}, [c?.negocio || t.cliente || 'Interno', t.por].filter(Boolean).join(' · ')),
+        h('small', {}, [c?.negocio || (t.prospectoId && prospectos?.nombre(t.prospectoId)) || t.cliente || 'Interno', t.por].filter(Boolean).join(' · ')),
         t.detalle ? h('p', { class: 'muted', style: 'margin:6px 0 0;white-space:pre-wrap;font-size:14px' }, t.detalle) : null,
         links.length ? h('div', { class: 'chips', style: 'margin-top:8px' }, links.map((l) => h('a', { class: 'btn btn-sm', href: urlSegura(l.url), target: '_blank', rel: 'noopener' }, l.nombre || 'Abrir'))) : null,
       ),
@@ -428,8 +432,9 @@ function filasRepetibles(items, columnas, clase, textoAgregar) {
   return cont;
 }
 
-function formulario(id) {
-  const c = id ? structuredClone(cliente(id)) : { estado: 'activo', responsable: estado.usuario, desde: hoy(), dominio: { registrador: 'NIC Chile', dns: 'Cloudflare' }, hosting: { proveedor: 'Vercel', frecuencia: 'mensual', activo: true }, productos: [], accesos: [] };
+// `base` precarga un cliente nuevo; `prospectoId` marca ese prospecto como cerrado al guardar.
+function formulario(id, base, prospectoId) {
+  const c = id ? structuredClone(cliente(id)) : { estado: 'activo', responsable: estado.usuario, desde: hoy(), dominio: { registrador: 'NIC Chile', dns: 'Cloudflare' }, hosting: { proveedor: 'Vercel', frecuencia: 'mensual', activo: true }, productos: [], accesos: [], ...(base || {}) };
   const d = c.dominio || {};
   const ho = c.hosting || {};
   const f = {
@@ -485,6 +490,8 @@ function formulario(id) {
     const ok = await cambiar((data) => {
       const i = data.clientes.findIndex((x) => x.id === nuevo.id);
       if (i >= 0) data.clientes[i] = nuevo; else data.clientes.push(nuevo);
+      const p = prospectoId && (data.prospectos || []).find((x) => x.id === prospectoId);
+      if (p) { p.estado = 'cerrado'; p.clienteId = nuevo.id; }
     }, id ? 'Cliente actualizado' : 'Cliente agregado');
     if (ok) detalle(nuevo.id);
   });
@@ -509,7 +516,7 @@ $('#login-form').addEventListener('submit', async (e) => {
 });
 $('#salir').addEventListener('click', async () => { await api('/api/panel/login', { method: 'DELETE' }); estado = { data: null, etag: null, usuario: '' }; mostrarLogin(); });
 for (const b of document.querySelectorAll('.tab')) b.addEventListener('click', () => { pestana = b.dataset.tab; render(); });
-$('#buscar').addEventListener('input', renderClientes);
+$('#buscar').addEventListener('input', () => { renderClientes(); prospectos?.render(); });
 $('#nuevo').addEventListener('click', () => formulario(null));
 $('#nuevo-trabajo').addEventListener('click', formularioTrabajo);
 $('#guardar-transferencia').addEventListener('click', () => {
@@ -527,5 +534,10 @@ $('#dlg').addEventListener('close', () => render());
 // Trae los cambios de los demás cada minuto, sin interrumpir si hay un diálogo abierto.
 setInterval(() => { if (document.visibilityState === 'visible' && !$('#dlg').open && !$('#app').hidden) cargar(true); }, 60000);
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !$('#dlg').open && !$('#app').hidden) cargar(true); });
+
+prospectos = iniciarProspectos({
+  h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy,
+  estado: () => estado, formulario, trabajosDe,
+});
 
 cargar();

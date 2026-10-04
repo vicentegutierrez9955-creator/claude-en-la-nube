@@ -11,6 +11,11 @@ planilla, etc.), anótalo en la pestaña "Trabajos" del panel:
 2. Ábrelo con un GET; desde este entorno, con `web_fetch_vercel_url` del conector de
    Vercel (el dominio no es accesible con curl). Debe responder `{"ok":true}`.
 
+Cuando hagas una maqueta o propuesta para un negocio que todavía no es cliente, agrégalo
+también como prospecto (`scripts/anotar-trabajo.py --prospecto ...`) con el link de la
+maqueta en `creado`, y anota el trabajo con su `prospectoId`. Aparece en la pestaña
+Clientes, sección Prospectos.
+
 Si `PANEL_API_TOKEN` no está en el entorno, pídele al usuario que la agregue como
 variable de entorno del ambiente de Claude Code (nunca la escribas en el repositorio:
 es público).
