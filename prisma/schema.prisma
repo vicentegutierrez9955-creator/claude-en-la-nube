@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Cada pyme cliente del SaaS es un "Business" (tenant).
+model Business {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  // WhatsApp Cloud API. Los tokens se guardan cifrados.
+  whatsappPhoneNumberId String? @unique
+  whatsappAccessToken   String?
+
+  // Mercado Pago (credenciales de la pyme)
+  mpAccessToken   String?
+  mpWebhookSecret String?
+
+  // Envíos: "simulado" (pruebas) o "bluexpress"
+  shippingProvider String  @default("simulado")
+  bxToken          String?
+  bxUserCode       String?
+  bxClientAccount  String?
+  // Costo fijo de envío en CLP y monto desde el cual el envío es gratis (0 = nunca)
+  shippingFlatRate  Int @default(3990)
+  freeShippingFrom  Int @default(0)
+
+  // Dirección de origen (bodega de la pyme) para la etiqueta
+  originName    String?
+  originPhone   String?
+  originAddress String?
+  originComuna  String?
+  originRegion  String?
+
+  // Bot
+  botEnabled      Boolean @default(true)
+  botInstructions String  @default("")
+  // Emitir la etiqueta automáticamente cuando se confirma el pago
+  autoCreateShipment Boolean @default(true)
+
+  orderSeq Int @default(0)
+
+  users         User[]
+  products      Product[]
+  customers     Customer[]
+  conversations Conversation[]
+  orders        Order[]
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  businessId   String
+  business     Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  sku         String?
+  name        String
+  description String   @default("")
+  price       Int // CLP, sin decimales
+  stock       Int      @default(0)
+  weightGrams Int      @default(500)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems OrderItem[]
+
+  @@index([businessId, active])
+}
+
+model Customer {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  waId       String // número de WhatsApp, ej: 56912345678
+  name       String?
+  createdAt  DateTime @default(now())
+
+  conversations Conversation[]
+  orders        Order[]
+
+  @@unique([businessId, waId])
+}
+
+enum ConversationMode {
+  BOT
+  HUMANO
+}
+
+enum Channel {
+  WHATSAPP
+  SIMULADOR
+}
+
+model Conversation {
+  id         String           @id @default(cuid())
+  businessId String
+  business   Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customerId String
+  customer   Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  channel    Channel          @default(WHATSAPP)
+  mode       ConversationMode @default(BOT)
+  needsHuman Boolean          @default(false)
+  handoffReason String?
+
+  // Historial del agente (Anthropic MessageParam[]). Solo se agrega al final.
+  agentHistory   Json      @default("[]")
+  lastAgentRunAt DateTime?
+
+  // "Lease" para que un solo proceso atienda la conversación a la vez
+  lockedUntil   DateTime?
+  lastMessageAt DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+
+  messages Message[]
+  orders   Order[]
+
+  @@unique([customerId, channel])
+  @@index([businessId, lastMessageAt])
+}
+
+enum MessageDirection {
+  ENTRANTE
+  SALIENTE
+}
+
+enum MessageAuthor {
+  CLIENTE
+  BOT
+  HUMANO
+  SISTEMA
+}
+
+model Message {
+  id             String           @id @default(cuid())
+  conversationId String
+  conversation   Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  direction      MessageDirection
+  author         MessageAuthor
+  text           String
+  waMessageId    String?          @unique
+  processed      Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
+  @@index([conversationId, processed])
+}
+
+enum OrderStatus {
+  BORRADOR // carrito en armado
+  PENDIENTE_PAGO
+  PAGADO
+  ETIQUETA_LISTA
+  DESPACHADO
+  ENTREGADO
+  CANCELADO
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  businessId     String
+  business       Business      @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  number         Int
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  conversationId String?
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  status         OrderStatus   @default(BORRADOR)
+
+  // Datos de envío
+  recipientName  String?
+  recipientPhone String?
+  recipientRut   String?
+  street         String?
+  streetNumber   String?
+  apartment      String?
+  comuna         String?
+  region         String?
+  addressNotes   String?
+
+  subtotal     Int @default(0)
+  shippingCost Int @default(0)
+  total        Int @default(0)
+
+  // Pago
+  mpPreferenceId String?
+  mpPaymentId    String?
+  paymentUrl     String?
+  paidAt         DateTime?
+
+  // Envío
+  carrier         String?
+  trackingNumber  String?
+  labelPdf        Bytes?
+  labelCreatedAt  DateTime?
+  labelPrintedAt  DateTime?
+  shipmentError   String?
+  dispatchedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@unique([businessId, number])
+  @@index([businessId, status])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  unitPrice Int
+  quantity  Int
+
+  @@unique([orderId, productId])
+}
