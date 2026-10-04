@@ -10,7 +10,7 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 
 ## Instalación en Windows
 
-1. Descargue `PuntoDeVenta-Instalador-1.1.1.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
+1. Descargue `PuntoDeVenta-Instalador-1.1.2.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
 2. En la **computadora principal** ejecute el instalador y elija **"Computadora PRINCIPAL (servidor)"**.
    - Se abre el acceso directo **Punto de Venta** en el escritorio.
    - El servidor se enciende solo cada vez que inicia Windows.

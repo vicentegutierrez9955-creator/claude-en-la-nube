@@ -30,7 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = process.env.PV_DATA_DIR ? path.resolve(process.env.PV_DATA_DIR) : path.join(ROOT, 'datos');
 const BACKUP_DIR = path.join(DATA_DIR, 'respaldos');
 const PORT = Number(process.env.PORT) || 8080;
-const VERSION = '1.1.1';
+const VERSION = '1.1.2';
 fs.mkdirSync(BACKUP_DIR, { recursive: true });
 
 /* ------------------------------------------------------------------ */
@@ -309,6 +309,14 @@ async function handleApi(req, res, url) {
     return send(req, res, 200, { token, user: sanitizeUser(u) });
   }
 
+  if (p === '/api/apagar-local' && req.method === 'POST') {
+    const ip = req.socket.remoteAddress || '';
+    if (!['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip)) return send(req, res, 403, { error: 'No permitido' });
+    send(req, res, 200, { ok: true });
+    console.log('  Se cerrará este servidor para dar paso a una versión nueva.');
+    return enqueue(async () => { try { sql.close(); } catch (e) { /* ya cerrada */ } setTimeout(() => process.exit(0), 100); });
+  }
+
   const session = sessionFrom(req, url);
   if (!session) return send(req, res, 401, { error: 'Sesión no válida. Vuelva a iniciar sesión.' });
 
@@ -420,9 +428,16 @@ const server = http.createServer(async (req, res) => {
   }
   await backup();
   setInterval(() => backup().catch(e => console.error('Error al respaldar:', e.message)), 6 * 3600 * 1000);
-  server.on('error', (e) => {
-    if (e.code === 'EADDRINUSE') { console.log(`  El servidor ya está funcionando en el puerto ${PORT}.`); process.exit(0); }
-    console.error(e); process.exit(1);
+  let intentos = 0;
+  server.on('error', async (e) => {
+    if (e.code !== 'EADDRINUSE') { console.error(e); process.exit(1); }
+    // Ya hay un servidor en este puerto: si es de otra versión, pedirle que se cierre y tomar su lugar
+    let otra = null;
+    try { otra = await (await fetch(`http://127.0.0.1:${PORT}/api/info`)).json(); } catch (err) { /* no responde */ }
+    if (otra && otra.version === VERSION) { console.log(`  El servidor ya está funcionando en el puerto ${PORT}.`); process.exit(0); }
+    if (++intentos > 10) { console.log(`  El puerto ${PORT} está ocupado por otro programa.`); process.exit(1); }
+    if (otra) { try { await fetch(`http://127.0.0.1:${PORT}/api/apagar-local`, { method: 'POST' }); } catch (err) { /* ya se cerró */ } }
+    setTimeout(() => server.listen(PORT, '0.0.0.0'), 1500);
   });
   server.listen(PORT, '0.0.0.0', () => {
     const ips = lanAddresses();

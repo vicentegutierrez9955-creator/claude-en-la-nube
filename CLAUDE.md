@@ -33,6 +33,14 @@ Todo el texto de la interfaz y la documentación va en **español**.
 - `node server/server.js --restablecer-admin` deja a `admin` sin contraseña (acceso `RestablecerAdmin.cmd`).
 - Al arrancar, la app reintenta la conexión con el servidor durante 30 s.
 
+## Versión 1.1.2 (arreglo del instalador al actualizar)
+- El instalador NSIS es de 32 bits: con `powershell` de 32 bits, `Get-Process` no ve la ruta del `node.exe`
+  de 64 bits, así que no cerraba el servidor y fallaba con "Error abriendo archivo para escritura: node.exe".
+  Ahora usa PowerShell de 64 bits + `Get-CimInstance Win32_Process` (macro `DETENER_SERVIDOR`), comprueba
+  que `node.exe` se pueda abrir para escritura y, si sigue bloqueado, explica qué hacer.
+- `server.js`: si el puerto está ocupado por otra versión, le pide que se cierre (`/api/apagar-local`,
+  sólo desde 127.0.0.1) y toma su lugar.
+
 ## Atajos (igual que eleventa)
 F1 Ventas, F2 Clientes, F3 Productos, F4 Inventario. En ventas: F10 Buscar, F11 Mayoreo, F12 Cobrar,
 INS Varios, Ctrl+P Artículo común (o código `0`), DEL Borrar, F5 Cambiar ticket, F6 Ticket pendiente,

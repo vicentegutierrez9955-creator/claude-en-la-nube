@@ -9,7 +9,7 @@ Unicode true
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.1.1"
+  !define VERSION "1.1.2"
 !endif
 !define APPNAME "Punto de Venta"
 !define REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuntoDeVenta"
@@ -116,10 +116,40 @@ Function PaginaModoSalir
   ${EndIf}
 FunctionEnd
 
-Function DetenerServidor
-  nsExec::Exec 'powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Process node -ErrorAction SilentlyContinue | Where-Object { $$_.Path -like \"$INSTDIR\*\" } | Stop-Process -Force"'
+; Cierra el servidor (node.exe de esta instalación) para poder reemplazar sus archivos.
+; Se usa PowerShell de 64 bits + CIM: desde 32 bits, Get-Process no ve la ruta de un proceso de 64 bits.
+!macro DETENER_SERVIDOR
+  ${DisableX64FSRedirection}
+  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $$_.Name -eq 'node.exe' -and $$_.ExecutablePath -like '$INSTDIR\*' } | ForEach-Object { Stop-Process -Id $$_.ProcessId -Force -ErrorAction SilentlyContinue }"`
   Pop $0
-  Sleep 800
+  ${EnableX64FSRedirection}
+  ; Respaldo: el servidor abierto con ventana (ServidorConVentana.cmd)
+  nsExec::Exec `"$SYSDIR\cmd.exe" /c taskkill /F /FI "IMAGENAME eq node.exe" /FI "WINDOWTITLE eq Punto de Venta - Servidor"`
+  Pop $0
+  Sleep 1500
+!macroend
+
+Function DetenerServidor
+  !insertmacro DETENER_SERVIDOR
+  ; Comprobar que node.exe ya se puede reemplazar
+  StrCpy $R0 0
+  ${If} ${FileExists} "$INSTDIR\node\node.exe"
+    revisar:
+    ClearErrors
+    FileOpen $1 "$INSTDIR\node\node.exe" a
+    ${IfNot} ${Errors}
+      FileClose $1
+    ${EndIf}
+    ${If} ${Errors}
+      IntOp $R0 $R0 + 1
+      ${If} $R0 < 4
+        !insertmacro DETENER_SERVIDOR
+        Goto revisar
+      ${EndIf}
+      MessageBox MB_RETRYCANCEL|MB_ICONEXCLAMATION "El programa Punto de Venta sigue abierto y no se puede actualizar.$\r$\n$\r$\n1. Cierre la ventana de Punto de Venta.$\r$\n2. Abra el Administrador de tareas (Ctrl + Shift + Esc).$\r$\n3. Finalice la tarea $\"Node.js JavaScript Runtime$\".$\r$\n$\r$\nLuego presione Reintentar." IDRETRY revisar
+      Abort "Instalación cancelada: el programa sigue abierto."
+    ${EndIf}
+  ${EndIf}
 FunctionEnd
 
 Section "Instalar"
@@ -222,9 +252,7 @@ FunctionEnd
 Section "Uninstall"
   SetRegView 64
   SetShellVarContext all
-  nsExec::Exec 'powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-Process node -ErrorAction SilentlyContinue | Where-Object { $$_.Path -like \"$INSTDIR\*\" } | Stop-Process -Force"'
-  Pop $0
-  Sleep 800
+  !insertmacro DETENER_SERVIDOR
   nsExec::Exec 'netsh advfirewall firewall delete rule name="Punto de Venta"'
   Pop $0
   Delete "$DESKTOP\Punto de Venta.lnk"

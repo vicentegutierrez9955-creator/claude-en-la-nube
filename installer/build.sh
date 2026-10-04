@@ -4,7 +4,7 @@
 set -euo pipefail
 
 NODE_VERSION="${NODE_VERSION:-22.22.2}"
-VERSION="${VERSION:-1.1.1}"
+VERSION="${VERSION:-1.1.2}"
 cd "$(dirname "$0")"
 ROOT="$(cd .. && pwd)"
 
