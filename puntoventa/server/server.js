@@ -30,7 +30,7 @@ const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = process.env.PV_DATA_DIR ? path.resolve(process.env.PV_DATA_DIR) : path.join(ROOT, 'datos');
 const BACKUP_DIR = path.join(DATA_DIR, 'respaldos');
 const PORT = Number(process.env.PORT) || 8080;
-const VERSION = '1.1.0';
+const VERSION = '1.1.1';
 fs.mkdirSync(BACKUP_DIR, { recursive: true });
 
 /* ------------------------------------------------------------------ */
@@ -409,6 +409,15 @@ const server = http.createServer(async (req, res) => {
 
 (async () => {
   await loadAll();
+  if (process.argv.includes('--restablecer-admin')) {
+    await backup('antes-de-restablecer-admin');
+    let admin = Store.usuarios.find(u => U.norm(u.usuario) === 'admin') || Store.usuarios.find(u => u.admin);
+    admin = { ...admin, usuario: 'admin', admin: true, activo: true, password: await U.hash('') };
+    await DB.put('usuarios', admin);
+    console.log(`  Listo: el usuario "admin" (${admin.nombre}) quedó sin contraseña.`);
+    sql.close();
+    process.exit(0);
+  }
   await backup();
   setInterval(() => backup().catch(e => console.error('Error al respaldar:', e.message)), 6 * 3600 * 1000);
   server.on('error', (e) => {

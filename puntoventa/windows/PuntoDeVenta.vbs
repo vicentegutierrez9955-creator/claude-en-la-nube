@@ -21,6 +21,10 @@ Else
   WScript.Sleep 1500
 End If
 
+' Cada computadora se identifica como una caja con su propio nombre
+If Right(url, 1) = "/" Then url = Left(url, Len(url) - 1)
+url = url & "/?caja=" & sh.ExpandEnvironmentStrings("%COMPUTERNAME%")
+
 ' Abrir como aplicación (sin barra de direcciones) e imprimir directo a la impresora predeterminada
 perfil = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\PuntoDeVenta\navegador"
 On Error Resume Next

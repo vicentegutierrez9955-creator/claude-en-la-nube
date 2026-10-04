@@ -724,7 +724,10 @@ const Store = {
   },
   async login(usuario, password) {
     const u = Store.usuarios.find(x => U.norm(x.usuario) === U.norm(usuario) && x.activo !== false);
-    if (!u || u.password !== await U.hash(password || '')) throw new Error('Usuario o contraseña incorrectos.');
+    const vacia = await U.hash('');
+    // Primera vez: el administrador sin contraseña también entra si escribe "admin"
+    const ok = u && (u.password === await U.hash(password || '') || (u.admin && u.password === vacia && U.norm(password) === 'admin'));
+    if (!ok) throw new Error(u ? 'La contraseña no es correcta.' : `No existe el usuario "${String(usuario).trim()}".`);
     Store.user = u;
     return u;
   },

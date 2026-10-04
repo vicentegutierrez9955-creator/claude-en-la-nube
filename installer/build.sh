@@ -4,7 +4,7 @@
 set -euo pipefail
 
 NODE_VERSION="${NODE_VERSION:-22.22.2}"
-VERSION="${VERSION:-1.1.0}"
+VERSION="${VERSION:-1.1.1}"
 cd "$(dirname "$0")"
 ROOT="$(cd .. && pwd)"
 
@@ -30,7 +30,7 @@ cp "$NODE_EXE" stage/node/node.exe
 # 2) Programa
 cp -r "$ROOT/puntoventa/index.html" "$ROOT/puntoventa/icon.png" "$ROOT/puntoventa/css" "$ROOT/puntoventa/js" "$ROOT/puntoventa/vendor" "$ROOT/puntoventa/server" stage/app/
 cp "$ROOT/puntoventa/windows/PuntoDeVenta.ico" stage/
-for f in PuntoDeVenta.vbs IniciarServidor.vbs ServidorConVentana.cmd; do
+for f in PuntoDeVenta.vbs IniciarServidor.vbs ServidorConVentana.cmd RestablecerAdmin.cmd; do
   sed 's/\r$//; s/$/\r/' "$ROOT/puntoventa/windows/$f" > "stage/$f"
 done
 sed 's/\r$//; s/$/\r/' "$ROOT/installer/LEEME.txt" > stage/LEEME.txt

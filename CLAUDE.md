@@ -26,6 +26,13 @@ Todo el texto de la interfaz y la documentación va en **español**.
 - **Mermas** (F4 Inventario → Mermas): `Store.registrarMerma` guarda un movimiento `movinv` de tipo `merma`, con `motivo` y `costoTotal`, más su reporte.
 - **Transferir datos desde eleventa** (Configuración): asistente que importa productos (`Importar.abrir`) y clientes con saldos (`Importar.clientes` → `Store.importarClientes`).
 
+## Versión 1.1.1 (arreglo del inicio de sesión)
+- Antes, la caja exigía escribir un nombre en un campo fácil de pasar por alto, y no dejaba entrar. Ahora el
+  nombre llega en `?caja=%COMPUTERNAME%` (desde `PuntoDeVenta.vbs`) o se usa uno por defecto.
+- La primera vez, `admin` entra con contraseña vacía o `admin` (`Store.login`) y se ofrece crear una contraseña.
+- `node server/server.js --restablecer-admin` deja a `admin` sin contraseña (acceso `RestablecerAdmin.cmd`).
+- Al arrancar, la app reintenta la conexión con el servidor durante 30 s.
+
 ## Atajos (igual que eleventa)
 F1 Ventas, F2 Clientes, F3 Productos, F4 Inventario. En ventas: F10 Buscar, F11 Mayoreo, F12 Cobrar,
 INS Varios, Ctrl+P Artículo común (o código `0`), DEL Borrar, F5 Cambiar ticket, F6 Ticket pendiente,

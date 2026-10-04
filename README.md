@@ -10,7 +10,7 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
 
 ## Instalación en Windows
 
-1. Descargue `PuntoDeVenta-Instalador-1.1.0.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
+1. Descargue `PuntoDeVenta-Instalador-1.1.1.exe`: en GitHub → pestaña **Actions** → última ejecución de "Pruebas e instalador de Windows" → **Artifacts**. También se arma con `bash installer/build.sh`.
 2. En la **computadora principal** ejecute el instalador y elija **"Computadora PRINCIPAL (servidor)"**.
    - Se abre el acceso directo **Punto de Venta** en el escritorio.
    - El servidor se enciende solo cada vez que inicia Windows.
@@ -18,7 +18,9 @@ Programa de punto de venta para uso personal, hecho a partir de las funciones y 
    - Los datos quedan en `C:\ProgramData\PuntoDeVenta\datos`, con respaldos automáticos en la subcarpeta `respaldos`.
 3. En las **otras cajas** ejecute el mismo instalador y elija **"CAJA conectada"**. Escriba la dirección de la computadora principal, que aparece en *Configuración → Red y cajas* (por ejemplo `192.168.1.10`).
    - También puede abrir esa dirección (`http://192.168.1.10:8080`) en Chrome o Edge sin instalar nada.
-4. La primera vez entre con el usuario **admin** sin contraseña, y cámbiela en *Configuración → Cajeros y permisos*.
+4. La primera vez entre con el usuario **admin** y la contraseña vacía (también acepta `admin`). El programa ofrece crear una contraseña nueva en ese momento.
+   - Cada computadora queda registrada sola como una caja, con el nombre del equipo en Windows.
+   - Si olvida la contraseña: *Inicio → Punto de Venta → Restablecer contraseña de administrador*, en la computadora principal. No borra ningún dato.
 
 > Recomendación: fije la IP de la computadora principal en el módem (reserva DHCP) para que la dirección no cambie.
 

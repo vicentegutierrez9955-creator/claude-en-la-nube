@@ -34,8 +34,10 @@ async function login(page, caja, usuario = 'admin', password = '') {
   await page.fill('#login-form input[name=password]', password);
   if (await page.isVisible('#caja-row')) await page.fill('#login-form input[name=caja]', caja);
   await page.click('#login-form button[type=submit]');
-  // ventana de fondo de caja
+  // primera vez: ofrece crear contraseña del administrador (se deja para después)
   await page.waitForSelector('.modal');
+  if (await page.isVisible('.modal >> text=Cree su contraseña')) { await page.click('.modal [data-no]'); await page.waitForSelector('.modal >> text=Iniciar turno'); }
+  // ventana de fondo de caja
   await page.fill('.modal input[name=fondo]', '500');
   await page.click('.modal [data-ok]');
   await page.waitForSelector('[data-code]');
@@ -203,7 +205,7 @@ async function login(page, caja, usuario = 'admin', password = '') {
     await c3.fill('#login-form input[name=password]', '1234');
     await c3.fill('#login-form input[name=caja]', 'Caja 3');
     await c3.click('#login-form button[type=submit]');
-    await c3.waitForSelector('.modal'); await c3.click('.modal [data-no]');
+    await c3.waitForSelector('.modal >> text=Iniciar turno'); await c3.click('.modal [data-no]');
     assert.equal(await c3.isVisible('#mainnav [data-screen=productos]'), false);
     const denied = await c3.evaluate(() => Store.movimientoCaja('salida', 50, 'robo').then(() => 'ok', e => e.message));
     assert.match(denied, /permiso/);

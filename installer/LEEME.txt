@@ -3,8 +3,10 @@ PUNTO DE VENTA - GUIA RAPIDA
 
 COMPUTADORA PRINCIPAL (SERVIDOR)
 - Abra "Punto de Venta" desde el escritorio.
-- La primera vez entre con el usuario: admin (sin contraseña).
-  Luego cambie la contraseña en Configuración -> Cajeros y permisos.
+- La primera vez entre con el usuario: admin (contraseña vacía).
+  El programa le pedirá crear una contraseña nueva.
+- Si olvida la contraseña: Inicio -> Punto de Venta ->
+  "Restablecer contraseña de administrador" (no borra ningún dato).
 - Esta computadora debe estar encendida para que las demás cajas funcionen.
   El servidor se enciende solo al iniciar Windows.
 - Sus datos se guardan en C:\ProgramData\PuntoDeVenta\datos

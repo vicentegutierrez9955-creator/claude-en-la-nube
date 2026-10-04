@@ -9,7 +9,7 @@ Unicode true
 !include "FileFunc.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.1.0"
+  !define VERSION "1.1.1"
 !endif
 !define APPNAME "Punto de Venta"
 !define REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\PuntoDeVenta"
@@ -170,6 +170,7 @@ Section "Instalar"
   ${If} $Modo == "servidor"
     CreateShortcut "$SMPROGRAMS\Punto de Venta\Servidor (ver direcciones de red).lnk" "$INSTDIR\ServidorConVentana.cmd" "" "$INSTDIR\PuntoDeVenta.ico"
     CreateShortcut "$SMPROGRAMS\Punto de Venta\Carpeta de datos y respaldos.lnk" "$APPDATA\PuntoDeVenta\datos"
+    CreateShortcut "$SMPROGRAMS\Punto de Venta\Restablecer contraseña de administrador.lnk" "$INSTDIR\RestablecerAdmin.cmd" "" "$INSTDIR\PuntoDeVenta.ico"
   ${EndIf}
   CreateShortcut "$SMPROGRAMS\Punto de Venta\Desinstalar.lnk" "$INSTDIR\Desinstalar.exe"
 
