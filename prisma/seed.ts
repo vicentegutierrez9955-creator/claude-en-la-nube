@@ -22,7 +22,16 @@ async function main() {
       originAddress: "Av. Providencia 1234, of. 56",
       originComuna: "Providencia",
       originRegion: "Metropolitana de Santiago",
+      botMode: "MENU",
       botInstructions: "Despachamos de lunes a viernes. Se aceptan cambios de talla dentro de 10 días.",
+      faqs: {
+        create: [
+          { position: 1, question: "¿Hacen envíos a regiones?", keywords: "envio, regiones, despacho, llega, demora", answer: "¡Sí! Enviamos a todo Chile con Blue Express 🚚 Despachamos de lunes a viernes y llega en 2 a 5 días hábiles. El envío cuesta $3.990 y es gratis sobre $40.000." },
+          { position: 2, question: "¿Puedo cambiar la talla?", keywords: "cambio, talla, devolucion, devolver", answer: "Claro, aceptamos cambios de talla dentro de 10 días desde que recibes tu pedido. Escribe *persona* y te ayudamos con el cambio." },
+          { position: 3, question: "¿Cómo puedo pagar?", keywords: "pagar, pago, transferencia, tarjeta, credito, debito, cuotas", answer: "Pagas con el link de Mercado Pago que te enviamos al cerrar el pedido: débito, crédito (en cuotas) o saldo de Mercado Pago 💳" },
+          { position: 4, question: "¿Tienen tienda física?", keywords: "tienda fisica, local, retiro, retirar, direccion", answer: "Por ahora vendemos solo online y despachamos a domicilio 📦" },
+        ],
+      },
       users: {
         create: { email: "demo@pedidosaltoque.cl", name: "Camila Demo", passwordHash: await bcrypt.hash("demo1234", 10) },
       },

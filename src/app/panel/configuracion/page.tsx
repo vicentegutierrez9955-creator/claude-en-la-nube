@@ -3,6 +3,27 @@ import { requireUser } from "@/lib/auth";
 import { appUrl, REGIONES_CHILE } from "@/lib/orders";
 import { saveSettingsAction } from "../actions";
 
+const BOT_MODES = [
+  {
+    value: "MENU",
+    title: "Solo menú",
+    cost: "Sin costo de IA",
+    text: "Menú con números, búsqueda de productos y respuestas rápidas. Si no entiende, ofrece hablar con una persona.",
+  },
+  {
+    value: "HIBRIDO",
+    title: "Híbrido",
+    cost: "Costo bajo",
+    text: "El menú atiende todo lo que puede y la IA entra solo cuando el cliente escribe algo que el menú no entiende.",
+  },
+  {
+    value: "IA",
+    title: "IA completa",
+    cost: "Costo por conversación",
+    text: "La IA conversa de forma natural de principio a fin. La experiencia más fluida.",
+  },
+] as const;
+
 function Section({
   id,
   title,
@@ -86,17 +107,49 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
         </div>
       </Section>
 
-      <Section id="bot" title="Vendedor IA" description="Cómo atiende y qué hace solo." saved={ok === "bot"}>
+      <Section id="bot" title="Vendedor automático" description="Cómo atiende y qué hace solo." saved={ok === "bot"}>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="botEnabled" defaultChecked={b.botEnabled} /> Responder automáticamente a los clientes
         </label>
+        <fieldset className="space-y-2">
+          <legend className="label">Modo de atención</legend>
+          {BOT_MODES.map((m) => (
+            <label key={m.value} className="flex cursor-pointer gap-3 rounded-lg border border-gray-200 p-3 text-sm has-checked:border-brand-500 has-checked:bg-brand-50">
+              <input type="radio" name="botMode" value={m.value} defaultChecked={b.botMode === m.value} className="mt-1" />
+              <span>
+                <span className="font-semibold">{m.title}</span>
+                <span className="ml-2 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-700">{m.cost}</span>
+                <span className="mt-0.5 block text-gray-600">{m.text}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+        <div>
+          <label className="label" htmlFor="welcomeMessage">
+            Mensaje de bienvenida
+          </label>
+          <textarea
+            id="welcomeMessage"
+            name="welcomeMessage"
+            className="input min-h-20"
+            defaultValue={b.welcomeMessage}
+            placeholder={`¡Hola! 👋 Bienvenido/a a *${b.name}*.`}
+          />
+          <p className="mt-1 text-xs text-gray-500">
+            Va antes del menú. Las respuestas a preguntas frecuentes se configuran en{" "}
+            <a href="/panel/respuestas" className="text-brand-700 underline">
+              Respuestas
+            </a>
+            .
+          </p>
+        </div>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="autoCreateShipment" defaultChecked={b.autoCreateShipment} /> Emitir la etiqueta de envío
           apenas se confirma el pago
         </label>
         <div>
           <label className="label" htmlFor="botInstructions">
-            Instrucciones extra (políticas, tono, preguntas frecuentes)
+            Instrucciones extra para la IA (solo modos Híbrido e IA)
           </label>
           <textarea
             id="botInstructions"

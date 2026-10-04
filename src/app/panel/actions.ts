@@ -56,6 +56,40 @@ export async function saveProduct(form: FormData) {
   redirect("/panel/productos");
 }
 
+// ---------- Respuestas rápidas ----------
+
+export async function saveFaqAction(form: FormData) {
+  const user = await requireUser();
+  const id = str(form, "id");
+  const data = {
+    question: str(form, "question").slice(0, 200),
+    keywords: str(form, "keywords")
+      .split(",")
+      .map((k) => k.trim())
+      .filter(Boolean)
+      .join(", ")
+      .slice(0, 500),
+    answer: str(form, "answer").slice(0, 2000),
+    position: int(form, "position"),
+  };
+  if (!data.question || !data.answer) {
+    redirect("/panel/respuestas?error=" + encodeURIComponent("La pregunta y la respuesta son obligatorias"));
+  }
+  if (id) {
+    await db.faqEntry.updateMany({ where: { id, businessId: user.businessId }, data });
+  } else {
+    await db.faqEntry.create({ data: { ...data, businessId: user.businessId } });
+  }
+  revalidatePath("/panel/respuestas");
+  redirect("/panel/respuestas");
+}
+
+export async function deleteFaqAction(form: FormData) {
+  const user = await requireUser();
+  await db.faqEntry.deleteMany({ where: { id: str(form, "id"), businessId: user.businessId } });
+  revalidatePath("/panel/respuestas");
+}
+
 // ---------- Pedidos ----------
 
 export async function createShipmentAction(form: FormData) {
@@ -170,6 +204,8 @@ export async function saveSettingsAction(form: FormData) {
     case "bot":
       data = {
         botEnabled: form.get("botEnabled") === "on",
+        botMode: ["MENU", "HIBRIDO", "IA"].includes(str(form, "botMode")) ? str(form, "botMode") : "MENU",
+        welcomeMessage: str(form, "welcomeMessage").slice(0, 1000),
         autoCreateShipment: form.get("autoCreateShipment") === "on",
         botInstructions: str(form, "botInstructions").slice(0, 4000),
       };

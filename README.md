@@ -2,7 +2,7 @@
 
 Software (SaaS) para pymes chilenas que venden por WhatsApp. Las pymes siguen vendiendo por el mismo chat de siempre, sin tienda online, y el sistema se encarga del resto:
 
-1. **El cliente escribe por WhatsApp.** Un vendedor con IA (Claude) responde al instante con los productos, precios y stock reales de la tienda.
+1. **El cliente escribe por WhatsApp.** El vendedor automático responde al instante con los productos, precios y stock reales de la tienda.
 2. **Arma el pedido.** Entiende mensajes desordenados ("quiero 2 poleras M a Los Aromos 45, Viña") y toma los datos de despacho.
 3. **Cobra con Mercado Pago.** Envía el link de pago y detecta solo cuándo se pagó (webhook).
 4. **Genera la etiqueta.** Emite el envío con Blue Express y deja la etiqueta PDF (10x15 cm) lista para imprimir. Se pueden imprimir varias de una vez.
@@ -10,12 +10,23 @@ Software (SaaS) para pymes chilenas que venden por WhatsApp. Las pymes siguen ve
 
 Si el bot no puede resolver algo (reclamos, cambios, o si el cliente pide hablar con una persona), pasa el chat al equipo y aparece marcado en el panel.
 
+## Modos de atención (cada pyme elige en Configuración)
+
+| Modo | Cómo atiende | Costo de IA |
+|---|---|---|
+| **Solo menú** (por defecto) | Menú con números, búsqueda de productos por palabras (sin importar tildes ni plurales), respuestas rápidas por palabra clave y toma de datos de despacho paso a paso. Si no entiende, ofrece hablar con una persona. | $0 |
+| **Híbrido** | El menú atiende todo lo que puede; la IA entra solo cuando el cliente escribe algo que el menú no entiende, y sigue hasta que el cliente escribe *menú*. | Bajo |
+| **IA completa** | Claude conversa de principio a fin. | Por conversación |
+
+Las **respuestas rápidas** (sección *Respuestas* del panel) son preguntas frecuentes con palabras clave y una respuesta fija. Se usan en los tres modos; en los modos con IA, la IA también las recibe como respuestas oficiales de la tienda.
+
 ## Qué incluye
 
 | Parte | Dónde está |
 |---|---|
 | Panel de la pyme: resumen, pedidos, conversaciones, productos, configuración | `src/app/panel` |
 | **Simulador**: se chatea con el bot como si fueras cliente, sin conectar WhatsApp (ideal para demos de venta) | `src/app/panel/simulador` |
+| Menú automático sin IA (respuestas predeterminadas) | `src/lib/menu-bot.ts` |
 | Vendedor IA (Claude + herramientas: catálogo, carrito, despacho, pago, derivar a humano) | `src/lib/agent` |
 | WhatsApp Cloud API (webhook + envío de mensajes) | `src/lib/whatsapp.ts`, `src/app/api/webhooks/whatsapp` |
 | Mercado Pago Checkout Pro (link de pago + webhook con verificación de firma) | `src/lib/mercadopago.ts`, `src/app/api/webhooks/mercadopago` |
@@ -37,7 +48,7 @@ npm run db:seed             # opcional: tienda de demo (demo@pedidosaltoque.cl /
 npm run dev                 # abre http://localhost:3000
 ```
 
-Para que el simulador responda necesitas `ANTHROPIC_API_KEY` (se saca en console.anthropic.com). Sin Mercado Pago ni Blue Express conectados igual se puede probar todo el flujo: el pago y la etiqueta funcionan en modo simulado.
+En modo *Solo menú* el simulador funciona sin ninguna clave. Para los modos *Híbrido* e *IA* necesitas `ANTHROPIC_API_KEY` (se saca en console.anthropic.com). Sin Mercado Pago ni Blue Express conectados igual se puede probar todo el flujo: el pago y la etiqueta funcionan en modo simulado.
 
 Pruebas automáticas: `npm test` (usa una base `pedidos_test` en el Postgres local).
 

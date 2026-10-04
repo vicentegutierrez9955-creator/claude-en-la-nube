@@ -1,5 +1,6 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
+import { searchCatalog } from "../catalog";
 import { db } from "../db";
 import { formatCLP, ORDER_STATUS_LABEL } from "../format";
 import {
@@ -8,6 +9,7 @@ import {
   missingShippingFields,
   OrderError,
   orderSummary,
+  recentOrders,
   REGIONES_CHILE,
   setCartItem,
   setShippingData,
@@ -54,24 +56,7 @@ const buscarProductos: Tool = {
   },
   schema: z.object({ consulta: z.string() }),
   run: async (input: { consulta: string }, ctx) => {
-    const words = input.consulta.trim().split(/\s+/).filter((w) => w.length > 1);
-    const products = await db.product.findMany({
-      where: {
-        businessId: ctx.businessId,
-        active: true,
-        ...(words.length
-          ? {
-              OR: words.flatMap((w) => [
-                { name: { contains: w, mode: "insensitive" as const } },
-                { description: { contains: w, mode: "insensitive" as const } },
-                { sku: { contains: w, mode: "insensitive" as const } },
-              ]),
-            }
-          : {}),
-      },
-      orderBy: { name: "asc" },
-      take: 40,
-    });
+    const products = await searchCatalog(ctx.businessId, input.consulta, 40);
     if (products.length === 0) return "No se encontraron productos con esa búsqueda.";
     return JSON.stringify(
       products.map((p) => ({
@@ -211,12 +196,7 @@ const consultarPedidos: Tool = {
   schema: z.object({}),
   run: async (_input: object, ctx) => {
     const conversation = await db.conversation.findUniqueOrThrow({ where: { id: ctx.conversationId } });
-    const orders = await db.order.findMany({
-      where: { customerId: conversation.customerId, status: { not: "BORRADOR" } },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { items: true },
-    });
+    const orders = await recentOrders(conversation.customerId);
     if (orders.length === 0) return "El cliente no tiene pedidos anteriores.";
     return JSON.stringify(
       orders.map((o) => ({

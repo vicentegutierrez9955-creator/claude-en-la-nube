@@ -1,7 +1,7 @@
-import type { Business, Order, OrderItem, Prisma } from "@prisma/client";
+import type { Business, MessageAuthor, Order, OrderItem, Prisma } from "@prisma/client";
 import { decryptSecret } from "./crypto";
 import { db } from "./db";
-import { formatCLP } from "./format";
+import { formatCLP, ORDER_STATUS_LABEL } from "./format";
 import { createPreference } from "./mercadopago";
 import { sendToCustomer } from "./messaging";
 import { shippingProviderFor } from "./shipping";
@@ -108,9 +108,59 @@ export type ShippingData = {
   addressNotes: string | null;
 };
 
-export async function setShippingData(conversationId: string, data: ShippingData): Promise<OrderWithItems> {
+export async function setShippingData(conversationId: string, data: Partial<ShippingData>): Promise<OrderWithItems> {
   const cart = await getOrCreateCart(conversationId);
   return db.order.update({ where: { id: cart.id }, data, include: { items: true } });
+}
+
+// Dirección del último pedido del cliente, para ofrecer reutilizarla.
+export async function lastShippingData(customerId: string): Promise<ShippingData | null> {
+  const prev = await db.order.findFirst({
+    where: { customerId, status: { not: "BORRADOR" }, street: { not: null } },
+    orderBy: { createdAt: "desc" },
+    omit: { labelPdf: true },
+  });
+  if (!prev?.street || !prev.streetNumber || !prev.comuna || !prev.region || !prev.recipientName) return null;
+  return {
+    recipientName: prev.recipientName,
+    recipientPhone: prev.recipientPhone ?? "",
+    recipientRut: prev.recipientRut,
+    street: prev.street,
+    streetNumber: prev.streetNumber,
+    apartment: prev.apartment,
+    comuna: prev.comuna,
+    region: prev.region,
+    addressNotes: prev.addressNotes,
+  };
+}
+
+export function formatAddress(o: Pick<Order, "street" | "streetNumber" | "apartment" | "comuna" | "region">): string {
+  return `${o.street} ${o.streetNumber}${o.apartment ? `, ${o.apartment}` : ""}, ${o.comuna}, ${o.region}`;
+}
+
+export async function recentOrders(customerId: string) {
+  return db.order.findMany({
+    where: { customerId, status: { not: "BORRADOR" } },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+    include: { items: true },
+    omit: { labelPdf: true },
+  });
+}
+
+// Texto con el estado de los últimos pedidos, para el menú automático.
+export async function recentOrdersText(customerId: string): Promise<string> {
+  const orders = await recentOrders(customerId);
+  if (orders.length === 0) return "Todavía no tienes pedidos con nosotros.";
+  return orders
+    .slice(0, 3)
+    .map((o) => {
+      const lines = [`*Pedido #${o.number}* · ${formatCLP(o.total)} · ${ORDER_STATUS_LABEL[o.status]}`];
+      if (o.status === "PENDIENTE_PAGO" && o.paymentUrl) lines.push(`Link de pago: ${o.paymentUrl}`);
+      if (o.trackingNumber) lines.push(`Seguimiento ${o.carrier}: ${o.trackingNumber}`);
+      return lines.join("\n");
+    })
+    .join("\n\n");
 }
 
 export function missingShippingFields(order: Order): string[] {
@@ -133,7 +183,7 @@ export function orderSummary(order: OrderWithItems): string {
 }
 
 // Cierra el carrito: valida stock y dirección, genera el link de pago y se lo envía al cliente.
-export async function checkout(conversationId: string): Promise<OrderWithItems> {
+export async function checkout(conversationId: string, author: MessageAuthor = "BOT"): Promise<OrderWithItems> {
   const cart = await recalcTotals((await getOrCreateCart(conversationId)).id);
   if (cart.items.length === 0) throw new OrderError("El carrito está vacío.");
   const missing = missingShippingFields(cart);
@@ -177,7 +227,7 @@ export async function checkout(conversationId: string): Promise<OrderWithItems> 
   await sendToCustomer(
     conversationId,
     `🧾 *Pedido #${order.number}*\n${orderSummary(order)}\n\n📦 Envío a: ${order.street} ${order.streetNumber}${order.apartment ? `, ${order.apartment}` : ""}, ${order.comuna}\n\n💳 Paga aquí con Mercado Pago:\n${paymentUrl}`,
-    "BOT",
+    author,
   );
   return order;
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 
 const STEPS = [
-  ["💬", "Te escribe un cliente", "El vendedor con IA responde al instante, 24/7: muestra productos, precios y stock reales."],
+  ["💬", "Te escribe un cliente", "Responde al instante, 24/7, con un menú automático o con IA: productos, precios y stock reales."],
   ["🛒", "Arma el pedido", "Entiende mensajes desordenados como “quiero 2 poleras M y una L” y toma la dirección de despacho."],
   ["💳", "Cobra con Mercado Pago", "Envía el link de pago y detecta solo cuándo el cliente pagó. Nada de revisar transferencias."],
   ["🏷️", "Etiqueta lista", "Emite el envío con Blue Express y deja la etiqueta lista para imprimir con un clic."],

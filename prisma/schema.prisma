@@ -39,6 +39,11 @@ model Business {
 
   // Bot
   botEnabled      Boolean @default(true)
+  // MENU: solo respuestas predeterminadas (sin costo de IA)
+  // HIBRIDO: menú primero y la IA solo cuando el menú no entiende
+  // IA: la IA atiende toda la conversación
+  botMode         BotMode @default(MENU)
+  welcomeMessage  String  @default("")
   botInstructions String  @default("")
   // Emitir la etiqueta automáticamente cuando se confirma el pago
   autoCreateShipment Boolean @default(true)
@@ -46,10 +51,32 @@ model Business {
   orderSeq Int @default(0)
 
   users         User[]
+  faqs          FaqEntry[]
   products      Product[]
   customers     Customer[]
   conversations Conversation[]
   orders        Order[]
+}
+
+enum BotMode {
+  MENU
+  HIBRIDO
+  IA
+}
+
+// Respuestas rápidas: si el mensaje del cliente contiene alguna palabra clave,
+// se responde con el texto predeterminado sin usar IA.
+model FaqEntry {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  question   String
+  keywords   String // separadas por coma
+  answer     String
+  position   Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([businessId, position])
 }
 
 model User {
@@ -118,6 +145,8 @@ model Conversation {
 
   // Historial del agente (Anthropic MessageParam[]). Solo se agrega al final.
   agentHistory   Json      @default("[]")
+  // Estado del menú automático (paso actual, opciones mostradas, etc.)
+  botState       Json      @default("{}")
   lastAgentRunAt DateTime?
 
   // "Lease" para que un solo proceso atienda la conversación a la vez
@@ -139,7 +168,8 @@ enum MessageDirection {
 
 enum MessageAuthor {
   CLIENTE
-  BOT
+  BOT // vendedor IA
+  MENU // respuestas predeterminadas
   HUMANO
   SISTEMA
 }

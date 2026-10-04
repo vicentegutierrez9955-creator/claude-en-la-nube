@@ -1,9 +1,9 @@
-import type { Business } from "@prisma/client";
+import type { Business, FaqEntry } from "@prisma/client";
 import { formatCLP } from "../format";
 
 // El system prompt es estable por negocio (no incluye la hora ni datos del cliente)
 // para que el caché de prompts de Claude funcione entre mensajes.
-export function buildSystemPrompt(business: Business): string {
+export function buildSystemPrompt(business: Business, faqs: FaqEntry[] = []): string {
   const shipping =
     business.freeShippingFrom > 0
       ? `El envío cuesta ${formatCLP(business.shippingFlatRate)} a todo Chile y es gratis en compras desde ${formatCLP(business.freeShippingFrom)}.`
@@ -22,5 +22,5 @@ Estilo:
 - Escribes por WhatsApp: mensajes cortos, cercanos y en español de Chile, sin sonar forzado. Trata de "tú".
 - Usa *negrita* de WhatsApp con moderación y emojis solo de vez en cuando. No uses tablas ni títulos markdown.
 - Los precios van en pesos chilenos con punto de miles, por ejemplo $12.990.
-${business.botInstructions.trim() ? `\nInstrucciones del dueño de la tienda (tienen prioridad sobre el estilo):\n${business.botInstructions.trim()}\n` : ""}`;
+${business.botMode === "HIBRIDO" ? "- Esta tienda también tiene un menú automático con opciones numeradas: si el cliente quiere volver a él, dile que escriba *menú*.\n" : ""}${faqs.length ? `\nRespuestas oficiales de la tienda a preguntas frecuentes (úsalas tal cual cuando apliquen):\n${faqs.map((f) => `- ${f.question}: ${f.answer}`).join("\n")}\n` : ""}${business.botInstructions.trim() ? `\nInstrucciones del dueño de la tienda (tienen prioridad sobre el estilo):\n${business.botInstructions.trim()}\n` : ""}`;
 }

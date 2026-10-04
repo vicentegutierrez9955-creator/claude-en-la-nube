@@ -5,6 +5,7 @@ import type { CreateMessage } from "@/lib/agent/run";
 import { processConversation, receiveCustomerMessage } from "@/lib/conversations";
 import { db } from "@/lib/db";
 import { markDispatched, markOrderPaid } from "@/lib/orders";
+import { createBusiness, resetDb } from "./helpers/db";
 
 type Block = Anthropic.Beta.BetaContentBlock;
 
@@ -54,30 +55,6 @@ function scriptedSeller(calls: Anthropic.Beta.MessageCreateParamsNonStreaming[])
         return message([text("¡Listo Ana! Te mandé el link de pago 🙌")], "end_turn");
     }
   };
-}
-
-async function resetDb() {
-  // Los ítems de pedido apuntan a productos: se borran los pedidos primero.
-  await db.order.deleteMany();
-  await db.business.deleteMany();
-}
-
-async function createBusiness() {
-  return db.business.create({
-    data: {
-      name: "Poleras Valpo",
-      shippingFlatRate: 3990,
-      originAddress: "Av. Brasil 100",
-      originComuna: "Valparaíso",
-      originRegion: "Valparaíso",
-      products: {
-        create: [
-          { name: "Polera negra M", price: 12990, stock: 5, weightGrams: 300 },
-          { name: "Gorro de lana", price: 8990, stock: 2 },
-        ],
-      },
-    },
-  });
 }
 
 describe("flujo completo: WhatsApp → pedido → pago → etiqueta → despacho", () => {

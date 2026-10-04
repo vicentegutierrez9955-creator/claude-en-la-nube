@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import type { Business } from "@prisma/client";
+import type { Business, FaqEntry } from "@prisma/client";
 import { buildSystemPrompt } from "./prompt";
 import { runTool, TOOL_DEFINITIONS, type ToolContext } from "./tools";
 
@@ -26,6 +26,7 @@ export type AgentTurnResult = {
 // deja que Claude use las herramientas y devuelve el texto a enviar por WhatsApp.
 export async function runAgentTurn(opts: {
   business: Business;
+  faqs?: FaqEntry[];
   history: Anthropic.Beta.BetaMessageParam[];
   userText: string;
   ctx: ToolContext;
@@ -33,7 +34,7 @@ export async function runAgentTurn(opts: {
 }): Promise<AgentTurnResult> {
   const createMessage = opts.createMessage ?? defaultCreateMessage;
   const history = [...opts.history, { role: "user" as const, content: opts.userText }];
-  const system = buildSystemPrompt(opts.business);
+  const system = buildSystemPrompt(opts.business, opts.faqs ?? []);
 
   for (let step = 0; step < MAX_STEPS; step++) {
     const response = await createMessage({

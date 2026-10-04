@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/format";
 const AUTHOR_LABEL: Record<string, string> = {
   CLIENTE: "Cliente",
   BOT: "Vendedor IA",
+  MENU: "Menú automático",
   HUMANO: "Equipo",
   SISTEMA: "Aviso automático",
 };
@@ -32,7 +33,7 @@ export function ChatMessages({ messages }: { messages: Message[] }) {
           <div key={m.id} className={`flex ${incoming ? "justify-start" : "justify-end"}`}>
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-xs ${
-                incoming ? "bg-white ring-1 ring-gray-200" : m.author === "HUMANO" ? "bg-blue-50" : "bg-brand-50"
+                incoming ? "bg-white ring-1 ring-gray-200" : m.author === "HUMANO" ? "bg-blue-50" : m.author === "MENU" ? "bg-amber-50" : "bg-brand-50"
               }`}
             >
               <p className="whitespace-pre-wrap">{linkify(m.text)}</p>

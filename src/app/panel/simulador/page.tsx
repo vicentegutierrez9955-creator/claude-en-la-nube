@@ -7,6 +7,8 @@ import { SendButton } from "./send-button";
 
 export const maxDuration = 300;
 
+const MODE_LABEL = { MENU: "solo menú", HIBRIDO: "híbrido", IA: "IA completa" } as const;
+
 export default async function SimulatorPage() {
   const user = await requireUser();
   const conversation = await db.conversation.findFirst({
@@ -18,7 +20,7 @@ export default async function SimulatorPage() {
     <>
       <PageHeader
         title="Simulador"
-        subtitle="Escríbele a tu vendedor IA como si fueras un cliente. Usa tus productos reales, pero no envía nada por WhatsApp."
+        subtitle={`Escríbele a tu vendedor automático como si fueras un cliente (modo actual: ${MODE_LABEL[user.business.botMode]}). Usa tus productos reales, pero no envía nada por WhatsApp.`}
       >
         <form action={simulatorResetAction}>
           <button className="btn-secondary">Reiniciar conversación</button>

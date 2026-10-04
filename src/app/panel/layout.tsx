@@ -9,6 +9,7 @@ const NAV = [
   ["/panel/pedidos", "Pedidos"],
   ["/panel/conversaciones", "Conversaciones"],
   ["/panel/productos", "Productos"],
+  ["/panel/respuestas", "Respuestas"],
   ["/panel/simulador", "Simulador"],
   ["/panel/configuracion", "Configuración"],
 ] as const;
