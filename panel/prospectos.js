@@ -5,6 +5,10 @@ export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado'
 export const MENSAJE_INICIAL = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar.
 
 Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?`;
+// Con menos de esto no se nombran las reseñas en el mensaje.
+const RESENAS_MIN = 10;
+const NOTA_MIN = 4;
+const FRASE_RESENAS = ' y nos gustaron mucho sus reseñas';
 const COLOR_P = { 'por contactar': 'inactivo', contactado: 'mes', interesado: 'pronto', cerrado: 'ok', 'no interesado': 'atrasado' };
 
 export function iniciarProspectos(u) {
@@ -12,7 +16,17 @@ export function iniciarProspectos(u) {
   const lista = () => estado().data.prospectos || [];
   const buscar = (id) => lista().find((p) => p.id === id);
   const plantilla = () => estado().data.config?.mensajeProspecto || MENSAJE_INICIAL;
-  const mensajeDe = (p) => plantilla().replaceAll('{negocio}', p.negocio || 'su negocio');
+  const sinDato = (v) => v === undefined || v === null || v === '';
+  const buenasResenas = (p) => Number(p.googleNota) >= NOTA_MIN && Number(p.googleResenas) >= RESENAS_MIN;
+  const mensajeDe = (p) => (buenasResenas(p) ? plantilla() : plantilla().replace(FRASE_RESENAS, ''))
+    .replaceAll('{negocio}', p.negocio || 'su negocio');
+  const textoResenas = (p) => {
+    if (sinDato(p.googleResenas)) return 'Reseñas en Google: sin revisar';
+    if (Number(p.googleResenas) === 0) return 'Sin reseñas en Google';
+    const n = `${p.googleResenas} reseña${Number(p.googleResenas) === 1 ? '' : 's'} en Google`;
+    return sinDato(p.googleNota) ? n : `★ ${Number(p.googleNota).toFixed(1).replace('.', ',')} · ${n}`;
+  };
+  const mapsUrl = (p) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([p.negocio, p.direccion, p.comuna].filter(Boolean).join(', '))}`;
   const etiqueta = (p) => badge(COLOR_P[p.estado] || 'inactivo', p.estado || 'por contactar');
 
   function creados(p) {
@@ -49,6 +63,7 @@ export function iniciarProspectos(u) {
             h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio))),
           etiqueta(p)),
         h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
+        h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
         h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
         h('div', { class: 'row' }, botonWhatsApp(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
       ));
@@ -70,6 +85,7 @@ export function iniciarProspectos(u) {
         ['WhatsApp', wa ? enlace(wa, `+${String(p.whatsapp).replace(/\D/g, '')}`) : 'Sin WhatsApp'],
         ['Teléfono', p.telefono],
         ['Dirección', p.direccion],
+        ['Google', h('span', {}, textoResenas(p), ' · ', enlace(mapsUrl(p), 'Ver en Google Maps'))],
         ['Redes / web', p.redes ? enlace(/^https?:\/\//.test(p.redes) ? p.redes : `https://${p.redes}`, p.redes) : null],
         ['Responsable', p.responsable],
         ['Agregado', fechaLarga(p.desde)],
@@ -117,12 +133,14 @@ export function iniciarProspectos(u) {
       redes: campo('Instagram / web', p.redes),
       responsable: campo('Responsable', p.responsable),
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
+      googleNota: campo('Nota en Google', sinDato(p.googleNota) ? '' : String(p.googleNota).replace('.', ','), { ph: 'Ej: 4,6' }),
+      googleResenas: campo('Reseñas en Google', p.googleResenas, { tipo: 'number', min: 0, step: 1, ph: 'Cantidad (0 si no tiene)' }),
       notas: campo('Notas', p.notas, { tipo: 'textarea', full: true }),
     };
     const creado = filasRepetibles(p.creado || [], [['nombre', 'Qué es (ej: Maqueta)'], ['url', 'https://…']], '', '+ Agregar link');
     const error = h('p', { class: 'error', hidden: true });
     const form = h('form', { class: 'form', id: 'form-prospecto' },
-      Object.values(f).slice(0, 10).map((x) => x.el),
+      Object.values(f).filter((x) => x !== f.notas).map((x) => x.el),
       h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Lo que le creamos (maquetas, propuestas)'), creado),
       f.notas.el, error);
     form.addEventListener('submit', async (e) => {
@@ -130,11 +148,15 @@ export function iniciarProspectos(u) {
       const v = (k) => f[k].input.value.trim();
       if (!v('negocio')) { error.textContent = 'Falta el nombre del negocio.'; error.hidden = false; return; }
       if (creado.valores().some((l) => l.url && !urlSegura(l.url))) { error.textContent = 'Los links deben empezar con https://'; error.hidden = false; return; }
+      const nota = v('googleNota').replace(',', '.');
+      if (nota && !(Number(nota) >= 1 && Number(nota) <= 5)) { error.textContent = 'La nota de Google va de 1 a 5 (ej: 4,6).'; error.hidden = false; return; }
+      const resenas = v('googleResenas');
+      if (resenas && !(Number.isInteger(Number(resenas)) && Number(resenas) >= 0)) { error.textContent = 'Las reseñas de Google son una cantidad (0 si no tiene).'; error.hidden = false; return; }
       const nuevo = {
         ...p, id: p.id || idNuevo(v('negocio')),
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
         whatsapp: v('whatsapp').replace(/\D/g, ''), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
-        estado: v('estado'), notas: f.notas.input.value.trim(), creado: creado.valores(),
+        estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '', notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];

@@ -91,6 +91,7 @@ main.wrap{padding-top:20px;padding-bottom:60px}
 .pcard.arrastrando{outline:2px dashed var(--acc);outline-offset:2px;box-shadow:0 14px 34px rgba(0,0,0,.22);opacity:.92}
 body.ordenando{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .pcard:hover{border-color:var(--line)}
+.resenas{color:var(--yellow);font-weight:600}
 .mini{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
 
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;margin-bottom:14px;max-width:640px}
