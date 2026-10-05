@@ -82,16 +82,28 @@ export function iniciarProspectos(u) {
       : h('span', { class: 'muted', style: 'font-size:14px' }, 'Aún no le creamos nada');
   }
 
+  // Al abrir WhatsApp o el correo desde el panel, el prospecto pasa a "contactado" (solo si estaba
+  // "por contactar", para no bajar a uno que ya está "interesado") y se anota quién y cuándo.
+  const marcarContactado = (p, via) => () => {
+    if ((p.estado || 'por contactar') !== 'por contactar') return;
+    cambiar((d) => {
+      const x = (d.prospectos || []).find((y) => y.id === p.id);
+      if (!x || (x.estado || 'por contactar') !== 'por contactar') return;
+      x.estado = 'contactado';
+      x.contactado = { fecha: hoy(), por: estado().usuario, via };
+    }, `${p.negocio}: marcado como contactado`).then(() => { if ($('#dlg').open) detalle(p.id); });
+  };
+
   function botonCorreo(p, chico) {
     if (!EMAIL_OK.test(p.email || '')) return null;
     const { asunto, cuerpo } = correoDe(p);
     const url = `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
-    return h('a', { class: `btn btn-correo${chico ? ' btn-sm' : ''}`, href: url }, 'Escribir por correo');
+    return h('a', { class: `btn btn-correo${chico ? ' btn-sm' : ''}`, href: url, onclick: marcarContactado(p, 'correo') }, 'Escribir por correo');
   }
 
   function botonWhatsApp(p, chico) {
     const url = waLink(p.whatsapp, mensajeDe(p));
-    return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener' }, 'Escribir por WhatsApp') : null;
+    return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener', onclick: marcarContactado(p, 'WhatsApp') }, 'Escribir por WhatsApp') : null;
   }
 
   // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
@@ -147,6 +159,7 @@ export function iniciarProspectos(u) {
         ['Redes / web', p.redes ? enlace(/^https?:\/\//.test(p.redes) ? p.redes : `https://${p.redes}`, p.redes) : null],
         ['Responsable', p.responsable],
         ['Agregado', fechaLarga(p.desde)],
+        p.contactado ? ['Contactado', [fechaLarga(p.contactado.fecha), p.contactado.por && `por ${p.contactado.por}`, p.contactado.via && `(${p.contactado.via})`].filter(Boolean).join(' ')] : null,
       ])),
       h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
