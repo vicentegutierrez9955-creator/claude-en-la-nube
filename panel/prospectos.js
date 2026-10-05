@@ -20,21 +20,25 @@ export function iniciarProspectos(u) {
     return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener' }, 'Escribir por WhatsApp') : null;
   }
 
+  // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
   function render() {
+    if (arrastre) return;
     const q = $('#buscar').value.trim().toLowerCase();
     const todos = lista();
     const visibles = todos
-      .filter((p) => !q || [p.negocio, p.rubro, p.comuna, p.contacto].some((v) => String(v || '').toLowerCase().includes(q)))
-      .sort((a, b) => ESTADOS_P.indexOf(a.estado) - ESTADOS_P.indexOf(b.estado) || String(a.negocio).localeCompare(String(b.negocio)));
+      .filter((p) => !q || [p.negocio, p.rubro, p.comuna, p.contacto].some((v) => String(v || '').toLowerCase().includes(q)));
     const conteo = ESTADOS_P.map((e) => [e, todos.filter((p) => (p.estado || 'por contactar') === e).length]).filter(([, n]) => n);
-    $('#prospectos-resumen').textContent = conteo.map(([e, n]) => `${n} ${e}`).join(' · ');
+    $('#prospectos-resumen').textContent = [...conteo.map(([e, n]) => `${n} ${e}`), todos.length > 1 ? 'arrastra ⠿ para ordenar' : ''].filter(Boolean).join(' · ');
     const cont = $('#prospectos');
     cont.replaceChildren();
     if (!visibles.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún prospecto coincide con la búsqueda.' : 'Aún no hay prospectos.')); return; }
     for (const p of visibles) {
-      cont.append(h('div', { class: 'ccard pcard' },
-        h('div', { class: 'row', style: 'justify-content:space-between;align-items:flex-start' },
-          h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio)), etiqueta(p)),
+      cont.append(h('div', { class: 'ccard pcard', 'data-id': p.id },
+        h('div', { class: 'row', style: 'justify-content:space-between;align-items:flex-start;flex-wrap:nowrap' },
+          h('div', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap;gap:2px' },
+            h('button', { class: 'mover', type: 'button', 'data-id': p.id, title: 'Arrastra para ordenar (o usa las flechas)', 'aria-label': `Mover ${p.negocio}` }, '⠿'),
+            h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio))),
+          etiqueta(p)),
         h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
         h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
         h('div', { class: 'row' }, botonWhatsApp(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
@@ -137,6 +141,67 @@ export function iniciarProspectos(u) {
     ]);
     f.negocio.input.focus();
   }
+
+  // ---------- ordenar arrastrando ----------
+  let arrastre = null;
+  const cont = $('#prospectos');
+  const idsVisibles = () => [...cont.querySelectorAll('.pcard')].map((c) => c.dataset.id);
+
+  // Reemplaza, en el orden completo, las posiciones de las tarjetas visibles por su nuevo orden
+  // (así también funciona con la búsqueda activa).
+  function guardarOrden(visibles, enfocar) {
+    cambiar((d) => {
+      const todos = d.prospectos || [];
+      const porId = new Map(todos.map((p) => [p.id, p]));
+      const enVista = new Set(visibles);
+      let k = 0;
+      d.prospectos = todos.map((p) => (enVista.has(p.id) ? porId.get(visibles[k++]) : p)).filter(Boolean);
+    }).then(() => { if (enfocar) cont.querySelector(`.mover[data-id="${CSS.escape(enfocar)}"]`)?.focus(); });
+  }
+
+  cont.addEventListener('pointerdown', (e) => {
+    const asa = e.target.closest('.mover');
+    if (!asa || e.button > 0) return;
+    e.preventDefault();
+    try { asa.setPointerCapture(e.pointerId); } catch { /* sin captura: igual seguimos el puntero en window */ }
+    arrastre = { tarjeta: asa.closest('.pcard'), antes: idsVisibles().join() };
+    arrastre.tarjeta.classList.add('arrastrando');
+    document.body.classList.add('ordenando');
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!arrastre) return;
+    const otra = document.elementFromPoint(e.clientX, e.clientY)?.closest('.pcard');
+    if (otra && otra !== arrastre.tarjeta && otra.parentNode === cont) {
+      const tarjetas = [...cont.querySelectorAll('.pcard')];
+      if (tarjetas.indexOf(arrastre.tarjeta) < tarjetas.indexOf(otra)) otra.after(arrastre.tarjeta); else otra.before(arrastre.tarjeta);
+    }
+    if (e.clientY < 80) window.scrollBy(0, -14);
+    else if (e.clientY > window.innerHeight - 80) window.scrollBy(0, 14);
+  });
+  const soltar = () => {
+    if (!arrastre) return;
+    arrastre.tarjeta.classList.remove('arrastrando');
+    document.body.classList.remove('ordenando');
+    const cambio = idsVisibles().join() !== arrastre.antes;
+    arrastre = null;
+    if (cambio) guardarOrden(idsVisibles()); else render();
+  };
+  window.addEventListener('pointerup', soltar);
+  window.addEventListener('pointercancel', soltar);
+  cont.addEventListener('keydown', (e) => {
+    const asa = e.target.closest('.mover');
+    const paso = { ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1 }[e.key];
+    if (!asa || !paso) return;
+    e.preventDefault();
+    const tarjetas = [...cont.querySelectorAll('.pcard')];
+    const tarjeta = asa.closest('.pcard');
+    const vecina = tarjetas[tarjetas.indexOf(tarjeta) + paso];
+    if (!vecina) return;
+    // Se mueve en pantalla al tiro, para que varias flechas seguidas se sumen.
+    if (paso < 0) vecina.before(tarjeta); else vecina.after(tarjeta);
+    asa.focus();
+    guardarOrden(idsVisibles(), asa.dataset.id);
+  });
 
   $('#nuevo-prospecto').addEventListener('click', () => formularioProspecto(null));
   return { render, nombre: (id) => buscar(id)?.negocio };
