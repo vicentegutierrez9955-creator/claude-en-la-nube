@@ -27,6 +27,7 @@ h3{font-size:15px;margin:0}
 .btn:hover{border-color:var(--acc)}
 .btn-primary{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
 .btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn-correo{background:var(--soft);border-color:var(--line);color:var(--ink)}
 .btn-danger{color:var(--red)}
 .btn-sm{padding:6px 10px;font-size:13px;border-radius:8px}
 .link{background:none;border:0;color:var(--acc);font:inherit;cursor:pointer;padding:0}
@@ -34,7 +35,7 @@ h3{font-size:15px;margin:0}
 
 input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
 textarea{resize:vertical}
-label textarea{font-weight:400;font-size:15px}
+label textarea,.card label input{font-weight:400;font-size:15px}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
 
 .login{min-height:100vh;display:grid;place-items:center;padding:16px}

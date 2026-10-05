@@ -90,6 +90,16 @@
         <div class="row"><button id="guardar-mensaje-prospecto-web" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-prospecto-web" class="btn">Volver al recomendado</button></div>
       </div>
       <div class="card">
+        <h2>Correos para prospectos</h2>
+        <p class="muted">Los abre el botón "Escribir por correo" de cada prospecto que tenga correo, en tu app de correo. Igual que en WhatsApp: {negocio} es el nombre del negocio y la frase de las reseñas se quita si no tiene buenas reseñas en Google.</p>
+        <label>Si no tiene página web: asunto<input id="correo-asunto"></label>
+        <label>Correo<textarea id="correo-cuerpo" rows="10"></textarea></label>
+        <div class="row"><button id="guardar-correo" class="btn btn-primary">Guardar</button><button id="restaurar-correo" class="btn">Volver al recomendado</button></div>
+        <label>Si ya tiene página web: asunto<input id="correo-asunto-web"></label>
+        <label>Correo<textarea id="correo-cuerpo-web" rows="10"></textarea></label>
+        <div class="row"><button id="guardar-correo-web" class="btn btn-primary">Guardar</button><button id="restaurar-correo-web" class="btn">Volver al recomendado</button></div>
+      </div>
+      <div class="card">
         <h2>Correos de aviso</h2>
         <p class="muted">Cada mañana el panel revisa los cobros y dominios. Si algo vence en 7, 3 o 1 día, hoy o está atrasado, manda un correo. Los lunes manda un resumen de lo que viene.</p>
         <button id="probar-correo" class="btn">Enviar correo de prueba</button>

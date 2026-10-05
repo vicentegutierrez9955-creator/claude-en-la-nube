@@ -9,6 +9,38 @@ Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?`;
 export const MENSAJE_CON_WEB = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos la página web de {negocio} y nos gustaron mucho sus reseñas, así que les armamos una versión renovada: más moderna, rápida en el celular y con contacto directo por WhatsApp.
 
 Es gratis y sin compromiso. ¿Les gustaría verla?`;
+// Correos: asunto corto con el nombre del negocio (sin "gratis" para no caer en spam) y la misma
+// pregunta de interés al final.
+export const CORREO_ASUNTO = 'Una maqueta para {negocio}';
+export const CORREO_CUERPO = `Hola, ¿cómo están?
+
+Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar: con sus servicios, cómo llegar y un botón para que sus clientes les escriban directo por WhatsApp.
+
+Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?
+
+Saludos,
+Equipo Optimind Partners`;
+export const CORREO_ASUNTO_WEB = 'Una idea para la web de {negocio}';
+export const CORREO_CUERPO_WEB = `Hola, ¿cómo están?
+
+Les escribimos de Optimind Partners. Vimos la página web de {negocio} y nos gustaron mucho sus reseñas, así que les armamos una versión renovada: más moderna, rápida en el celular y con un botón para que sus clientes les escriban directo por WhatsApp.
+
+Es gratis y sin compromiso. ¿Les gustaría verla?
+
+Saludos,
+Equipo Optimind Partners`;
+// Textos que el equipo puede cambiar en Ajustes: clave en config → [id del campo, texto recomendado].
+const PLANTILLAS = {
+  mensajeProspecto: ['mensaje-prospecto', MENSAJE_INICIAL],
+  mensajeProspectoWeb: ['mensaje-prospecto-web', MENSAJE_CON_WEB],
+  correoAsunto: ['correo-asunto', CORREO_ASUNTO],
+  correoCuerpo: ['correo-cuerpo', CORREO_CUERPO],
+  correoAsuntoWeb: ['correo-asunto-web', CORREO_ASUNTO_WEB],
+  correoCuerpoWeb: ['correo-cuerpo-web', CORREO_CUERPO_WEB],
+};
+// Cada grupo se guarda con un botón (guardar-<grupo> / restaurar-<grupo>).
+const GRUPOS = { 'mensaje-prospecto': ['mensajeProspecto'], 'mensaje-prospecto-web': ['mensajeProspectoWeb'], correo: ['correoAsunto', 'correoCuerpo'], 'correo-web': ['correoAsuntoWeb', 'correoCuerpoWeb'] };
+const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Con menos de esto no se nombran las reseñas en el mensaje.
 const RESENAS_MIN = 10;
 const NOTA_MIN = 4;
@@ -20,13 +52,18 @@ export function iniciarProspectos(u) {
   const lista = () => estado().data.prospectos || [];
   const buscar = (id) => lista().find((p) => p.id === id);
   const conWeb = (p) => p.tieneWeb === 'si' || Boolean(urlSegura(p.webActual));
-  const plantilla = (web) => (web ? estado().data.config?.mensajeProspectoWeb || MENSAJE_CON_WEB : estado().data.config?.mensajeProspecto || MENSAJE_INICIAL);
+  const plantilla = (clave) => estado().data.config?.[clave] || PLANTILLAS[clave][1];
   const sinDato = (v) => v === undefined || v === null || v === '';
   const buenasResenas = (p) => Number(p.googleNota) >= NOTA_MIN && Number(p.googleResenas) >= RESENAS_MIN;
-  const mensajeDe = (p) => {
-    const t = plantilla(conWeb(p));
+  const rellenar = (p, clave) => {
+    const t = plantilla(clave);
     return (buenasResenas(p) ? t : t.replace(FRASE_RESENAS, '')).replaceAll('{negocio}', p.negocio || 'su negocio');
   };
+  const mensajeDe = (p) => rellenar(p, conWeb(p) ? 'mensajeProspectoWeb' : 'mensajeProspecto');
+  const correoDe = (p) => (conWeb(p)
+    ? { asunto: rellenar(p, 'correoAsuntoWeb'), cuerpo: rellenar(p, 'correoCuerpoWeb') }
+    : { asunto: rellenar(p, 'correoAsunto'), cuerpo: rellenar(p, 'correoCuerpo') });
+  const copiar = (texto) => (e) => { navigator.clipboard?.writeText(texto).then(() => { e.target.textContent = 'Copiado'; }); };
   const textoWeb = (p) => (conWeb(p) ? 'Ya tiene página web' : p.tieneWeb === 'no' ? 'Sin página web' : 'Página web: sin revisar');
   const linkWeb = (p) => (urlSegura(p.webActual) ? enlace(p.webActual, 'ver la actual') : null);
   const textoResenas = (p) => {
@@ -45,6 +82,13 @@ export function iniciarProspectos(u) {
       : h('span', { class: 'muted', style: 'font-size:14px' }, 'Aún no le creamos nada');
   }
 
+  function botonCorreo(p, chico) {
+    if (!EMAIL_OK.test(p.email || '')) return null;
+    const { asunto, cuerpo } = correoDe(p);
+    const url = `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    return h('a', { class: `btn btn-correo${chico ? ' btn-sm' : ''}`, href: url }, 'Escribir por correo');
+  }
+
   function botonWhatsApp(p, chico) {
     const url = waLink(p.whatsapp, mensajeDe(p));
     return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener' }, 'Escribir por WhatsApp') : null;
@@ -53,9 +97,9 @@ export function iniciarProspectos(u) {
   // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
   function render() {
     if (arrastre) return;
-    for (const [sel, web] of [['#mensaje-prospecto', false], ['#mensaje-prospecto-web', true]]) {
-      const tm = $(sel);
-      if (document.activeElement !== tm) tm.value = plantilla(web);
+    for (const [clave, [id]] of Object.entries(PLANTILLAS)) {
+      const campoAjustes = $(`#${id}`);
+      if (document.activeElement !== campoAjustes) campoAjustes.value = plantilla(clave);
     }
     const q = $('#buscar').value.trim().toLowerCase();
     const todos = lista();
@@ -77,7 +121,7 @@ export function iniciarProspectos(u) {
         h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
         h('div', { class: conWeb(p) ? 'conweb' : 'muted', style: 'font-size:14px' }, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null),
         h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
-        h('div', { class: 'row' }, botonWhatsApp(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
+        h('div', { class: 'row' }, botonWhatsApp(p, true), botonCorreo(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
       ));
     }
   }
@@ -95,6 +139,7 @@ export function iniciarProspectos(u) {
       h('div', { class: 'blk' }, h('h3', {}, 'Datos'), kv([
         ['Contacto', p.contacto],
         ['WhatsApp', wa ? enlace(wa, `+${String(p.whatsapp).replace(/\D/g, '')}`) : 'Sin WhatsApp'],
+        ['Correo', EMAIL_OK.test(p.email || '') ? p.email : 'Sin correo'],
         ['Teléfono', p.telefono],
         ['Dirección', p.direccion],
         ['Google', h('span', {}, textoResenas(p), ' · ', enlace(mapsUrl(p), 'Ver en Google Maps'))],
@@ -105,13 +150,20 @@ export function iniciarProspectos(u) {
       ])),
       h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
-        h('button', { class: 'btn btn-sm', onclick: (e) => { navigator.clipboard?.writeText(mensajeDe(p)).then(() => { e.target.textContent = 'Copiado'; }); } }, 'Copiar mensaje')),
+        h('button', { class: 'btn btn-sm', onclick: copiar(mensajeDe(p)) }, 'Copiar mensaje')),
+      h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Correo (ya tiene página)' : 'Correo'),
+        h('p', { style: 'margin:0 0 6px' }, h('b', {}, 'Asunto: '), correoDe(p).asunto),
+        h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, correoDe(p).cuerpo),
+        h('div', { class: 'row' },
+          h('button', { class: 'btn btn-sm', onclick: copiar(correoDe(p).asunto) }, 'Copiar asunto'),
+          h('button', { class: 'btn btn-sm', onclick: copiar(correoDe(p).cuerpo) }, 'Copiar correo'))),
       p.notas ? h('div', { class: 'blk' }, h('h3', {}, 'Notas'), h('p', { style: 'white-space:pre-wrap;margin:0' }, p.notas)) : null,
       trabajos.length ? h('div', { class: 'blk' }, h('h3', {}, 'Trabajos'), h('table', { class: 'table' },
         trabajos.map((t) => h('tr', {}, h('td', { style: 'white-space:nowrap' }, fechaLarga(t.fecha)), h('td', {}, t.titulo))))) : null,
     ], [
       h('button', { class: 'btn btn-danger', style: 'margin-right:auto', onclick: () => eliminar(id) }, 'Eliminar'),
       botonWhatsApp(p),
+      botonCorreo(p),
       p.clienteId ? null : h('button', { class: 'btn', onclick: () => pasarACliente(id) }, 'Pasar a cliente'),
       h('button', { class: 'btn btn-primary', onclick: () => formularioProspecto(id) }, 'Editar'),
     ]);
@@ -142,6 +194,7 @@ export function iniciarProspectos(u) {
       direccion: campo('Dirección', p.direccion),
       contacto: campo('Contacto (dueño)', p.contacto),
       whatsapp: campo('WhatsApp', p.whatsapp, { ph: '56912345678' }),
+      email: campo('Correo', p.email, { tipo: 'email', ph: 'contacto@negocio.cl' }),
       telefono: campo('Teléfono fijo', p.telefono),
       redes: campo('Instagram / redes', p.redes),
       tieneWeb: campo('¿Tiene página web?', conWeb(p) ? 'si' : p.tieneWeb || '', { opciones: [['', 'Sin revisar'], ['no', 'No tiene'], ['si', 'Sí, ya tiene']] }),
@@ -167,12 +220,13 @@ export function iniciarProspectos(u) {
       if (nota && !(Number(nota) >= 1 && Number(nota) <= 5)) { error.textContent = 'La nota de Google va de 1 a 5 (ej: 4,6).'; error.hidden = false; return; }
       const webActual = v('webActual') && !/^https?:\/\//i.test(v('webActual')) ? `https://${v('webActual')}` : v('webActual');
       if (webActual && !urlSegura(webActual)) { error.textContent = 'La página actual debe ser un link válido.'; error.hidden = false; return; }
+      if (v('email') && !EMAIL_OK.test(v('email'))) { error.textContent = 'Revisa el correo (ej: contacto@negocio.cl).'; error.hidden = false; return; }
       const resenas = v('googleResenas');
       if (resenas && !(Number.isInteger(Number(resenas)) && Number(resenas) >= 0)) { error.textContent = 'Las reseñas de Google son una cantidad (0 si no tiene).'; error.hidden = false; return; }
       const nuevo = {
         ...p, id: p.id || idNuevo(v('negocio')),
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
-        whatsapp: v('whatsapp').replace(/\D/g, ''), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
+        whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email').toLowerCase(), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
         estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
         tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
@@ -252,18 +306,18 @@ export function iniciarProspectos(u) {
   });
 
   $('#nuevo-prospecto').addEventListener('click', () => formularioProspecto(null));
-  // Ajustes: los dos mensajes (sin página web y con página web) se guardan para todo el equipo.
-  for (const [base, clave, inicial] of [['mensaje-prospecto', 'mensajeProspecto', MENSAJE_INICIAL], ['mensaje-prospecto-web', 'mensajeProspectoWeb', MENSAJE_CON_WEB]]) {
-    $(`#guardar-${base}`).addEventListener('click', () => {
-      const t = $(`#${base}`).value.trim();
+  // Ajustes: mensajes de WhatsApp y correos (sin página web y con página web), para todo el equipo.
+  for (const [grupo, claves] of Object.entries(GRUPOS)) {
+    $(`#guardar-${grupo}`).addEventListener('click', () => {
+      const valores = claves.map((clave) => [clave, $(`#${PLANTILLAS[clave][0]}`).value.trim()]);
       cambiar((d) => {
         d.config = { ...(d.config || {}) };
-        if (t && t !== inicial) d.config[clave] = t; else delete d.config[clave];
-      }, 'Mensaje guardado');
+        for (const [clave, t] of valores) if (t && t !== PLANTILLAS[clave][1]) d.config[clave] = t; else delete d.config[clave];
+      }, 'Guardado');
     });
-    $(`#restaurar-${base}`).addEventListener('click', () => {
-      $(`#${base}`).value = inicial;
-      $(`#guardar-${base}`).click();
+    $(`#restaurar-${grupo}`).addEventListener('click', () => {
+      for (const clave of claves) $(`#${PLANTILLAS[clave][0]}`).value = PLANTILLAS[clave][1];
+      $(`#guardar-${grupo}`).click();
     });
   }
   return { render, nombre: (id) => buscar(id)?.negocio };

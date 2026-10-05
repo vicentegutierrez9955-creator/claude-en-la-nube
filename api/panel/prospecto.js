@@ -6,7 +6,7 @@ import { leerDatos, guardarDatos, datosIniciales, json } from '../_lib/panel.js'
 
 const hash = (s) => createHash('sha256').update(String(s)).digest();
 const texto = (v, max) => String(v ?? '').trim().slice(0, max);
-const CAMPOS = { negocio: 80, rubro: 60, comuna: 60, direccion: 120, contacto: 60, whatsapp: 20, telefono: 30, redes: 200, responsable: 40, mensaje: 1000, notas: 1000, desde: 10 };
+const CAMPOS = { negocio: 80, rubro: 60, comuna: 60, direccion: 120, contacto: 60, whatsapp: 20, email: 120, telefono: 30, redes: 200, responsable: 40, mensaje: 1000, notas: 1000, desde: 10 };
 // Reseñas de Google: nota (1 a 5) y cantidad. 0 reseñas es un dato válido.
 const numero = (v, min, max) => (v === '' || v == null || !Number.isFinite(Number(v)) || Number(v) < min || Number(v) > max ? '' : Number(v));
 const vacio = (v) => v === undefined || v === null || v === '';
@@ -23,6 +23,7 @@ export default {
     if (!id || !texto(p.negocio, 80)) return json({ error: 'Faltan id o negocio' }, 400);
     const limpio = {};
     for (const [k, max] of Object.entries(CAMPOS)) limpio[k] = k === 'whatsapp' ? texto(p[k], max).replace(/\D/g, '') : texto(p[k], max);
+    limpio.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(limpio.email) ? limpio.email.toLowerCase() : '';
     limpio.googleNota = numero(p.googleNota, 1, 5);
     limpio.googleResenas = numero(p.googleResenas, 0, 1e6) === '' ? '' : Math.round(Number(p.googleResenas));
     // Página web actual: si la tiene, el panel le ofrece renovarla en vez de una página nueva.
