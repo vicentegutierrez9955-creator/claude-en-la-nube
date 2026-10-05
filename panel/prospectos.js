@@ -1,11 +1,18 @@
 // Prospectos: negocios a los que les ofrecemos página, con lo que les hemos creado (maquetas, etc.).
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
+// Primer mensaje por WhatsApp: pregunta si quieren ver la maqueta (sin link, precio ni reunión).
+// {negocio} se reemplaza por el nombre del prospecto. El equipo lo puede cambiar en Ajustes.
+export const MENSAJE_INICIAL = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar.
+
+Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?`;
 const COLOR_P = { 'por contactar': 'inactivo', contactado: 'mes', interesado: 'pronto', cerrado: 'ok', 'no interesado': 'atrasado' };
 
 export function iniciarProspectos(u) {
   const { h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy, estado, formulario, trabajosDe } = u;
   const lista = () => estado().data.prospectos || [];
   const buscar = (id) => lista().find((p) => p.id === id);
+  const plantilla = () => estado().data.config?.mensajeProspecto || MENSAJE_INICIAL;
+  const mensajeDe = (p) => plantilla().replaceAll('{negocio}', p.negocio || 'su negocio');
   const etiqueta = (p) => badge(COLOR_P[p.estado] || 'inactivo', p.estado || 'por contactar');
 
   function creados(p) {
@@ -16,13 +23,15 @@ export function iniciarProspectos(u) {
   }
 
   function botonWhatsApp(p, chico) {
-    const url = waLink(p.whatsapp, p.mensaje);
+    const url = waLink(p.whatsapp, mensajeDe(p));
     return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener' }, 'Escribir por WhatsApp') : null;
   }
 
   // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
   function render() {
     if (arrastre) return;
+    const tm = $('#mensaje-prospecto');
+    if (document.activeElement !== tm) tm.value = plantilla();
     const q = $('#buscar').value.trim().toLowerCase();
     const todos = lista();
     const visibles = todos
@@ -65,9 +74,9 @@ export function iniciarProspectos(u) {
         ['Responsable', p.responsable],
         ['Agregado', fechaLarga(p.desde)],
       ])),
-      p.mensaje ? h('div', { class: 'blk' }, h('h3', {}, 'Primer mensaje sugerido'),
-        h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, p.mensaje),
-        h('button', { class: 'btn btn-sm', onclick: (e) => { navigator.clipboard?.writeText(p.mensaje).then(() => { e.target.textContent = 'Copiado'; }); } }, 'Copiar mensaje')) : null,
+      h('div', { class: 'blk' }, h('h3', {}, 'Mensaje de WhatsApp'),
+        h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
+        h('button', { class: 'btn btn-sm', onclick: (e) => { navigator.clipboard?.writeText(mensajeDe(p)).then(() => { e.target.textContent = 'Copiado'; }); } }, 'Copiar mensaje')),
       p.notas ? h('div', { class: 'blk' }, h('h3', {}, 'Notas'), h('p', { style: 'white-space:pre-wrap;margin:0' }, p.notas)) : null,
       trabajos.length ? h('div', { class: 'blk' }, h('h3', {}, 'Trabajos'), h('table', { class: 'table' },
         trabajos.map((t) => h('tr', {}, h('td', { style: 'white-space:nowrap' }, fechaLarga(t.fecha)), h('td', {}, t.titulo))))) : null,
@@ -108,7 +117,6 @@ export function iniciarProspectos(u) {
       redes: campo('Instagram / web', p.redes),
       responsable: campo('Responsable', p.responsable),
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
-      mensaje: campo('Primer mensaje sugerido', p.mensaje, { tipo: 'textarea', full: true }),
       notas: campo('Notas', p.notas, { tipo: 'textarea', full: true }),
     };
     const creado = filasRepetibles(p.creado || [], [['nombre', 'Qué es (ej: Maqueta)'], ['url', 'https://…']], '', '+ Agregar link');
@@ -116,7 +124,7 @@ export function iniciarProspectos(u) {
     const form = h('form', { class: 'form', id: 'form-prospecto' },
       Object.values(f).slice(0, 10).map((x) => x.el),
       h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Lo que le creamos (maquetas, propuestas)'), creado),
-      f.mensaje.el, f.notas.el, error);
+      f.notas.el, error);
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const v = (k) => f[k].input.value.trim();
@@ -126,7 +134,7 @@ export function iniciarProspectos(u) {
         ...p, id: p.id || idNuevo(v('negocio')),
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
         whatsapp: v('whatsapp').replace(/\D/g, ''), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
-        estado: v('estado'), mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(),
+        estado: v('estado'), notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];
@@ -204,5 +212,16 @@ export function iniciarProspectos(u) {
   });
 
   $('#nuevo-prospecto').addEventListener('click', () => formularioProspecto(null));
+  $('#guardar-mensaje-prospecto').addEventListener('click', () => {
+    const t = $('#mensaje-prospecto').value.trim();
+    cambiar((d) => {
+      d.config = { ...(d.config || {}) };
+      if (t && t !== MENSAJE_INICIAL) d.config.mensajeProspecto = t; else delete d.config.mensajeProspecto;
+    }, 'Mensaje guardado');
+  });
+  $('#restaurar-mensaje-prospecto').addEventListener('click', () => {
+    $('#mensaje-prospecto').value = MENSAJE_INICIAL;
+    $('#guardar-mensaje-prospecto').click();
+  });
   return { render, nombre: (id) => buscar(id)?.negocio };
 }
