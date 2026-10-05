@@ -97,6 +97,16 @@
 .page-ph{aspect-ratio:4/3;border-radius:24px;box-shadow:0 40px 80px -36px rgba(6,47,51,.6);max-width:520px;width:100%;margin:0 auto}
 .ph-label{position:absolute;left:12px;top:12px;z-index:1;background:rgba(255,255,255,.92);color:#92400e;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
 .prose .fig{margin:28px 0;border-radius:20px;aspect-ratio:16/9}
+.ba{display:grid;gap:16px;margin:8px 0 14px}
+.ba-case{margin:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow)}
+.ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ba-ph{position:relative;aspect-ratio:1;border-radius:14px;background:linear-gradient(150deg,#e9eef0,#d6e0e2);display:grid;place-items:center;overflow:hidden}
+.ba-ph.after{background:linear-gradient(150deg,var(--brand-100),#bfe6df)}
+.ba-tag{position:absolute;left:8px;top:8px;background:var(--ink);color:#fff;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.ba-ph.after .ba-tag{background:var(--brand)}
+.ba-case figcaption{font-size:14.5px;color:var(--muted);padding:10px 4px 2px}
+.ba-case figcaption b{color:var(--ink)}
+@media (min-width:640px){.ba{grid-template-columns:1fr 1fr}}
 @media (min-width:900px){.page-hero .wrap{grid-template-columns:1.25fr .75fr;gap:48px}}
 </style>
 </head>
@@ -155,6 +165,9 @@
         <h2>Cómo es el tratamiento</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Retiro las durezas y helomas capa por capa, con instrumental esterilizado. Normalmente no duele.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Reviso tu pisada y tus zapatos para encontrar la causa.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Te recomiendo cómo cuidar la piel en casa para que no se vuelva a endurecer tan rápido.</span></li></ul>
         <div class="alert"><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-alert"/></svg><div><b>Si tienes diabetes:</b><ul><li>No uses parches callicidas ni te cortes los callos en casa: una herida pequeña puede complicarse.</li><li>Es mejor que un profesional retire las durezas y revise tus pies con regularidad.</li></ul></div></div>
+        <h2>Antes y después</h2>
+        <p>Casos reales atendidos en la consulta, publicados con autorización de cada paciente. Los resultados varían según cada caso.</p>
+        <div class="ba"><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 1</b> · Callos y durezas <span class="tbd">Descripción breve</span></figcaption></figure><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 2</b> · Callos y durezas <span class="tbd">Descripción breve</span></figcaption></figure></div>
         <h2>Cómo prevenirlo</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Hidrata tus pies a diario, especialmente los talones (sin dejar crema entre los dedos).</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Usa zapatos cómodos, con espacio y sin costuras que rocen.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Evita los parches callicidas: pueden dañar la piel sana.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Agenda un control cuando notes que la dureza vuelve a molestar.</span></li></ul>
         <h2>Valor</h2>
