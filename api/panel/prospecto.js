@@ -25,6 +25,9 @@ export default {
     for (const [k, max] of Object.entries(CAMPOS)) limpio[k] = k === 'whatsapp' ? texto(p[k], max).replace(/\D/g, '') : texto(p[k], max);
     limpio.googleNota = numero(p.googleNota, 1, 5);
     limpio.googleResenas = numero(p.googleResenas, 0, 1e6) === '' ? '' : Math.round(Number(p.googleResenas));
+    // Página web actual: si la tiene, el panel le ofrece renovarla en vez de una página nueva.
+    limpio.webActual = /^https:\/\//.test(texto(p.webActual, 300)) ? texto(p.webActual, 300) : '';
+    limpio.tieneWeb = limpio.webActual ? 'si' : ['si', 'no'].includes(p.tieneWeb) ? p.tieneWeb : '';
     const creado = (Array.isArray(p.creado) ? p.creado : []).slice(0, 10)
       .map((l) => ({ nombre: texto(l?.nombre, 60), url: texto(l?.url, 500) }))
       .filter((l) => /^https:\/\//.test(l.url));

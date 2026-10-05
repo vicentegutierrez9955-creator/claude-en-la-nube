@@ -82,10 +82,12 @@
         <button id="guardar-transferencia" class="btn btn-primary">Guardar</button>
       </div>
       <div class="card">
-        <h2>Mensaje para prospectos</h2>
-        <p class="muted">Es el que abre el botón "Escribir por WhatsApp" de cada prospecto. Escribe {negocio} donde va el nombre del negocio. Si el prospecto no tiene buenas reseñas en Google (nota 4 o más y al menos 10 reseñas), se quita la frase "y nos gustaron mucho sus reseñas". Antes de enviarlo puedes ajustarlo en WhatsApp.</p>
-        <textarea id="mensaje-prospecto" rows="6" aria-label="Mensaje para prospectos"></textarea>
+        <h2>Mensajes para prospectos</h2>
+        <p class="muted">Son los que abre el botón "Escribir por WhatsApp" de cada prospecto: uno para los que no tienen página web y otro para los que ya tienen (ahí la oferta es renovarla). Escribe {negocio} donde va el nombre del negocio. Si el prospecto no tiene buenas reseñas en Google (nota 4 o más y al menos 10 reseñas), se quita la frase "y nos gustaron mucho sus reseñas". Antes de enviarlo puedes ajustarlo en WhatsApp.</p>
+        <label>Si no tiene página web<textarea id="mensaje-prospecto" rows="6"></textarea></label>
         <div class="row"><button id="guardar-mensaje-prospecto" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-prospecto" class="btn">Volver al recomendado</button></div>
+        <label>Si ya tiene página web<textarea id="mensaje-prospecto-web" rows="6"></textarea></label>
+        <div class="row"><button id="guardar-mensaje-prospecto-web" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-prospecto-web" class="btn">Volver al recomendado</button></div>
       </div>
       <div class="card">
         <h2>Correos de aviso</h2>

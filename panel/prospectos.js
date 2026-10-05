@@ -5,6 +5,10 @@ export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado'
 export const MENSAJE_INICIAL = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar.
 
 Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?`;
+// Si el prospecto ya tiene página web, la oferta es mejorarla (sin criticar la que tiene).
+export const MENSAJE_CON_WEB = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos la página web de {negocio} y nos gustaron mucho sus reseñas, así que les armamos una versión renovada: más moderna, rápida en el celular y con contacto directo por WhatsApp.
+
+Es gratis y sin compromiso. ¿Les gustaría verla?`;
 // Con menos de esto no se nombran las reseñas en el mensaje.
 const RESENAS_MIN = 10;
 const NOTA_MIN = 4;
@@ -15,11 +19,16 @@ export function iniciarProspectos(u) {
   const { h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy, estado, formulario, trabajosDe } = u;
   const lista = () => estado().data.prospectos || [];
   const buscar = (id) => lista().find((p) => p.id === id);
-  const plantilla = () => estado().data.config?.mensajeProspecto || MENSAJE_INICIAL;
+  const conWeb = (p) => p.tieneWeb === 'si' || Boolean(urlSegura(p.webActual));
+  const plantilla = (web) => (web ? estado().data.config?.mensajeProspectoWeb || MENSAJE_CON_WEB : estado().data.config?.mensajeProspecto || MENSAJE_INICIAL);
   const sinDato = (v) => v === undefined || v === null || v === '';
   const buenasResenas = (p) => Number(p.googleNota) >= NOTA_MIN && Number(p.googleResenas) >= RESENAS_MIN;
-  const mensajeDe = (p) => (buenasResenas(p) ? plantilla() : plantilla().replace(FRASE_RESENAS, ''))
-    .replaceAll('{negocio}', p.negocio || 'su negocio');
+  const mensajeDe = (p) => {
+    const t = plantilla(conWeb(p));
+    return (buenasResenas(p) ? t : t.replace(FRASE_RESENAS, '')).replaceAll('{negocio}', p.negocio || 'su negocio');
+  };
+  const textoWeb = (p) => (conWeb(p) ? 'Ya tiene página web' : p.tieneWeb === 'no' ? 'Sin página web' : 'Página web: sin revisar');
+  const linkWeb = (p) => (urlSegura(p.webActual) ? enlace(p.webActual, 'ver la actual') : null);
   const textoResenas = (p) => {
     if (sinDato(p.googleResenas)) return 'Reseñas en Google: sin revisar';
     if (Number(p.googleResenas) === 0) return 'Sin reseñas en Google';
@@ -44,8 +53,10 @@ export function iniciarProspectos(u) {
   // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
   function render() {
     if (arrastre) return;
-    const tm = $('#mensaje-prospecto');
-    if (document.activeElement !== tm) tm.value = plantilla();
+    for (const [sel, web] of [['#mensaje-prospecto', false], ['#mensaje-prospecto-web', true]]) {
+      const tm = $(sel);
+      if (document.activeElement !== tm) tm.value = plantilla(web);
+    }
     const q = $('#buscar').value.trim().toLowerCase();
     const todos = lista();
     const visibles = todos
@@ -64,6 +75,7 @@ export function iniciarProspectos(u) {
           etiqueta(p)),
         h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
         h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
+        h('div', { class: conWeb(p) ? 'conweb' : 'muted', style: 'font-size:14px' }, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null),
         h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
         h('div', { class: 'row' }, botonWhatsApp(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
       ));
@@ -86,11 +98,12 @@ export function iniciarProspectos(u) {
         ['Teléfono', p.telefono],
         ['Dirección', p.direccion],
         ['Google', h('span', {}, textoResenas(p), ' · ', enlace(mapsUrl(p), 'Ver en Google Maps'))],
+        ['Página web', h('span', {}, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null)],
         ['Redes / web', p.redes ? enlace(/^https?:\/\//.test(p.redes) ? p.redes : `https://${p.redes}`, p.redes) : null],
         ['Responsable', p.responsable],
         ['Agregado', fechaLarga(p.desde)],
       ])),
-      h('div', { class: 'blk' }, h('h3', {}, 'Mensaje de WhatsApp'),
+      h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
         h('button', { class: 'btn btn-sm', onclick: (e) => { navigator.clipboard?.writeText(mensajeDe(p)).then(() => { e.target.textContent = 'Copiado'; }); } }, 'Copiar mensaje')),
       p.notas ? h('div', { class: 'blk' }, h('h3', {}, 'Notas'), h('p', { style: 'white-space:pre-wrap;margin:0' }, p.notas)) : null,
@@ -130,7 +143,9 @@ export function iniciarProspectos(u) {
       contacto: campo('Contacto (dueño)', p.contacto),
       whatsapp: campo('WhatsApp', p.whatsapp, { ph: '56912345678' }),
       telefono: campo('Teléfono fijo', p.telefono),
-      redes: campo('Instagram / web', p.redes),
+      redes: campo('Instagram / redes', p.redes),
+      tieneWeb: campo('¿Tiene página web?', conWeb(p) ? 'si' : p.tieneWeb || '', { opciones: [['', 'Sin revisar'], ['no', 'No tiene'], ['si', 'Sí, ya tiene']] }),
+      webActual: campo('Su página actual', p.webActual, { ph: 'https://…' }),
       responsable: campo('Responsable', p.responsable),
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
       googleNota: campo('Nota en Google', sinDato(p.googleNota) ? '' : String(p.googleNota).replace('.', ','), { ph: 'Ej: 4,6' }),
@@ -150,13 +165,16 @@ export function iniciarProspectos(u) {
       if (creado.valores().some((l) => l.url && !urlSegura(l.url))) { error.textContent = 'Los links deben empezar con https://'; error.hidden = false; return; }
       const nota = v('googleNota').replace(',', '.');
       if (nota && !(Number(nota) >= 1 && Number(nota) <= 5)) { error.textContent = 'La nota de Google va de 1 a 5 (ej: 4,6).'; error.hidden = false; return; }
+      const webActual = v('webActual') && !/^https?:\/\//i.test(v('webActual')) ? `https://${v('webActual')}` : v('webActual');
+      if (webActual && !urlSegura(webActual)) { error.textContent = 'La página actual debe ser un link válido.'; error.hidden = false; return; }
       const resenas = v('googleResenas');
       if (resenas && !(Number.isInteger(Number(resenas)) && Number(resenas) >= 0)) { error.textContent = 'Las reseñas de Google son una cantidad (0 si no tiene).'; error.hidden = false; return; }
       const nuevo = {
         ...p, id: p.id || idNuevo(v('negocio')),
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
         whatsapp: v('whatsapp').replace(/\D/g, ''), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
-        estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '', notas: f.notas.input.value.trim(), creado: creado.valores(),
+        estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
+        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];
@@ -234,16 +252,19 @@ export function iniciarProspectos(u) {
   });
 
   $('#nuevo-prospecto').addEventListener('click', () => formularioProspecto(null));
-  $('#guardar-mensaje-prospecto').addEventListener('click', () => {
-    const t = $('#mensaje-prospecto').value.trim();
-    cambiar((d) => {
-      d.config = { ...(d.config || {}) };
-      if (t && t !== MENSAJE_INICIAL) d.config.mensajeProspecto = t; else delete d.config.mensajeProspecto;
-    }, 'Mensaje guardado');
-  });
-  $('#restaurar-mensaje-prospecto').addEventListener('click', () => {
-    $('#mensaje-prospecto').value = MENSAJE_INICIAL;
-    $('#guardar-mensaje-prospecto').click();
-  });
+  // Ajustes: los dos mensajes (sin página web y con página web) se guardan para todo el equipo.
+  for (const [base, clave, inicial] of [['mensaje-prospecto', 'mensajeProspecto', MENSAJE_INICIAL], ['mensaje-prospecto-web', 'mensajeProspectoWeb', MENSAJE_CON_WEB]]) {
+    $(`#guardar-${base}`).addEventListener('click', () => {
+      const t = $(`#${base}`).value.trim();
+      cambiar((d) => {
+        d.config = { ...(d.config || {}) };
+        if (t && t !== inicial) d.config[clave] = t; else delete d.config[clave];
+      }, 'Mensaje guardado');
+    });
+    $(`#restaurar-${base}`).addEventListener('click', () => {
+      $(`#${base}`).value = inicial;
+      $(`#guardar-${base}`).click();
+    });
+  }
   return { render, nombre: (id) => buscar(id)?.negocio };
 }
