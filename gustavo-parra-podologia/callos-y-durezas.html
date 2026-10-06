@@ -104,6 +104,12 @@
 @media (min-width:640px){.ba-solo{grid-template-columns:220px 1fr;gap:20px}.ba-solo img{margin:0}}
 .ba-solo figcaption{padding:0 4px}
 .ba{display:grid;gap:16px;margin:8px 0 14px}
+.ba-ref{margin:8px 0 14px;max-width:460px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow)}
+.ba-img{position:relative;border-radius:14px;overflow:hidden}
+.ba-img img{display:block;width:100%;height:auto}
+.ba-img .ba-tag{z-index:1}
+.ba-img .ba-tag.after{left:auto;right:8px;background:var(--brand)}
+.ba-ref figcaption{font-size:13.5px;color:var(--muted);padding:10px 4px 2px}
 .ba-case{margin:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow)}
 .ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ba-ph{position:relative;aspect-ratio:1;border-radius:14px;background:linear-gradient(150deg,#e9eef0,#d6e0e2);display:grid;place-items:center;overflow:hidden}
@@ -139,6 +145,7 @@
 
 <main id="contenido">
   <section class="page-hero" aria-labelledby="titulo">
+    <div class="hero-bg" aria-hidden="true" style="background-image:url('https://images.pexels.com/photos/17056218/pexels-photo-17056218.jpeg?auto=compress&cs=tinysrgb&w=1000')"></div>
     <div class="wrap">
       <div>
       <p class="crumbs"><a href="/gustavo-parra-podologia">Inicio</a> › Callos y durezas</p>
@@ -167,13 +174,12 @@
         <div class="cta-box"><div><b>¿Te identificas con esto?</b><p>Escríbeme y te digo si conviene atenderte pronto.</p></div><a class="btn btn-wa" href="https://wa.me/56956633536?text=Hola%20Gustavo%2C%20tengo%20callos%20o%20durezas%20en%20los%20pies%20y%20quiero%20pedir%20una%20hora.%20%C2%BFQu%C3%A9%20horas%20tienes%20disponibles%3F" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="/gustavo-parra-podologia/icons.svg#i-wa"/></svg>Escribir por WhatsApp</a></div>
         <h2>¿Por qué aparecen?</h2>
         <p>Por roce o presión repetida: zapatos apretados o de taco, la forma de pisar, juanetes o dedos en garra. La piel se defiende engrosándose, y esa dureza termina molestando.</p>
-        <figure class="ph fig"><img src="/gustavo-parra-podologia/img/camilla.webp" alt="Camilla y equipos de la consulta de Gustavo Parra en Estación Central" width="400" height="400" loading="lazy"><figcaption>Mi consulta en Ramón Rivas 343</figcaption></figure>
         <h2>Cómo es el tratamiento</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Retiro las durezas y helomas capa por capa, con instrumental esterilizado. Normalmente no duele.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Reviso tu pisada y tus zapatos para encontrar la causa.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Te recomiendo cómo cuidar la piel en casa para que no se vuelva a endurecer tan rápido.</span></li></ul>
         <div class="alert"><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-alert"/></svg><div><b>Si tienes diabetes:</b><ul><li>No uses parches callicidas ni te cortes los callos en casa: una herida pequeña puede complicarse.</li><li>Es mejor que un profesional retire las durezas y revise tus pies con regularidad.</li></ul></div></div>
         <h2>Antes y después</h2>
-        <p>Casos reales atendidos en la consulta, publicados con autorización de cada paciente. Los resultados varían según cada caso.</p>
-        <div class="ba"><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 1</b> · Callos y durezas <span class="tbd">Descripción breve</span></figcaption></figure><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 2</b> · Callos y durezas <span class="tbd">Descripción breve</span></figcaption></figure></div>
+        <p>Así cambia el pie con un tratamiento bien hecho. Imagen referencial; los resultados varían según cada caso.</p>
+        <figure class="ba-ref"><div class="ba-img"><span class="ba-tag">Antes</span><span class="ba-tag after">Después</span><img src="/gustavo-parra-podologia/img/antes-despues-callos.webp" alt="Planta del pie con una callosidad gruesa antes del tratamiento y la piel lisa después" width="440" height="434" loading="lazy"></div><figcaption>Imagen referencial · Callos y durezas</figcaption></figure>
         <h2>Cómo prevenirlo</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Hidrata tus pies a diario, especialmente los talones (sin dejar crema entre los dedos).</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Usa zapatos cómodos, con espacio y sin costuras que rocen.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Evita los parches callicidas: pueden dañar la piel sana.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Agenda un control cuando notes que la dureza vuelve a molestar.</span></li></ul>
         <h2>Valor</h2>

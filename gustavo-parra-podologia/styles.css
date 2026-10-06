@@ -310,8 +310,11 @@ a.chip:hover{border-color:var(--brand);color:var(--brand-800)}
 .gallery figcaption{position:absolute;inset:auto 0 0 0;padding:28px 12px 10px;background:linear-gradient(transparent,rgba(6,47,51,.78));color:#fff;font-size:14px;font-weight:700}
 @media (min-width:760px){.gallery{grid-template-columns:repeat(3,1fr);gap:14px}}
 
-/* Portada: fondo de la consulta difuminado y foto redonda de Gustavo */
-.hero{background:linear-gradient(100deg,rgba(255,255,255,.88) 0%,rgba(255,255,255,.72) 45%,rgba(239,250,248,.35) 100%),linear-gradient(180deg,transparent 75%,#fff),url("/gustavo-parra-podologia/img/hero-bg.webp") center/cover no-repeat}
+/* Portada y páginas de tratamiento: foto de una atención difuminada de fondo */
+.hero,.page-hero{position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:-24px;background:var(--brand-50) center/cover no-repeat;filter:blur(5px)}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.76) 48%,rgba(239,250,248,.4) 100%),linear-gradient(180deg,transparent 72%,#fff 96%)}
+.page-hero .wrap{position:relative}
 .hero-ph{aspect-ratio:1;border-radius:50%;border:6px solid #fff}
 @media (max-width:899px){
   .hero .wrap{gap:22px}
@@ -319,3 +322,4 @@ a.chip:hover{border-color:var(--brand);color:var(--brand-800)}
   .hero .rating{display:none}
 }
 @media (min-width:900px){.hero-media{max-width:440px}}
+@media (max-width:899px){.hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.84) 55%,#fff 98%)}}

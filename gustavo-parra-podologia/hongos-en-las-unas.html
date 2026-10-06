@@ -104,6 +104,12 @@
 @media (min-width:640px){.ba-solo{grid-template-columns:220px 1fr;gap:20px}.ba-solo img{margin:0}}
 .ba-solo figcaption{padding:0 4px}
 .ba{display:grid;gap:16px;margin:8px 0 14px}
+.ba-ref{margin:8px 0 14px;max-width:460px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow)}
+.ba-img{position:relative;border-radius:14px;overflow:hidden}
+.ba-img img{display:block;width:100%;height:auto}
+.ba-img .ba-tag{z-index:1}
+.ba-img .ba-tag.after{left:auto;right:8px;background:var(--brand)}
+.ba-ref figcaption{font-size:13.5px;color:var(--muted);padding:10px 4px 2px}
 .ba-case{margin:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow)}
 .ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .ba-ph{position:relative;aspect-ratio:1;border-radius:14px;background:linear-gradient(150deg,#e9eef0,#d6e0e2);display:grid;place-items:center;overflow:hidden}
@@ -139,6 +145,7 @@
 
 <main id="contenido">
   <section class="page-hero" aria-labelledby="titulo">
+    <div class="hero-bg" aria-hidden="true" style="background-image:url('https://images.pexels.com/photos/17056222/pexels-photo-17056222.jpeg?auto=compress&cs=tinysrgb&w=1000')"></div>
     <div class="wrap">
       <div>
       <p class="crumbs"><a href="/gustavo-parra-podologia">Inicio</a> › Hongos en las uñas</p>
@@ -155,7 +162,7 @@
         <li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-shield"/></svg>Instrumental esterilizado</li>
       </ul>
       </div>
-      <div class="ph page-ph"><img src="https://images.pexels.com/photos/17739679/pexels-photo-17739679.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Pies descalzos vistos de cerca" width="520" height="390" fetchpriority="high" onerror="this.remove()"></div>
+      <div class="ph page-ph"><img src="https://images.pexels.com/photos/17056219/pexels-photo-17056219.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Podólogo con guantes trabajando en las uñas de un pie" width="520" height="390" fetchpriority="high" onerror="this.remove()"></div>
     </div>
   </section>
 
@@ -167,12 +174,11 @@
         <div class="cta-box"><div><b>¿Te identificas con esto?</b><p>Escríbeme y te digo si conviene atenderte pronto.</p></div><a class="btn btn-wa" href="https://wa.me/56956633536?text=Hola%20Gustavo%2C%20creo%20que%20tengo%20hongos%20en%20las%20u%C3%B1as%20y%20quiero%20pedir%20una%20hora.%20%C2%BFQu%C3%A9%20horas%20tienes%20disponibles%3F" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="/gustavo-parra-podologia/icons.svg#i-wa"/></svg>Escribir por WhatsApp</a></div>
         <h2>Cómo es el tratamiento</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Evalúo las uñas afectadas y cuánto ha avanzado el hongo.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Rebajo y limpio la uña con instrumental esterilizado. Esto alivia la molestia y ayuda a que el tratamiento funcione mejor.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Te explico qué hacer en casa y cómo seguir el tratamiento.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Si el hongo está muy extendido, te oriento para que un médico evalúe un tratamiento con medicamentos.</span></li></ul>
-        <figure class="ph fig"><img src="/gustavo-parra-podologia/img/vitrina.webp" alt="Vitrina con insumos de la consulta de Gustavo Parra en Estación Central" width="400" height="400" loading="lazy"><figcaption>Mi consulta en Ramón Rivas 343</figcaption></figure>
         <h2>Paciencia: la uña crece lento</h2>
         <p>La uña sana tiene que crecer y reemplazar a la dañada, y eso toma meses. Por eso son importantes los controles: vamos viendo cómo avanza y ajustando el cuidado.</p>
         <h2>Antes y después</h2>
-        <p>Casos reales atendidos en la consulta, publicados con autorización de cada paciente. Los resultados varían según cada caso.</p>
-        <div class="ba"><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 1</b> · Hongos en las uñas <span class="tbd">Descripción breve</span></figcaption></figure><figure class="ba-case"><div class="ba-pair"><div class="ba-ph"><span class="ba-tag">Antes</span><span class="tbd">Foto real</span></div><div class="ba-ph after"><span class="ba-tag">Después</span><span class="tbd">Foto real</span></div></div><figcaption><b>Caso 2</b> · Hongos en las uñas <span class="tbd">Descripción breve</span></figcaption></figure></div>
+        <p>Así cambia el pie con un tratamiento bien hecho. Imagen referencial; los resultados varían según cada caso.</p>
+        <figure class="ba-ref"><div class="ba-img"><img src="/gustavo-parra-podologia/img/antes-despues-hongos.webp" alt="Uña del dedo gordo con hongos antes del tratamiento y la misma uña sana después" width="380" height="477" loading="lazy"></div><figcaption>Imagen referencial · Hongos en las uñas</figcaption></figure>
         <h2>Cómo prevenirlo</h2>
         <ul class="ticks"><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Seca bien tus pies, sobre todo entre los dedos.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Usa chalas en camarines, piscinas y duchas compartidas.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>No compartas cortaúñas, limas ni calcetines.</span></li><li><svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-check"/></svg><span>Alterna tus zapatos y prefiere calcetines de algodón.</span></li></ul>
         <h2>Valor</h2>
