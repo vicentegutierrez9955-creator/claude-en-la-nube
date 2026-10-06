@@ -323,3 +323,13 @@ a.chip:hover{border-color:var(--brand);color:var(--brand-800)}
 }
 @media (min-width:900px){.hero-media{max-width:440px}}
 @media (max-width:899px){.hero-bg::after{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(255,255,255,.84) 55%,#fff 98%)}}
+
+/* Tarjetas de tratamientos: mini foto y botón más visible */
+.svc .thumb{flex:none;width:96px;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--brand-100)}
+.svc .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s ease}
+.svc article:has(a.card-link):hover .thumb img{transform:scale(1.06)}
+.btn-more{margin-top:14px;padding:9px 16px;border-radius:999px;background:var(--brand);color:#fff;font-size:14.5px;box-shadow:0 8px 18px -10px rgba(13,124,122,.9);transition:background .15s ease,transform .15s ease}
+.btn-more .icon{width:17px;height:17px;transition:transform .15s ease}
+.svc article:has(a.card-link):hover .btn-more{background:var(--brand-800)}
+.svc article:has(a.card-link):hover .btn-more .icon{transform:translateX(3px)}
+@media (min-width:900px){.svc a.card-link{flex-direction:column}.svc .thumb{width:100%;aspect-ratio:4/3}}
