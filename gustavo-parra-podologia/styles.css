@@ -136,7 +136,10 @@ h2{font-size:clamp(30px,4.6vw,44px);line-height:1.1;letter-spacing:-.02em;font-w
 .portrait .icon{width:60px;height:60px;opacity:.5;margin:0 auto 12px}
 .about p{color:var(--muted);font-size:17px}
 .reviews{display:grid;gap:10px;margin-top:18px}
-.review{border:1px dashed #f59e0b;background:#fffbeb;border-radius:14px;padding:14px 16px;font-size:15px;color:#78350f}
+.review{margin:0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow)}
+.review blockquote{margin:8px 0 10px;font-size:15.5px;line-height:1.55;color:var(--ink)}
+.review figcaption{font-size:14px;color:var(--muted)}
+.review figcaption b{color:var(--ink)}
 
 /* FAQ */
 .faq{max-width:780px;margin:0 auto;display:grid;gap:12px}
@@ -295,3 +298,14 @@ a.chip:hover{border-color:var(--brand);color:var(--brand-800)}
   .page-hero{padding:56px 0 70px}
   .cta-box{flex-direction:row;align-items:center;justify-content:space-between;padding:30px 34px}
 }
+
+/* Fotos reales */
+.logo-img{width:42px;height:42px;border-radius:50%;object-fit:cover;display:block;flex:none}
+.portrait.photo{padding:0;overflow:hidden;position:relative;box-shadow:0 30px 60px -30px rgba(6,47,51,.5)}
+.portrait.photo img{width:100%;height:100%;object-fit:cover}
+.portrait.photo figcaption{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.94);color:var(--ink);font-size:13.5px;font-weight:700;padding:6px 12px;border-radius:999px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gallery figure{margin:0;position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;background:var(--brand-100)}
+.gallery img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery figcaption{position:absolute;inset:auto 0 0 0;padding:28px 12px 10px;background:linear-gradient(transparent,rgba(6,47,51,.78));color:#fff;font-size:14px;font-weight:700}
+@media (min-width:760px){.gallery{grid-template-columns:repeat(3,1fr);gap:14px}}
