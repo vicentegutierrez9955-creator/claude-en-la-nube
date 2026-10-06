@@ -1,7 +1,7 @@
 import { after, NextResponse, type NextRequest } from "next/server";
-import { processConversation, receiveCustomerMessage } from "@/lib/conversations";
+import { processConversation, receiveCustomerMessage, recordOwnerEcho } from "@/lib/conversations";
 import { db } from "@/lib/db";
-import { parseWhatsAppWebhook, verifyWhatsAppSignature } from "@/lib/whatsapp";
+import { parseWhatsAppEchoes, parseWhatsAppWebhook, verifyWhatsAppSignature } from "@/lib/whatsapp";
 
 export const maxDuration = 300;
 
@@ -19,13 +19,13 @@ export async function GET(req: NextRequest) {
 // y el vendedor automático trabaja después (Meta reintenta si tardamos).
 export async function POST(req: NextRequest) {
   const raw = await req.text();
-  const appSecret = process.env.WHATSAPP_APP_SECRET;
+  const appSecret = process.env.META_APP_SECRET ?? process.env.WHATSAPP_APP_SECRET;
   if (appSecret) {
     if (!verifyWhatsAppSignature(raw, req.headers.get("x-hub-signature-256"), appSecret)) {
       return new NextResponse("Firma inválida", { status: 401 });
     }
   } else if (process.env.NODE_ENV === "production") {
-    console.error("[whatsapp] WHATSAPP_APP_SECRET no está configurado; se rechaza el webhook");
+    console.error("[whatsapp] META_APP_SECRET no está configurado; se rechaza el webhook");
     return new NextResponse("Webhook no configurado", { status: 500 });
   }
 
@@ -52,6 +52,13 @@ export async function POST(req: NextRequest) {
       channel: "WHATSAPP",
     });
     if (conversationId) toProcess.add(conversationId);
+  }
+
+  for (const echo of parseWhatsAppEchoes(body)) {
+    const business = await db.business.findUnique({ where: { whatsappPhoneNumberId: echo.phoneNumberId } });
+    if (business) {
+      await recordOwnerEcho({ businessId: business.id, waId: echo.to, text: echo.text, waMessageId: echo.waMessageId });
+    }
   }
 
   after(async () => {

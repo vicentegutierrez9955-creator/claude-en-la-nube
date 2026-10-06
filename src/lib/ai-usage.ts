@@ -5,6 +5,9 @@ import { db } from "./db";
 // Precios oficiales por millón de tokens (USD). La escritura en caché (5 min) cuesta 1,25x la entrada.
 type Price = { input: number; output: number; cacheRead: number };
 const PRICES: Record<string, Price> = {
+  // DeepSeek: tarifa de horario punta (la más cara) para no subestimar.
+  "deepseek-v4-flash": { input: 0.3, output: 1.2, cacheRead: 0.006 },
+  "deepseek-v4-pro": { input: 1.32, output: 3.96, cacheRead: 0.044 },
   "claude-opus-5-5": { input: 4, output: 20, cacheRead: 0.2 },
   "claude-sonnet-5-5": { input: 2, output: 10, cacheRead: 0.2 },
   "claude-haiku-4-5": { input: 1, output: 5, cacheRead: 0.1 },
@@ -15,12 +18,14 @@ const PRICES: Record<string, Price> = {
 };
 
 export const AI_MODELS = [
+  { id: "deepseek-v4-flash", label: "DeepSeek Flash", note: "El más económico" },
+  { id: "deepseek-v4-pro", label: "DeepSeek Pro", note: "DeepSeek más capaz · ~3x Flash" },
   { id: "claude-opus-5-5", label: "Opus 5.5", note: "El más capaz · costo alto" },
   { id: "claude-sonnet-5-5", label: "Sonnet 5.5", note: "Muy bueno · la mitad del costo de Opus" },
   { id: "claude-haiku-4-5", label: "Haiku 4.5", note: "Rápido y económico · un cuarto del costo de Opus" },
 ] as const;
 
-export const DEFAULT_MODEL = process.env.AI_MODEL ?? "claude-opus-5-5";
+export const DEFAULT_MODEL = process.env.AI_MODEL ?? "deepseek-v4-flash";
 
 export function modelFor(business: Pick<Business, "aiModel">): string {
   return business.aiModel || DEFAULT_MODEL;
@@ -34,9 +39,16 @@ export function usdToClp(usd: number): number {
   return Math.round(usd * Number(process.env.USD_CLP ?? 950));
 }
 
+function priceFor(model: string): Price {
+  if (PRICES[model]) return PRICES[model];
+  // La API de DeepSeek puede responder con el nombre de la versión exacta (ej. "deepseek-v4.1-flash").
+  if (model.startsWith("deepseek")) return model.includes("pro") ? PRICES["deepseek-v4-pro"] : PRICES["deepseek-v4-flash"];
+  return PRICES[DEFAULT_MODEL] ?? PRICES["claude-opus-5-5"];
+}
+
 export function costUsd(model: string, usage: Partial<Anthropic.Beta.BetaUsage> | undefined): number {
   if (!usage) return 0;
-  const price = PRICES[model] ?? PRICES[DEFAULT_MODEL] ?? PRICES["claude-opus-5-5"];
+  const price = priceFor(model);
   const input = usage.input_tokens ?? 0;
   const cacheWrite = usage.cache_creation_input_tokens ?? 0;
   const cacheRead = usage.cache_read_input_tokens ?? 0;

@@ -44,8 +44,18 @@ export type MenuState = {
   options?: string[];
   productId?: string;
   misses?: number;
+  // "envio": la IA le pasó al sistema la toma de datos de envío; al terminar, vuelve a la IA.
+  flow?: "envio";
   updatedAt?: string;
 };
+
+// Pasos de la toma de datos de envío. Lo que se conversa aquí es privado: la IA no lo ve.
+export const SHIPPING_FLOW_STEPS: Step[] = ["REUSAR_DIRECCION", "NOMBRE", "DIRECCION", "NUMERO", "DEPTO", "COMUNA", "REGION", "CONFIRMAR"];
+
+export function inShippingFlow(state: MenuState): boolean {
+  if (state.flow !== "envio" || !state.step || !SHIPPING_FLOW_STEPS.includes(state.step)) return false;
+  return !!state.updatedAt && Date.now() - new Date(state.updatedAt).getTime() < STATE_TTL_MS;
+}
 
 // Pasos donde el cliente escribe datos libres: no se buscan palabras clave ahí.
 const FREE_TEXT_STEPS: Step[] = ["NOMBRE", "DIRECCION", "NUMERO", "DEPTO", "COMUNA"];
@@ -240,7 +250,7 @@ async function handleMenuChoice(ctx: Ctx, key: string): Promise<Reply> {
 async function handOff(ctx: Ctx, reason: string): Promise<Reply> {
   await db.conversation.update({
     where: { id: ctx.conversationId },
-    data: { mode: "HUMANO", needsHuman: true, handoffReason: reason },
+    data: { mode: "HUMANO", needsHuman: true, humanUntil: null, handoffReason: reason },
   });
   return { text: "¡Listo! Una persona del equipo te va a responder por aquí en breve 🙌", state: { step: "MENU" } };
 }
@@ -248,9 +258,11 @@ async function handOff(ctx: Ctx, reason: string): Promise<Reply> {
 // Cuando el menú no entiende: busca productos por las palabras, deriva a la IA
 // (en modo híbrido) o vuelve a mostrar las opciones.
 async function notUnderstood(ctx: Ctx, text: string, again: () => Promise<Reply> | Reply): Promise<Reply> {
-  const found = await searchProducts(ctx.business.id, text);
-  if (found.length > 0) return productList(found, "Encontré esto 👇");
-  if (ctx.allowAi) return { useAi: true };
+  if (ctx.state.flow !== "envio") {
+    const found = await searchProducts(ctx.business.id, text);
+    if (found.length > 0) return productList(found, "Encontré esto 👇");
+    if (ctx.allowAi) return { useAi: true };
+  }
   const misses = (ctx.state.misses ?? 0) + 1;
   const base = await again();
   if ("useAi" in base) return base;
@@ -258,12 +270,21 @@ async function notUnderstood(ctx: Ctx, text: string, again: () => Promise<Reply>
   return { text: `No te entendí 🙈 ${base.text}${hint}`, state: { ...base.state, misses } };
 }
 
+// Devuelve la conversación a la IA (fin de la toma de datos de envío).
+function backToAi(text: string): Reply {
+  return { text, state: { engine: "ia" } };
+}
+
 async function step(ctx: Ctx, text: string): Promise<Reply> {
   const n = normalize(text);
   const num = parseNumber(text);
   const current = ctx.state.step;
+  const flow = ctx.state.flow === "envio";
 
   // Comandos que funcionan en cualquier momento.
+  if (flow && MENU_WORDS.includes(n)) {
+    return backToAi("Listo, dejamos los datos de envío para después. ¿En qué más te puedo ayudar?");
+  }
   if (MENU_WORDS.includes(n)) return menuText(ctx);
   if (HUMAN_WORDS.some((w) => containsPhrase(n, w))) return handOff(ctx, "El cliente pidió hablar con una persona");
 
@@ -285,7 +306,7 @@ async function step(ctx: Ctx, text: string): Promise<Reply> {
   if (current === "CARRITO" && /^(quiero )?(pagar|finalizar|comprar|terminar|listo)$/.test(n)) return startCheckout(ctx);
 
   // Preguntas frecuentes por palabra clave (salvo cuando el cliente escribe datos de envío).
-  if (num === null && !FREE_TEXT_STEPS.includes(current)) {
+  if (num === null && !flow && !FREE_TEXT_STEPS.includes(current)) {
     const faq = matchFaq(text, ctx.faqs);
     if (faq) {
       return { text: `${faq.answer}\n\n_Escribe *menú* para ver las opciones._`, state: ctx.state };
@@ -362,7 +383,7 @@ async function step(ctx: Ctx, text: string): Promise<Reply> {
       if (NO.test(n) || YES.test(n)) {
         return { text: "📦 ¿A nombre de quién va el envío? (nombre y apellido)", state: { step: "NOMBRE" } };
       }
-      return notUnderstood(ctx, text, () => startCheckout(ctx));
+      return notUnderstood(ctx, text, async () => (await startCheckout(ctx)) as Reply);
     }
 
     case "NOMBRE": {
@@ -413,19 +434,21 @@ async function step(ctx: Ctx, text: string): Promise<Reply> {
       if (num === 1 || /^(confirmo|confirmar|si|pagar)$/.test(n)) {
         try {
           await checkout(ctx.conversationId, "MENU");
+          if (flow) return backToAi("Cuando se confirme tu pago te avisaremos por aquí 🙌");
           return {
             text: "Cuando se confirme tu pago te avisaremos por aquí 🙌 Escribe *menú* si necesitas algo más.",
             state: { step: "MENU", options: menuOptions(ctx.faqs).map(([k]) => k) },
           };
         } catch (err) {
           if (err instanceof OrderError) {
+            if (flow) return backToAi(`😕 ${err.message} ¿Quieres cambiar algo de tu pedido?`);
             return cartText(await getOrCreateCart(ctx.conversationId), `😕 ${err.message}\n\n🛒 *Tu carrito:*`);
           }
           throw err;
         }
       }
       if (num === 2) return { text: "📦 ¿A nombre de quién va el envío? (nombre y apellido)", state: { step: "NOMBRE" } };
-      if (num === 3) return catalog(ctx);
+      if (num === 3) return flow ? backToAi("¡Dale! ¿Qué más te gustaría agregar?") : catalog(ctx);
       return notUnderstood(ctx, text, () => confirmText(ctx));
     }
 
@@ -442,7 +465,7 @@ async function step(ctx: Ctx, text: string): Promise<Reply> {
   }
 }
 
-export type MenuResult = "handled" | "use_ai";
+export type MenuResult = { result: "handled" | "use_ai"; private: boolean };
 
 // Atiende un mensaje del cliente con el menú. Devuelve "use_ai" cuando el menú no
 // entiende y el negocio está en modo híbrido.
@@ -465,13 +488,39 @@ export async function runMenuBot(opts: {
     { business: opts.business, customer: opts.customer, conversationId: opts.conversationId, state, faqs, allowAi: opts.allowAi },
     opts.text,
   );
+  const wasInFlow = state.flow === "envio";
   if ("useAi" in reply) {
     await saveMenuState(opts.conversationId, { ...state, engine: "ia" });
-    return "use_ai";
+    return { result: "use_ai", private: wasInFlow };
   }
-  await saveMenuState(opts.conversationId, { ...reply.state, engine: "menu" });
-  await sendToCustomer(opts.conversationId, reply.text, "MENU");
-  return "handled";
+  // Mientras se toman los datos de envío, el estado conserva la marca del flujo.
+  const keepFlow = wasInFlow && !!reply.state.step && SHIPPING_FLOW_STEPS.includes(reply.state.step);
+  const next: MenuState = { ...reply.state, engine: reply.state.engine ?? "menu", ...(keepFlow ? { flow: "envio" } : {}) };
+  await saveMenuState(opts.conversationId, next);
+  await sendToCustomer(opts.conversationId, reply.text, "MENU", { private: wasInFlow || keepFlow });
+  return { result: "handled", private: wasInFlow };
+}
+
+// La IA le pide al sistema que tome los datos de envío. Devuelve la primera pregunta,
+// que se envía después de la respuesta de la IA.
+export async function beginShippingFlow(conversationId: string): Promise<string> {
+  const conversation = await db.conversation.findUniqueOrThrow({
+    where: { id: conversationId },
+    include: { business: true, customer: true },
+  });
+  const cart = await getOrCreateCart(conversationId);
+  if (cart.items.length === 0) throw new OrderError("El carrito está vacío: primero agrega productos.");
+  const reply = await startCheckout({
+    business: conversation.business,
+    customer: conversation.customer,
+    conversationId,
+    state: { flow: "envio" },
+    faqs: [],
+    allowAi: false,
+  });
+  if ("useAi" in reply) throw new Error("Respuesta inesperada del flujo de envío");
+  await saveMenuState(conversationId, { ...reply.state, engine: "menu", flow: "envio" });
+  return reply.text;
 }
 
 export async function saveMenuState(conversationId: string, state: MenuState) {

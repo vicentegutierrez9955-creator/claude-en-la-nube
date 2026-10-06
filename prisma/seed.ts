@@ -22,7 +22,7 @@ async function main() {
       originAddress: "Av. Providencia 1234, of. 56",
       originComuna: "Providencia",
       originRegion: "Metropolitana de Santiago",
-      botMode: "MENU",
+      botMode: "IA",
       botInstructions: "Despachamos de lunes a viernes. Se aceptan cambios de talla dentro de 10 días.",
       faqs: {
         create: [
@@ -105,16 +105,16 @@ async function main() {
       data: {
         businessId: business.id,
         conversationId: `demo-${i % 4}`,
-        model: "claude-haiku-4-5",
+        model: "deepseek-v4-flash",
         inputTokens: 4000,
         cacheReadTokens: 6000,
-        cacheWriteTokens: 1000,
+        cacheWriteTokens: 0,
         outputTokens: 300,
-        costUsd: (4000 * 1 + 1000 * 1.25 + 6000 * 0.1 + 300 * 5) / 1_000_000,
+        costUsd: (4000 * 0.3 + 6000 * 0.006 + 300 * 1.2) / 1_000_000,
       },
     });
   }
-  await db.business.update({ where: { id: business.id }, data: { aiModel: "claude-haiku-4-5", aiMonthlyLimitUsd: 10 } });
+  await db.business.update({ where: { id: business.id }, data: { aiModel: null, aiMonthlyLimitUsd: 5 } });
 
   console.log("Listo. Entra con demo@pedidosaltoque.cl / demo1234");
 }

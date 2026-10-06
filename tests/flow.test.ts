@@ -21,7 +21,13 @@ function lastToolResult(params: Anthropic.Beta.MessageCreateParamsNonStreaming):
   return String(block.content);
 }
 
-// Simula a Claude atendiendo una compra completa usando las herramientas reales.
+function userText(params: Anthropic.Beta.MessageCreateParamsNonStreaming): string {
+  const first = params.messages.findLast((m) => m.role === "user" && typeof m.content === "string");
+  return String(first?.content ?? "");
+}
+
+// Simula a la IA atendiendo una compra: busca, agrega al carrito y le pasa al sistema
+// la toma privada de datos de envío.
 function scriptedSeller(calls: Anthropic.Beta.MessageCreateParamsNonStreaming[]): CreateMessage {
   return async (params) => {
     calls.push(params);
@@ -33,26 +39,11 @@ function scriptedSeller(calls: Anthropic.Beta.MessageCreateParamsNonStreaming[])
         return message([toolUse("t2", "modificar_carrito", { producto_id: products[0].id, cantidad: 2 })], "tool_use");
       }
       case 3:
-        return message(
-          [
-            toolUse("t3", "guardar_datos_envio", {
-              nombre: "Ana Pérez",
-              telefono: "",
-              rut: "",
-              calle: "Los Aromos",
-              numero: "45",
-              depto: "Depto 3B",
-              comuna: "Viña del Mar",
-              region: "Valparaíso",
-              referencias: "",
-            }),
-          ],
-          "tool_use",
-        );
+        return message([toolUse("t3", "pedir_datos_envio", {})], "tool_use");
       case 4:
-        return message([toolUse("t4", "confirmar_pedido", {})], "tool_use");
+        return message([text("¡Perfecto! Ahora te pido los datos para el despacho 📦")], "end_turn");
       default:
-        return message([text("¡Listo Ana! Te mandé el link de pago 🙌")], "end_turn");
+        return message([text("Llega en 2 a 5 días hábiles 🚚")], "end_turn");
     }
   };
 }
@@ -60,45 +51,64 @@ function scriptedSeller(calls: Anthropic.Beta.MessageCreateParamsNonStreaming[])
 describe("flujo completo: WhatsApp → pedido → pago → etiqueta → despacho", () => {
   beforeEach(resetDb);
 
-  it("el vendedor IA arma el pedido y el pago genera la etiqueta", async () => {
+  it("la IA vende, el sistema toma los datos de envío en privado y el pago genera la etiqueta", async () => {
     const business = await createBusiness();
-    const conversationId = await receiveCustomerMessage({
-      businessId: business.id,
-      waId: "56911112222",
-      profileName: "Ana",
-      text: "Hola! quiero 2 poleras negras talla M, a Los Aromos 45 depto 3B, Viña del Mar. Ana Pérez",
-      waMessageId: null,
-      channel: "SIMULADOR",
-    });
-    expect(conversationId).toBeTruthy();
-
     const calls: Anthropic.Beta.MessageCreateParamsNonStreaming[] = [];
-    await processConversation(conversationId!, scriptedSeller(calls));
+    const seller = scriptedSeller(calls);
+    const say = async (text: string) => {
+      const id = await receiveCustomerMessage({
+        businessId: business.id,
+        waId: "56911112222",
+        profileName: "Ana",
+        text,
+        waMessageId: null,
+        channel: "SIMULADOR",
+      });
+      await processConversation(id!, seller);
+      return id!;
+    };
 
-    expect(calls).toHaveLength(5);
-    expect(calls[0].model).toBe("claude-opus-5-5");
-    expect(calls[0].fallbacks).toBe("default");
-    expect(String(calls[0].system)).toContain("Poleras Valpo");
+    const conversationId = await say("Hola! quiero 2 poleras negras talla M. Mi fono es +56 9 1234 5678");
+    expect(calls).toHaveLength(4);
+    expect(calls[0].model).toBe("deepseek-v4-flash");
+    expect(calls[0].fallbacks).toBeUndefined();
+    expect(calls[0].tools?.some((t) => "strict" in t)).toBe(false);
+    // La IA no recibe el teléfono ni el nombre del perfil de WhatsApp.
+    expect(userText(calls[0])).toContain("[teléfono oculto]");
+    expect(userText(calls[0])).not.toContain("1234");
+    expect(JSON.stringify(calls[0])).not.toContain("56911112222");
 
-    const order = await db.order.findFirstOrThrow({ where: { conversationId: conversationId! }, include: { items: true } });
+    let messages = await db.message.findMany({ where: { conversationId }, orderBy: { createdAt: "asc" } });
+    expect(messages.map((m) => m.author)).toEqual(["CLIENTE", "BOT", "MENU"]);
+    expect(messages[2].text).toContain("¿A nombre de quién");
+    expect(messages[2].private).toBe(true);
+
+    // Los datos de envío los toma el sistema: la IA no se llama.
+    for (const t of ["Ana Pérez", "Los Aromos 45", "Depto 3B", "Viña del Mar", "6", "1"]) await say(t);
+    expect(calls).toHaveLength(4);
+
+    const order = await db.order.findFirstOrThrow({ where: { conversationId }, include: { items: true } });
     expect(order.status).toBe("PENDIENTE_PAGO");
     expect(order.items).toHaveLength(1);
-    expect(order.subtotal).toBe(25980);
-    expect(order.shippingCost).toBe(3990);
     expect(order.total).toBe(29970);
-    expect(order.recipientPhone).toBe("56911112222"); // usa el WhatsApp si no dio otro
+    expect(order.recipientName).toBe("Ana Pérez");
+    expect(order.street).toBe("Los Aromos");
+    expect(order.streetNumber).toBe("45");
+    expect(order.recipientPhone).toBe("56911112222");
     expect(order.paymentUrl).toBe(`https://pedidos.test/pago-simulado/${order.id}`);
 
-    const messages = await db.message.findMany({ where: { conversationId: conversationId! }, orderBy: { createdAt: "asc" } });
-    expect(messages.map((m) => m.author)).toEqual(["CLIENTE", "BOT", "BOT"]);
-    expect(messages[1].text).toContain(order.paymentUrl);
-    expect(messages[2].text).toContain("Te mandé el link");
-    expect(messages[0].processed).toBe(true);
+    messages = await db.message.findMany({ where: { conversationId }, orderBy: { createdAt: "asc" } });
+    const linkMsg = messages.find((m) => m.text.includes(order.paymentUrl!));
+    expect(linkMsg?.private).toBe(true);
+    expect(messages.filter((m) => m.text === "Ana Pérez" || m.text === "Los Aromos 45").every((m) => m.private)).toBe(true);
 
-    // El historial guardado incluye todo el turno, para continuar la conversación.
-    const conv = await db.conversation.findUniqueOrThrow({ where: { id: conversationId! } });
-    expect((conv.agentHistory as unknown[]).length).toBe(10);
-    expect(conv.lockedUntil).toBeNull();
+    // De vuelta con la IA: sabe que se tomaron los datos, pero no los ve.
+    await say("gracias! cuánto demora?");
+    expect(calls).toHaveLength(5);
+    const context = userText(calls[4]);
+    expect(context).toContain("ocultos por privacidad");
+    expect(context).not.toContain("Aromos");
+    expect(context).not.toContain("Ana Pérez");
 
     // Pago aprobado → descuenta stock → etiqueta lista
     expect(await markOrderPaid(order.id, "mp-999")).toBe(true);
@@ -113,8 +123,41 @@ describe("flujo completo: WhatsApp → pedido → pago → etiqueta → despacho
 
     // Despacho → aviso con seguimiento
     expect(await markDispatched(business.id, [order.id])).toBe(1);
-    const last = await db.message.findFirstOrThrow({ where: { conversationId: conversationId! }, orderBy: { createdAt: "desc" } });
+    const last = await db.message.findFirstOrThrow({ where: { conversationId }, orderBy: { createdAt: "desc" } });
     expect(last.text).toContain(paid.trackingNumber!);
+  });
+
+  it("si la IA falla, el cliente recibe el menú y el chat queda marcado", async () => {
+    const business = await createBusiness();
+    const id = await receiveCustomerMessage({
+      businessId: business.id,
+      waId: "56944445555",
+      profileName: null,
+      text: "hola",
+      waMessageId: null,
+      channel: "SIMULADOR",
+    });
+    await processConversation(id!, async () => {
+      throw new Error("DeepSeek no responde");
+    });
+    const conv = await db.conversation.findUniqueOrThrow({ where: { id: id! }, include: { messages: true } });
+    expect(conv.needsHuman).toBe(true);
+    expect(conv.messages.some((m) => m.author === "MENU" && m.text.includes("Responde con el número"))).toBe(true);
+  });
+
+  it("el bot retoma solo cuando vence la pausa de una persona", async () => {
+    const business = await createBusiness();
+    const base = { businessId: business.id, waId: "56966667777", profileName: null, waMessageId: null, channel: "SIMULADOR" as const };
+    const id = await receiveCustomerMessage({ ...base, text: "hola" });
+    await db.conversation.update({ where: { id: id! }, data: { mode: "HUMANO", humanUntil: new Date(Date.now() - 1000) } });
+    let called = 0;
+    await processConversation(id!, async () => {
+      called++;
+      return message([text("¡Hola! ¿Qué buscas?")], "end_turn");
+    });
+    expect(called).toBe(1);
+    const conv = await db.conversation.findUniqueOrThrow({ where: { id: id! } });
+    expect(conv.mode).toBe("BOT");
   });
 
   it("no deja agregar más unidades que el stock", async () => {

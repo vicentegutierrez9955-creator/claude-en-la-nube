@@ -228,6 +228,8 @@ export async function checkout(conversationId: string, author: MessageAuthor = "
     conversationId,
     `🧾 *Pedido #${order.number}*\n${orderSummary(order)}\n\n📦 Envío a: ${order.street} ${order.streetNumber}${order.apartment ? `, ${order.apartment}` : ""}, ${order.comuna}\n\n💳 Paga aquí con Mercado Pago:\n${paymentUrl}`,
     author,
+    // Lleva la dirección: nunca se le muestra a la IA.
+    { private: true },
   );
   return order;
 }

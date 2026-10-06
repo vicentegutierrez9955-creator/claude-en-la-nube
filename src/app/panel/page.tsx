@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { ConnectWhatsApp } from "@/components/connect-whatsapp";
 import { PageHeader } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { monthlyAiSummary, usdToClp } from "@/lib/ai-usage";
 import { formatCLP } from "@/lib/format";
+import { embeddedSignupReady, GRAPH_VERSION, metaConfig } from "@/lib/meta";
 
 export default async function PanelHome() {
   const user = await requireUser();
@@ -23,7 +25,7 @@ export default async function PanelHome() {
 
   const setup = [
     { done: productCount > 0, text: "Carga tus productos", href: "/panel/productos" },
-    { done: Boolean(b.whatsappPhoneNumberId && b.whatsappAccessToken), text: "Conecta tu WhatsApp", href: "/panel/configuracion" },
+    { done: Boolean(b.whatsappPhoneNumberId && b.whatsappAccessToken), text: "Conecta tu WhatsApp", href: "/panel/configuracion#whatsapp" },
     { done: Boolean(b.mpAccessToken), text: "Conecta Mercado Pago", href: "/panel/configuracion" },
     { done: b.shippingProvider === "bluexpress", text: "Conecta Blue Express", href: "/panel/configuracion" },
     { done: Boolean(b.originAddress), text: "Ingresa la dirección de despacho", href: "/panel/configuracion" },
@@ -36,10 +38,20 @@ export default async function PanelHome() {
     { label: "Chats que necesitan a alguien", value: needsHuman, href: "/panel/conversaciones" },
   ];
   const overLimit = b.aiMonthlyLimitUsd > 0 && ai.costUsd >= b.aiMonthlyLimitUsd;
+  const whatsappConnected = Boolean(b.whatsappPhoneNumberId && b.whatsappAccessToken);
+  const meta = metaConfig();
 
   return (
     <>
       <PageHeader title={`Hola, ${user.name.split(" ")[0]} 👋`} subtitle="Así va tu tienda hoy." />
+      {!whatsappConnected && embeddedSignupReady() && (
+        <div className="card mb-6 border-brand-500 bg-brand-50">
+          <h2 className="text-lg font-bold">Conecta tu WhatsApp y empieza a vender en automático</h2>
+          <p className="mb-4 mt-1 text-sm text-gray-700">Un clic, inicias sesión con Facebook, eliges tu número y listo.</p>
+          <ConnectWhatsApp appId={meta.appId} configId={meta.configId} graphVersion={GRAPH_VERSION} />
+        </div>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => {
           const body = (
@@ -64,7 +76,6 @@ export default async function PanelHome() {
           <span className="font-semibold">Uso de IA este mes:</span> {formatCLP(usdToClp(ai.costUsd))} en {ai.conversations}{" "}
           {ai.conversations === 1 ? "conversación" : "conversaciones"}
           {b.aiMonthlyLimitUsd > 0 && <span className="text-gray-500"> · tope del plan {formatCLP(usdToClp(b.aiMonthlyLimitUsd))}</span>}
-          {b.botMode === "MENU" && <span className="text-gray-500"> · estás en modo Solo menú (sin costo de IA)</span>}
         </div>
         {overLimit && (
           <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">

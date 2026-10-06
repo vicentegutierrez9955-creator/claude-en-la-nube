@@ -16,6 +16,12 @@ model Business {
   // WhatsApp Cloud API. Los tokens se guardan cifrados.
   whatsappPhoneNumberId String? @unique
   whatsappAccessToken   String?
+  whatsappWabaId        String?
+  whatsappDisplayPhone  String?
+  // true = el número sigue funcionando en la app WhatsApp Business del celular (coexistencia)
+  whatsappCoexistence   Boolean   @default(false)
+  whatsappPin           String? // PIN de registro del número (cifrado)
+  whatsappConnectedAt   DateTime?
 
   // Mercado Pago (credenciales de la pyme)
   mpAccessToken   String?
@@ -42,7 +48,7 @@ model Business {
   // MENU: solo respuestas predeterminadas (sin costo de IA)
   // HIBRIDO: menú primero y la IA solo cuando el menú no entiende
   // IA: la IA atiende toda la conversación
-  botMode         BotMode @default(MENU)
+  botMode         BotMode @default(IA)
   welcomeMessage  String  @default("")
   // Modelo de IA y tope de gasto mensual: los define el administrador del SaaS.
   aiModel           String? // null = modelo por defecto (CLAUDE_MODEL)
@@ -162,6 +168,8 @@ model Conversation {
   channel    Channel          @default(WHATSAPP)
   mode       ConversationMode @default(BOT)
   needsHuman Boolean          @default(false)
+  // Si atiende una persona: hasta cuándo (null = hasta que la devuelvan al bot)
+  humanUntil DateTime?
   handoffReason String?
 
   // Historial del agente (Anthropic MessageParam[]). Solo se agrega al final.
@@ -204,6 +212,8 @@ model Message {
   text           String
   waMessageId    String?          @unique
   processed      Boolean          @default(false)
+  // Datos personales (envío): nunca se le muestran a la IA
+  private        Boolean          @default(false)
   createdAt      DateTime         @default(now())
 
   @@index([conversationId, createdAt])

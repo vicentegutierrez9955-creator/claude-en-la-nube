@@ -4,7 +4,7 @@ import type { OrderStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
-import { processConversation, receiveCustomerMessage } from "@/lib/conversations";
+import { pauseBotForOwner, processConversation, receiveCustomerMessage } from "@/lib/conversations";
 import { encryptSecret } from "@/lib/crypto";
 import { db } from "@/lib/db";
 import { sendToCustomer } from "@/lib/messaging";
@@ -127,9 +127,10 @@ export async function sendManualMessageAction(form: FormData) {
   const conversation = await ownConversation(str(form, "conversationId"));
   const text = str(form, "text");
   if (text) {
-    // Si alguien del equipo escribe, el bot se hace a un lado en ese chat.
-    await db.conversation.update({ where: { id: conversation.id }, data: { mode: "HUMANO", needsHuman: false } });
+    // Si alguien del equipo escribe, el bot se hace a un lado en ese chat por unas horas.
     await sendToCustomer(conversation.id, text, "HUMANO");
+    await pauseBotForOwner(conversation.id);
+    await db.conversation.update({ where: { id: conversation.id }, data: { needsHuman: false } });
   }
   revalidatePath(`/panel/conversaciones/${conversation.id}`);
 }
@@ -139,7 +140,8 @@ export async function setConversationModeAction(form: FormData) {
   const mode = str(form, "mode") === "BOT" ? "BOT" : "HUMANO";
   await db.conversation.update({
     where: { id: conversation.id },
-    data: { mode, needsHuman: false, ...(mode === "BOT" ? { handoffReason: null } : {}) },
+    // "Tomar el control" no tiene plazo: el bot vuelve solo cuando lo devuelvan.
+    data: { mode, needsHuman: false, humanUntil: null, ...(mode === "BOT" ? { handoffReason: null } : {}) },
   });
   revalidatePath(`/panel/conversaciones/${conversation.id}`);
 }
@@ -178,6 +180,23 @@ export async function simulatorResetAction() {
 
 // ---------- Configuración ----------
 
+export async function disconnectWhatsAppAction() {
+  const user = await requireUser();
+  await db.business.update({
+    where: { id: user.businessId },
+    data: {
+      whatsappPhoneNumberId: null,
+      whatsappAccessToken: null,
+      whatsappWabaId: null,
+      whatsappDisplayPhone: null,
+      whatsappCoexistence: false,
+      whatsappPin: null,
+      whatsappConnectedAt: null,
+    },
+  });
+  revalidatePath("/panel/configuracion");
+}
+
 function secretUpdate(form: FormData, key: string) {
   const value = str(form, key);
   // Campo vacío = no cambiar el valor guardado.
@@ -204,8 +223,8 @@ export async function saveSettingsAction(form: FormData) {
     case "bot":
       data = {
         botEnabled: form.get("botEnabled") === "on",
-        botMode: ["MENU", "HIBRIDO", "IA"].includes(str(form, "botMode")) ? str(form, "botMode") : "MENU",
-        welcomeMessage: str(form, "welcomeMessage").slice(0, 1000),
+        ...(["MENU", "HIBRIDO", "IA"].includes(str(form, "botMode")) ? { botMode: str(form, "botMode") } : {}),
+        ...(form.has("welcomeMessage") ? { welcomeMessage: str(form, "welcomeMessage").slice(0, 1000) } : {}),
         autoCreateShipment: form.get("autoCreateShipment") === "on",
         botInstructions: str(form, "botInstructions").slice(0, 4000),
       };

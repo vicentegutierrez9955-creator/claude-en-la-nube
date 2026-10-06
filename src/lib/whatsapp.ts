@@ -58,7 +58,33 @@ type WebhookValue = {
   metadata?: { phone_number_id?: string };
   contacts?: { wa_id: string; profile?: { name?: string } }[];
   messages?: WebhookMessage[];
+  // Coexistencia: mensajes que la pyme envió desde la app WhatsApp Business del celular
+  message_echoes?: (WebhookMessage & { to: string })[];
 };
+
+export type OwnerEcho = {
+  phoneNumberId: string;
+  to: string; // número del cliente
+  waMessageId: string;
+  text: string;
+};
+
+// Mensajes que el dueño respondió desde su celular (campo smb_message_echoes).
+export function parseWhatsAppEchoes(body: unknown): OwnerEcho[] {
+  const out: OwnerEcho[] = [];
+  const entries = (body as { entry?: unknown[] })?.entry ?? [];
+  for (const entry of entries as { changes?: { value?: WebhookValue }[] }[]) {
+    for (const change of entry.changes ?? []) {
+      const value = change.value;
+      const phoneNumberId = value?.metadata?.phone_number_id;
+      if (!value || !phoneNumberId) continue;
+      for (const echo of value.message_echoes ?? []) {
+        out.push({ phoneNumberId, to: echo.to, waMessageId: echo.id, text: messageToText(echo).replace(/^\[El cliente /, "[La tienda ") });
+      }
+    }
+  }
+  return out;
+}
 
 function messageToText(msg: WebhookMessage): string {
   switch (msg.type) {

@@ -7,20 +7,36 @@ export type CreateMessage = (
   params: Anthropic.Beta.MessageCreateParamsNonStreaming,
 ) => Promise<Anthropic.Beta.BetaMessage>;
 
-let defaultClient: Anthropic | null = null;
-export const defaultCreateMessage: CreateMessage = (params) => {
-  defaultClient ??= new Anthropic();
-  return defaultClient.beta.messages.create(params);
+export function isDeepSeek(model: string): boolean {
+  return model.startsWith("deepseek");
+}
+
+let claudeClient: Anthropic | null = null;
+let deepseekClient: Anthropic | null = null;
+
+// DeepSeek ofrece un endpoint compatible con la API de Mensajes de Anthropic, así que
+// se usa el mismo SDK apuntando a su URL. Solo acepta los parámetros estándar.
+export const defaultCreateMessage: CreateMessage = async (params) => {
+  if (isDeepSeek(params.model)) {
+    deepseekClient ??= new Anthropic({
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      baseURL: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/anthropic",
+    });
+    const response = await deepseekClient.messages.create(params as unknown as Anthropic.MessageCreateParamsNonStreaming);
+    return response as unknown as Anthropic.Beta.BetaMessage;
+  }
+  claudeClient ??= new Anthropic();
+  return claudeClient.beta.messages.create(params);
 };
 
 const MAX_STEPS = 10;
 type Effort = "low" | "medium" | "high" | "xhigh" | "max";
 
-// Parámetros según el modelo: Haiku 4.5 no acepta "effort" ni el fallback del servidor.
+// Parámetros según el modelo: DeepSeek y Haiku 4.5 no aceptan "effort" ni el fallback del servidor.
 export function modelParams(
   model: string,
 ): Pick<Anthropic.Beta.MessageCreateParamsNonStreaming, "model" | "output_config" | "betas" | "fallbacks"> {
-  if (model.startsWith("claude-haiku")) return { model };
+  if (isDeepSeek(model) || model.startsWith("claude-haiku")) return { model };
   return {
     model,
     output_config: { effort: (process.env.AI_EFFORT as Effort | undefined) ?? "medium" },
@@ -37,7 +53,7 @@ export type AgentTurnResult = {
 };
 
 // Ejecuta un turno del vendedor: agrega el mensaje del cliente al historial,
-// deja que Claude use las herramientas y devuelve el texto a enviar por WhatsApp.
+// deja que la IA use las herramientas y devuelve el texto a enviar por WhatsApp.
 export async function runAgentTurn(opts: {
   business: Business;
   faqs?: FaqEntry[];
@@ -54,13 +70,15 @@ export async function runAgentTurn(opts: {
   const system = buildSystemPrompt(opts.business, opts.faqs ?? []);
 
   for (let step = 0; step < MAX_STEPS; step++) {
+    const deepseek = isDeepSeek(opts.model);
     const response = await createMessage({
       ...modelParams(opts.model),
-      max_tokens: 16000,
+      max_tokens: deepseek ? 8000 : 16000,
       system,
-      tools: TOOL_DEFINITIONS,
+      // DeepSeek cachea solo los prefijos repetidos y no conoce "strict"; Claude necesita cache_control.
+      tools: deepseek ? TOOL_DEFINITIONS.map(({ strict: _strict, ...tool }) => tool) : TOOL_DEFINITIONS,
       messages: history,
-      cache_control: { type: "ephemeral" },
+      ...(deepseek ? {} : { cache_control: { type: "ephemeral" as const } }),
     });
     await opts.onResponse?.(response);
 

@@ -5,7 +5,12 @@ import { sendWhatsAppText } from "./whatsapp";
 
 // Envía un mensaje al cliente por el canal de la conversación y lo deja registrado.
 // En el simulador no se llama a WhatsApp: el mensaje solo queda en la base de datos.
-export async function sendToCustomer(conversationId: string, text: string, author: MessageAuthor): Promise<boolean> {
+export async function sendToCustomer(
+  conversationId: string,
+  text: string,
+  author: MessageAuthor,
+  opts: { private?: boolean } = {},
+): Promise<boolean> {
   const conversation = await db.conversation.findUniqueOrThrow({
     where: { id: conversationId },
     include: { business: true, customer: true },
@@ -37,6 +42,7 @@ export async function sendToCustomer(conversationId: string, text: string, autho
       text: delivered ? text : `⚠️ No se pudo entregar por WhatsApp:\n${text}`,
       waMessageId,
       processed: true,
+      private: opts.private ?? false,
     },
   });
   await db.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: new Date() } });

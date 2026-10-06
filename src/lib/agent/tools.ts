@@ -1,6 +1,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { searchCatalog } from "../catalog";
+import { beginShippingFlow } from "../menu-bot";
 import { db } from "../db";
 import { formatCLP, ORDER_STATUS_LABEL } from "../format";
 import {
@@ -10,16 +11,15 @@ import {
   OrderError,
   orderSummary,
   recentOrders,
-  REGIONES_CHILE,
   setCartItem,
-  setShippingData,
   type OrderWithItems,
 } from "../orders";
 
 export type ToolContext = {
   businessId: string;
   conversationId: string;
-  customerWaId: string;
+  // Mensajes que el sistema envía al cliente después de la respuesta de la IA.
+  afterReply: { text: string; private: boolean }[];
 };
 
 type Tool = {
@@ -102,67 +102,25 @@ const verCarrito: Tool = {
   run: async (_input: object, ctx) => cartView(await getOrCreateCart(ctx.conversationId)),
 };
 
-const guardarDatosEnvio: Tool = {
+const pedirDatosEnvio: Tool = {
   definition: {
-    name: "guardar_datos_envio",
+    name: "pedir_datos_envio",
     description:
-      "Guarda los datos de despacho del pedido. Usa string vacío en los campos opcionales que el cliente no dio. " +
-      "Si el cliente no da un teléfono distinto, usa su número de WhatsApp.",
+      "Cuando el cliente ya eligió sus productos y quiere comprar, el sistema le pide sus datos de despacho " +
+      "(nombre, dirección, comuna y región) de forma privada, le muestra el resumen y le envía el link de pago. " +
+      "Tú no verás esos datos. No pidas datos personales tú: usa esta herramienta.",
     strict: true,
-    input_schema: {
-      type: "object",
-      properties: {
-        nombre: { type: "string", description: "Nombre y apellido de quien recibe" },
-        telefono: { type: "string" },
-        rut: { type: "string", description: "RUT de quien recibe, opcional" },
-        calle: { type: "string" },
-        numero: { type: "string", description: "Número de la dirección" },
-        depto: { type: "string", description: "Depto, casa, block u oficina; opcional" },
-        comuna: { type: "string" },
-        region: { type: "string", enum: [...REGIONES_CHILE] },
-        referencias: { type: "string", description: "Indicaciones para el repartidor; opcional" },
-      },
-      required: ["nombre", "telefono", "rut", "calle", "numero", "depto", "comuna", "region", "referencias"],
-      additionalProperties: false,
-    },
+    input_schema: noInput,
   },
-  schema: z.object({
-    nombre: z.string().min(1),
-    telefono: z.string(),
-    rut: z.string(),
-    calle: z.string().min(1),
-    numero: z.string().min(1),
-    depto: z.string(),
-    comuna: z.string().min(1),
-    region: z.enum(REGIONES_CHILE),
-    referencias: z.string(),
-  }),
-  run: async (
-    input: {
-      nombre: string;
-      telefono: string;
-      rut: string;
-      calle: string;
-      numero: string;
-      depto: string;
-      comuna: string;
-      region: string;
-      referencias: string;
-    },
-    ctx,
-  ) => {
-    const order = await setShippingData(ctx.conversationId, {
-      recipientName: input.nombre.trim(),
-      recipientPhone: input.telefono.trim() || ctx.customerWaId,
-      recipientRut: input.rut.trim() || null,
-      street: input.calle.trim(),
-      streetNumber: input.numero.trim(),
-      apartment: input.depto.trim() || null,
-      comuna: input.comuna.trim(),
-      region: input.region,
-      addressNotes: input.referencias.trim() || null,
-    });
-    return `Datos guardados.\n${cartView(order)}`;
+  schema: z.object({}),
+  run: async (_input: object, ctx) => {
+    const firstQuestion = await beginShippingFlow(ctx.conversationId);
+    ctx.afterReply.push({ text: firstQuestion, private: true });
+    return (
+      "Listo: después de tu mensaje, el sistema le pedirá los datos de envío al cliente, le mostrará el resumen " +
+      "y le enviará el link de pago. Responde solo con una frase breve (por ejemplo, que ahora le pediremos los datos " +
+      "para el despacho), sin pedir ni mencionar datos personales."
+    );
   },
 };
 
@@ -170,8 +128,9 @@ const confirmarPedido: Tool = {
   definition: {
     name: "confirmar_pedido",
     description:
-      "Cierra el pedido y le envía al cliente, en un mensaje aparte, el resumen y el link de pago de Mercado Pago. " +
-      "Úsala solo cuando el cliente confirmó explícitamente los productos, el total y la dirección.",
+      "Vuelve a enviar el resumen y el link de pago de un carrito que ya tiene datos de envío completos " +
+      "(por ejemplo, si el cliente agregó productos después de dar su dirección). Úsala solo si el cliente lo confirmó; " +
+      "si faltan datos de envío, usa pedir_datos_envio.",
     strict: true,
     input_schema: noInput,
   },
@@ -230,7 +189,7 @@ const derivarAHumano: Tool = {
   run: async (input: { motivo: string }, ctx) => {
     await db.conversation.update({
       where: { id: ctx.conversationId },
-      data: { mode: "HUMANO", needsHuman: true, handoffReason: input.motivo },
+      data: { mode: "HUMANO", needsHuman: true, humanUntil: null, handoffReason: input.motivo },
     });
     return "Conversación derivada. Avísale al cliente que una persona del equipo le responderá pronto.";
   },
@@ -240,7 +199,7 @@ export const TOOLS: Tool[] = [
   buscarProductos,
   modificarCarrito,
   verCarrito,
-  guardarDatosEnvio,
+  pedirDatosEnvio,
   confirmarPedido,
   consultarPedidos,
   derivarAHumano,
