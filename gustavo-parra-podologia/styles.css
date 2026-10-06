@@ -333,3 +333,5 @@ a.chip:hover{border-color:var(--brand);color:var(--brand-800)}
 .svc article:has(a.card-link):hover .btn-more{background:var(--brand-800)}
 .svc article:has(a.card-link):hover .btn-more .icon{transform:translateX(3px)}
 @media (min-width:900px){.svc a.card-link{flex-direction:column}.svc .thumb{width:100%;aspect-ratio:4/3}}
+.card-price{display:block;margin-top:10px;font-size:14px;font-weight:600;color:var(--muted)}
+.card-price b{color:var(--brand-800);font-weight:800}
