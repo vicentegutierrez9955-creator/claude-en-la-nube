@@ -28,6 +28,7 @@
   "medicalSpecialty": "Podiatric",
   "telephone": "+56956633536",
   "priceRange": "$20.000 - $35.000",
+  "paymentAccepted": "Efectivo, transferencia",
   "image": "https://plantillas-omega.vercel.app/gustavo-parra-podologia/img/gustavo.webp",
   "logo": "https://plantillas-omega.vercel.app/gustavo-parra-podologia/img/logo.webp",
   "openingHours": "Mo-Su 09:00-19:00",
@@ -46,7 +47,8 @@
     { "@type": "MedicalProcedure", "name": "Tratamiento de uña encarnada" },
     { "@type": "MedicalProcedure", "name": "Tratamiento de hongos en las uñas" },
     { "@type": "MedicalProcedure", "name": "Retiro de callos y durezas" },
-    { "@type": "MedicalProcedure", "name": "Control de pie diabético" }
+    { "@type": "MedicalProcedure", "name": "Control de pie diabético" },
+    { "@type": "MedicalProcedure", "name": "Ortonixia" }
   ]
 }
 </script>
@@ -120,9 +122,11 @@
         <span class="chip">Corte y limpieza de uñas</span>
         <span class="chip">Limpieza de surcos</span>
         <span class="chip">Uñas gruesas</span>
+        <span class="chip">Ortonixia</span>
         <span class="chip">Ojos de gallo y helomas con núcleo</span>
         <span class="chip">Grietas en talones</span>
         <span class="chip">Adultos mayores</span>
+        <span class="chip">Productos para el cuidado del pie</span>
       </div>
     </div>
   </section>
@@ -227,8 +231,11 @@
       <div class="prices reveal">
         <div class="p"><div><b>Podología general</b><small>Limpieza inicial y de surcos, corte de uñas, desbaste de uñas con hongos, retiro de durezas, ojos de gallo y helomas con núcleo, limpieza final y humectación.</small></div><span class="val">$20.000</span></div>
         <div class="p"><div><b>Uña encarnada</b><small>Por cada lado de la uña. Incluye anestesia local (con aguja o sin aguja, con dermojet) y curación con apósitos especiales para evitar infecciones.</small></div><span class="val">$35.000<small>por lado</small></span></div>
+        <div class="p"><div><b>Ortonixia</b><small>Tratamiento para reeducar la forma de la uña y evitar que se vuelva a encarnar. Más detalles en la consulta.</small></div><span class="val">$30.000</span></div>
+        <div class="p"><div><b>Tratamiento para uñas encarnadas</b><small>El valor depende de cada caso. Te lo confirmo en la consulta, antes de empezar.</small></div><span class="val val-txt">En consulta</span></div>
+        <div class="p"><div><b>Productos para el cuidado del pie</b><small>Venta de productos para el cuidado diario y de apoyo a tus tratamientos. Pregunta por ellos en tu atención.</small></div><span class="val val-txt">En consulta</span></div>
       </div>
-      <p class="note">Hongos, callos, durezas y ojos de gallo están incluidos en la podología general. Medios de pago: transferencia y tarjetas.</p>
+      <p class="note">Hongos, callos, durezas y ojos de gallo están incluidos en la podología general. Medios de pago: efectivo y transferencia.</p>
     </div>
   </section>
 
@@ -276,7 +283,7 @@
       </div>
       <div class="faq reveal">
         <details><summary>¿Dónde atiendes?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>En Ramón Rivas 343, Estación Central. Atiendo a pacientes de Estación Central y comunas cercanas como Santiago Centro, Quinta Normal, Lo Prado, Cerrillos y Maipú. Al confirmar tu hora te envío la ubicación por WhatsApp.</p></details>
-        <details><summary>¿Cuánto cuesta la atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>La podología general cuesta $20.000 e incluye hongos, callos, durezas y ojos de gallo. La uña encarnada cuesta $35.000 por cada lado de la uña. Puedes ver el detalle en <a href="#valores">valores</a>.</p></details>
+        <details><summary>¿Cuánto cuesta la atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>La podología general cuesta $20.000 e incluye hongos, callos, durezas y ojos de gallo. La uña encarnada cuesta $35.000 por cada lado de la uña, y la ortonixia, para evitar que la uña se vuelva a encarnar, $30.000. Puedes ver el detalle en <a href="#valores">valores</a>.</p></details>
         <details><summary>¿Duele el tratamiento de la uña encarnada?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>El proceso es casi indoloro. Aplico anestesia local, con aguja o sin aguja (con dermojet, que la aplica a presión), y al final curo la zona con apósitos especiales para evitar infecciones.</p></details>
         <details><summary>Tengo diabetes, ¿me puedes atender?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>Sí. En personas con diabetes el control del pie es muy importante y se trabaja con especial cuidado. Si tienes una herida abierta, avísame al escribir para darte prioridad.</p></details>
         <details><summary>¿Cuánto dura una atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>Entre 45 minutos y una hora, según el tratamiento.</p></details>
@@ -287,7 +294,19 @@
     </div>
   </section>
 
-  <section id="ubicacion" aria-labelledby="contact-title">
+  <section id="mi-consulta" aria-labelledby="video-title">
+    <div class="wrap video-wrap">
+      <div class="reveal">
+        <span class="kicker">Mi consulta</span>
+        <h2 id="video-title">Un espacio pensado para tu tranquilidad</h2>
+        <p>Acondicioné mi consulta para que te sientas a gusto y en calma desde que entras: un ambiente cálido, música relajante y el tiempo que tu caso necesita.</p>
+        <a class="btn btn-ghost" href="https://www.tiktok.com/@gustavo.parra37/video/7674091679401413909" target="_blank" rel="noopener"><svg class="icon icon-fill"><use href="/gustavo-parra-podologia/icons.svg#i-tiktok"/></svg>Ver en TikTok</a>
+      </div>
+      <div class="video-frame reveal"><iframe src="https://www.tiktok.com/player/v1/7674091679401413909?description=0&amp;music_info=0&amp;rel=0" title="Video de la consulta de Gustavo Parra en TikTok" loading="lazy" allow="fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+    </div>
+  </section>
+
+  <section id="ubicacion" class="bg-soft" aria-labelledby="contact-title">
     <div class="wrap contact">
       <div class="final reveal">
         <span class="kicker">Pide tu hora</span>
@@ -310,7 +329,7 @@
 
 <footer>
   <div class="wrap">
-    <div><strong style="font-size:18px">Gustavo Parra Podología</strong><p style="margin:8px 0 0">Podólogo clínico en Estación Central. Uña encarnada, hongos en las uñas, callos y pie diabético.</p></div>
+    <div><img class="foot-logo" src="/gustavo-parra-podologia/img/logo-cuadrado.webp" alt="Logo de Gustavo Parra Podología" width="120" height="120" loading="lazy"><strong style="font-size:18px">Gustavo Parra Podología</strong><p style="margin:8px 0 0">Podólogo clínico en Estación Central. Uña encarnada, hongos en las uñas, callos y pie diabético.</p></div>
     <div><strong>Tratamientos</strong><p style="margin:8px 0 0"><a href="/gustavo-parra-podologia/una-encarnada">Uña encarnada</a><br><a href="/gustavo-parra-podologia/hongos-en-las-unas">Hongos en las uñas</a><br><a href="/gustavo-parra-podologia/callos-y-durezas">Callos y durezas</a><br><a href="/gustavo-parra-podologia/pie-diabetico">Pie diabético</a></p></div>
     <div><strong>Contacto</strong><p style="margin:8px 0 0">Ramón Rivas 343, Estación Central<br><a href="https://wa.me/56956633536" target="_blank" rel="noopener">WhatsApp +56 9 5663 3536</a><br><a href="https://www.tiktok.com/@gustavo.parra37" target="_blank" rel="noopener">TikTok @gustavo.parra37</a></p></div>
     <div class="foot-small">Maqueta de propuesta · La información de esta página es orientativa y no reemplaza una evaluación profesional.</div>
