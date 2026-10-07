@@ -1,0 +1,66 @@
+{
+  "demo": true,
+  "slug": "plantilla-veterinaria",
+  "nombre": "Clínica Veterinaria Huellas del Sur",
+  "nombre_corto": "Huellas del Sur",
+  "bajada": "Clínica veterinaria",
+  "comuna": "La Florida",
+  "direccion": "Av. Vicuña Mackenna 0000",
+  "whatsapp": "",
+  "telefono": "",
+  "telefono_txt": "+56 9 0000 0000",
+  "instagram": "",
+  "desde": "2014",
+  "resumen": "Clínica veterinaria en La Florida. Consultas, vacunas, esterilización, cirugía y atención a domicilio para perros y gatos.",
+  "horario": [["09:00", "20:00"], ["09:00", "20:00"], ["09:00", "20:00"], ["09:00", "20:00"], ["09:00", "20:00"], ["10:00", "14:00"], null],
+  "urgencias": "Atendemos urgencias en horario de atención. Llámanos antes de venir para tener todo listo cuando llegues.",
+  "google": {"nota": "4,9", "cantidad": "Más de 200", "link": "https://www.google.com/maps"},
+  "fotos": {"hero": "6235244", "hero_alt": "Veterinario con un perro pastor alemán en la consulta", "equipo": "6234610", "equipo_alt": "Ecografía a un perro con una asistente veterinaria"},
+  "servicios": [
+    {"t": "Consulta general", "d": "Revisión completa, diagnóstico y tratamiento. Te explicamos todo en palabras simples.", "precio": "Desde <b>$18.000</b>", "foto": "7469222", "alt": "Veterinaria examinando a un perro de pelo corto", "msg": "una consulta general"},
+    {"t": "Vacunas y desparasitación", "d": "Plan de vacunas para cachorros, gatitos y adultos, con su carnet al día.", "precio": "Desde <b>$12.000</b>", "foto": "7474859", "alt": "Veterinaria preparando una vacuna", "msg": "vacunas"},
+    {"t": "Esterilización", "d": "Cirugía segura con anestesia monitoreada y control post operatorio incluido.", "precio": "Desde <b>$45.000</b> · según peso", "foto": "6235230", "alt": "Veterinario revisando los ojos de un perro", "msg": "una esterilización"},
+    {"t": "Cirugía y ecografía", "d": "Pabellón equipado, ecografía y exámenes para un diagnóstico preciso.", "precio": "Previa evaluación", "foto": "6234610", "alt": "Ecografía a un perro con asistente veterinaria", "msg": "una ecografía o cirugía"},
+    {"t": "Atención de gatos", "d": "Manejo tranquilo y sin estrés, con horarios pensados para ellos.", "precio": "Consulta desde <b>$18.000</b>", "foto": "6130984", "alt": "Persona sosteniendo a un gato con cariño", "msg": "una consulta para mi gato"},
+    {"t": "Atención a domicilio", "d": "Vamos a tu casa para consultas, vacunas y controles. Ideal para mascotas mayores o nerviosas.", "precio": "Desde <b>$25.000</b>", "foto": "10117517", "alt": "Perro feliz con su dueña en casa", "msg": "una atención a domicilio"}
+  ],
+  "precios": [
+    {"t": "Consultas y vacunas", "filas": [
+      ["Consulta general", "Perros y gatos", "$18.000"],
+      ["Consulta a domicilio", "Dentro de la comuna", "$25.000"],
+      ["Vacuna óctuple (perro)", "Por dosis", "$15.000"],
+      ["Vacuna triple felina", "Por dosis", "$15.000"],
+      ["Vacuna antirrábica", "Obligatoria en Chile", "$10.000"],
+      ["Microchip y registro", "Ley Cholito", "$15.000"]
+    ]},
+    {"t": "Esterilización", "filas": [
+      ["Gata", "Incluye control post operatorio", "$45.000"],
+      ["Gato", "Incluye control post operatorio", "$35.000"],
+      ["Perra hasta 10 kg", "Incluye control post operatorio", "$60.000"],
+      ["Perra de 10 a 20 kg", "Incluye control post operatorio", "$75.000"],
+      ["Perra de más de 20 kg", "Incluye control post operatorio", "$90.000"],
+      ["Perro macho", "Según peso", "Desde $50.000"]
+    ]}
+  ],
+  "pagos": "Efectivo, transferencia y tarjetas.",
+  "equipo": [
+    {"n": "Dra. Valentina Soto", "r": "Médico veterinario · Directora", "i": "VS"},
+    {"n": "Dr. Matías Fuentes", "r": "Cirugía y anestesia", "i": "MF"},
+    {"n": "Dra. Camila Rojas", "r": "Medicina felina", "i": "CR"}
+  ],
+  "resenas": [
+    {"nombre": "Daniela P.", "texto": "Llevé a mi gata asustadísima y la trataron con una paciencia increíble. Me explicaron todo y el precio fue el que me dijeron por WhatsApp."},
+    {"nombre": "Rodrigo M.", "texto": "Esterilizaron a nuestra perrita y nos llamaron al día siguiente para ver cómo estaba. Se nota que les importan los animales."},
+    {"nombre": "Francisca L.", "texto": "Fueron a la casa a vacunar a mi perro viejito, que ya no tolera el auto. Súper puntuales y cariñosos."}
+  ],
+  "tema": {
+    "brand": "#0f766e", "brand-strong": "#115e59", "brand-text": "#0f766e", "brand-soft": "#e6f6f3", "on-brand": "#ffffff",
+    "accent": "#f97316", "accent-ink": "#c2410c", "accent-on-dark": "#fdba74",
+    "bg": "#ffffff", "surface": "#ffffff", "surface-2": "#f4faf8", "ink": "#11231f", "muted": "#4f625e", "line": "#e1ece9",
+    "header-bg": "rgba(255,255,255,.95)", "hero-bg": "linear-gradient(180deg,#e9f7f4,#ffffff)",
+    "dark": "#0d3b37", "footer-bg": "#082a27", "footer-ink": "#a7c7c1", "glow-1": "rgba(249,115,22,.35)", "glow-2": "rgba(94,234,212,.22)",
+    "wa": "#16a34a", "radius": "18px", "btn-radius": "999px", "shadow": "0 20px 44px -26px rgba(8,42,39,.45)",
+    "font-body": "\"Nunito\", system-ui, -apple-system, \"Segoe UI\", sans-serif", "font-head": "\"Nunito\", system-ui, sans-serif",
+    "head-transform": "none", "head-spacing": "-.02em", "head-weight": "900"
+  }
+}

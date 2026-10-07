@@ -1,0 +1,68 @@
+{
+  "demo": true,
+  "slug": "plantilla-gimnasio",
+  "nombre": "Pulso Gym Maipú",
+  "nombre_corto": "Pulso Gym",
+  "bajada": "Gimnasio y clases",
+  "comuna": "Maipú",
+  "direccion": "Av. Pajaritos 0000",
+  "whatsapp": "",
+  "telefono": "",
+  "telefono_txt": "+56 9 0000 0000",
+  "instagram": "",
+  "resumen": "Gimnasio en Maipú con sala de máquinas, peso libre y más de 40 clases grupales a la semana. Clase de prueba gratis.",
+  "promo": "Matrícula gratis este mes",
+  "horario": [["06:00", "23:00"], ["06:00", "23:00"], ["06:00", "23:00"], ["06:00", "23:00"], ["06:00", "22:00"], ["08:00", "20:00"], ["09:00", "14:00"]],
+  "google": {"nota": "4,8", "cantidad": "Más de 350", "link": "https://www.google.com/maps"},
+  "fotos": {"hero": "4853297", "hero_alt": "Entrenador ayudando a una mujer con la técnica de peso muerto"},
+  "datos": [["i-dumbbell", "Máquinas y peso libre", "Sala equipada y renovada"], ["i-users", "Más de 40 clases", "Incluidas en tu plan"], ["i-shower", "Duchas y lockers", "Para ir directo al trabajo"], ["i-car", "Estacionamiento", "Gratis para socios"]],
+  "matricula": 10000,
+  "descuento": 15,
+  "planes": [
+    {"t": "Mensual", "precio": 24990, "meses": 1, "items": ["Sala de máquinas y peso libre", "Todas las clases grupales", "Evaluación inicial"], "nota": "Sin permanencia"},
+    {"t": "Trimestral", "precio": 64990, "meses": 3, "top": true, "items": ["Todo lo del plan mensual", "Plan de entrenamiento personalizado", "Reevaluación cada mes"], "nota": "El más elegido"},
+    {"t": "Semestral", "precio": 119990, "meses": 6, "items": ["Todo lo del plan trimestral", "Congela tu plan hasta 15 días", "1 invitado al mes"], "nota": ""},
+    {"t": "Anual", "precio": 199990, "meses": 12, "items": ["Todo lo del plan semestral", "Congela tu plan hasta 30 días", "Polera de regalo"], "nota": "El mejor precio"}
+  ],
+  "letra_chica": ["Sin contratos de permanencia en el plan mensual", "Pagas solo el plan que eliges: sin cobros escondidos", "Si te cambias a un plan más largo, descontamos lo que ya pagaste", "Medios de pago: efectivo, transferencia, débito y crédito"],
+  "disciplinas": [
+    {"k": "Funcional", "foto": "6339487", "alt": "Clase grupal entrenando con mancuernas sobre colchonetas", "d": "Fuerza y cardio en circuito"},
+    {"k": "Spinning", "foto": "19254708", "alt": "Hombre pedaleando en una bicicleta de spinning", "d": "Cardio con música, a tu ritmo"},
+    {"k": "Yoga", "foto": "3984338", "alt": "Grupo de mujeres haciendo yoga sobre colchonetas", "d": "Movilidad, fuerza y calma"},
+    {"k": "Box", "foto": "7991687", "alt": "Hombre entrenando box con un saco", "d": "Técnica, potencia y desahogo"},
+    {"k": "Zumba", "foto": "863926", "alt": "Grupo de mujeres entrenando juntas", "d": "Baile y cardio, sin experiencia"}
+  ],
+  "clases": [
+    [0, "07:00", "Funcional", "Nico", 45], [0, "09:30", "Yoga", "Fran", 60], [0, "18:30", "Spinning", "Cami", 45], [0, "19:30", "Box", "Diego", 60], [0, "20:30", "Zumba", "Vale", 50],
+    [1, "07:00", "Spinning", "Cami", 45], [1, "10:00", "Funcional", "Nico", 45], [1, "18:30", "Yoga", "Fran", 60], [1, "19:30", "Funcional", "Nico", 45], [1, "20:30", "Box", "Diego", 60],
+    [2, "07:00", "Funcional", "Nico", 45], [2, "09:30", "Zumba", "Vale", 50], [2, "18:30", "Spinning", "Cami", 45], [2, "19:30", "Box", "Diego", 60], [2, "20:30", "Yoga", "Fran", 60],
+    [3, "07:00", "Spinning", "Cami", 45], [3, "10:00", "Yoga", "Fran", 60], [3, "18:30", "Funcional", "Nico", 45], [3, "19:30", "Zumba", "Vale", 50], [3, "20:30", "Spinning", "Cami", 45],
+    [4, "07:00", "Funcional", "Nico", 45], [4, "18:00", "Box", "Diego", 60], [4, "19:00", "Spinning", "Cami", 45], [4, "20:00", "Zumba", "Vale", 50],
+    [5, "09:00", "Funcional", "Nico", 45], [5, "10:00", "Spinning", "Cami", 45], [5, "11:00", "Yoga", "Fran", 60], [5, "12:00", "Box", "Diego", 60],
+    [6, "10:00", "Yoga", "Fran", 60], [6, "11:15", "Zumba", "Vale", 50]
+  ],
+  "galeria": [
+    ["17227607", "Sala de máquinas"], ["17211446", "Peso libre"], ["12250460", "Zona de cardio"],
+    ["18812272", "Entrena acompañado"], ["6551191", "Zona de box"], ["8436725", "Sala de yoga"]
+  ],
+  "equipo": [
+    {"n": "Nicolás Pérez", "r": "Entrenador · Funcional y fuerza", "i": "NP"},
+    {"n": "Camila Díaz", "r": "Spinning y cardio", "i": "CD"},
+    {"n": "Diego Muñoz", "r": "Box y acondicionamiento", "i": "DM"}
+  ],
+  "resenas": [
+    {"nombre": "Javiera R.", "texto": "Nunca había entrado a un gimnasio y me dio cero vergüenza. El profe me armó una rutina y me corrige siempre que me ve."},
+    {"nombre": "Felipe A.", "texto": "Las máquinas están nuevas y nunca hay que esperar mucho. El horario hasta las 11 de la noche me salva."},
+    {"nombre": "Marcela V.", "texto": "Voy a spinning y yoga tres veces a la semana. Buen ambiente, todo limpio y los precios están claros desde el principio."}
+  ],
+  "tema": {
+    "brand": "#c8f031", "brand-strong": "#b4dc1c", "brand-text": "#c8f031", "brand-soft": "rgba(200,240,49,.12)", "on-brand": "#0b0e11",
+    "accent": "#ff5a36", "accent-ink": "#ff7a59", "accent-on-dark": "#c8f031",
+    "bg": "#0b0e11", "surface": "#141a1f", "surface-2": "#0f1418", "ink": "#f2f5f7", "muted": "#9aa8b3", "line": "#26303a",
+    "header-bg": "rgba(11,14,17,.92)", "hero-bg": "radial-gradient(700px 420px at 85% 10%,rgba(200,240,49,.14),transparent 70%),radial-gradient(500px 360px at 0% 100%,rgba(255,90,54,.12),transparent 70%),#0b0e11",
+    "dark": "#1a2229", "footer-bg": "#07090b", "footer-ink": "#8a97a1", "glow-1": "rgba(200,240,49,.22)", "glow-2": "rgba(255,90,54,.2)",
+    "wa": "#16a34a", "radius": "16px", "btn-radius": "12px", "shadow": "0 24px 48px -28px rgba(0,0,0,.8)",
+    "font-body": "\"Barlow\", system-ui, -apple-system, \"Segoe UI\", sans-serif", "font-head": "\"Barlow Condensed\", \"Barlow\", system-ui, sans-serif",
+    "head-transform": "uppercase", "head-spacing": ".01em", "head-weight": "800"
+  }
+}

@@ -34,6 +34,16 @@ de WhatsApp ya escrito:
 Precios, horarios, fotos y equipo que no se pudieron confirmar están marcados en amarillo.
 En Buddha Sushi la carta y los precios son de ejemplo.
 
+## Plantillas por rubro
+
+Generadores en `scripts/plantillas/` que arman una maqueta completa desde una ficha JSON
+con los datos del negocio (ver `scripts/plantillas/README.md`).
+
+| Rubro | Carpeta | Vista en línea |
+|---|---|---|
+| Veterinaria | `plantilla-veterinaria/` | https://plantillas-omega.vercel.app/plantilla-veterinaria |
+| Gimnasio | `plantilla-gimnasio/` | https://plantillas-omega.vercel.app/plantilla-gimnasio |
+
 ## Asesorías Contables JC (sitio real, en borrador)
 
 Carpeta `asesorias-contables-jc/`. Es un contador auditor con más de 20 años de experiencia,
