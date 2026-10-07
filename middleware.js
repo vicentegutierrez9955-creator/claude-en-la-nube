@@ -19,14 +19,21 @@ const GDIR = '/gustavo-parra-podologia';
 const rewrite = (path, url) =>
   new Response(null, { headers: { 'x-middleware-rewrite': new URL(path, url).toString() } });
 
+// Si la ruta es una página de la carpeta de Gustavo, devuelve su URL limpia en su
+// dominio (las de archivos con extensión, como CSS o fotos, devuelven null)
+function urlLimpia(url) {
+  const path = url.pathname;
+  if (path !== GDIR && !path.startsWith(GDIR + '/')) return null;
+  const rest = path.slice(GDIR.length);
+  if (/\.[a-z0-9]+$/i.test(rest) && !rest.endsWith('.html')) return null;
+  return 'https://' + GUSTAVO[0] + (rest.replace(/^\/index(\.html)?$/, '').replace(/\.html$/, '') || '/') + url.search;
+}
+
 function gustavo(url) {
   const path = url.pathname;
   if (path === GDIR || path.startsWith(GDIR + '/')) {
-    const rest = path.slice(GDIR.length);
-    // Archivos con extensión pasan tal cual; las páginas van a su URL limpia
-    if (/\.[a-z0-9]+$/i.test(rest) && !rest.endsWith('.html')) return;
-    const limpia = new URL((rest.replace(/^\/index(\.html)?$/, '').replace(/\.html$/, '') || '/') + url.search, url);
-    return Response.redirect(limpia, 301);
+    const limpia = urlLimpia(url);
+    return limpia ? Response.redirect(limpia, 301) : undefined;
   }
   return rewrite(path === '/' ? GDIR : GDIR + path, url);
 }
@@ -35,6 +42,9 @@ export default function middleware(request) {
   const host = (request.headers.get('host') || '').toLowerCase();
   const url = new URL(request.url);
   if (GUSTAVO.includes(host)) return gustavo(url);
+  // La maqueta antigua (plantillas-omega.vercel.app/gustavo-parra-podologia) lleva al dominio
+  const limpia = urlLimpia(url);
+  if (limpia) return Response.redirect(limpia, 301);
   if (!ASESORIAS.includes(host)) return;
 
   const path = url.pathname;
