@@ -11,10 +11,15 @@
 <meta property="og:locale" content="es_CL">
 <meta property="og:title" content="Gustavo Parra · Podólogo en Estación Central">
 <meta property="og:description" content="Uña encarnada, hongos, callos y pie diabético. Cerca de 150 reseñas 5 estrellas en Google.">
-<meta property="og:image" content="https://gparrapodologia.cl/img/gustavo.webp">
+<meta property="og:image" content="https://gparrapodologia.cl/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Gustavo Parra, podólogo clínico en Estación Central">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b4f55">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/webp" href="/gustavo-parra-podologia/img/logo.webp">
 <link rel="apple-touch-icon" href="/gustavo-parra-podologia/img/logo.webp">
@@ -43,6 +48,7 @@
   },
   "areaServed": ["Estación Central", "Santiago", "Quinta Normal", "Lo Prado", "Cerrillos", "Maipú"],
   "founder": { "@type": "Person", "name": "Gustavo Parra Urrea", "jobTitle": "Podólogo clínico" },
+  "geo": { "@type": "GeoCoordinates", "latitude": -33.466001, "longitude": -70.6980166 },
   "hasMap": "https://www.google.com/maps/search/?api=1&query=Gustavo+Parra+Podolog%C3%ADa+Estaci%C3%B3n+Central",
   "availableService": [
     { "@type": "MedicalProcedure", "name": "Tratamiento de uña encarnada" },
@@ -51,6 +57,78 @@
     { "@type": "MedicalProcedure", "name": "Control de pie diabético" },
     { "@type": "MedicalProcedure", "name": "Ortonixia" }
   ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "¿Dónde atiendes?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "En Ramón Rivas 343, Estación Central. Atiendo a pacientes de Estación Central y comunas cercanas como Santiago Centro, Quinta Normal, Lo Prado, Cerrillos y Maipú. Al confirmar tu hora te envío la ubicación por WhatsApp."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Cuánto cuesta la atención?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "La podología general cuesta $20.000 e incluye hongos, callos, durezas y ojos de gallo. La uña encarnada cuesta $35.000 por cada lado de la uña, y la ortonixia, para evitar que la uña se vuelva a encarnar, $30.000. Puedes ver el detalle en valores."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Duele el tratamiento de la uña encarnada?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "El proceso es casi indoloro. Aplico anestesia local, con aguja o sin aguja (con dermojet, que la aplica a presión), y al final curo la zona con apósitos especiales para evitar infecciones."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Tengo diabetes, ¿me puedes atender?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Sí. En personas con diabetes el control del pie es muy importante y se trabaja con especial cuidado. Si tienes una herida abierta, avísame al escribir para darte prioridad."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Cuánto dura una atención?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Entre 45 minutos y una hora, según el tratamiento."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Cada cuánto conviene ir al podólogo?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Depende de tu caso. Muchas personas vuelven cada uno o dos meses para mantener uñas y durezas bajo control. En la consulta te digo qué te conviene a ti."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Atiendes adultos mayores?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Sí, atiendo a muchos adultos mayores, sobre todo a quienes les cuesta cortarse las uñas en casa. Me tomo el tiempo y trabajo con especial cuidado."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "¿Cómo sé que eres podólogo titulado?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Puedes verificarlo tú mismo en el Registro Nacional de Prestadores Individuales de Salud, buscando mi nombre, Gustavo Parra Urrea. Mi número de registro es 241325457."
+   }
+  }
+ ]
 }
 </script>
 <link rel="stylesheet" href="/gustavo-parra-podologia/styles.css">
@@ -121,7 +199,7 @@
         <span class="chip">Corte y limpieza de uñas</span>
         <span class="chip">Limpieza de surcos</span>
         <span class="chip">Uñas gruesas</span>
-        <span class="chip">Ortonixia</span>
+        <a class="chip" href="/ortonixia">Ortonixia</a>
         <span class="chip">Ojos de gallo y helomas con núcleo</span>
         <span class="chip">Grietas en talones</span>
         <span class="chip">Adultos mayores</span>
@@ -230,7 +308,7 @@
       <div class="prices reveal">
         <div class="p"><div><b>Podología general</b><small>Limpieza inicial y de surcos, corte de uñas, desbaste de uñas con hongos, retiro de durezas, ojos de gallo y helomas con núcleo, limpieza final y humectación.</small></div><span class="val">$20.000</span></div>
         <div class="p"><div><b>Uña encarnada</b><small>Por cada lado de la uña. Incluye anestesia local (con aguja o sin aguja, con dermojet) y curación con apósitos especiales para evitar infecciones.</small></div><span class="val">$35.000<small>por lado</small></span></div>
-        <div class="p"><div><b>Ortonixia</b><small>Tratamiento para reeducar la forma de la uña y evitar que se vuelva a encarnar. Más detalles en la consulta.</small></div><span class="val">$30.000</span></div>
+        <div class="p"><div><b>Ortonixia</b><small>Tratamiento para reeducar la forma de la uña y evitar que se vuelva a encarnar. Más detalles en la consulta. <a href="/ortonixia">Ver tratamiento</a></small></div><span class="val">$30.000</span></div>
         <div class="p"><div><b>Productos para el cuidado del pie</b><small>Venta de productos para el cuidado diario y de apoyo a tus tratamientos. Pregunta por ellos en tu atención.</small></div><span class="val val-txt">En consulta</span></div>
       </div>
       <p class="note">Hongos, callos, durezas y ojos de gallo están incluidos en la podología general. Medios de pago: efectivo y transferencia.</p>
@@ -281,7 +359,7 @@
       </div>
       <div class="faq reveal">
         <details><summary>¿Dónde atiendes?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>En Ramón Rivas 343, Estación Central. Atiendo a pacientes de Estación Central y comunas cercanas como Santiago Centro, Quinta Normal, Lo Prado, Cerrillos y Maipú. Al confirmar tu hora te envío la ubicación por WhatsApp.</p></details>
-        <details><summary>¿Cuánto cuesta la atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>La podología general cuesta $20.000 e incluye hongos, callos, durezas y ojos de gallo. La uña encarnada cuesta $35.000 por cada lado de la uña, y la ortonixia, para evitar que la uña se vuelva a encarnar, $30.000. Puedes ver el detalle en <a href="#valores">valores</a>.</p></details>
+        <details><summary>¿Cuánto cuesta la atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>La podología general cuesta $20.000 e incluye hongos, callos, durezas y ojos de gallo. La uña encarnada cuesta $35.000 por cada lado de la uña, y la <a href="/ortonixia">ortonixia</a>, para evitar que la uña se vuelva a encarnar, $30.000. Puedes ver el detalle en <a href="#valores">valores</a>.</p></details>
         <details><summary>¿Duele el tratamiento de la uña encarnada?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>El proceso es casi indoloro. Aplico anestesia local, con aguja o sin aguja (con dermojet, que la aplica a presión), y al final curo la zona con apósitos especiales para evitar infecciones.</p></details>
         <details><summary>Tengo diabetes, ¿me puedes atender?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>Sí. En personas con diabetes el control del pie es muy importante y se trabaja con especial cuidado. Si tienes una herida abierta, avísame al escribir para darte prioridad.</p></details>
         <details><summary>¿Cuánto dura una atención?<svg class="icon"><use href="/gustavo-parra-podologia/icons.svg#i-chev"/></svg></summary><p>Entre 45 minutos y una hora, según el tratamiento.</p></details>
@@ -328,7 +406,7 @@
 <footer>
   <div class="wrap">
     <div><img class="foot-logo" src="/gustavo-parra-podologia/img/logo-cuadrado.webp" alt="Logo de Gustavo Parra Podología" width="120" height="120" loading="lazy"><strong style="font-size:18px">Gustavo Parra Podología</strong><p style="margin:8px 0 0">Podólogo clínico en Estación Central. Uña encarnada, hongos en las uñas, callos y pie diabético.</p></div>
-    <div><strong>Tratamientos</strong><p style="margin:8px 0 0"><a href="/una-encarnada">Uña encarnada</a><br><a href="/hongos-en-las-unas">Hongos en las uñas</a><br><a href="/callos-y-durezas">Callos y durezas</a><br><a href="/pie-diabetico">Pie diabético</a></p></div>
+    <div><strong>Tratamientos</strong><p style="margin:8px 0 0"><a href="/una-encarnada">Uña encarnada</a><br><a href="/hongos-en-las-unas">Hongos en las uñas</a><br><a href="/callos-y-durezas">Callos y durezas</a><br><a href="/pie-diabetico">Pie diabético</a><br><a href="/ortonixia">Ortonixia</a></p></div>
     <div><strong>Contacto</strong><p style="margin:8px 0 0">Ramón Rivas 343, Estación Central<br><a href="https://wa.me/56956633536" target="_blank" rel="noopener">WhatsApp +56 9 5663 3536</a><br><a href="https://www.tiktok.com/@gustavo.parra37" target="_blank" rel="noopener">TikTok @gustavo.parra37</a></p></div>
     <div class="foot-small">La información de esta página es orientativa y no reemplaza una evaluación profesional.</div>
   </div>
