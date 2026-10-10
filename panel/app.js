@@ -2,12 +2,14 @@ import {
   avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro,
 } from '/panel/alertas.js';
 import { iniciarProspectos } from '/panel/prospectos.js';
+import { iniciarMaquetas } from '/panel/maquetas.js';
 
 const $ = (s) => document.querySelector(s);
 const ETIQUETA = { atrasado: 'Atrasado', pronto: 'Pronto', mes: 'Este mes', ok: 'Al día' };
 let estado = { data: null, etag: null, usuario: '' };
 let pestana = 'resumen';
 let prospectos = null;
+let maquetas = null;
 
 // ---------- utilidades ----------
 function h(tag, props, ...hijos) {
@@ -127,6 +129,7 @@ function render() {
   renderResumen();
   renderClientes();
   prospectos?.render();
+  maquetas?.render();
   renderPagos();
   renderTrabajos();
   const t = $('#transferencia');
@@ -539,5 +542,6 @@ prospectos = iniciarProspectos({
   h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy,
   estado: () => estado, formulario, trabajosDe,
 });
+maquetas = iniciarMaquetas({ h, $, badge, abrir, urlSegura, estado: () => estado });
 
 cargar();

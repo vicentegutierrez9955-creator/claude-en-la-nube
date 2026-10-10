@@ -29,6 +29,7 @@
       <nav class="tabs" aria-label="Secciones">
         <button class="tab" data-tab="resumen" aria-current="page">Resumen</button>
         <button class="tab" data-tab="clientes">Clientes</button>
+        <button class="tab" data-tab="maquetas">Maquetas</button>
         <button class="tab" data-tab="trabajos">Trabajos</button>
         <button class="tab" data-tab="pagos">Pagos</button>
         <button class="tab" data-tab="ajustes">Ajustes</button>
@@ -59,6 +60,15 @@
         <div class="row"><span class="muted" id="prospectos-resumen"></span><button id="nuevo-prospecto" class="btn">+ Nuevo prospecto</button></div>
       </div>
       <div id="prospectos" class="pgrupos"></div>
+    </section>
+
+    <section id="tab-maquetas" class="tab-panel" hidden>
+      <div class="section-head">
+        <h2>Maquetas</h2>
+        <span class="muted" id="maquetas-resumen"></span>
+      </div>
+      <p class="muted" style="margin:-4px 0 18px">Toca una para verla en grande, en celular o en computador. Las maquetas que se anoten en "Lo que le creamos" de un prospecto aparecen aquí solas.</p>
+      <div id="maquetas" class="pgrupos"></div>
     </section>
 
     <section id="tab-trabajos" class="tab-panel" hidden>

@@ -99,6 +99,16 @@ body.ordenando{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .pcard:hover{border-color:var(--line)}
 .resenas{color:var(--yellow);font-weight:600}
 .conweb{color:var(--acc);font-weight:600}
+.mgrid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.mcard{cursor:default}
+.mcard:hover{border-color:var(--line)}
+.mprev-btn{display:block;width:100%;padding:10px 0 0;border:1px solid var(--line);border-radius:10px;background:var(--soft);cursor:pointer;overflow:hidden}
+.mprev-btn:hover{border-color:var(--acc)}
+.mprev{position:relative;overflow:hidden;margin:0 auto;border-radius:8px 8px 0 0;box-shadow:0 0 0 1px var(--line)}
+.mprev iframe,.mver iframe{border:0;transform-origin:0 0;display:block;background:#fff}
+.mprev iframe{pointer-events:none}
+.mver{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+.btn[aria-pressed=true]{background:var(--soft);border-color:var(--acc)}
 .mini{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
 
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;margin-bottom:14px;max-width:640px}
