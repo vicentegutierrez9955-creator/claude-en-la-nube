@@ -1,4 +1,6 @@
 // Prospectos: negocios a los que les ofrecemos página, con lo que les hemos creado (maquetas, etc.).
+import { esFecha } from '/panel/alertas.js';
+
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
 // Primer mensaje por WhatsApp: pregunta si quieren ver la maqueta (sin link, precio ni reunión).
 // {negocio} se reemplaza por el nombre del prospecto. El equipo lo puede cambiar en Ajustes.
@@ -59,7 +61,8 @@ export function iniciarProspectos(u) {
     const t = plantilla(clave);
     return (buenasResenas(p) ? t : t.replace(FRASE_RESENAS, '')).replaceAll('{negocio}', p.negocio || 'su negocio');
   };
-  const mensajeDe = (p) => rellenar(p, conWeb(p) ? 'mensajeProspectoWeb' : 'mensajeProspecto');
+  // Si el prospecto trae un primer mensaje propio (ej. el que va con el video de su maqueta), se usa ese.
+  const mensajeDe = (p) => (p.mensaje?.trim() ? p.mensaje.trim() : rellenar(p, conWeb(p) ? 'mensajeProspectoWeb' : 'mensajeProspecto'));
   const correoDe = (p) => (conWeb(p)
     ? { asunto: rellenar(p, 'correoAsuntoWeb'), cuerpo: rellenar(p, 'correoCuerpoWeb') }
     : { asunto: rellenar(p, 'correoAsunto'), cuerpo: rellenar(p, 'correoCuerpo') });
@@ -122,20 +125,37 @@ export function iniciarProspectos(u) {
     const cont = $('#prospectos');
     cont.replaceChildren();
     if (!visibles.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún prospecto coincide con la búsqueda.' : 'Aún no hay prospectos.')); return; }
+    // Separados por la fecha en que se agregaron, los más nuevos arriba. Dentro de cada fecha se
+    // mantiene el orden del arreglo (el que el equipo arma arrastrando).
+    const porFecha = new Map();
     for (const p of visibles) {
-      cont.append(h('div', { class: 'ccard pcard', 'data-id': p.id },
-        h('div', { class: 'row', style: 'justify-content:space-between;align-items:flex-start;flex-wrap:nowrap' },
-          h('div', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap;gap:2px' },
-            h('button', { class: 'mover', type: 'button', 'data-id': p.id, title: 'Arrastra para ordenar (o usa las flechas)', 'aria-label': `Mover ${p.negocio}` }, '⠿'),
-            h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio))),
-          etiqueta(p)),
-        h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
-        h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
-        h('div', { class: conWeb(p) ? 'conweb' : 'muted', style: 'font-size:14px' }, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null),
-        h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
-        h('div', { class: 'row' }, botonWhatsApp(p, true), botonCorreo(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
-      ));
+      const f = esFecha(p.desde) ? p.desde : '';
+      if (!porFecha.has(f)) porFecha.set(f, []);
+      porFecha.get(f).push(p);
     }
+    const fechas = [...porFecha.keys()].sort((a, b) => (!a ? 1 : !b ? -1 : b.localeCompare(a)));
+    for (const f of fechas) {
+      const grupo = porFecha.get(f);
+      const grilla = h('div', { class: 'grid' }, grupo.map(tarjeta));
+      cont.append(h('div', { class: 'pgrupo' },
+        h('div', { class: 'pgrupo-head' }, h('h3', {}, f ? fechaLarga(f) : 'Sin fecha'), h('span', {}, `${grupo.length} prospecto${grupo.length === 1 ? '' : 's'}`)),
+        grilla));
+    }
+  }
+
+  function tarjeta(p) {
+    return h('div', { class: 'ccard pcard', 'data-id': p.id },
+      h('div', { class: 'row', style: 'justify-content:space-between;align-items:flex-start;flex-wrap:nowrap' },
+        h('div', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap;gap:2px' },
+          h('button', { class: 'mover', type: 'button', 'data-id': p.id, title: 'Arrastra para ordenar (o usa las flechas)', 'aria-label': `Mover ${p.negocio}` }, '⠿'),
+          h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio))),
+        etiqueta(p)),
+      h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
+      h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
+      h('div', { class: conWeb(p) ? 'conweb' : 'muted', style: 'font-size:14px' }, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null),
+      h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
+      h('div', { class: 'row' }, botonWhatsApp(p, true), botonCorreo(p, true), h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha')),
+    );
   }
 
   function detalle(id) {
@@ -161,7 +181,7 @@ export function iniciarProspectos(u) {
         ['Agregado', fechaLarga(p.desde)],
         p.contactado ? ['Contactado', [fechaLarga(p.contactado.fecha), p.contactado.por && `por ${p.contactado.por}`, p.contactado.via && `(${p.contactado.via})`].filter(Boolean).join(' ')] : null,
       ])),
-      h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
+      h('div', { class: 'blk' }, h('h3', {}, p.mensaje?.trim() ? 'Primer mensaje (propio de este prospecto)' : conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
         h('button', { class: 'btn btn-sm', onclick: copiar(mensajeDe(p)) }, 'Copiar mensaje')),
       h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Correo (ya tiene página)' : 'Correo'),
@@ -216,6 +236,7 @@ export function iniciarProspectos(u) {
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
       googleNota: campo('Nota en Google', sinDato(p.googleNota) ? '' : String(p.googleNota).replace('.', ','), { ph: 'Ej: 4,6' }),
       googleResenas: campo('Reseñas en Google', p.googleResenas, { tipo: 'number', min: 0, step: 1, ph: 'Cantidad (0 si no tiene)' }),
+      mensaje: campo('Primer mensaje propio (si se deja vacío se usa el de Ajustes)', p.mensaje, { tipo: 'textarea', full: true }),
       notas: campo('Notas', p.notas, { tipo: 'textarea', full: true }),
     };
     const creado = filasRepetibles(p.creado || [], [['nombre', 'Qué es (ej: Maqueta)'], ['url', 'https://…']], '', '+ Agregar link');
@@ -241,7 +262,7 @@ export function iniciarProspectos(u) {
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
         whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email').toLowerCase(), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
         estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
-        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, notas: f.notas.input.value.trim(), creado: creado.valores(),
+        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];
@@ -286,8 +307,9 @@ export function iniciarProspectos(u) {
   window.addEventListener('pointermove', (e) => {
     if (!arrastre) return;
     const otra = document.elementFromPoint(e.clientX, e.clientY)?.closest('.pcard');
-    if (otra && otra !== arrastre.tarjeta && otra.parentNode === cont) {
-      const tarjetas = [...cont.querySelectorAll('.pcard')];
+    // Solo se ordena dentro de la misma fecha.
+    if (otra && otra !== arrastre.tarjeta && otra.parentNode === arrastre.tarjeta.parentNode) {
+      const tarjetas = [...otra.parentNode.querySelectorAll('.pcard')];
       if (tarjetas.indexOf(arrastre.tarjeta) < tarjetas.indexOf(otra)) otra.after(arrastre.tarjeta); else otra.before(arrastre.tarjeta);
     }
     if (e.clientY < 80) window.scrollBy(0, -14);
@@ -308,8 +330,8 @@ export function iniciarProspectos(u) {
     const paso = { ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1 }[e.key];
     if (!asa || !paso) return;
     e.preventDefault();
-    const tarjetas = [...cont.querySelectorAll('.pcard')];
     const tarjeta = asa.closest('.pcard');
+    const tarjetas = [...tarjeta.parentNode.querySelectorAll('.pcard')];
     const vecina = tarjetas[tarjetas.indexOf(tarjeta) + paso];
     if (!vecina) return;
     // Se mueve en pantalla al tiro, para que varias flechas seguidas se sumen.
