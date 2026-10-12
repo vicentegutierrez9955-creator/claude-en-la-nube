@@ -1,4 +1,4 @@
-"""Piezas comunes de las plantillas por rubro (veterinaria.py, gimnasio.py).
+"""Piezas comunes de las plantillas por rubro (veterinaria.py, gimnasio.py, salud.py, hogar.py).
 
 Cada generador arma la página desde una ficha JSON (carpeta datos/) y escribe una carpeta
 lista para subir: index.html, styles.css, app.js e icons.svg.
@@ -84,7 +84,8 @@ def aviso_demo(d):
 
 
 def cabecera(d, icono, nav, cta_txt, cta_corto, cta_msg):
-    links = '\n'.join(f'      <a href="#{a}">{e(t)}</a>' for a, t in nav)
+    # Un ancla simple ("precios") es de esta página; si empieza con "/" o "{B}" es un link completo.
+    links = '\n'.join(f'      <a href="{a if a[:1] in "/{" else "#" + a}">{e(t)}</a>' for a, t in nav)
     return f'''
 <header class="top">
   <div class="wrap">
@@ -248,7 +249,8 @@ COMUN_JS = r'''
 '''
 
 
-def escribir(slug, d, html_txt, css_extra, js_rubro):
+def escribir(slug, d, html_txt, css_extra, js_rubro, paginas=None):
+    """paginas: {nombre: html} con páginas extra (nombre.html, que se ven en /slug/nombre)."""
     out = os.path.join(RAIZ, slug)
     os.makedirs(out, exist_ok=True)
     B = '/' + slug
@@ -262,5 +264,8 @@ def escribir(slug, d, html_txt, css_extra, js_rubro):
         f.write(tema + base + css_extra)
     with open(os.path.join(out, 'app.js'), 'w', encoding='utf-8') as f:
         f.write('(function () {' + COMUN_JS + js_rubro + '\n  reveal();\n})();\n')
+    for nombre, txt in (paginas or {}).items():
+        with open(os.path.join(out, nombre + '.html'), 'w', encoding='utf-8') as f:
+            f.write(txt.replace('{B}', B))
     shutil.copyfile(os.path.join(AQUI, 'icons.svg'), os.path.join(out, 'icons.svg'))
     print('Listo:', out)

@@ -1,0 +1,679 @@
+{
+  "demo": true,
+  "slug": "plantilla-salud",
+  "nombre": "Clínica Dental Aurora",
+  "nombre_corto": "Dental Aurora",
+  "bajada": "Clínica dental",
+  "profesion": "Dentista",
+  "icono": "i-tooth",
+  "schema_tipo": "Dentist",
+  "comuna": "Ñuñoa",
+  "direccion": "Av. Irarrázaval 0000",
+  "whatsapp": "",
+  "telefono": "",
+  "telefono_txt": "+56 9 0000 0000",
+  "instagram": "",
+  "agenda_url": "",
+  "resumen": "Clínica dental en Ñuñoa. Limpiezas, tapaduras, blanqueamiento, ortodoncia, implantes y urgencias, con presupuesto por escrito antes de empezar.",
+  "descripcion": "Dentista en Ñuñoa: limpieza, tapaduras, blanqueamiento, ortodoncia, implantes y urgencias dentales. Evaluación con presupuesto por escrito. Agenda por WhatsApp.",
+  "h1": "Dentista en Ñuñoa:",
+  "h1_em": "atención sin dolor y sin sorpresas",
+  "lead": "Te explicamos todo antes de empezar, con presupuesto por escrito y anestesia cuando la necesitas. Si te da miedo el dentista, avísanos: vamos a tu ritmo.",
+  "titulo_tratamientos": "Tratamientos dentales en Ñuñoa",
+  "titulo_resenas": "Pacientes de Ñuñoa que volvieron a sonreír",
+  "titulo_contacto": "No esperes a que el dolor empeore",
+  "horario": [
+    [
+      "09:00",
+      "20:00"
+    ],
+    [
+      "09:00",
+      "20:00"
+    ],
+    [
+      "09:00",
+      "20:00"
+    ],
+    [
+      "09:00",
+      "20:00"
+    ],
+    [
+      "09:00",
+      "19:00"
+    ],
+    [
+      "10:00",
+      "14:00"
+    ],
+    null
+  ],
+  "google": {
+    "nota": "4,9",
+    "cantidad": "Más de 150",
+    "link": "https://www.google.com/maps"
+  },
+  "fotos": {
+    "hero": "6528861",
+    "hero_alt": "Dentista revisando los dientes de una paciente",
+    "profesional": "3845810",
+    "profesional_alt": "Dentista conversando con un paciente en el sillón"
+  },
+  "profesional": {
+    "nombre": "Dra. Fernanda Morales",
+    "iniciales": "FM",
+    "titulo": "Cirujano dentista",
+    "universidad": "Universidad de ejemplo",
+    "registro": "",
+    "experiencia": "Más de 12 años atendiendo en Ñuñoa",
+    "texto": "Me formé para que ir al dentista deje de ser un mal rato. Antes de cada tratamiento te muestro qué tienes, te explico las opciones y lo que cuesta cada una. Tú decides."
+  },
+  "equipo": [
+    {
+      "n": "Dra. Fernanda Morales",
+      "r": "Directora · Rehabilitación oral",
+      "i": "FM"
+    },
+    {
+      "n": "Dr. Ignacio Pérez",
+      "r": "Ortodoncia",
+      "i": "IP"
+    },
+    {
+      "n": "Dra. Javiera Núñez",
+      "r": "Endodoncia e implantes",
+      "i": "JN"
+    }
+  ],
+  "tratamientos": [
+    {
+      "slug": "limpieza-dental",
+      "t": "Limpieza dental",
+      "d": "Destartraje y pulido para sacar el sarro y cuidar tus encías. Lo ideal es cada 6 meses.",
+      "precio": "Desde <b>$35.000</b>",
+      "precio_txt": "Desde $35.000",
+      "foto": "3845745",
+      "alt": "Control dental de un paciente",
+      "msg": "una limpieza dental",
+      "pagina": {
+        "descripcion": "Limpieza dental (destartraje y pulido) en Ñuñoa desde $35.000. Saca el sarro, cuida tus encías y evita el mal aliento. Agenda por WhatsApp.",
+        "intro": "Sacamos el sarro que el cepillo no alcanza, pulimos los dientes y revisamos tus encías. Sales con la boca fresca y sabiendo si necesitas algo más.",
+        "senales": [
+          "Te sangran las encías al cepillarte",
+          "Ves sarro amarillo o café cerca de las encías",
+          "Tienes mal aliento aunque te laves los dientes",
+          "Hace más de 6 meses que no vas al dentista"
+        ],
+        "pasos": [
+          [
+            "Revisión",
+            "Miramos dientes y encías, y te contamos qué encontramos."
+          ],
+          [
+            "Destartraje",
+            "Con ultrasonido sacamos el sarro, también el de bajo la encía."
+          ],
+          [
+            "Pulido",
+            "Dejamos los dientes lisos para que el sarro no se pegue tan rápido."
+          ],
+          [
+            "Consejos",
+            "Te mostramos cómo cepillarte y usar seda dental en tu caso."
+          ]
+        ],
+        "dura": "40 a 60 minutos",
+        "sesiones": "Una, cada 6 meses",
+        "duele": "No. Puede haber algo de sensibilidad si hay mucho sarro.",
+        "valor_txt": "La limpieza incluye la revisión. Si encontramos algo más, te lo explicamos y te damos el presupuesto antes de hacerlo.",
+        "cuidados": [
+          "Evita café, té y vino durante unas horas",
+          "Si sientes sensibilidad, usa pasta para dientes sensibles unos días",
+          "Vuelve a control en 6 meses"
+        ],
+        "faqs": [
+          [
+            "¿La limpieza blanquea los dientes?",
+            "Saca las manchas de sarro y de café, así que los dientes se ven más limpios. Para aclarar el color se necesita un blanqueamiento."
+          ],
+          [
+            "¿Puedo hacerme una limpieza si estoy embarazada?",
+            "Sí, y es recomendable, porque en el embarazo las encías se inflaman más. Avísanos al agendar."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "tapaduras",
+      "t": "Tapaduras (resinas)",
+      "d": "Tratamos las caries con resina del color de tu diente, para que no se note.",
+      "precio": "Desde <b>$35.000</b>",
+      "precio_txt": "Desde $35.000",
+      "foto": "3845736",
+      "alt": "Dentista atendiendo a un paciente en el sillón",
+      "msg": "una tapadura",
+      "pagina": {
+        "descripcion": "Tapaduras de resina del color del diente en Ñuñoa desde $35.000. Tratamos caries y dientes quebrados con anestesia. Agenda por WhatsApp.",
+        "intro": "Sacamos la caries y rellenamos el diente con resina del mismo color. Queda firme, no se nota y lo hacemos con anestesia para que no sientas dolor.",
+        "senales": [
+          "Sientes dolor o sensibilidad al comer algo frío o dulce",
+          "Ves una mancha oscura o un hoyito en un diente",
+          "Se te quebró un pedazo de diente",
+          "Se te cayó una tapadura antigua"
+        ],
+        "pasos": [
+          [
+            "Anestesia",
+            "Dormimos la zona para que no sientas nada."
+          ],
+          [
+            "Limpieza de la caries",
+            "Sacamos solo la parte dañada del diente."
+          ],
+          [
+            "Resina",
+            "Rellenamos por capas con el color de tu diente."
+          ],
+          [
+            "Ajuste",
+            "Revisamos tu mordida y pulimos para que se sienta natural."
+          ]
+        ],
+        "dura": "30 a 60 minutos por diente",
+        "sesiones": "Una",
+        "duele": "No, usamos anestesia. Después puede quedar sensible uno o dos días.",
+        "valor_txt": "El valor depende del tamaño de la caries: va desde $35.000 en una cara del diente hasta $55.000 en una tapadura grande.",
+        "cuidados": [
+          "No comas hasta que pase la anestesia, para no morderte",
+          "Si sientes que la mordida queda alta, avísanos y la ajustamos",
+          "Cepíllate normal desde el mismo día"
+        ],
+        "faqs": [
+          [
+            "¿Cambian las tapaduras negras (amalgamas)?",
+            "Sí. Si están desgastadas o con filtración, las cambiamos por resina del color del diente."
+          ],
+          [
+            "¿Cuánto dura una resina?",
+            "Entre 5 y 10 años con buenos cuidados y controles cada 6 meses."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "blanqueamiento",
+      "t": "Blanqueamiento",
+      "d": "Aclara varios tonos tus dientes en la clínica, con control de la sensibilidad.",
+      "precio": "Desde <b>$150.000</b>",
+      "precio_txt": "Desde $150.000",
+      "foto": "6627574",
+      "alt": "Paciente sonriendo en el sillón dental mientras se mira en un espejo",
+      "msg": "un blanqueamiento",
+      "pagina": {
+        "descripcion": "Blanqueamiento dental en Ñuñoa desde $150.000. Aclara tus dientes varios tonos en la clínica, con evaluación previa y control de la sensibilidad.",
+        "intro": "Aclaramos tus dientes varios tonos con un gel profesional aplicado en la clínica. Antes revisamos que no tengas caries ni sensibilidad para que el resultado sea seguro.",
+        "senales": [
+          "Tus dientes se ven amarillos o apagados",
+          "Tomas café, té o vino con frecuencia",
+          "Fumas o fumaste",
+          "Quieres verte mejor para una ocasión especial"
+        ],
+        "pasos": [
+          [
+            "Evaluación y limpieza",
+            "Revisamos tus dientes y sacamos el sarro para que el gel actúe parejo."
+          ],
+          [
+            "Registro del color",
+            "Anotamos tu tono actual para comparar al final."
+          ],
+          [
+            "Aplicación del gel",
+            "Protegemos las encías y aplicamos el gel en sesiones cortas."
+          ],
+          [
+            "Resultado",
+            "Comparamos el color y te damos indicaciones para que dure."
+          ]
+        ],
+        "dura": "Alrededor de 90 minutos",
+        "sesiones": "Una o dos",
+        "duele": "No duele. Algunas personas sienten sensibilidad uno o dos días.",
+        "valor_txt": "Incluye la evaluación y el control. Si hay caries o sarro, primero se tratan, y te damos ese valor aparte antes de empezar.",
+        "cuidados": [
+          "Evita café, té, vino y bebidas oscuras por 48 horas",
+          "No fumes los primeros días",
+          "Usa pasta para dientes sensibles si lo necesitas"
+        ],
+        "faqs": [
+          [
+            "¿Daña el esmalte?",
+            "No, si lo hace un dentista con productos profesionales y después de revisar tus dientes."
+          ],
+          [
+            "¿Blanquea las tapaduras y coronas?",
+            "No. Las resinas y coronas mantienen su color, por eso lo revisamos antes."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "ortodoncia",
+      "t": "Ortodoncia",
+      "d": "Brackets metálicos, estéticos o alineadores invisibles para ordenar tus dientes.",
+      "precio": "Instalación desde <b>$350.000</b>",
+      "precio_txt": "Instalación desde $350.000",
+      "foto": "6502309",
+      "alt": "Modelo dental con brackets",
+      "msg": "ortodoncia",
+      "pagina": {
+        "descripcion": "Ortodoncia en Ñuñoa: brackets metálicos, estéticos y alineadores invisibles. Instalación desde $350.000 y controles mensuales. Evaluación con presupuesto.",
+        "intro": "Ordenamos tus dientes y mejoramos tu mordida con brackets o alineadores invisibles. En la evaluación te mostramos las opciones, cuánto dura y cuánto cuesta cada una.",
+        "senales": [
+          "Tienes dientes chuecos, montados o separados",
+          "Te cuesta limpiar entre los dientes",
+          "Tu mordida no calza o te duele la mandíbula",
+          "Tu hijo o hija tiene los dientes desordenados (desde los 7 años se puede evaluar)"
+        ],
+        "pasos": [
+          [
+            "Evaluación",
+            "Revisamos tu boca y pedimos radiografías y fotos."
+          ],
+          [
+            "Plan de tratamiento",
+            "Te mostramos las opciones, la duración estimada y el presupuesto."
+          ],
+          [
+            "Instalación",
+            "Ponemos los brackets o te entregamos los alineadores."
+          ],
+          [
+            "Controles",
+            "Cada 4 a 6 semanas ajustamos hasta lograr el resultado."
+          ]
+        ],
+        "dura": "Instalación de 60 a 90 minutos",
+        "sesiones": "Tratamiento de 12 a 24 meses",
+        "duele": "No duele. Los primeros días después de cada ajuste se siente presión.",
+        "valor_txt": "La instalación va desde $350.000 con brackets metálicos y los controles mensuales desde $35.000. Puedes pagarlo en cuotas.",
+        "cuidados": [
+          "Los primeros días come cosas blandas",
+          "Evita alimentos duros o pegajosos que suelten los brackets",
+          "Cepíllate después de cada comida"
+        ],
+        "faqs": [
+          [
+            "¿Hay edad para la ortodoncia?",
+            "No. Se puede hacer en niños, adolescentes y adultos. Lo importante es tener encías sanas."
+          ],
+          [
+            "¿Los alineadores sirven para todos los casos?",
+            "Sirven en la mayoría. En la evaluación te decimos si son una buena opción para ti."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "implantes",
+      "t": "Implantes dentales",
+      "d": "Reemplaza un diente perdido con un implante fijo que se ve y se siente natural.",
+      "precio": "Desde <b>$650.000</b>",
+      "precio_txt": "Desde $650.000",
+      "foto": "6502343",
+      "alt": "Modelo de un implante dental",
+      "msg": "un implante dental",
+      "pagina": {
+        "descripcion": "Implantes dentales en Ñuñoa desde $650.000. Reemplaza dientes perdidos con un implante fijo. Evaluación con radiografía y presupuesto por escrito.",
+        "intro": "Un implante es una raíz de titanio que reemplaza al diente perdido. Encima va una corona igual a tus dientes. Es fijo: no se saca y puedes comer de todo.",
+        "senales": [
+          "Te falta uno o más dientes",
+          "Usas una placa removible que se mueve o molesta",
+          "Te cuesta masticar por los dientes que faltan",
+          "Te van a sacar un diente que no se puede salvar"
+        ],
+        "pasos": [
+          [
+            "Evaluación",
+            "Con radiografía vemos el hueso y si el implante es posible."
+          ],
+          [
+            "Colocación del implante",
+            "Con anestesia ponemos el implante en una cirugía corta."
+          ],
+          [
+            "Integración",
+            "Esperamos de 3 a 4 meses a que se una al hueso."
+          ],
+          [
+            "Corona",
+            "Ponemos la corona definitiva, del color de tus dientes."
+          ]
+        ],
+        "dura": "Cirugía de 60 a 90 minutos",
+        "sesiones": "3 a 5 citas en 3 a 6 meses",
+        "duele": "No durante la cirugía, por la anestesia. Los días siguientes se controla con analgésicos.",
+        "valor_txt": "El implante va desde $650.000 y la corona se cotiza aparte según el material. En la evaluación te damos el valor total por escrito.",
+        "cuidados": [
+          "Las primeras 24 horas come frío y blando",
+          "No fumes: afecta la unión del implante con el hueso",
+          "Asiste a los controles"
+        ],
+        "faqs": [
+          [
+            "¿Todos pueden ponerse un implante?",
+            "La mayoría de los adultos sí. A veces falta hueso y hay que hacer un injerto antes. Lo vemos en la evaluación."
+          ],
+          [
+            "¿Cuánto dura un implante?",
+            "Bien cuidado, puede durar toda la vida. La corona puede necesitar cambio con los años."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "endodoncia",
+      "t": "Endodoncia",
+      "d": "Tratamiento de conducto para salvar un diente con dolor fuerte o infección.",
+      "precio": "Desde <b>$120.000</b>",
+      "precio_txt": "Desde $120.000",
+      "foto": "6528862",
+      "alt": "Dentista revisando una radiografía dental",
+      "msg": "una endodoncia",
+      "pagina": {
+        "descripcion": "Endodoncia (tratamiento de conducto) en Ñuñoa desde $120.000. Salva tu diente y quita el dolor, con anestesia. Atención de urgencia el mismo día.",
+        "intro": "Cuando la caries llega al nervio, duele mucho. Con la endodoncia limpiamos el interior del diente y lo sellamos: se va el dolor y salvas tu diente en vez de sacarlo.",
+        "senales": [
+          "Dolor fuerte que no te deja dormir",
+          "Dolor que dura mucho después de tomar algo frío o caliente",
+          "Encía hinchada o con una bolita de pus",
+          "El diente se puso oscuro después de un golpe"
+        ],
+        "pasos": [
+          [
+            "Radiografía y anestesia",
+            "Vemos el diente por dentro y dormimos la zona."
+          ],
+          [
+            "Limpieza de los conductos",
+            "Sacamos el nervio dañado y desinfectamos."
+          ],
+          [
+            "Sellado",
+            "Rellenamos los conductos para que no vuelva la infección."
+          ],
+          [
+            "Restauración",
+            "Reconstruimos el diente con resina o una corona."
+          ]
+        ],
+        "dura": "60 a 90 minutos",
+        "sesiones": "Una o dos",
+        "duele": "No, con anestesia. Al contrario: quita el dolor que traías.",
+        "valor_txt": "Va desde $120.000 en dientes de adelante hasta $200.000 en molares. La reconstrucción final se cotiza aparte.",
+        "cuidados": [
+          "Evita masticar fuerte con ese diente hasta que esté reconstruido",
+          "Toma los analgésicos que te indiquemos",
+          "No dejes pasar la reconstrucción final: el diente queda más frágil"
+        ],
+        "faqs": [
+          [
+            "¿No es mejor sacar el diente?",
+            "Siempre que se pueda, conviene salvarlo. Reemplazar un diente sacado con un implante cuesta bastante más."
+          ],
+          [
+            "¿Atienden si tengo mucho dolor hoy?",
+            "Sí. Escríbenos o llámanos y te damos hora de urgencia el mismo día."
+          ]
+        ]
+      }
+    }
+  ],
+  "molestias": [
+    {
+      "k": "dolor",
+      "t": "Dolor fuerte",
+      "s": "No me deja dormir o comer",
+      "nivel": "urgente",
+      "trat": "endodoncia",
+      "msg": "tengo un dolor de muela muy fuerte",
+      "texto": "Un dolor así suele indicar que la caries llegó al nervio. Llámanos o escríbenos y te damos hora hoy. Mientras, puedes tomar un analgésico que ya uses; no pongas aspirina sobre la encía."
+    },
+    {
+      "k": "hinchazon",
+      "t": "Cara o encía hinchada",
+      "s": "Con o sin fiebre",
+      "nivel": "urgente",
+      "trat": "endodoncia",
+      "msg": "tengo la cara o la encía hinchada",
+      "texto": "Puede ser una infección y conviene verla hoy. Llámanos. Si además tienes fiebre alta o te cuesta tragar o respirar, ve a un servicio de urgencia."
+    },
+    {
+      "k": "golpe",
+      "t": "Golpe o diente quebrado",
+      "s": "Se quebró o se soltó",
+      "nivel": "urgente",
+      "trat": "tapaduras",
+      "msg": "me quebré un diente con un golpe",
+      "texto": "Mientras antes lo veamos, más fácil es salvarlo. Si el diente se salió entero, guárdalo en leche y llámanos de inmediato."
+    },
+    {
+      "k": "sensible",
+      "t": "Sensibilidad",
+      "s": "Al frío, calor o dulce",
+      "nivel": "pronto",
+      "trat": "tapaduras",
+      "msg": "sensibilidad en un diente",
+      "texto": "Puede ser una caries pequeña o desgaste del esmalte. Si se trata a tiempo, suele bastar una tapadura."
+    },
+    {
+      "k": "encias",
+      "t": "Me sangran las encías",
+      "s": "Al cepillarme",
+      "nivel": "pronto",
+      "trat": "limpieza-dental",
+      "msg": "sangrado de encías",
+      "texto": "Casi siempre es sarro acumulado. Una limpieza lo soluciona y evita que las encías se retraigan."
+    },
+    {
+      "k": "control",
+      "t": "Hace mucho que no voy",
+      "s": "Quiero un control",
+      "nivel": "",
+      "trat": "limpieza-dental",
+      "msg": "un control y limpieza",
+      "texto": "Partimos con una revisión completa y una limpieza. Te decimos si necesitas algo más y cuánto cuesta, sin compromiso."
+    },
+    {
+      "k": "color",
+      "t": "Dientes amarillos",
+      "s": "Manchas o color apagado",
+      "nivel": "",
+      "trat": "blanqueamiento",
+      "msg": "un blanqueamiento",
+      "texto": "Primero revisamos que no haya caries ni sarro. Después, un blanqueamiento en la clínica aclara varios tonos."
+    },
+    {
+      "k": "chuecos",
+      "t": "Dientes chuecos",
+      "s": "Montados o separados",
+      "nivel": "",
+      "trat": "ortodoncia",
+      "msg": "ortodoncia",
+      "texto": "En la evaluación vemos si te conviene brackets o alineadores invisibles, cuánto dura y cuánto cuesta."
+    },
+    {
+      "k": "falta",
+      "t": "Me falta un diente",
+      "s": "O uso placa",
+      "nivel": "",
+      "trat": "implantes",
+      "msg": "un implante para reemplazar un diente",
+      "texto": "Un implante es la opción más parecida a un diente natural. Con una radiografía vemos si tienes hueso suficiente."
+    }
+  ],
+  "precios": [
+    {
+      "t": "Consultas y prevención",
+      "filas": [
+        [
+          "Evaluación",
+          "Con presupuesto por escrito",
+          "$15.000"
+        ],
+        [
+          "Urgencia dental",
+          "El mismo día",
+          "$30.000"
+        ],
+        [
+          "Limpieza dental",
+          "Destartraje y pulido",
+          "$35.000"
+        ],
+        [
+          "Tapadura de resina",
+          "Según tamaño",
+          "$35.000 a $55.000"
+        ],
+        [
+          "Radiografía",
+          "En la clínica",
+          "$8.000"
+        ]
+      ]
+    },
+    {
+      "t": "Tratamientos",
+      "filas": [
+        [
+          "Blanqueamiento",
+          "En la clínica",
+          "$150.000"
+        ],
+        [
+          "Endodoncia",
+          "Según el diente",
+          "$120.000 a $200.000"
+        ],
+        [
+          "Ortodoncia",
+          "Instalación con brackets metálicos",
+          "Desde $350.000"
+        ],
+        [
+          "Control de ortodoncia",
+          "Mensual",
+          "$35.000"
+        ],
+        [
+          "Implante dental",
+          "Sin corona",
+          "Desde $650.000"
+        ]
+      ]
+    }
+  ],
+  "convenios": {
+    "corto": "Boleta para reembolso en tu isapre",
+    "fonasa": "Atendemos pacientes Fonasa como particulares, con boleta detallada.",
+    "isapres": "Te damos boleta con el detalle de cada prestación para que pidas el reembolso según tu plan.",
+    "pagos": "Efectivo, transferencia, débito y crédito.",
+    "cuotas": "Tratamientos largos en cuotas con tarjeta de crédito o en pagos mensuales."
+  },
+  "primera_visita": {
+    "gancho": "Evaluación con presupuesto por escrito",
+    "pasos": [
+      [
+        "Nos cuentas qué te pasa",
+        "Conversamos de lo que te molesta y de tu historial. Si te da miedo el dentista, dínoslo."
+      ],
+      [
+        "Revisamos tu boca",
+        "Miramos dientes y encías y, si hace falta, tomamos una radiografía."
+      ],
+      [
+        "Te damos el plan",
+        "Te explicamos las opciones y te entregamos el presupuesto por escrito. Tú decides."
+      ]
+    ],
+    "dura": "Alrededor de 30 minutos",
+    "duele": "No. En la evaluación solo revisamos.",
+    "traer": "Tu carnet y radiografías anteriores, si tienes."
+  },
+  "antes_despues": [],
+  "pagos": "Efectivo, transferencia, débito y crédito.",
+  "resenas": [
+    {
+      "nombre": "Catalina R.",
+      "texto": "Tenía pánico al dentista y la doctora tuvo una paciencia increíble. Me explicó todo antes y no sentí nada. Volví a ir a control sin miedo."
+    },
+    {
+      "nombre": "Andrés V.",
+      "texto": "Llegué con un dolor de muela terrible un sábado y me atendieron el mismo día. El presupuesto fue exactamente el que me dieron."
+    },
+    {
+      "nombre": "Marcela T.",
+      "texto": "Me hice ortodoncia de adulta y estoy feliz. Los controles siempre a la hora y me dejaron pagarlo en cuotas."
+    }
+  ],
+  "faqs": [
+    [
+      "¿Cuánto cuesta la evaluación?",
+      "La evaluación cuesta $15.000 e incluye el presupuesto por escrito. Si haces el tratamiento con nosotros, se descuenta."
+    ],
+    [
+      "¿Atienden urgencias?",
+      "Sí. Si tienes dolor fuerte, un diente quebrado o la cara hinchada, llámanos y te damos hora el mismo día."
+    ],
+    [
+      "¿Atienden con Fonasa o isapre?",
+      "Atendemos como particulares y te damos boleta detallada para que pidas el reembolso según tu plan."
+    ],
+    [
+      "¿Puedo pagar en cuotas?",
+      "Sí. Los tratamientos largos, como ortodoncia o implantes, se pueden pagar en cuotas."
+    ],
+    [
+      "Me da miedo el dentista, ¿qué hago?",
+      "Cuéntanos al agendar. Vamos paso a paso, te avisamos antes de cada cosa y paramos cuando lo necesites."
+    ],
+    [
+      "¿Atienden niños?",
+      "Sí, desde los 3 años. Les explicamos todo con calma para que la primera visita sea una buena experiencia."
+    ]
+  ],
+  "tema": {
+    "brand": "#1d4ed8",
+    "brand-strong": "#1e40af",
+    "brand-text": "#1d4ed8",
+    "brand-soft": "#eaf0fe",
+    "on-brand": "#ffffff",
+    "accent": "#06b6d4",
+    "accent-ink": "#0e7490",
+    "accent-on-dark": "#67e8f9",
+    "bg": "#ffffff",
+    "surface": "#ffffff",
+    "surface-2": "#f5f8fc",
+    "ink": "#0f1b2d",
+    "muted": "#51607a",
+    "line": "#e2e8f2",
+    "header-bg": "rgba(255,255,255,.95)",
+    "hero-bg": "linear-gradient(180deg,#eef4ff,#ffffff)",
+    "dark": "#0f2a5c",
+    "footer-bg": "#0b1f44",
+    "footer-ink": "#a9b9d6",
+    "glow-1": "rgba(6,182,212,.35)",
+    "glow-2": "rgba(147,197,253,.25)",
+    "wa": "#16a34a",
+    "radius": "18px",
+    "btn-radius": "14px",
+    "shadow": "0 20px 44px -26px rgba(15,42,92,.4)",
+    "font-body": "\"Manrope\", system-ui, -apple-system, \"Segoe UI\", sans-serif",
+    "font-head": "\"Manrope\", system-ui, sans-serif",
+    "head-transform": "none",
+    "head-spacing": "-.025em",
+    "head-weight": "800"
+  }
+}

@@ -43,6 +43,8 @@ con los datos del negocio (ver `scripts/plantillas/README.md`).
 |---|---|---|
 | Veterinaria | `plantilla-veterinaria/` | https://plantillas-omega.vercel.app/plantilla-veterinaria |
 | Gimnasio | `plantilla-gimnasio/` | https://plantillas-omega.vercel.app/plantilla-gimnasio |
+| Consulta de salud | `plantilla-salud/` | https://plantillas-omega.vercel.app/plantilla-salud |
+| Servicios para la casa | `plantilla-hogar/` | https://plantillas-omega.vercel.app/plantilla-hogar |
 
 ## Asesorías Contables JC (sitio real, en borrador)
 

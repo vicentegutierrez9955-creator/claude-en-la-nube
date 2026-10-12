@@ -1,0 +1,516 @@
+{
+  "demo": true,
+  "slug": "plantilla-hogar",
+  "nombre": "Jardines del Valle · Paisajismo y piscinas",
+  "nombre_corto": "Jardines del Valle",
+  "bajada": "Paisajismo y piscinas",
+  "rubro_titulo": "Paisajismo y piscinas",
+  "icono": "i-leaf",
+  "schema_tipo": "HomeAndConstructionBusiness",
+  "zona": "Chicureo y Colina",
+  "comuna": "Colina",
+  "direccion": "Camino Chicureo 0000",
+  "whatsapp": "",
+  "telefono": "",
+  "telefono_txt": "+56 9 0000 0000",
+  "instagram": "",
+  "desde": "2015",
+  "proyectos_hechos": "Más de 300",
+  "resumen": "Paisajismo, pasto en rollo, riego automático, piscinas, pérgolas y mantención de jardines en Chicureo, Colina y alrededores. Visita técnica gratis.",
+  "descripcion": "Paisajismo y construcción de piscinas en Chicureo y Colina: diseño de jardines, pasto en rollo, riego automático, pérgolas y mantención. Cotiza gratis en línea.",
+  "h1": "El patio que imaginas,",
+  "h1_em": "listo en semanas",
+  "lead": "Diseñamos y construimos jardines, piscinas y pérgolas en Chicureo y alrededores. Visita técnica gratis, presupuesto por escrito en 48 horas y garantía de 12 meses.",
+  "titulo_servicios": "Todo para tu patio, con un solo equipo",
+  "titulo_resenas": "Familias de Chicureo que ya disfrutan su patio",
+  "titulo_contacto": "¿Agendamos la visita a tu casa?",
+  "horario": [
+    [
+      "08:30",
+      "18:30"
+    ],
+    [
+      "08:30",
+      "18:30"
+    ],
+    [
+      "08:30",
+      "18:30"
+    ],
+    [
+      "08:30",
+      "18:30"
+    ],
+    [
+      "08:30",
+      "18:30"
+    ],
+    [
+      "09:00",
+      "14:00"
+    ],
+    null
+  ],
+  "cobertura": [
+    "Chicureo",
+    "Colina",
+    "Lampa",
+    "Lo Barnechea",
+    "Huechuraba",
+    "Vitacura",
+    "Las Condes"
+  ],
+  "google": {
+    "nota": "4,9",
+    "cantidad": "Más de 120",
+    "link": "https://www.google.com/maps"
+  },
+  "fotos": {
+    "hero": "8134849",
+    "hero_alt": "Casa con piscina y jardín de pasto verde"
+  },
+  "garantia": {
+    "meses": "12",
+    "texto": "Si algo de la obra falla en el primer año, volvemos y lo arreglamos sin costo. Las plantas tienen 3 meses de garantía de prendimiento."
+  },
+  "pagos": {
+    "boleta": "Siempre con boleta o factura, para que tengas respaldo de tu inversión.",
+    "etapas": "30% al firmar, 40% a mitad de obra y 30% al entregar. Nunca pagas todo por adelantado.",
+    "cuotas": "Hasta 12 cuotas con tarjeta de crédito en proyectos de piscina y paisajismo."
+  },
+  "proceso": [
+    [
+      "Visita técnica gratis",
+      "Vamos a tu casa, medimos y conversamos lo que quieres y tu presupuesto.",
+      "En 24 a 48 h"
+    ],
+    [
+      "Diseño y presupuesto",
+      "Te mandamos el diseño y el presupuesto por escrito, con plazos y materiales.",
+      "En 48 h"
+    ],
+    [
+      "Obra",
+      "Trabajamos con plazo firmado y te mandamos fotos del avance por WhatsApp.",
+      "Según el proyecto"
+    ],
+    [
+      "Entrega",
+      "Revisamos todo contigo y te explicamos cómo cuidarlo. Desde ahí corre la garantía.",
+      "Garantía 12 meses"
+    ]
+  ],
+  "servicios": [
+    {
+      "slug": "paisajismo",
+      "t": "Diseño de jardines y paisajismo",
+      "corto": "Paisajismo",
+      "opt_txt": "Jardín completo",
+      "d": "Diseñamos tu jardín según el sol, el agua y tu estilo de vida. Plantas que se adaptan al clima de Santiago.",
+      "foto": "7587880",
+      "alt": "Jardín con plantas y pasto",
+      "msg": "un proyecto de paisajismo",
+      "plazo": "2 a 4 semanas",
+      "m2": [
+        25000,
+        45000
+      ],
+      "tam_t": "¿Cuántos m² tiene el patio?",
+      "incluye": [
+        "Diseño del jardín con plano y lista de plantas",
+        "Preparación del suelo y tierra de hoja",
+        "Plantas, árboles y cubresuelos",
+        "Riego por goteo en jardineras",
+        "Limpieza y retiro de escombros"
+      ],
+      "pagina": {
+        "descripcion": "Diseño de jardines y paisajismo en Chicureo y Colina desde $25.000 el m². Plantas adaptadas al clima, riego y garantía. Visita técnica gratis.",
+        "intro": "Transformamos tu patio en un jardín pensado para tu familia: zonas de sombra, plantas que gastan poca agua y un diseño que se ve bien todo el año.",
+        "precio_txt": "El precio por m² depende de cuántas plantas y árboles lleva el diseño, del tipo de suelo y de si hay que retirar escombros.",
+        "lugar": "patio",
+        "faqs": [
+          [
+            "¿Usan plantas de bajo consumo de agua?",
+            "Sí. Proponemos especies nativas y de clima mediterráneo, que necesitan poca agua y aguantan el calor de Santiago."
+          ],
+          [
+            "¿Puedo hacer el jardín por etapas?",
+            "Sí. Hacemos el diseño completo y lo construimos por partes, según tu presupuesto."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "pasto-en-rollo",
+      "t": "Pasto en rollo",
+      "corto": "Pasto",
+      "opt_txt": "Instalado en 1 día",
+      "d": "Pasto listo en un día, con preparación del suelo para que prenda parejo y sin parches.",
+      "foto": "8443756",
+      "alt": "Jardín con pasto verde",
+      "msg": "pasto en rollo",
+      "plazo": "1 a 3 días",
+      "m2": [
+        6500,
+        10000
+      ],
+      "tam_t": "¿Cuántos m² de pasto?",
+      "incluye": [
+        "Retiro de pasto viejo y malezas",
+        "Nivelación y tierra preparada",
+        "Pasto en rollo de primera calidad",
+        "Primer riego y guía de cuidados"
+      ],
+      "pagina": {
+        "descripcion": "Pasto en rollo instalado en Chicureo y Colina desde $6.500 el m². Preparación del suelo, nivelación y garantía de prendimiento.",
+        "intro": "Instalamos pasto en rollo con el suelo bien preparado, para que quede parejo y prenda rápido. En un día tienes el patio verde.",
+        "precio_txt": "Incluye el pasto, la tierra y la instalación. Si hay que retirar mucho material o el acceso es difícil, te lo decimos en la visita.",
+        "lugar": "patio",
+        "faqs": [
+          [
+            "¿Cuándo se puede pisar?",
+            "Después de 2 a 3 semanas, cuando las raíces ya prendieron. Te dejamos una guía de riego para esos días."
+          ],
+          [
+            "¿Qué pasa si se seca una parte?",
+            "Si se riega como indicamos, cubrimos la reposición dentro de los primeros 3 meses."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "riego-automatico",
+      "t": "Riego automático",
+      "corto": "Riego",
+      "opt_txt": "Ahorra agua y tiempo",
+      "d": "Aspersores y goteo con programador: tu jardín se riega solo y gastas menos agua.",
+      "foto": "8443729",
+      "alt": "Aspersor regando el pasto de un jardín",
+      "msg": "un sistema de riego automático",
+      "plazo": "1 a 3 días",
+      "m2": [
+        3500,
+        6000
+      ],
+      "tam_t": "¿Cuántos m² hay que regar?",
+      "incluye": [
+        "Diseño del sistema por zonas",
+        "Aspersores, goteo y cañerías enterradas",
+        "Programador automático",
+        "Ajuste y enseñanza de uso"
+      ],
+      "pagina": {
+        "descripcion": "Riego automático en Chicureo y Colina desde $3.500 el m². Aspersores, goteo y programador. Ahorra agua y tiempo. Visita técnica gratis.",
+        "intro": "Instalamos riego automático por zonas, con aspersores para el pasto y goteo para las plantas. Se programa una vez y el jardín se riega solo, a la hora correcta.",
+        "precio_txt": "El valor depende de la cantidad de zonas, la presión de agua de tu casa y si hay que romper pavimento.",
+        "lugar": "jardín",
+        "faqs": [
+          [
+            "¿De verdad ahorra agua?",
+            "Sí. Al regar de noche y solo lo necesario, se gasta bastante menos que regando con manguera."
+          ],
+          [
+            "¿Se puede poner en un jardín que ya existe?",
+            "Sí. Abrimos zanjas finas, pasamos las cañerías y dejamos el pasto como estaba."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "piscinas",
+      "t": "Construcción de piscinas",
+      "corto": "Piscinas",
+      "opt_txt": "De hormigón, a medida",
+      "d": "Piscinas de hormigón a medida, con filtro, iluminación y terminaciones que duran.",
+      "foto": "8134744",
+      "alt": "Piscina en el patio de una casa",
+      "msg": "la construcción de una piscina",
+      "plazo": "6 a 8 semanas",
+      "opciones": [
+        {
+          "t": "Pequeña",
+          "s": "Hasta 6 × 3 m",
+          "min": 9000000,
+          "max": 12000000
+        },
+        {
+          "t": "Mediana",
+          "s": "Unos 8 × 4 m",
+          "min": 13000000,
+          "max": 17000000
+        },
+        {
+          "t": "Grande",
+          "s": "10 × 5 m o más",
+          "min": 18000000,
+          "max": 25000000
+        }
+      ],
+      "tam_t": "¿De qué tamaño la imaginas?",
+      "incluye": [
+        "Diseño y permisos",
+        "Excavación y retiro de tierra",
+        "Estructura de hormigón armado",
+        "Filtro, bomba e iluminación",
+        "Revestimiento y borde",
+        "Primer llenado y puesta en marcha"
+      ],
+      "pagina": {
+        "descripcion": "Construcción de piscinas de hormigón en Chicureo y Colina desde $9.000.000. Diseño a medida, filtro, iluminación y garantía. Hasta 12 cuotas.",
+        "intro": "Construimos piscinas de hormigón armado a la medida de tu patio, con todo incluido: excavación, filtro, iluminación y terminaciones. Te entregamos lista para bañarse.",
+        "precio_txt": "Los rangos incluyen excavación, estructura, equipos y terminaciones estándar. Revestimientos especiales, climatización o cascadas se cotizan aparte.",
+        "lugar": "patio",
+        "faqs": [
+          [
+            "¿Cuánto demora una piscina?",
+            "Entre 6 y 8 semanas desde que empieza la obra. Conviene empezar en invierno o primavera para tenerla en verano."
+          ],
+          [
+            "¿Qué pasa con la tierra que se saca?",
+            "La retiramos nosotros y queda incluida en el precio."
+          ],
+          [
+            "¿Necesito permiso?",
+            "Depende de tu comuna. Te ayudamos con los trámites en la municipalidad."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "pergolas-y-decks",
+      "t": "Pérgolas y decks",
+      "corto": "Pérgolas y decks",
+      "opt_txt": "Madera o metal",
+      "d": "Sombra y un lugar para compartir: pérgolas y decks de madera tratada o metal.",
+      "foto": "7587884",
+      "alt": "Pérgola de madera sobre una terraza",
+      "msg": "una pérgola o deck",
+      "plazo": "1 a 3 semanas",
+      "m2": [
+        90000,
+        160000
+      ],
+      "tam_t": "¿Cuántos m² de pérgola o deck?",
+      "incluye": [
+        "Diseño a medida",
+        "Madera tratada o estructura metálica",
+        "Fundaciones y anclajes",
+        "Barniz o pintura de terminación"
+      ],
+      "pagina": {
+        "descripcion": "Pérgolas y decks de madera o metal en Chicureo y Colina desde $90.000 el m². Diseño a medida, instalación y garantía. Visita técnica gratis.",
+        "intro": "Construimos pérgolas y decks a medida para que uses tu patio todo el año: sombra en verano, un lugar para el asado y una terraza junto a la piscina.",
+        "precio_txt": "El valor por m² cambia según el tipo de madera o metal, la altura y si lleva techo, policarbonato o luces.",
+        "lugar": "terraza",
+        "faqs": [
+          [
+            "¿Qué madera usan?",
+            "Pino impregnado o maderas nobles, según el presupuesto. Todas con tratamiento para el sol y la lluvia."
+          ],
+          [
+            "¿Cada cuánto hay que mantenerla?",
+            "Recomendamos barnizar una vez al año. Lo podemos hacer nosotros en el plan de mantención."
+          ]
+        ]
+      }
+    },
+    {
+      "slug": "mantencion",
+      "t": "Mantención de jardín y piscina",
+      "corto": "Mantención",
+      "opt_txt": "Plan mensual",
+      "d": "Visitas en días fijos para cortar el pasto, podar, limpiar la piscina y revisar el riego.",
+      "foto": "6728925",
+      "alt": "Persona cortando el pasto con una cortadora a bencina",
+      "msg": "un plan de mantención mensual",
+      "plazo": "Visitas semanales o quincenales",
+      "mes": [
+        65000,
+        180000
+      ],
+      "incluye": [
+        "Corte de pasto y orillas",
+        "Poda y control de malezas",
+        "Limpieza y químicos de la piscina",
+        "Revisión del riego",
+        "Fotos al terminar cada visita"
+      ],
+      "pagina": {
+        "descripcion": "Mantención de jardines y piscinas en Chicureo y Colina desde $65.000 al mes. Visitas en días fijos, sin contrato de permanencia.",
+        "intro": "Nos encargamos de que tu jardín y tu piscina estén siempre listos. Vamos en días fijos, te avisamos antes y te mandamos fotos al terminar.",
+        "precio_txt": "El valor mensual depende del tamaño del jardín, de si hay piscina y de cuántas visitas al mes necesitas.",
+        "lugar": "jardín",
+        "faqs": [
+          [
+            "¿Hay contrato de permanencia?",
+            "No. Puedes pausar o terminar el plan avisando con 15 días."
+          ],
+          [
+            "¿Los químicos de la piscina están incluidos?",
+            "Sí, en los planes que incluyen piscina."
+          ]
+        ]
+      }
+    }
+  ],
+  "proyectos": [
+    {
+      "t": "Jardín y piscina familiar",
+      "tipo": "piscinas",
+      "comuna": "Chicureo",
+      "detalle": "8 × 4 m",
+      "despues": "8134849",
+      "alt": "Casa con piscina y jardín de pasto verde"
+    },
+    {
+      "t": "Pasto y jardín junto a la piscina",
+      "tipo": "paisajismo",
+      "comuna": "Colina",
+      "detalle": "180 m²",
+      "despues": "8134751",
+      "alt": "Jardín con pasto verde junto a una piscina"
+    },
+    {
+      "t": "Terraza de madera para el asado",
+      "tipo": "pergolas-y-decks",
+      "comuna": "Lo Barnechea",
+      "detalle": "24 m²",
+      "despues": "8134813",
+      "alt": "Terraza de madera con muebles de exterior"
+    },
+    {
+      "t": "Piscina con borde de piedra",
+      "tipo": "piscinas",
+      "comuna": "Vitacura",
+      "detalle": "10 × 4 m",
+      "despues": "8134750",
+      "alt": "Piscina en el patio de una casa"
+    },
+    {
+      "t": "Riego automático por zonas",
+      "tipo": "riego-automatico",
+      "comuna": "Lampa",
+      "detalle": "250 m²",
+      "despues": "8443728",
+      "alt": "Aspersor regando un jardín"
+    },
+    {
+      "t": "Pasto nuevo en todo el patio",
+      "tipo": "pasto-en-rollo",
+      "comuna": "Huechuraba",
+      "detalle": "120 m²",
+      "despues": "8443757",
+      "alt": "Jardín con pasto verde"
+    }
+  ],
+  "mantencion": [
+    {
+      "t": "Jardín",
+      "d": "Para jardines de hasta 150 m².",
+      "precio": 65000,
+      "items": [
+        "2 visitas al mes",
+        "Corte de pasto y orillas",
+        "Poda y control de malezas",
+        "Revisión del riego"
+      ]
+    },
+    {
+      "t": "Jardín + piscina",
+      "d": "El más pedido en Chicureo.",
+      "precio": 120000,
+      "top": true,
+      "nota": "Más elegido",
+      "items": [
+        "4 visitas al mes",
+        "Todo lo del plan Jardín",
+        "Limpieza de la piscina",
+        "Químicos incluidos",
+        "Fotos al terminar cada visita"
+      ]
+    },
+    {
+      "t": "Piscina",
+      "d": "Agua cristalina toda la temporada.",
+      "precio": 70000,
+      "items": [
+        "1 visita a la semana",
+        "Aspirado y limpieza de bordes",
+        "Control de cloro y pH",
+        "Químicos incluidos"
+      ]
+    }
+  ],
+  "resenas": [
+    {
+      "nombre": "Paula G.",
+      "texto": "Nos hicieron la piscina y el jardín completo. Cumplieron el plazo y nos mandaban fotos del avance todas las semanas. Quedó increíble."
+    },
+    {
+      "nombre": "Cristián B.",
+      "texto": "Pedí la cotización en la página un domingo y el martes ya habían venido a medir. El precio final fue el del presupuesto."
+    },
+    {
+      "nombre": "Fernanda S.",
+      "texto": "Tenemos el plan de mantención hace dos años. Siempre puntuales y el pasto se ve mejor que nunca."
+    }
+  ],
+  "faqs": [
+    [
+      "¿La visita técnica tiene costo?",
+      "No. Vamos a tu casa, medimos y te mandamos el presupuesto por escrito en 48 horas, sin compromiso."
+    ],
+    [
+      "¿A qué comunas llegan?",
+      "Chicureo, Colina, Lampa, Lo Barnechea, Huechuraba, Vitacura y Las Condes. Si estás en otra comuna, escríbenos y lo vemos."
+    ],
+    [
+      "¿Cómo se paga?",
+      "Por etapas: 30% al firmar, 40% a mitad de obra y 30% al entregar. También en cuotas con tarjeta de crédito."
+    ],
+    [
+      "¿Dan boleta o factura?",
+      "Sí, siempre."
+    ],
+    [
+      "¿Qué garantía tienen los trabajos?",
+      "12 meses en la obra y 3 meses de prendimiento en plantas y pasto, regando según nuestras indicaciones."
+    ],
+    [
+      "¿Puedo ver trabajos que hayan hecho?",
+      "Sí. Mira la sección de proyectos y, si quieres, te contactamos con clientes de tu sector."
+    ]
+  ],
+  "tema": {
+    "brand": "#3f6212",
+    "brand-strong": "#365314",
+    "brand-text": "#3f6212",
+    "brand-soft": "#eef5e3",
+    "on-brand": "#ffffff",
+    "accent": "#c2410c",
+    "accent-ink": "#b45309",
+    "accent-on-dark": "#fbbf77",
+    "bg": "#fbfaf6",
+    "surface": "#ffffff",
+    "surface-2": "#f3f1e8",
+    "ink": "#1c2414",
+    "muted": "#5b6450",
+    "line": "#e5e2d4",
+    "header-bg": "rgba(251,250,246,.95)",
+    "hero-bg": "#1f2a16",
+    "dark": "#1f2a16",
+    "footer-bg": "#161e10",
+    "footer-ink": "#b5bea6",
+    "glow-1": "rgba(194,65,12,.35)",
+    "glow-2": "rgba(163,230,53,.18)",
+    "wa": "#16a34a",
+    "radius": "16px",
+    "btn-radius": "999px",
+    "shadow": "0 20px 44px -26px rgba(31,42,22,.45)",
+    "font-body": "\"DM Sans\", system-ui, -apple-system, \"Segoe UI\", sans-serif",
+    "font-head": "\"Fraunces\", Georgia, serif",
+    "head-transform": "none",
+    "head-spacing": "-.01em",
+    "head-weight": "700"
+  }
+}

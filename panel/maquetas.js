@@ -5,6 +5,8 @@
 const CATALOGO = [
   { tipo: 'plantilla', nombre: 'Veterinaria', detalle: 'Clínica Veterinaria Huellas del Sur · datos de ejemplo', url: '/plantilla-veterinaria' },
   { tipo: 'plantilla', nombre: 'Gimnasio', detalle: 'Pulso Gym Maipú · datos de ejemplo', url: '/plantilla-gimnasio' },
+  { tipo: 'plantilla', nombre: 'Consulta de salud', detalle: 'Clínica Dental Aurora · datos de ejemplo', url: '/plantilla-salud' },
+  { tipo: 'plantilla', nombre: 'Servicios para la casa', detalle: 'Jardines del Valle, paisajismo y piscinas · datos de ejemplo', url: '/plantilla-hogar' },
   { tipo: 'plantilla', nombre: 'Barbería de barrio', detalle: 'Barbería Los Robles · datos de ejemplo', url: '/barrio' },
   { tipo: 'plantilla', nombre: 'Barbería premium', detalle: 'Casa Bruno Barbería · datos de ejemplo', url: '/premium' },
   { tipo: 'plantilla', nombre: 'Barbería urbana', detalle: 'Trece Barbershop · datos de ejemplo', url: '/urbana' },
