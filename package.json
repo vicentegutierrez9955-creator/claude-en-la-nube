@@ -11,7 +11,8 @@
     "test": "vitest run",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate && if [ -n \"$DATABASE_URL\" ]; then DATABASE_URL=\"${DATABASE_URL_UNPOOLED:-$DATABASE_URL}\" prisma db push --skip-generate; else echo \"Sin DATABASE_URL: se omite la creación de tablas\"; fi && next build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
