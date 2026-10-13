@@ -22,6 +22,29 @@ export function EvalRunner({
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState<EvalResult[]>([]);
   const [current, setCurrent] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  // Resumen en texto para pegarlo en el chat con Claude: aciertos y el chat completo de cada falla.
+  async function copyResults() {
+    const ok = results.filter((r) => r.passed).length;
+    const total = results.reduce((s, r) => s + r.costUsd, 0);
+    const lines = [
+      `Prueba del vendedor IA — modelo ${model}`,
+      `Aciertos: ${ok}/${results.length} · costo US$${total.toFixed(4)}`,
+      "",
+      ...results.map((r) => `${r.passed ? "OK " : "FALLA"} ${r.title}${r.passed ? "" : ` — ${r.failures.join(" · ")}`}`),
+    ];
+    for (const r of results.filter((x) => !x.passed)) {
+      lines.push("", `--- ${r.title} ---`, ...r.transcript.map((m) => `${AUTHOR[m.author] ?? m.author}: ${m.text}`));
+    }
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 3000);
+    } catch {
+      window.prompt("Copia este texto:", lines.join("\n"));
+    }
+  }
 
   async function run() {
     setRunning(true);
@@ -71,6 +94,11 @@ export function EvalRunner({
           {running ? "Probando…" : `Correr ${scenarios.length} conversaciones de prueba`}
         </button>
         {running && current && <p className="text-sm text-gray-600">Ahora: {current}</p>}
+        {!running && results.length > 0 && (
+          <button className="btn-secondary" onClick={copyResults}>
+            {copied ? "✓ Copiado: pégalo en el chat" : "📋 Copiar resultados"}
+          </button>
+        )}
       </div>
 
       {results.length > 0 && (
