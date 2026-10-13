@@ -19,7 +19,8 @@ let deepseekClient: Anthropic | null = null;
 export const defaultCreateMessage: CreateMessage = async (params) => {
   if (isDeepSeek(params.model)) {
     deepseekClient ??= new Anthropic({
-      apiKey: process.env.DEEPSEEK_API_KEY,
+      // Se acepta también el nombre en minúsculas, por si se escribió así en Vercel.
+      apiKey: process.env.DEEPSEEK_API_KEY ?? process.env.deepseek_api_key,
       baseURL: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com/anthropic",
     });
     const response = await deepseekClient.messages.create(params as unknown as Anthropic.MessageCreateParamsNonStreaming);
