@@ -63,8 +63,13 @@ def tarjeta_proyecto(p):
         </figure>'''
 
 
-NAV = [('servicios', 'Servicios'), ('proyectos', 'Proyectos'), ('cotizar', 'Cotizar'), ('mantencion', 'Mantención')]
-NAV_SUB = [('{B}#servicios', 'Servicios'), ('{B}#proyectos', 'Proyectos'), ('{B}#cotizar', 'Cotizar'), ('{B}#mantencion', 'Mantención')]
+# Secciones opcionales: sin mantención, sin reseñas o sin datos de pago, no se muestran.
+ULT = ('mantencion', 'Mantención') if d.get('mantencion') else ('proceso', 'Cómo trabajamos')
+NAV = [('servicios', 'Servicios'), ('proyectos', 'Proyectos'), ('cotizar', 'Cotizar'), ULT]
+NAV_SUB = [('{B}#' + a, t) for a, t in NAV]
+G = d.get('google')
+PRES = d.get('plazo_presupuesto', ' en 48 horas')  # cuánto demoran en mandar el presupuesto ('' si no lo dicen)
+GAR = d['garantia'].get('titulo') or f'Garantía de {d["garantia"]["meses"]} meses'
 PIE_COLS = [('Servicios', '<br>'.join(f'<a href="{{B}}/{e(s["slug"])}">{e(s["t"])}</a>' for s in S[:5])),
             ('Contacto', f'{e(Z)}<br><a href="{wa(d, MSG)}" target="_blank" rel="noopener">WhatsApp {e(d.get("telefono_txt", ""))}</a>')]
 comunas_chips = ''.join(f'<li>{e(c)}</li>' for c in d['cobertura'])
@@ -74,10 +79,11 @@ h = head(d, f'{d["rubro_titulo"]} en {Z} | {N}', d['descripcion'], FUENTES, sche
 h += aviso_demo(d)
 h += cabecera(d, d.get('icono', 'i-leaf'), NAV, 'gratis', 'Cotizar', MSG)
 
-trust = [f'{estrellas()}<a href="#resenas" style="color:inherit">{e(d["google"]["nota"])} · {e(d["google"]["cantidad"])} reseñas en Google</a>',
-         f'{ic("i-shield")}Garantía de {e(d["garantia"]["meses"])} meses',
-         f'{ic("i-file")}Boleta o factura',
-         f'{ic("i-award")}{e(d["proyectos_hechos"])} proyectos desde {e(d["desde"])}']
+trust = [f'{estrellas()}<a href="#resenas" style="color:inherit">{e(G["nota"])} · {e(G["cantidad"])} reseñas en Google</a>' if G else None,
+         f'{ic("i-shield")}{e(GAR)}',
+         f'{ic("i-file")}Boleta o factura' if d.get('pagos') else (f'{ic("i-users")}{e(d["trust_extra"])}' if d.get('trust_extra') else None),
+         f'{ic("i-award")}{e(d.get("trayectoria") or d["proyectos_hechos"] + " proyectos desde " + d["desde"])}']
+trust = [x for x in trust if x]
 h += f'''
 <main id="inicio">
 
@@ -120,12 +126,29 @@ h += f'''
   </section>
 '''
 
+# Qué incluye (opcional): la lista completa de lo que trae cada trabajo
+if d.get('incluye_todo'):
+    it = d['incluye_todo']
+    grupos = ''.join(f'''<div class="inc-g"><h3>{e(t)}</h3><ul class="checks">{''.join(f'<li>{ic("i-check")}<span>{e(x)}</span></li>' for x in xs)}</ul></div>''' for t, xs in it['grupos'])
+    h += f'''
+  <section id="incluye" class="alt" aria-labelledby="inc-all-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">Todo incluido</span>
+        <h2 id="inc-all-title">{e(it['titulo'])}</h2>
+        <p>{e(it['intro'])}</p>
+      </div>
+      <div class="inc-grid reveal">{grupos}</div>
+    </div>
+  </section>
+'''
+
 # Proyectos (galería filtrable)
 tipos = [s for s in S if any(p['tipo'] == s['slug'] for p in PROY)]
 filtros = '<button class="tab" role="tab" aria-selected="true" data-f="">Todos</button>' + ''.join(
     f'<button class="tab" role="tab" aria-selected="false" data-f="{e(s["slug"])}">{e(s["corto"])}</button>' for s in tipos)
 h += f'''
-  <section id="proyectos" class="alt" aria-labelledby="proj-title">
+  <section id="proyectos" class="{'' if d.get('incluye_todo') else 'alt'}" aria-labelledby="proj-title">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="kicker">Proyectos</span>
@@ -140,6 +163,7 @@ h += f'''
 '''
 
 # Cotizador
+M2 = d.get('m2_slider', [10, 600, 10, 80])  # mínimo, máximo, paso y valor inicial
 serv_opts = ''.join(f'<button type="button" class="opt" aria-pressed="false" data-s="{e(s["slug"])}">{e(s["corto"])}<small>{e(s["opt_txt"])}</small></button>' for s in S)
 comunas_opts = ''.join(f'<option>{e(c)}</option>' for c in d['cobertura'])
 h += f'''
@@ -159,8 +183,8 @@ h += f'''
           <div class="step" id="paso-tam" hidden>
             <h3><i>2</i><span id="tam-t">¿De qué tamaño?</span></h3>
             <div id="tam-m2" hidden>
-              <div class="m2-row"><input id="m2" type="range" min="10" max="600" step="10" value="80" aria-label="Metros cuadrados aproximados"><output id="m2-out" for="m2">80 m²</output></div>
-              <p class="hint">Si no sabes: un patio de casa suele tener entre 50 y 150 m².</p>
+              <div class="m2-row"><input id="m2" type="range" min="{M2[0]}" max="{M2[1]}" step="{M2[2]}" value="{M2[3]}" aria-label="Metros cuadrados aproximados"><output id="m2-out" for="m2">{M2[3]} m²</output></div>
+              <p class="hint">{e(d.get('m2_hint', 'Si no sabes: un patio de casa suele tener entre 50 y 150 m².'))}</p>
             </div>
             <div class="opts" id="tam-op" hidden></div>
           </div>
@@ -186,7 +210,7 @@ h += f'''
           <ul class="list-plain" id="r-inc"></ul>
           <div class="bubble"><small>Mensaje que nos llega</small><span id="r-msg">{e(MSG)}</span></div>
           <a class="btn btn-wa" id="r-wa" href="{wa(d, MSG)}" target="_blank" rel="noopener">{ic('i-wa', True)}Pedir visita gratis</a>
-          <span class="fine">Precio referencial con IVA. El valor final depende del terreno, los materiales y el acceso.</span>
+          <span class="fine">{e(d.get('nota_precio', 'Precio referencial con IVA. El valor final depende del terreno, los materiales y el acceso.'))}</span>
         </aside>
       </div>
     </div>
@@ -195,16 +219,17 @@ h += f'''
 
 # Proceso
 pasos = ''.join(f'<li><span class="plazo">{e(c)}</span><b>{e(a)}</b><span>{e(b)}</span></li>' for a, b, c in d['proceso'])
-g, pg = d['garantia'], d['pagos']
-seg = [('i-shield', f'Garantía de {g["meses"]} meses', g['texto']), ('i-file', 'Boleta o factura', pg['boleta']),
-       ('i-card', 'Pago por etapas', pg['etapas']), ('i-calendar', 'Cuotas', pg['cuotas'])]
+g, pg = d['garantia'], d.get('pagos') or {}
+seg = [('i-shield', GAR, g['texto'])] + [(i, t, pg[k]) for i, t, k in
+       [('i-file', 'Boleta o factura', 'boleta'), ('i-card', 'Pago por etapas', 'etapas'), ('i-calendar', 'Cuotas', 'cuotas')] if pg.get(k)]
+seg += [(x[0], x[1], x[2]) for x in d.get('seguridad_extra', [])]
 seg_html = ''.join(f'<div class="conv"><span class="ic">{ic(i)}</span><div><b>{e(a)}</b><p>{e(b)}</p></div></div>' for i, a, b in seg)
 h += f'''
   <section id="proceso" class="alt" aria-labelledby="proc-title">
     <div class="wrap two">
       <div class="reveal">
         <span class="kicker">Cómo trabajamos</span>
-        <h2 id="proc-title">De la visita a la entrega, con plazos claros</h2>
+        <h2 id="proc-title">{e(d.get('titulo_proceso', 'De la visita a la entrega, con plazos claros'))}</h2>
         <ol class="timeline">{pasos}</ol>
       </div>
       <div class="reveal">
@@ -231,7 +256,8 @@ def plan(p):
         </article>'''
 
 
-h += f'''
+if d.get('mantencion'):
+    h += f'''
   <section id="mantencion" aria-labelledby="mant-title">
     <div class="wrap">
       <div class="section-head center reveal">
@@ -244,10 +270,11 @@ h += f'''
   </section>
 '''
 
-h += resenas(d, d['titulo_resenas'], 'Lo que dicen nuestros clientes')
+if d.get('resenas') and G:
+    h += resenas(d, d['titulo_resenas'], 'Lo que dicen nuestros clientes')
 h += preguntas(d, [(q, e(a)) for q, a in d['faqs']])
 h += contacto(d, 'Visita técnica gratis', d['titulo_contacto'],
-              f'Vamos a tu casa, medimos y te damos el presupuesto por escrito en 48 horas. Atendemos {", ".join(d["cobertura"][:4])} y alrededores.',
+              f'Vamos a tu casa, medimos y te damos el presupuesto por escrito{PRES}. Atendemos {", ".join(d["cobertura"][:4])} y alrededores.',
               'Pedir visita por WhatsApp', MSG)
 h += pie(d, PIE_COLS, 'Cotizar por WhatsApp', MSG)
 
@@ -266,7 +293,9 @@ def pagina(s):
     inc = ''.join(f'<li>{ic("i-check")}<span>{e(i)}</span></li>' for i in s['incluye'])
     if s.get('m2'):
         filas = [(f'Por m²', 'Según terreno y materiales', f'{clp(s["m2"][0])} a {clp(s["m2"][1])}')]
-        filas += [(f'Ejemplo: {m} m²', 'Aproximado', f'{clp(s["m2"][0] * m)} a {clp(s["m2"][1] * m)}') for m in (50, 100)]
+        # Ejemplos: [m², detalle] por servicio (ej. la medida del modelo); si no, 50 y 100 m².
+        ejemplos = s.get('ejemplos_m2') or [[50, 'Aproximado'], [100, 'Aproximado']]
+        filas += [(f'Ejemplo: {m} m²', det, f'{clp(s["m2"][0] * m)} a {clp(s["m2"][1] * m)}') for m, det in ejemplos]
     elif s.get('opciones'):
         filas = [(o['t'], o.get('s', ''), f'{clp(o["min"])} a {clp(o["max"])}') for o in s['opciones']]
     else:
@@ -286,7 +315,7 @@ def pagina(s):
         <h1 id="hero-title">{e(s['t'])} en {e(Z)}</h1>
         <p class="lead">{e(sp['intro'])}</p>
         <div class="cta-row"><a class="btn btn-primary" href="{{B}}?s={e(s['slug'])}#cotizar">{ic('i-ruler')}Cotizar {e(s['corto'].lower())}</a><a class="btn btn-wa" href="{wa(d, MS)}" target="_blank" rel="noopener">{ic('i-wa', True)}WhatsApp</a></div>
-        <ul class="trust"><li>{estrellas()}{e(d['google']['nota'])} · {e(d['google']['cantidad'])} reseñas</li><li>{ic('i-shield')}Garantía de {e(g['meses'])} meses</li><li>{ic('i-clock')}{e(s['plazo'])}</li></ul>
+        <ul class="trust">{f"<li>{estrellas()}{e(G['nota'])} · {e(G['cantidad'])} reseñas</li>" if G else ''}<li>{ic('i-shield')}{e(GAR)}</li>{f"<li>{ic('i-clock')}{e(s['plazo'])}</li>" if s.get('plazo') else ''}</ul>
       </div>
       <div class="hero-media"><div class="ph hero-ph"><img src="{px(s['foto'], 900)}" alt="{e(s['alt'])}" width="520" height="650" fetchpriority="high"></div></div>
     </div>
@@ -325,10 +354,10 @@ def pagina(s):
       <div class="final reveal" style="min-height:0">
         <span class="kicker">Visita técnica gratis</span>
         <h2>¿Vamos a ver tu {e(sp['lugar'])}?</h2>
-        <p>Medimos, te mostramos ideas y te mandamos el presupuesto por escrito en 48 horas. Sin compromiso.</p>
+        <p>Medimos, te mostramos ideas y te mandamos el presupuesto por escrito{PRES}. Sin compromiso.</p>
         <div class="cta-row"><a class="btn btn-wa" href="{wa(d, MS)}" target="_blank" rel="noopener">{ic('i-wa', True)}Pedir visita por WhatsApp</a><a class="btn btn-ghost" href="{tel(d)}">{ic('i-phone')}Llamar</a></div>
       </div>
-      <h2 id="otros-title" class="otros-t reveal">Otros servicios</h2>
+      <h2 id="otros-title" class="otros-t reveal">{e(d.get('titulo_otros', 'Otros servicios'))}</h2>
       <div class="minis reveal">{otros}</div>
     </div>
   </section>
@@ -386,14 +415,14 @@ JS = r'''
   function render() {
     var s = C.serv[st.s], com = $("comuna").value, rr = $("r-range"), inc = $("r-inc");
     var lo = 0, hi = 0, tam = "";
-    if (s && s.m2) { var m = +$("m2").value; lo = s.m2[0] * m; hi = s.m2[1] * m; tam = m + " m² aprox."; }
+    if (s && s.m2) { var m = +$("m2").value; lo = s.m2[0] * m; hi = s.m2[1] * m; tam = m + " m² aproximadamente"; }
     else if (s && s.op && st.op >= 0) { lo = s.op[st.op].min; hi = s.op[st.op].max; tam = s.op[st.op].t.toLowerCase(); }
     else if (s && s.mes) { lo = s.mes[0]; hi = s.mes[1]; }
     $("r-title").textContent = s ? s.t : "Elige un servicio";
     if (s && lo) { rr.hidden = false; rr.innerHTML = clp(lo) + " a " + clp(hi) + (s.mes ? " <small>al mes</small>" : ""); } else rr.hidden = true;
     var txt = "Marca lo que necesitas y te mostramos un rango de precio aproximado.";
     if (s && !lo) txt = "Elige el tamaño para ver el rango de precio.";
-    if (s && lo) txt = "Plazo habitual: " + s.plazo + ". " + (com === "otra" ? "Escríbenos para confirmar si llegamos a tu comuna." : com ? "Visita técnica gratis en " + com + "." : "La visita técnica es gratis.");
+    if (s && lo) txt = (s.plazo ? "Plazo habitual: " + s.plazo + ". " : "") + (com === "otra" ? "Escríbenos para confirmar si llegamos a tu comuna." : com ? "Visita técnica gratis en " + com + "." : "La visita técnica es gratis.");
     $("r-text").textContent = txt;
     inc.innerHTML = s ? s.inc.map(function (i) { return "<li>✓ " + i + "</li>"; }).join("") : "";
     var msg = "Hola, quiero cotizar " + (s ? s.msg : "un trabajo") + " con " + C.n + ".";
@@ -446,6 +475,11 @@ select.field{appearance:auto}
 .photo-tip .icon{color:var(--brand-text);width:20px;height:20px;margin-top:2px}
 .range{margin:0;font-family:var(--font-head);font-size:30px;font-weight:700;line-height:1.1;color:#fff}
 .range small{font-family:var(--font-body);font-size:15px;font-weight:600;color:rgba(255,255,255,.7)}
+.inc-grid{display:grid;gap:16px}
+.inc-g{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px}
+.inc-g h3{margin:0;font-size:19px}
+.inc-g .checks{margin-top:10px}
+.inc-g .checks li{font-size:15.5px}
 .two{display:grid;gap:36px}
 .two>*{min-width:0}
 @media (max-width:639px){.prow .val{white-space:normal;max-width:55%}}
@@ -496,6 +530,7 @@ select.field{appearance:auto}
   .two{grid-template-columns:1fr 1fr;gap:56px}
   .plans{grid-template-columns:repeat(3,1fr);align-items:stretch}
   .minis{grid-template-columns:repeat(3,1fr)}
+  .inc-grid{grid-template-columns:repeat(3,1fr)}
 }
 '''
 escribir(d['slug'], d, h, CSS, JS, paginas)

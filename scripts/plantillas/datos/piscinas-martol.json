@@ -1,0 +1,572 @@
+{
+ "demo": false,
+ "slug": "piscinas-martol",
+ "nombre": "Piscinas Martol · Construcción de piscinas de hormigón",
+ "nombre_corto": "Piscinas Martol",
+ "bajada": "Piscinas de hormigón",
+ "rubro_titulo": "Construcción de piscinas",
+ "icono": "i-waves",
+ "schema_tipo": "HomeAndConstructionBusiness",
+ "zona": "Talagante y alrededores",
+ "comuna": "Talagante",
+ "direccion": "",
+ "whatsapp": "+56989003616",
+ "telefono": "+56989003616",
+ "telefono_txt": "+56 9 8900 3616",
+ "instagram": "",
+ "trayectoria": "Más de 10 años construyendo piscinas",
+ "trust_extra": "Empresa familiar",
+ "resumen": "Construcción de piscinas de hormigón armado en Talagante, Peñaflor, Isla de Maipo y alrededores. Empresa familiar con más de 10 años de experiencia y 7 años de garantía en la obra.",
+ "descripcion": "Construcción de piscinas de hormigón en Talagante, Peñaflor e Isla de Maipo. Empresa familiar, todo incluido y 7 años de garantía. Cotiza tu piscina en línea.",
+ "h1": "Tu piscina de hormigón,",
+ "h1_em": "lista para el verano",
+ "lead": "Somos una empresa familiar de Talagante. Construimos piscinas de hormigón armado de todas las medidas, con los equipos instalados y 7 años de garantía en la obra.",
+ "titulo_servicios": "Elige el modelo de tu piscina",
+ "titulo_resenas": "",
+ "titulo_contacto": "¿Conversamos sobre tu piscina?",
+ "horario": null,
+ "cobertura": [
+  "Talagante",
+  "Peñaflor",
+  "Isla de Maipo",
+  "Lonquén",
+  "Padre Hurtado",
+  "El Monte",
+  "Calera de Tango"
+ ],
+ "google": null,
+ "fotos": {
+  "hero": "wix:71bb81_5a4628d11d204e77955f5e99d6da5d24~mv2.jpg",
+  "hero_alt": "Piscina con playa construida por Piscinas Martol"
+ },
+ "garantia": {
+  "meses": "84",
+  "titulo": "Garantía de 7 años",
+  "texto": "7 años de garantía sobre la obra civil. Si algo de la estructura falla, volvemos y lo reparamos."
+ },
+ "seguridad_extra": [
+  [
+   "i-users",
+   "Empresa familiar",
+   "Nuestra primera piscina fue la de nuestra casa. Cuidamos cada proyecto como si fuera propio."
+  ],
+  [
+   "i-award",
+   "Más de 10 años",
+   "Piscinas en condominios de Talagante, Isla de Maipo, Lonquén y Peñaflor."
+  ],
+  [
+   "i-check",
+   "Todo incluido",
+   "Obra, equipos de filtración e instalación eléctrica en el mismo precio. Sin sorpresas."
+  ]
+ ],
+ "proceso": [
+  [
+   "Conversemos",
+   "Nos cuentas qué piscina quieres y te asesoramos con la medida y el modelo.",
+   "Por WhatsApp"
+  ],
+  [
+   "Visita y presupuesto",
+   "Vamos a tu casa, medimos el terreno y te mandamos el presupuesto por escrito.",
+   "Sin costo"
+  ],
+  [
+   "Construcción",
+   "Hormigón armado, con moldaje de muros y llenado de piso en el día. Te contamos cómo va la obra.",
+   "Obra cuidada"
+  ],
+  [
+   "Entrega",
+   "Instalamos y probamos los equipos y te enseñamos a usarlos. Desde ahí corre la garantía.",
+   "Garantía 7 años"
+  ]
+ ],
+ "incluye_todo": {
+  "titulo": "Todo incluido, sin sorpresas",
+  "intro": "Cada piscina se entrega lista para bañarse. Esto viene en el precio:",
+  "grupos": [
+   [
+    "Obra civil",
+    [
+     "Hormigón armado: moldaje de muros y llenado de piso en el día",
+     "Rompe ola",
+     "Dren de fondo",
+     "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+     "Pintura del área de la piscina",
+     "Instalación de cerámica o mosaico"
+    ]
+   ],
+   [
+    "Equipos",
+    [
+     "Skimmer",
+     "Filtro de arena",
+     "Motor bomba de piscina",
+     "Retornos",
+     "Foco subacuático",
+     "Pozo de drenaje"
+    ]
+   ],
+   [
+    "Instalación eléctrica",
+    [
+     "Transformador",
+     "Diferencial",
+     "Protector automático de la bomba",
+     "Conexión eléctrica",
+     "Instalación de todos los equipos"
+    ]
+   ]
+  ]
+ },
+ "m2_slider": [
+  10,
+  80,
+  1,
+  21
+ ],
+ "m2_hint": "Referencia: nuestra piscina familiar de 7 x 3 m tiene 21 m²; una de 10 x 5 m tiene 50 m².",
+ "servicios": [
+  {
+   "slug": "mosaico",
+   "t": "Piscina familiar con mosaico",
+   "corto": "Mosaico",
+   "opt_txt": "7 x 3 m",
+   "d": "Nuestro modelo más pedido: 21 m², revestida completa en mosaico y con borde de cemento blanco.",
+   "foto": "wix:71bb81_d0cb142151e2418aa350823489ab581a~mv2.jpg",
+   "alt": "Piscina revestida en mosaico azul",
+   "msg": "una piscina familiar con mosaico",
+   "plazo": "",
+   "m2": [
+    320000,
+    345000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Revestimiento completo en mosaico",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina familiar con mosaico de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 7 x 3 x 1,6 m, todo incluido y 7 años de garantía.",
+    "intro": "La piscina ideal para una casa familiar: 7 x 3 metros y 1,6 de profundidad, revestida completa en mosaico. Es la que construimos en el Condominio Miraflores de Peñaflor.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿Cuánto cuesta la piscina de 7 x 3 m?",
+      "Tiene un precio de referencia de $7.250.000 con todo incluido: obra, equipos e instalación eléctrica."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     21,
+     "Modelo de 7 x 3 m"
+    ],
+    [
+     30,
+     "Por ejemplo, 7,5 x 4 m"
+    ]
+   ]
+  },
+  {
+   "slug": "playa",
+   "t": "Piscina con playa",
+   "corto": "Playa",
+   "opt_txt": "9 x 4,5 m",
+   "d": "Con una sección de poca profundidad para poner reposeras o para que jueguen los niños.",
+   "foto": "wix:71bb81_5a4628d11d204e77955f5e99d6da5d24~mv2.jpg",
+   "alt": "Piscina con sección playa y jardín",
+   "msg": "una piscina con playa",
+   "plazo": "",
+   "m2": [
+    300000,
+    340000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Sección playa de poca profundidad",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina con playa de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 9 x 4,5 x 1,6 m, todo incluido y 7 años de garantía.",
+    "intro": "Una piscina de 9 x 4,5 metros con una zona de playa: poca profundidad para sentarse, poner reposeras dentro del agua o para que los más chicos jueguen seguros.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿Para qué sirve la playa?",
+      "Es una zona de poca profundidad dentro de la piscina. Sirve para tomar sol con los pies en el agua, poner reposeras y que los niños jueguen seguros."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     40,
+     "Modelo de 9 x 4,5 m"
+    ],
+    [
+     50,
+     "Por ejemplo, 10 x 5 m"
+    ]
+   ]
+  },
+  {
+   "slug": "deck",
+   "t": "Piscina con deck",
+   "corto": "Deck",
+   "opt_txt": "9 x 4,5 m",
+   "d": "Rodeada de deck, para tomar sol al borde del agua. Podemos agregar una sección para niños.",
+   "foto": "wix:71bb81_58e4003295334f8e9930f3b42cabc930~mv2.jpg",
+   "alt": "Piscina con deck alrededor",
+   "msg": "una piscina con deck",
+   "plazo": "",
+   "m2": [
+    310000,
+    350000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Deck alrededor de la piscina",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina con deck de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 9 x 4,5 x 1,6 m, todo incluido y 7 años de garantía.",
+    "intro": "Una piscina de 9 x 4,5 metros rodeada de deck. En el Condominio San Luis de Isla de Maipo la hicimos con deck de PVC y una sección para niños con su propio espacio.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿De qué material es el deck?",
+      "Lo hacemos en PVC, que no se astilla ni necesita barniz. Te mostramos las opciones en la visita."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     40,
+     "Modelo de 9 x 4,5 m"
+    ],
+    [
+     50,
+     "Por ejemplo, 10 x 5 m"
+    ]
+   ]
+  },
+  {
+   "slug": "curvas",
+   "t": "Piscina de curvas",
+   "corto": "Curvas",
+   "opt_txt": "10 x 5 m",
+   "d": "Formas libres y orgánicas, que se integran al jardín. El hormigón permite cualquier diseño.",
+   "foto": "wix:71bb81_a4fe6612b5944df7985a2533023ce887~mv2.jpg",
+   "alt": "Piscina de formas curvas",
+   "msg": "una piscina de curvas",
+   "plazo": "",
+   "m2": [
+    320000,
+    360000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Diseño de forma libre a tu medida",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina de curvas de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 10 x 5 x 1,7 m, todo incluido y 7 años de garantía.",
+    "intro": "Una piscina de formas curvas de 10 x 5 metros y 1,7 de profundidad. Con hormigón proyectado podemos darle la forma que mejor se adapte a tu jardín.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿Puedo elegir la forma?",
+      "Sí. Diseñamos la forma contigo según tu terreno y tu jardín."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     50,
+     "Modelo de 10 x 5 m"
+    ],
+    [
+     60,
+     "Por ejemplo, 12 x 5 m"
+    ]
+   ]
+  },
+  {
+   "slug": "horizonte",
+   "t": "Piscina horizonte (espejo de agua)",
+   "corto": "Horizonte",
+   "opt_txt": "11 x 5 m",
+   "d": "Bordes lisos por donde cae el agua, que se ve como un espejo. Con sistema de reutilización del agua.",
+   "foto": "wix:71bb81_038196cefd1740f593e13db1428ab6b3~mv2.jpg",
+   "alt": "Piscina horizonte con borde de espejo de agua",
+   "msg": "una piscina horizonte",
+   "plazo": "",
+   "m2": [
+    360000,
+    420000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Borde liso de caída de agua (espejo)",
+    "Sistema de reutilización del agua",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina horizonte (espejo de agua) de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 11 x 5 x 1,5 m, todo incluido y 7 años de garantía.",
+    "intro": "La piscina horizonte tiene bordes lisos por donde cae el agua, así la superficie se ve como un espejo. La construimos en el Condominio Las Colonias de Lonquén, con sistema de reutilización del agua.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿Se pierde agua por el borde?",
+      "No. El agua que cae por el borde se recoge y vuelve a la piscina con un sistema de reutilización."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     55,
+     "Modelo de 11 x 5 m"
+    ],
+    [
+     70,
+     "Por ejemplo, 14 x 5 m"
+    ]
+   ]
+  },
+  {
+   "slug": "natacion",
+   "t": "Piscina de natación",
+   "corto": "Natación",
+   "opt_txt": "10 x 5 m",
+   "d": "Larga y profunda para nadar de verdad, con escalera y pasamanos de acero inoxidable.",
+   "foto": "wix:71bb81_c60a6b454d6345aa93206bf6574ac3aa~mv2.jpg",
+   "alt": "Piscina larga para nadar",
+   "msg": "una piscina de natación",
+   "plazo": "",
+   "m2": [
+    290000,
+    330000
+   ],
+   "tam_t": "¿De cuántos m² la imaginas?",
+   "incluye": [
+    "Escalera y pasamanos de acero inoxidable",
+    "Hormigón armado: moldaje de muros y llenado de piso en el día",
+    "Rompe ola y dren de fondo",
+    "Borde a elección: Fulget, piedra Serena, piedra de río o texturado",
+    "Skimmer, filtro de arena, motor bomba y retornos",
+    "Foco subacuático e instalación eléctrica completa"
+   ],
+   "pagina": {
+    "descripcion": "Piscina de natación de hormigón armado en Talagante, Peñaflor e Isla de Maipo. Modelo de referencia de 10 x 5 x 1,8 m, todo incluido y 7 años de garantía.",
+    "intro": "Una piscina de 10 x 5 metros y 1,8 de profundidad, pensada para nadar. En el Condominio Santa María de Talagante la hicimos con escalera y pasamanos de acero inoxidable y borde de cemento blanco, con un look minimalista.",
+    "precio_txt": "Valor referencial por m², calculado a partir de nuestra piscina de 7 x 3 m ($7.250.000 con todo incluido). El valor final depende del terreno, la medida y las terminaciones, y te lo confirmamos en la visita.",
+    "lugar": "patio",
+    "faqs": [
+     [
+      "¿Sirve para nadar largos?",
+      "Sí. Con 10 metros de largo y 1,8 de profundidad es cómoda para nadar y hacer ejercicio."
+     ],
+     [
+      "¿Se puede hacer de otra medida?",
+      "Sí. Este es nuestro modelo de referencia, pero construimos piscinas de hormigón de todas las medidas."
+     ],
+     [
+      "¿Qué garantía tiene?",
+      "7 años de garantía sobre la obra civil."
+     ]
+    ]
+   },
+   "ejemplos_m2": [
+    [
+     50,
+     "Modelo de 10 x 5 m"
+    ],
+    [
+     60,
+     "Por ejemplo, 12 x 5 m"
+    ]
+   ]
+  }
+ ],
+ "proyectos": [
+  {
+   "t": "Condominio San Luis",
+   "tipo": "deck",
+   "comuna": "Isla de Maipo",
+   "detalle": "Deck de PVC y sección para niños · 9 × 4,5 m",
+   "despues": "wix:71bb81_ecdf7309c1ab42c2b9bd35a3f717b237~mv2.jpg",
+   "alt": "Piscina con deck de PVC en Isla de Maipo"
+  },
+  {
+   "t": "Condominio Los Pimientos",
+   "tipo": "",
+   "comuna": "Talagante",
+   "detalle": "Cascada interior, reutilización de agua y borde Fulget · 9 × 4 m",
+   "despues": "wix:71bb81_5119352bbee641f29757c2849da404f3~mv2.jpg",
+   "alt": "Piscina con cascada interior en Talagante"
+  },
+  {
+   "t": "Condominio Santa María",
+   "tipo": "natacion",
+   "comuna": "Talagante",
+   "detalle": "Escalera de acero inoxidable · 10 × 5 m",
+   "despues": "wix:71bb81_6f509ff96ebc47cca31b4f91c114a1ae~mv2.jpg",
+   "alt": "Piscina de natación minimalista en Talagante"
+  },
+  {
+   "t": "Condominio Nehuén",
+   "tipo": "playa",
+   "comuna": "Talagante",
+   "detalle": "Sección playa y borde de piedra Serena · 9 × 4,5 m",
+   "despues": "wix:71bb81_67fdbe6054044edf928e0cbf1b925724~mv2.jpg",
+   "alt": "Piscina con playa en Talagante"
+  },
+  {
+   "t": "Condominio Las Colonias",
+   "tipo": "horizonte",
+   "comuna": "Lonquén",
+   "detalle": "Espejo de agua con reutilización · 11 × 5 m",
+   "despues": "wix:71bb81_48c795f2647945fca90b3c1ed8d2384a~mv2.jpg",
+   "alt": "Piscina horizonte en Lonquén"
+  },
+  {
+   "t": "Condominio Miraflores",
+   "tipo": "mosaico",
+   "comuna": "Peñaflor",
+   "detalle": "Mosaico completo y borde de cemento blanco · 7 × 3 m",
+   "despues": "wix:71bb81_d0cb142151e2418aa350823489ab581a~mv2.jpg",
+   "alt": "Piscina con mosaico en Peñaflor"
+  }
+ ],
+ "mantencion": [],
+ "resenas": [],
+ "faqs": [
+  [
+   "¿Qué garantía tienen?",
+   "7 años de garantía sobre la obra civil de la piscina."
+  ],
+  [
+   "¿Qué incluye el precio?",
+   "La obra civil en hormigón armado, el borde, la pintura y el revestimiento, los equipos (skimmer, filtro de arena, motor bomba, retornos y foco) y toda la instalación eléctrica."
+  ],
+  [
+   "¿Construyen piscinas a medida?",
+   "Sí. Tenemos seis modelos de referencia, pero construimos piscinas de hormigón de todas las medidas y formas."
+  ],
+  [
+   "¿En qué comunas trabajan?",
+   "En Talagante, Peñaflor, Isla de Maipo, Lonquén y alrededores. Si estás en otra comuna de la Región Metropolitana, escríbenos."
+  ],
+  [
+   "¿Por qué una piscina de hormigón?",
+   "El hormigón armado permite cualquier forma y medida, y es la opción más firme y duradera para una piscina."
+  ],
+  [
+   "¿La visita y el presupuesto tienen costo?",
+   "No. Vamos a tu casa, medimos y te mandamos el presupuesto por escrito, sin compromiso."
+  ]
+ ],
+ "tema": {
+  "brand": "#0b6e99",
+  "brand-strong": "#085a7e",
+  "brand-text": "#0a6690",
+  "brand-soft": "#e3f3fa",
+  "on-brand": "#ffffff",
+  "accent": "#f59e0b",
+  "accent-ink": "#b45309",
+  "accent-on-dark": "#7dd3fc",
+  "bg": "#f7fbfd",
+  "surface": "#ffffff",
+  "surface-2": "#eaf4f8",
+  "ink": "#0c1f2c",
+  "muted": "#4b5f6c",
+  "line": "#d9e8ef",
+  "header-bg": "rgba(247,251,253,.95)",
+  "hero-bg": "#082433",
+  "dark": "#082433",
+  "footer-bg": "#061a25",
+  "footer-ink": "#a9c3d1",
+  "glow-1": "rgba(56,189,248,.35)",
+  "glow-2": "rgba(245,158,11,.18)",
+  "wa": "#16a34a",
+  "radius": "16px",
+  "btn-radius": "999px",
+  "shadow": "0 20px 44px -26px rgba(8,36,51,.45)",
+  "font-body": "\"DM Sans\", system-ui, -apple-system, \"Segoe UI\", sans-serif",
+  "font-head": "\"Fraunces\", Georgia, serif",
+  "head-transform": "none",
+  "head-spacing": "-.01em",
+  "head-weight": "700"
+ },
+ "plazo_presupuesto": "",
+ "titulo_proceso": "De la primera conversación a tu primer chapuzón",
+ "nota_precio": "Precio referencial. El valor final depende del terreno, la medida y las terminaciones; te lo confirmamos en la visita.",
+ "titulo_otros": "Otros modelos"
+}

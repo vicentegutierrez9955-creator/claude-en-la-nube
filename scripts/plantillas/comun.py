@@ -30,6 +30,9 @@ def ic(nombre, fill=False):
 
 
 def px(foto_id, w=900):
+    # "wix:<id>" = foto de la página Wix del propio negocio (su CDN las achica al ancho pedido).
+    if str(foto_id).startswith('wix:'):
+        return f'https://static.wixstatic.com/media/{foto_id[4:]}/v1/fit/w_{w},h_{w},q_80,enc_auto/foto.jpg'
     return f'https://images.pexels.com/photos/{foto_id}/pexels-photo-{foto_id}.jpeg?auto=compress&amp;cs=tinysrgb&amp;w={w}'
 
 
@@ -155,10 +158,14 @@ def preguntas(d, faqs):
 
 
 def contacto(d, kicker, titulo, texto, cta_txt, cta_msg):
-    q = quote(d['direccion'] + ', ' + d['comuna'] + ', Chile')
-    filas = [
-        ('i-pin', 'Dirección', f'<a href="https://www.google.com/maps/dir/?api=1&amp;destination={q}" target="_blank" rel="noopener">{e(d["direccion"])}, {e(d["comuna"])} · Cómo llegar</a>{tbd(d)}'),
-        ('i-clock', 'Horario', horario_tabla(d)),
+    # Sin dirección (negocios que van a domicilio) el mapa muestra la comuna y se listan las comunas que cubren.
+    lugar = ', '.join(x for x in [d.get('direccion'), d['comuna']] if x)
+    q = quote(lugar + ', Chile')
+    filas = [('i-pin', 'Dirección', f'<a href="https://www.google.com/maps/dir/?api=1&amp;destination={q}" target="_blank" rel="noopener">{e(lugar)} · Cómo llegar</a>{tbd(d)}')
+             if d.get('direccion') else ('i-pin', 'Dónde trabajamos', e(', '.join(d.get('cobertura', [d['comuna']]))))]
+    if d.get('horario'):
+        filas.append(('i-clock', 'Horario', horario_tabla(d)))
+    filas += [
         ('i-wa', 'WhatsApp y teléfono', f'<a href="{wa(d, cta_msg)}" target="_blank" rel="noopener">{e(d.get("telefono_txt", d.get("telefono", "")))}</a>{tbd(d)}'),
     ]
     if d.get('instagram'):
@@ -175,7 +182,7 @@ def contacto(d, kicker, titulo, texto, cta_txt, cta_msg):
         <div class="cta-row"><a class="btn btn-wa" href="{wa(d, cta_msg)}" target="_blank" rel="noopener">{ic('i-wa', True)}{e(cta_txt)}</a><a class="btn btn-ghost" href="{tel(d)}">{ic('i-phone')}Llamar</a></div>
       </div>
       <div class="box reveal">
-        <div class="map"><iframe title="Mapa: {e(d['direccion'])}, {e(d['comuna'])}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q={q}&amp;z=15&amp;output=embed"></iframe></div>
+        <div class="map"><iframe title="Mapa: {e(lugar)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q={q}&amp;z=15&amp;output=embed"></iframe></div>
 {rows}
       </div>
     </div>
@@ -206,7 +213,7 @@ def pie(d, columnas, cta_txt, cta_msg):
 
 def config_js(d, extra):
     cfg = {'wa': d.get('whatsapp', '').replace('+', '').replace(' ', ''), 'tel': d.get('telefono', ''),
-           'horario': d['horario']}
+           'horario': d.get('horario') or [None] * 7}
     cfg.update(extra)
     return '<script id="cfg" type="application/json">' + json.dumps(cfg, ensure_ascii=False).replace('</', '<\\/') + '</script>\n'
 
