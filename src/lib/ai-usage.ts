@@ -19,6 +19,7 @@ const PRICES: Record<string, Price> = {
 
 export const AI_MODELS = [
   { id: "deepseek-v4-flash", label: "DeepSeek Flash", note: "El más económico" },
+  { id: "deepseek-flash", label: "DeepSeek Flash (nombre nuevo)", note: "Mismo modelo, nombre que DeepSeek recomienda desde sept. 2026" },
   { id: "deepseek-v4-pro", label: "DeepSeek Pro", note: "DeepSeek más capaz · ~3x Flash" },
   { id: "claude-opus-5-5", label: "Opus 5.5", note: "El más capaz · costo alto" },
   { id: "claude-sonnet-5-5", label: "Sonnet 5.5", note: "Muy bueno · la mitad del costo de Opus" },

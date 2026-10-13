@@ -17,8 +17,8 @@ export default async function AdminPage() {
   await requireAdmin();
   const since = startOfMonthChile();
   const [businesses, usage, sales, aiConversations] = await Promise.all([
-    db.business.findMany({ orderBy: { createdAt: "desc" } }),
-    db.aiUsage.groupBy({ by: ["businessId"], where: { createdAt: { gte: since } }, _sum: { costUsd: true } }),
+    db.business.findMany({ where: { sandbox: false }, orderBy: { createdAt: "desc" } }),
+    db.aiUsage.groupBy({ by: ["businessId"], where: { createdAt: { gte: since }, business: { sandbox: false } }, _sum: { costUsd: true } }),
     db.order.groupBy({ by: ["businessId"], where: { paidAt: { gte: since } }, _count: true }),
     db.aiUsage.findMany({
       where: { createdAt: { gte: since }, conversationId: { not: null } },
@@ -40,7 +40,11 @@ export default async function AdminPage() {
         <PageHeader
           title={`Administración de ${BRAND}`}
           subtitle={`Consumo de IA de este mes en todas las tiendas: ${usd(totalCost)} (≈ ${formatCLP(usdToClp(totalCost))}). Modelo por defecto: ${modelLabel(DEFAULT_MODEL)}.`}
-        />
+        >
+          <Link href="/admin/pruebas" className="btn-primary">
+            🧪 Probar el vendedor IA
+          </Link>
+        </PageHeader>
       </div>
 
       <div className="card overflow-x-auto p-0">
