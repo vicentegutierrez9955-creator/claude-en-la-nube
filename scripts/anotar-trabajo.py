@@ -10,7 +10,9 @@ Santiago"), detalle, estado ("hecho", "en curso" o "pendiente") y links [{nombre
 Con --prospecto: id (ej. "p-negocio"), negocio, rubro, comuna, direccion, contacto,
 whatsapp, telefono, redes, mensaje (primer mensaje sugerido), notas y creado
 [{nombre, url}] (maquetas). Si el prospecto ya existe, solo rellena campos vacíos y
-agrega links nuevos a "creado"; nunca pisa lo que escribió el equipo. Para asociar un
+agrega links nuevos a "creado"; nunca pisa lo que escribió el equipo. Con
+"reemplazar": true, si el prospecto sigue "por contactar", cambia su mensaje, notas y
+contactarEl (fecha AAAA-MM-DD en que sale en la lista del día). Para asociar un
 trabajo a un prospecto, usa "prospectoId" en el trabajo.
 El link resultante se abre con un GET (por ejemplo con web_fetch_vercel_url).
 """

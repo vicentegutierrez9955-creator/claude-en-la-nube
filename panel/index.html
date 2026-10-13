@@ -93,15 +93,17 @@
       </div>
       <div class="card">
         <h2>Mensajes para prospectos</h2>
-        <p class="muted">Son los que abre el botón "Escribir por WhatsApp" de cada prospecto: uno para los que no tienen página web y otro para los que ya tienen (ahí la oferta es renovarla). Escribe {negocio} donde va el nombre del negocio. Si el prospecto no tiene buenas reseñas en Google (nota 4 o más y al menos 10 reseñas), se quita la frase "y nos gustaron mucho sus reseñas". Si un prospecto tiene su propio primer mensaje (se escribe en su ficha), se usa ese en vez de estos. Antes de enviarlo puedes ajustarlo en WhatsApp.</p>
+        <p class="muted">Son los que abre el botón "Escribir por WhatsApp" de cada prospecto, dirigidos al dueño o la dueña: uno para los que no tienen página web y otro para los que ya tienen (ahí la oferta es renovarla). El seguimiento es para los que ya se contactaron y no respondieron. Escribe {negocio} donde va el nombre del negocio y {yo} donde va tu nombre (el que usaste para entrar al panel). Si el prospecto no tiene buenas reseñas en Google (nota 4 o más y al menos 10 reseñas), se quita la frase "y nos gustaron mucho sus reseñas". Si un prospecto tiene su propio primer mensaje (se escribe en su ficha), se usa ese en vez de estos. Antes de enviarlo puedes ajustarlo en WhatsApp.</p>
         <label>Si no tiene página web<textarea id="mensaje-prospecto" rows="6"></textarea></label>
         <div class="row"><button id="guardar-mensaje-prospecto" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-prospecto" class="btn">Volver al recomendado</button></div>
         <label>Si ya tiene página web<textarea id="mensaje-prospecto-web" rows="6"></textarea></label>
         <div class="row"><button id="guardar-mensaje-prospecto-web" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-prospecto-web" class="btn">Volver al recomendado</button></div>
+        <label>Seguimiento (si no respondieron)<textarea id="mensaje-seguimiento" rows="5"></textarea></label>
+        <div class="row"><button id="guardar-mensaje-seguimiento" class="btn btn-primary">Guardar</button><button id="restaurar-mensaje-seguimiento" class="btn">Volver al recomendado</button></div>
       </div>
       <div class="card">
         <h2>Correos para prospectos</h2>
-        <p class="muted">Los abre el botón "Escribir por correo" de cada prospecto que tenga correo, en tu app de correo. Igual que en WhatsApp: {negocio} es el nombre del negocio y la frase de las reseñas se quita si no tiene buenas reseñas en Google.</p>
+        <p class="muted">Los abre el botón "Escribir por correo" de cada prospecto que tenga correo, en tu app de correo. Igual que en WhatsApp: {negocio} es el nombre del negocio, {yo} es tu nombre y la frase de las reseñas se quita si no tiene buenas reseñas en Google.</p>
         <label>Si no tiene página web: asunto<input id="correo-asunto"></label>
         <label>Correo<textarea id="correo-cuerpo" rows="10"></textarea></label>
         <div class="row"><button id="guardar-correo" class="btn btn-primary">Guardar</button><button id="restaurar-correo" class="btn">Volver al recomendado</button></div>

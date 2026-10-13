@@ -92,6 +92,22 @@ main.wrap{padding-top:20px;padding-bottom:60px}
 .pgrupo-head{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
 .pgrupo-head h3{font-size:15px;margin:0}
 .pgrupo-head span{font-size:13px;color:var(--muted)}
+.btn-wa-suave{background:var(--green-bg);border-color:var(--wa);color:var(--green)}
+.plan{background:var(--card);border:2px solid var(--wa);border-radius:14px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.plan-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.plan-head h3{font-size:17px;margin:0 0 2px}
+.plan-head .btn-wa{white-space:normal;max-width:100%}
+.barra{height:8px;border-radius:99px;background:var(--soft);overflow:hidden}
+.barra span{display:block;height:100%;background:var(--wa);border-radius:99px;transition:width .3s}
+.plan-lista{list-style:none;counter-reset:plan;margin:0;padding:0;display:flex;flex-direction:column}
+.plan-lista li{counter-increment:plan;display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.plan-lista li::before{content:counter(plan);flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--soft);color:var(--muted)}
+.plan-lista li.hecho::before{content:"✓";background:var(--wa);color:#fff}
+.plan-nombre{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left}
+.plan-nombre span{font-size:13px}
+.plan-lista li.hecho .plan-nombre b{color:var(--muted)}
+.plan-acciones{gap:6px;justify-content:flex-end}
+@media (max-width:600px){.plan-lista li{align-items:flex-start}.plan-acciones{width:100%;padding-left:38px;justify-content:flex-start}.plan-acciones .btn:not(.btn-wa):not(.btn-wa-suave){display:none}.plan-head .btn-wa{width:100%;text-align:center}}
 .mover{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;padding:2px 6px;margin:-2px 0 0 -6px;border-radius:6px;cursor:grab;touch-action:none}
 .mover:hover{background:var(--soft);color:var(--ink)}
 .pcard.arrastrando{outline:2px dashed var(--acc);outline-offset:2px;box-shadow:0 14px 34px rgba(0,0,0,.22);opacity:.92}

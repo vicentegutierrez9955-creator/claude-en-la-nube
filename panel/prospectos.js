@@ -2,46 +2,59 @@
 import { esFecha } from '/panel/alertas.js';
 
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
-// Primer mensaje por WhatsApp: pregunta si quieren ver la maqueta (sin link, precio ni reunión).
-// {negocio} se reemplaza por el nombre del prospecto. El equipo lo puede cambiar en Ajustes.
-export const MENSAJE_INICIAL = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar.
+// Primer mensaje por WhatsApp, para el dueño o la dueña: lo principal es la página web, pero se
+// nombran otras cosas que les pueden servir, y termina con una pregunta (sin link, precio ni reunión).
+// {negocio} se reemplaza por el nombre del prospecto y {yo} por el nombre de quien entró al panel.
+// El equipo los puede cambiar en Ajustes.
+export const MENSAJE_INICIAL = `Hola, ¿cómo está? ¿Hablo con el dueño o la dueña de {negocio}?
 
-Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?`;
+Soy {yo}, de Optimind Partners. Hacemos páginas web para pymes: rápidas en el celular, con botón directo a WhatsApp y para que los encuentren en Google. También ayudamos con otras cosas que suelen servir, como la ficha de Google Maps, las reservas en línea o las redes sociales.
+
+Vimos {negocio} en Google y nos gustaron mucho sus reseñas. ¿Le puedo contar cómo podría quedar su página? Es sin compromiso.`;
 // Si el prospecto ya tiene página web, la oferta es mejorarla (sin criticar la que tiene).
-export const MENSAJE_CON_WEB = `Hola, ¿cómo están? Les escribimos de Optimind Partners. Vimos la página web de {negocio} y nos gustaron mucho sus reseñas, así que les armamos una versión renovada: más moderna, rápida en el celular y con contacto directo por WhatsApp.
+export const MENSAJE_CON_WEB = `Hola, ¿cómo está? ¿Hablo con el dueño o la dueña de {negocio}?
 
-Es gratis y sin compromiso. ¿Les gustaría verla?`;
+Soy {yo}, de Optimind Partners. Ayudamos a pymes a conseguir más clientes por internet: renovamos páginas web para que carguen rápido en el celular, tengan botón directo a WhatsApp y aparezcan mejor en Google. También vemos otras cosas, como la ficha de Google Maps, las reservas en línea o las redes sociales.
+
+Vimos la página de {negocio} y nos gustaron mucho sus reseñas. ¿Le puedo contar algunas ideas para que les traiga más consultas? Es sin compromiso.`;
+// Si no respondieron al primero (un par de días después), un recordatorio corto.
+export const MENSAJE_SEGUIMIENTO = `Hola de nuevo, soy {yo}, de Optimind Partners. Le escribí hace unos días por una página web para {negocio}.
+
+Si le interesa, le mando un ejemplo de cómo podría quedar, o si prefiere lo conversamos por teléfono en 5 minutos. ¿Qué le acomoda más?`;
 // Correos: asunto corto con el nombre del negocio (sin "gratis" para no caer en spam) y la misma
 // pregunta de interés al final.
-export const CORREO_ASUNTO = 'Una maqueta para {negocio}';
-export const CORREO_CUERPO = `Hola, ¿cómo están?
+export const CORREO_ASUNTO = 'Página web para {negocio}';
+export const CORREO_CUERPO = `Hola, ¿cómo está? Este correo es para el dueño o la dueña de {negocio}.
 
-Les escribimos de Optimind Partners. Vimos {negocio} en Google y nos gustaron mucho sus reseñas, así que les armamos una maqueta de página web para que vean cómo podría quedar: con sus servicios, cómo llegar y un botón para que sus clientes les escriban directo por WhatsApp.
+Soy {yo}, de Optimind Partners. Hacemos páginas web para pymes: rápidas en el celular, con botón directo a WhatsApp y para que los encuentren en Google. También ayudamos con otras cosas que suelen servir, como la ficha de Google Maps, las reservas en línea o las redes sociales.
 
-Es gratis y sin compromiso. ¿Les gustaría que se la enviemos?
+Vimos {negocio} en Google y nos gustaron mucho sus reseñas. ¿Le puedo contar cómo podría quedar su página? Es sin compromiso.
 
 Saludos,
-Equipo Optimind Partners`;
+{yo}
+Optimind Partners`;
 export const CORREO_ASUNTO_WEB = 'Una idea para la web de {negocio}';
-export const CORREO_CUERPO_WEB = `Hola, ¿cómo están?
+export const CORREO_CUERPO_WEB = `Hola, ¿cómo está? Este correo es para el dueño o la dueña de {negocio}.
 
-Les escribimos de Optimind Partners. Vimos la página web de {negocio} y nos gustaron mucho sus reseñas, así que les armamos una versión renovada: más moderna, rápida en el celular y con un botón para que sus clientes les escriban directo por WhatsApp.
+Soy {yo}, de Optimind Partners. Ayudamos a pymes a conseguir más clientes por internet: renovamos páginas web para que carguen rápido en el celular, tengan botón directo a WhatsApp y aparezcan mejor en Google. También vemos otras cosas, como la ficha de Google Maps, las reservas en línea o las redes sociales.
 
-Es gratis y sin compromiso. ¿Les gustaría verla?
+Vimos la página de {negocio} y nos gustaron mucho sus reseñas. ¿Le puedo contar algunas ideas para que les traiga más consultas? Es sin compromiso.
 
 Saludos,
-Equipo Optimind Partners`;
+{yo}
+Optimind Partners`;
 // Textos que el equipo puede cambiar en Ajustes: clave en config → [id del campo, texto recomendado].
 const PLANTILLAS = {
   mensajeProspecto: ['mensaje-prospecto', MENSAJE_INICIAL],
   mensajeProspectoWeb: ['mensaje-prospecto-web', MENSAJE_CON_WEB],
+  mensajeSeguimiento: ['mensaje-seguimiento', MENSAJE_SEGUIMIENTO],
   correoAsunto: ['correo-asunto', CORREO_ASUNTO],
   correoCuerpo: ['correo-cuerpo', CORREO_CUERPO],
   correoAsuntoWeb: ['correo-asunto-web', CORREO_ASUNTO_WEB],
   correoCuerpoWeb: ['correo-cuerpo-web', CORREO_CUERPO_WEB],
 };
 // Cada grupo se guarda con un botón (guardar-<grupo> / restaurar-<grupo>).
-const GRUPOS = { 'mensaje-prospecto': ['mensajeProspecto'], 'mensaje-prospecto-web': ['mensajeProspectoWeb'], correo: ['correoAsunto', 'correoCuerpo'], 'correo-web': ['correoAsuntoWeb', 'correoCuerpoWeb'] };
+const GRUPOS = { 'mensaje-prospecto': ['mensajeProspecto'], 'mensaje-prospecto-web': ['mensajeProspectoWeb'], 'mensaje-seguimiento': ['mensajeSeguimiento'], correo: ['correoAsunto', 'correoCuerpo'], 'correo-web': ['correoAsuntoWeb', 'correoCuerpoWeb'] };
 const EMAIL_OK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // Con menos de esto no se nombran las reseñas en el mensaje.
 const RESENAS_MIN = 10;
@@ -57,12 +70,19 @@ export function iniciarProspectos(u) {
   const plantilla = (clave) => estado().data.config?.[clave] || PLANTILLAS[clave][1];
   const sinDato = (v) => v === undefined || v === null || v === '';
   const buenasResenas = (p) => Number(p.googleNota) >= NOTA_MIN && Number(p.googleResenas) >= RESENAS_MIN;
+  // {yo}: el nombre con que entró al panel quien va a escribir (sin nombre, una frase sin él).
+  const conFirma = (t) => {
+    const yo = String(estado().usuario || '').trim();
+    const nombre = yo && yo[0].toUpperCase() + yo.slice(1);
+    return nombre ? t.replaceAll('{yo}', nombre) : t.replace(/\n\{yo\}\n/g, '\n').replace(/[Ss]oy \{yo\}, de/g, (m) => (m[0] === 'S' ? 'Le escribo de' : 'le escribo de')).replaceAll('{yo}', '');
+  };
   const rellenar = (p, clave) => {
     const t = plantilla(clave);
-    return (buenasResenas(p) ? t : t.replace(FRASE_RESENAS, '')).replaceAll('{negocio}', p.negocio || 'su negocio');
+    return conFirma((buenasResenas(p) ? t : t.replace(FRASE_RESENAS, '')).replaceAll('{negocio}', p.negocio || 'su negocio'));
   };
-  // Si el prospecto trae un primer mensaje propio (ej. el que va con el video de su maqueta), se usa ese.
-  const mensajeDe = (p) => (p.mensaje?.trim() ? p.mensaje.trim() : rellenar(p, conWeb(p) ? 'mensajeProspectoWeb' : 'mensajeProspecto'));
+  // Si el prospecto trae un primer mensaje propio (escrito para ese negocio), se usa ese.
+  const mensajeDe = (p) => (p.mensaje?.trim() ? conFirma(p.mensaje.trim()) : rellenar(p, conWeb(p) ? 'mensajeProspectoWeb' : 'mensajeProspecto'));
+  const pendiente = (p) => (p.estado || 'por contactar') === 'por contactar';
   const correoDe = (p) => (conWeb(p)
     ? { asunto: rellenar(p, 'correoAsuntoWeb'), cuerpo: rellenar(p, 'correoCuerpoWeb') }
     : { asunto: rellenar(p, 'correoAsunto'), cuerpo: rellenar(p, 'correoCuerpo') });
@@ -109,6 +129,54 @@ export function iniciarProspectos(u) {
     return url ? h('a', { class: `btn btn-wa${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener', onclick: marcarContactado(p, 'WhatsApp') }, 'Escribir por WhatsApp') : null;
   }
 
+  // Recordatorio para los que ya se contactaron y siguen sin responder; se anota cuándo se mandó.
+  function botonSeguimiento(p, chico) {
+    const url = p.estado === 'contactado' ? waLink(p.whatsapp, rellenar(p, 'mensajeSeguimiento')) : null;
+    const anotar = () => cambiar((d) => {
+      const x = (d.prospectos || []).find((y) => y.id === p.id);
+      if (x) x.seguimiento = { fecha: hoy(), por: estado().usuario };
+    }, `${p.negocio}: seguimiento anotado`).then(() => { if ($('#dlg').open) detalle(p.id); });
+    return url ? h('a', { class: `btn btn-wa-suave${chico ? ' btn-sm' : ''}`, href: url, target: '_blank', rel: 'noopener', onclick: anotar }, p.seguimiento ? 'Otro seguimiento' : 'Mandar seguimiento') : null;
+  }
+
+  // Lista del día: los prospectos con fecha "Para contactar el", con el avance y un botón que abre
+  // WhatsApp con el siguiente que falta (al abrirlo queda como contactado y el botón pasa al otro).
+  function planes(todos) {
+    const porDia = new Map();
+    for (const p of todos) {
+      if (!esFecha(p.contactarEl)) continue;
+      if (!porDia.has(p.contactarEl)) porDia.set(p.contactarEl, []);
+      porDia.get(p.contactarEl).push(p);
+    }
+    return [...porDia.keys()].sort()
+      .filter((f) => f >= hoy() || porDia.get(f).some(pendiente))
+      .map((f) => plan(f, porDia.get(f)));
+  }
+
+  function plan(f, grupo) {
+    const hechos = grupo.filter((p) => !pendiente(p)).length;
+    const siguiente = grupo.find((p) => pendiente(p) && waLink(p.whatsapp));
+    const titulo = f === hoy() ? `Para contactar hoy, ${fechaLarga(f)}` : f < hoy() ? `Quedaron pendientes del ${fechaLarga(f)}` : `Para contactar el ${fechaLarga(f)}`;
+    const faltan = grupo.length - hechos;
+    return h('div', { class: 'plan' },
+      h('div', { class: 'plan-head' },
+        h('div', {}, h('h3', {}, titulo), h('div', { class: 'muted', style: 'font-size:14px' }, `${hechos} de ${grupo.length} escritos${faltan ? ` · faltan ${faltan}` : ''}`)),
+        siguiente
+          ? h('a', { class: 'btn btn-wa', href: waLink(siguiente.whatsapp, mensajeDe(siguiente)), target: '_blank', rel: 'noopener', onclick: marcarContactado(siguiente, 'WhatsApp') }, `Escribir al siguiente: ${siguiente.negocio}`)
+          : faltan ? h('span', { class: 'muted', style: 'font-size:14px' }, 'Los que faltan no tienen WhatsApp') : badge('ok', '¡Todos escritos!')),
+      h('div', { class: 'barra', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(grupo.length), 'aria-valuenow': String(hechos) },
+        h('span', { style: `width:${Math.round((hechos * 100) / grupo.length)}%` })),
+      h('ol', { class: 'plan-lista' }, grupo.map((p) => h('li', { class: pendiente(p) ? '' : 'hecho' },
+        h('button', { class: 'link plan-nombre', onclick: () => detalle(p.id) },
+          h('b', {}, p.negocio),
+          h('span', { class: 'muted' }, [p.rubro, p.comuna].filter(Boolean).join(' · '))),
+        h('div', { class: 'row plan-acciones' },
+          etiqueta(p),
+          p.seguimiento ? h('span', { class: 'muted', style: 'font-size:13px' }, `seguimiento ${fechaLarga(p.seguimiento.fecha)}`) : null,
+          pendiente(p) ? botonWhatsApp(p, true) : botonSeguimiento(p, true),
+          h('button', { class: 'btn btn-sm', onclick: () => detalle(p.id) }, 'Ver ficha'))))));
+  }
+
   // El orden de las tarjetas es el del arreglo `prospectos`; el equipo lo cambia arrastrando.
   function render() {
     if (arrastre) return;
@@ -124,6 +192,7 @@ export function iniciarProspectos(u) {
     $('#prospectos-resumen').textContent = [...conteo.map(([e, n]) => `${n} ${e}`), todos.length > 1 ? 'arrastra ⠿ para ordenar' : ''].filter(Boolean).join(' · ');
     const cont = $('#prospectos');
     cont.replaceChildren();
+    if (!q) cont.append(...planes(todos));
     if (!visibles.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún prospecto coincide con la búsqueda.' : 'Aún no hay prospectos.')); return; }
     // Separados por la fecha en que se agregaron, los más nuevos arriba. Dentro de cada fecha se
     // mantiene el orden del arreglo (el que el equipo arma arrastrando).
@@ -179,11 +248,16 @@ export function iniciarProspectos(u) {
         ['Redes / web', p.redes ? enlace(/^https?:\/\//.test(p.redes) ? p.redes : `https://${p.redes}`, p.redes) : null],
         ['Responsable', p.responsable],
         ['Agregado', fechaLarga(p.desde)],
+        esFecha(p.contactarEl) ? ['Para contactar el', fechaLarga(p.contactarEl)] : null,
         p.contactado ? ['Contactado', [fechaLarga(p.contactado.fecha), p.contactado.por && `por ${p.contactado.por}`, p.contactado.via && `(${p.contactado.via})`].filter(Boolean).join(' ')] : null,
       ])),
       h('div', { class: 'blk' }, h('h3', {}, p.mensaje?.trim() ? 'Primer mensaje (propio de este prospecto)' : conWeb(p) ? 'Mensaje de WhatsApp (ya tiene página)' : 'Mensaje de WhatsApp'),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, mensajeDe(p)),
         h('button', { class: 'btn btn-sm', onclick: copiar(mensajeDe(p)) }, 'Copiar mensaje')),
+      p.estado === 'contactado' ? h('div', { class: 'blk' }, h('h3', {}, 'Si no respondió: seguimiento'),
+        p.seguimiento ? h('p', { class: 'muted', style: 'margin:0 0 6px' }, `Último seguimiento: ${[fechaLarga(p.seguimiento.fecha), p.seguimiento.por && `por ${p.seguimiento.por}`].filter(Boolean).join(' ')}`) : null,
+        h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, rellenar(p, 'mensajeSeguimiento')),
+        h('div', { class: 'row' }, botonSeguimiento(p, true), h('button', { class: 'btn btn-sm', onclick: copiar(rellenar(p, 'mensajeSeguimiento')) }, 'Copiar seguimiento'))) : null,
       h('div', { class: 'blk' }, h('h3', {}, conWeb(p) ? 'Correo (ya tiene página)' : 'Correo'),
         h('p', { style: 'margin:0 0 6px' }, h('b', {}, 'Asunto: '), correoDe(p).asunto),
         h('p', { style: 'white-space:pre-wrap;margin:0 0 8px' }, correoDe(p).cuerpo),
@@ -233,6 +307,7 @@ export function iniciarProspectos(u) {
       tieneWeb: campo('¿Tiene página web?', conWeb(p) ? 'si' : p.tieneWeb || '', { opciones: [['', 'Sin revisar'], ['no', 'No tiene'], ['si', 'Sí, ya tiene']] }),
       webActual: campo('Su página actual', p.webActual, { ph: 'https://…' }),
       responsable: campo('Responsable', p.responsable),
+      contactarEl: campo('Para contactar el (sale en la lista del día)', p.contactarEl, { tipo: 'date' }),
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
       googleNota: campo('Nota en Google', sinDato(p.googleNota) ? '' : String(p.googleNota).replace('.', ','), { ph: 'Ej: 4,6' }),
       googleResenas: campo('Reseñas en Google', p.googleResenas, { tipo: 'number', min: 0, step: 1, ph: 'Cantidad (0 si no tiene)' }),
@@ -261,6 +336,7 @@ export function iniciarProspectos(u) {
         ...p, id: p.id || idNuevo(v('negocio')),
         negocio: v('negocio'), rubro: v('rubro'), comuna: v('comuna'), direccion: v('direccion'), contacto: v('contacto'),
         whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email').toLowerCase(), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
+        contactarEl: esFecha(v('contactarEl')) ? v('contactarEl') : '',
         estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
         tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(),
       };
