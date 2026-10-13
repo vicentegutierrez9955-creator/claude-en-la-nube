@@ -1,5 +1,6 @@
 // Prospectos: negocios a los que les ofrecemos página, con lo que les hemos creado (maquetas, etc.).
 import { esFecha } from '/panel/alertas.js';
+import { iniciarContactar } from '/panel/contactar.js';
 
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
 // Primer mensaje por WhatsApp, para el dueño o la dueña: lo principal es la página web, pero se
@@ -431,5 +432,6 @@ export function iniciarProspectos(u) {
       $(`#guardar-${grupo}`).click();
     });
   }
+  iniciarContactar(u);
   return { render, nombre: (id) => buscar(id)?.negocio };
 }
