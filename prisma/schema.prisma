@@ -58,6 +58,8 @@ model Business {
   autoCreateShipment Boolean @default(true)
 
   orderSeq Int @default(0)
+  // Tienda interna para las pruebas automáticas del vendedor (no aparece en /admin)
+  sandbox  Boolean @default(false)
 
   users         User[]
   faqs          FaqEntry[]

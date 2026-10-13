@@ -16,6 +16,7 @@ Si el bot no puede resolver algo (reclamos, cambios, o si el cliente pide hablar
 - **La IA nunca ve datos personales.** No recibe el nombre ni el teléfono del cliente. Cuando el cliente quiere comprar, la IA usa la herramienta `pedir_datos_envio` y el **sistema** pide nombre, dirección, comuna y región, muestra el resumen y envía el link de pago; esos mensajes quedan marcados como privados y la IA solo sabe que "los datos se tomaron". Si el cliente escribe un teléfono, RUT, correo o dirección por su cuenta, se reemplaza por `[teléfono oculto]`, `[dirección oculta]`, etc. antes de llegar a la IA (`src/lib/privacy.ts`).
 - **Respaldo:** si la IA falla (caída del proveedor, clave inválida) o la tienda llega a su tope mensual de gasto, el cliente es atendido por el menú automático sin IA (`src/lib/menu-bot.ts`) y el chat queda marcado en el panel.
 - **Respuestas** (sección del panel): preguntas frecuentes con respuesta oficial; la IA las recibe como información de la tienda.
+- **Prueba del vendedor** (`/admin/pruebas`): corre 26 conversaciones típicas (compras, tallas ambiguas, stock, descuentos, reclamos, datos personales…) contra una tienda de prueba con catálogo fijo y la IA real, y muestra el porcentaje de aciertos, el costo y el detalle de cada falla. Sirve para comparar modelos o medir el efecto de cambiar las instrucciones. Escenarios en `src/lib/evals/scenarios.ts`.
 
 ## Conectar WhatsApp con un botón
 
