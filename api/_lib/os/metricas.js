@@ -1,5 +1,7 @@
 // Métricas (resultados clave) y avance de objetivos. Las automáticas se calculan con datos reales
 // del CRM y del módulo de contenido; las manuales usan el último valor registrado.
+// Las fuentes de leads, clientes, pagos y tareas se pueden acotar a una unidad de negocio: la de la
+// métrica (unidadNegocio) o, si no tiene, la de su objetivo. Así hay un objetivo por unidad.
 import { ETAPAS } from './comun.js';
 import { hoy, esFecha } from './util.js';
 
@@ -13,7 +15,7 @@ export const FUENTES = {
   clientes_nuevos: 'Clientes que empezaron en el periodo',
   clientes_activos: 'Clientes activos hoy',
   ingresos_cobrados: 'Suma de pagos recibidos en el periodo (CLP)',
-  ingreso_mensual_recurrente: 'Hosting mensual activo + anual/12 (CLP)',
+  ingreso_mensual_recurrente: 'Hosting o mensualidad activa + anual/12 (CLP)',
   publicaciones_publicadas: 'Publicaciones con estado Publicado en el periodo',
   seguidores_instagram: 'Seguidores de Instagram (última semana registrada)',
   seguidores_tiktok: 'Seguidores de TikTok (última semana registrada)',
@@ -22,6 +24,8 @@ export const FUENTES = {
   mensajes_redes: 'Mensajes recibidos por redes en el periodo',
   tareas_completadas: 'Tareas completadas en el periodo (parametro opcional = área)',
 };
+// Fuentes que respetan la unidad de negocio (las de contenido son de la marca, comunes a las dos).
+export const FUENTES_CON_UNIDAD = ['leads_nuevos', 'leads_contactados', 'leads_interesados', 'leads_cerrados', 'tasa_conversion', 'leads_por_origen', 'clientes_nuevos', 'clientes_activos', 'ingresos_cobrados', 'ingreso_mensual_recurrente', 'tareas_completadas'];
 
 const orden = (e) => (e === 'no interesado' ? 1 : ETAPAS.indexOf(e || 'por contactar'));
 const enRango = (f, desde, hasta) => esFecha(f) && f >= desde && f <= hasta;
@@ -41,8 +45,11 @@ function llegoEnPeriodo(p, etapa, desde, hasta) {
   return f ? enRango(f, desde, hasta) : enRango(p.desde, desde, hasta);
 }
 
-export function calcularFuente(fuente, parametro, { crm, os, contenido }, desde, hasta) {
-  const leads = crm.prospectos || [];
+export function calcularFuente(fuente, parametro, { crm, os, contenido }, desde, hasta, unidad) {
+  const deUnidad = (x) => !unidad || x.unidad === unidad;
+  const leads = (crm.prospectos || []).filter(deUnidad);
+  const clientes = (crm.clientes || []).filter(deUnidad);
+  const idsClientes = new Set(clientes.map((c) => c.id));
   const semanas = [...(contenido.metricasRedes || [])].sort((a, b) => b.semana.localeCompare(a.semana));
   const sumaSemanas = (campo) => semanas.filter((s) => enRango(s.semana, desde, hasta)).reduce((t, s) => t + (Number(s[campo]) || 0), 0);
   switch (fuente) {
@@ -55,11 +62,11 @@ export function calcularFuente(fuente, parametro, { crm, os, contenido }, desde,
       return contactados.length ? Math.round((contactados.filter((p) => p.estado === 'cerrado').length / contactados.length) * 1000) / 10 : 0;
     }
     case 'leads_por_origen': return leads.filter((p) => p.origen === parametro && enRango(p.desde, desde, hasta)).length;
-    case 'clientes_nuevos': return crm.clientes.filter((c) => enRango(c.desde, desde, hasta)).length;
-    case 'clientes_activos': return crm.clientes.filter((c) => c.estado !== 'inactivo').length;
-    case 'ingresos_cobrados': return (crm.pagos || []).filter((p) => enRango(p.fecha, desde, hasta)).reduce((t, p) => t + (Number(p.monto) || 0), 0);
+    case 'clientes_nuevos': return clientes.filter((c) => enRango(c.desde, desde, hasta)).length;
+    case 'clientes_activos': return clientes.filter((c) => c.estado !== 'inactivo').length;
+    case 'ingresos_cobrados': return (crm.pagos || []).filter((p) => enRango(p.fecha, desde, hasta) && (!unidad || idsClientes.has(p.clienteId))).reduce((t, p) => t + (Number(p.monto) || 0), 0);
     case 'ingreso_mensual_recurrente':
-      return Math.round(crm.clientes.filter((c) => c.estado !== 'inactivo' && c.hosting?.activo).reduce((t, c) => {
+      return Math.round(clientes.filter((c) => c.estado !== 'inactivo' && c.hosting?.activo).reduce((t, c) => {
         const m = Number(c.hosting.monto) || 0;
         return t + (c.hosting.frecuencia === 'anual' ? m / 12 : m);
       }, 0));
@@ -71,10 +78,9 @@ export function calcularFuente(fuente, parametro, { crm, os, contenido }, desde,
     case 'mensajes_redes': return sumaSemanas('mensajes');
     case 'tareas_completadas': {
       const deArea = (t) => {
-        if (!parametro) return true;
         const ini = os.iniciativas.find((i) => i.id === t.iniciativaId);
         const est = ini && os.estrategias.find((e) => e.id === ini.estrategiaId);
-        return est?.area === parametro;
+        return (!parametro || est?.area === parametro) && (!unidad || est?.unidad === unidad);
       };
       return os.tareas.filter((t) => t.estado === 'hecha' && enRango(t.completadaEl, desde, hasta) && deArea(t)).length;
     }
@@ -82,12 +88,15 @@ export function calcularFuente(fuente, parametro, { crm, os, contenido }, desde,
   }
 }
 
+// Unidad con que se calcula una métrica automática: la suya o la de su objetivo.
+export const unidadDeMetrica = (m, obj) => (FUENTES_CON_UNIDAD.includes(m.fuente) ? m.unidadNegocio || obj?.unidad : undefined);
+
 export function valorMetrica(m, ctx) {
   if (m.tipo === 'automatica') {
     const obj = ctx.os.objetivos.find((o) => o.id === m.objetivoId);
     const desde = m.desde || obj?.creado || '2000-01-01';
     const hasta = [hoy(), obj?.fechaLimite].filter(Boolean).sort()[0];
-    return calcularFuente(m.fuente, m.parametro, ctx, desde, hasta);
+    return calcularFuente(m.fuente, m.parametro, ctx, desde, hasta, unidadDeMetrica(m, obj));
   }
   const ultimo = [...(m.valores || [])].sort((a, b) => a.fecha.localeCompare(b.fecha)).pop();
   return ultimo ? ultimo.valor : (m.inicial ?? 0);
@@ -102,7 +111,8 @@ export function avanceMetrica(m, valor) {
 }
 
 // Avance del objetivo = el de su métrica principal (o el promedio de sus métricas si no tiene principal).
-// "ritmo" compara el avance con el tiempo transcurrido hasta la fecha límite.
+// "ritmo" compara el avance con el tiempo transcurrido hasta la fecha límite: en camino, atrasado,
+// vencido (pasó la fecha) o logrado.
 export function estadoObjetivo(o, ctx) {
   const mets = ctx.os.metricas.filter((m) => m.objetivoId === o.id).map((m) => {
     const valor = valorMetrica(m, ctx);
@@ -119,7 +129,7 @@ export function estadoObjetivo(o, ctx) {
     else if (avance != null) {
       const total = Date.parse(o.fechaLimite) - Date.parse(o.creado || hoy());
       const transcurrido = total > 0 ? (Date.parse(hoy()) - Date.parse(o.creado || hoy())) / total : 1;
-      ritmo = avance + 0.1 >= transcurrido ? 'en camino' : 'en riesgo';
+      ritmo = avance + 0.1 >= transcurrido ? 'en camino' : 'atrasado';
     }
   }
   return { avance: avance == null ? null : Math.round(avance * 100), ritmo, principal, metricas: mets };

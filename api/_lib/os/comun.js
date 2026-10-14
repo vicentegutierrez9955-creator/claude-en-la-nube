@@ -9,6 +9,10 @@ export const ORIGENES = ['instagram', 'tiktok', 'whatsapp_frio', 'correo_frio', 
 export const AREAS = ['marca_contenido', 'ventas', 'proyectos_entrega', 'finanzas'];
 export const ENFOQUES = { ventas: ['ventas', 'proyectos_entrega', 'finanzas'], marca: ['marca_contenido'] };
 export const ESTADOS_PUB = ['Idea', 'Guion', 'Grabado', 'Editado', 'Publicado'];
+// Unidades de negocio. Leads y clientes siempre tienen una; productos, objetivos y estrategias pueden
+// no tenerla (son generales, de las dos unidades).
+export const UNIDADES = ['web_agenda', 'erp_talleres'];
+export const UNIDAD_DESC = 'web_agenda (webs con agendamiento de citas para pymes unipersonales, la vende el fundador) o erp_talleres (ERP Tuerkit para talleres mecánicos, a cargo de Pablo)';
 
 export const fecha = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Usa el formato AAAA-MM-DD');
 export const texto = (max) => z.string().trim().max(max);
@@ -18,6 +22,18 @@ export const paginacion = {
   pagina: z.number().int().min(1).max(1000).default(1),
   limite: z.number().int().min(1).max(50).default(20),
 };
+
+export const unidad = z.enum(UNIDADES).describe(`Unidad de negocio: ${UNIDAD_DESC}`);
+// Para productos, objetivos, estrategias y métricas: "ninguna" la quita (queda general).
+export const unidadOpcional = z.enum([...UNIDADES, 'ninguna']).describe(`Unidad de negocio: ${UNIDAD_DESC}; "ninguna" la deja general`);
+export const unidadFiltro = z.enum([...UNIDADES, 'sin_unidad']).describe('Filtra por unidad de negocio ("sin_unidad": los que aún no tienen)');
+
+// Aplica una unidad recibida de una herramienta: undefined no cambia nada y "ninguna" la quita.
+export function ponerUnidad(x, campo, valor) {
+  if (valor === undefined) return;
+  if (valor === 'ninguna') delete x[campo];
+  else x[campo] = valor;
+}
 
 export function fallar(mensaje) {
   throw new ErrorUsuario(mensaje);

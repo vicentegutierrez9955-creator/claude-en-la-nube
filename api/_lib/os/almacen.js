@@ -23,14 +23,15 @@ export async function leer(doc) {
 }
 
 // Lee, aplica `cambio(data)` y guarda. Si alguien guardó entremedio (ETag distinto), lo reintenta
-// con los datos nuevos. Devuelve lo que devuelva `cambio`.
-export async function modificar(doc, cambio, usuario) {
+// con los datos nuevos. Devuelve lo que devuelva `cambio`. `autor` es lo que muestra el panel en
+// "Último cambio por" (por defecto, Claude con el nombre de quien autorizó el conector).
+export async function modificar(doc, cambio, usuario, autor = usuario ? `Claude (${usuario})` : 'Claude') {
   for (let intento = 0; intento < 4; intento++) {
     const { data, etag } = await leerDoc(DOCS[doc].ruta);
     const d = conVacios(doc, data);
     const resultado = await cambio(d);
     d.actualizado = new Date().toISOString();
-    d.actualizadoPor = usuario ? `Claude (${usuario})` : 'Claude';
+    d.actualizadoPor = autor;
     const r = await guardarDoc(DOCS[doc].ruta, d, etag);
     if (r.ok) return resultado;
   }

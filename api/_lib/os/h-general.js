@@ -1,20 +1,21 @@
 // Herramientas generales: resumen para ponerse al día, búsqueda global y auditoría. Y los dos roles
 // (prompts) con los que se trabaja: estratega de ventas y estratega de marca.
 import { z } from 'zod';
-import { ENFOQUES, ETAPAS, texto } from './comun.js';
-import { contexto, objetivosDe, resumenObjetivo } from './h-estrategia.js';
+import { ENFOQUES, ETAPAS, UNIDADES, texto } from './comun.js';
+import { contexto, objetivosDe, resumenObjetivo, deUnidad } from './h-estrategia.js';
 import { calcularFuente } from './metricas.js';
 import { ultimosEventos } from './auditoria.js';
 import { hoy, sumarDias, lunesDe, recortar } from './util.js';
 
-function bloqueVentas(ctx) {
+function bloqueVentas(ctx, u) {
   const { crm, os } = ctx;
   const h = hoy();
-  const leads = crm.prospectos;
+  const leads = crm.prospectos.filter((p) => !u || p.unidad === u);
+  const clientesU = crm.clientes.filter((c) => !u || c.unidad === u);
   const etapa = (p) => p.estado || 'por contactar';
   const abiertos = leads.filter((p) => !['cerrado', 'no interesado'].includes(etapa(p)));
   const mesIni = h.slice(0, 8) + '01';
-  const cobros = crm.clientes.filter((c) => c.estado !== 'inactivo' && c.hosting?.activo && c.hosting.proximoCobro && c.hosting.proximoCobro <= sumarDias(h, 14))
+  const cobros = clientesU.filter((c) => c.estado !== 'inactivo' && c.hosting?.activo && c.hosting.proximoCobro && c.hosting.proximoCobro <= sumarDias(h, 14))
     .map((c) => ({ cliente: c.negocio, fecha: c.hosting.proximoCobro, monto: c.hosting.monto, atrasado: c.hosting.proximoCobro < h || undefined }));
   const porOrigen = {};
   for (const p of leads) porOrigen[p.origen || 'sin_dato'] = (porOrigen[p.origen || 'sin_dato'] || 0) + 1;
@@ -25,13 +26,14 @@ function bloqueVentas(ctx) {
       .map((p) => ({ id: p.id, negocio: p.negocio, etapa: etapa(p), contactarEl: p.contactarEl, atrasado: p.contactarEl < h || undefined })),
     interesados: leads.filter((p) => etapa(p) === 'interesado').slice(0, 10).map((p) => ({ id: p.id, negocio: p.negocio, rubro: p.rubro, ultimoContacto: (p.mensajes || []).at(-1)?.fecha })),
     clientes: {
-      activos: calcularFuente('clientes_activos', null, ctx, h, h),
-      ingresoMensualRecurrente: calcularFuente('ingreso_mensual_recurrente', null, ctx, h, h),
-      cobradoEsteMes: calcularFuente('ingresos_cobrados', null, ctx, mesIni, h),
-      nuevosEsteMes: calcularFuente('clientes_nuevos', null, ctx, mesIni, h),
+      activos: calcularFuente('clientes_activos', null, ctx, h, h, u),
+      ingresoMensualRecurrente: calcularFuente('ingreso_mensual_recurrente', null, ctx, h, h, u),
+      cobradoEsteMes: calcularFuente('ingresos_cobrados', null, ctx, mesIni, h, u),
+      nuevosEsteMes: calcularFuente('clientes_nuevos', null, ctx, mesIni, h, u),
     },
     cobrosProximos14Dias: cobros,
-    productos: os.productos.filter((p) => p.estado !== 'pausado').map((p) => ({ id: p.id, nombre: p.nombre, estado: p.estado, precio: p.precioTexto || p.precio })),
+    productos: os.productos.filter((p) => p.estado !== 'pausado' && deUnidad(p, u)).map((p) => ({ id: p.id, nombre: p.nombre, unidad: p.unidad, estado: p.estado, precio: p.precioTexto || p.precio })),
+    ...(u ? {} : { leadsSinUnidad: leads.filter((p) => !p.unidad).length || undefined })
   };
 }
 
@@ -65,12 +67,13 @@ function bloqueMarca(ctx) {
   };
 }
 
-function tareasDe(ctx, enfoque) {
+function tareasDe(ctx, enfoque, u) {
   const { os } = ctx;
   const areas = ENFOQUES[enfoque];
-  const areaDe = (t) => { const i = os.iniciativas.find((x) => x.id === t.iniciativaId); return i && os.estrategias.find((s) => s.id === i.estrategiaId)?.area; };
+  const estDe = (t) => { const i = os.iniciativas.find((x) => x.id === t.iniciativaId); return i && os.estrategias.find((s) => s.id === i.estrategiaId); };
+  const areaDe = (t) => estDe(t)?.area;
   const h = hoy();
-  const abiertas = os.tareas.filter((t) => t.estado !== 'hecha' && (!areas || !areaDe(t) || areas.includes(areaDe(t))));
+  const abiertas = os.tareas.filter((t) => t.estado !== 'hecha' && (!areas || !areaDe(t) || areas.includes(areaDe(t))) && deUnidad(estDe(t) || {}, u));
   const corta = (t) => ({ id: t.id, titulo: t.titulo, vence: t.vence, responsable: t.responsable, estado: t.estado, prioridad: t.prioridad });
   return {
     vencidas: abiertas.filter((t) => t.vence && t.vence < h).map(corta),
@@ -83,17 +86,18 @@ function tareasDe(ctx, enfoque) {
 export function registrarGeneral(definir, server) {
   definir('resumen_empresa', {
     titulo: 'Resumen de la empresa',
-    descripcion: 'Úsala al empezar una conversación para ponerte al día en una sola llamada. enfoque "ventas": visión, objetivos con avance, embudo de leads, a quién contactar hoy, interesados, clientes, ingresos, cobros próximos, catálogo de productos y tareas. enfoque "marca": visión, objetivos de marca, calendario de publicaciones, métricas de redes, rutina de comunidad, último briefing y leads que vienen de redes. "todo": ambos.',
-    entrada: z.object({ enfoque: z.enum(['todo', 'ventas', 'marca']).default('todo') }),
-  }, async ({ enfoque }) => {
+    descripcion: 'Úsala al empezar una conversación para ponerte al día en una sola llamada. enfoque "ventas": visión, objetivos con avance, embudo de leads, a quién contactar hoy, interesados, clientes, ingresos, cobros próximos, catálogo de productos y tareas. enfoque "marca": visión, objetivos de marca, calendario de publicaciones, métricas de redes, rutina de comunidad, último briefing y leads que vienen de redes. "todo": ambos. unidad_negocio (web_agenda o erp_talleres) acota objetivos, leads, clientes, ingresos, productos y tareas a esa unidad (más lo general).',
+    entrada: z.object({ enfoque: z.enum(['todo', 'ventas', 'marca']).default('todo'), unidad_negocio: z.enum(UNIDADES).optional() }),
+  }, async ({ enfoque, unidad_negocio: u }) => {
     const ctx = await contexto();
     return {
       hoy: hoy(),
       vision: ctx.os.vision?.texto || 'Sin visión definida (usa actualizar_vision)',
-      objetivos: objetivosDe(ctx, enfoque).filter((o) => (o.estado || 'activo') === 'activo').map((o) => resumenObjetivo(o, ctx)),
-      ...(enfoque !== 'marca' ? { ventas: bloqueVentas(ctx) } : {}),
+      unidad: u,
+      objetivos: objetivosDe(ctx, enfoque, u).filter((o) => (o.estado || 'activo') === 'activo').map((o) => resumenObjetivo(o, ctx)),
+      ...(enfoque !== 'marca' ? { ventas: bloqueVentas(ctx, u) } : {}),
       ...(enfoque !== 'ventas' ? { marca: bloqueMarca(ctx) } : {}),
-      tareas: tareasDe(ctx, enfoque),
+      tareas: tareasDe(ctx, enfoque, u),
     };
   });
 
@@ -132,9 +136,10 @@ export function registrarGeneral(definir, server) {
       content: {
         type: 'text',
         text: `Actúa como estratega principal de ventas y productos de Optimind Partners (soluciones tecnológicas y automatización para pymes chilenas). Tu foco: conseguir leads, convertirlos en clientes y crear productos que esos clientes compren.
-1. Empieza con resumen_empresa (enfoque "ventas") y revisa objetivos, embudo y a quién contactar hoy.
-2. Propón acciones concretas con número y fecha, ligadas a un objetivo; regístralas con crear_estrategia / crear_iniciativa / crear_tarea.
-3. Cada lead nuevo va con su origen (crear_lead). Cada contacto, con registrar_contacto_lead. Cada cambio de etapa, con actualizar_etapa_lead.
+Hay dos unidades de negocio: web_agenda (webs con agendamiento de citas para pymes unipersonales, la vende el fundador) y erp_talleres (ERP Tuerkit para talleres mecánicos, a cargo de Pablo).
+1. Empieza con resumen_empresa (enfoque "ventas", y unidad_negocio si la conversación es de una sola unidad) y revisa objetivos, embudo y a quién contactar hoy.
+2. Propón acciones concretas con número y fecha, ligadas a un objetivo (idealmente uno por unidad); regístralas con crear_estrategia / crear_iniciativa / crear_tarea.
+3. Cada lead nuevo va con su origen y su unidad de negocio (crear_lead). Cada contacto, con registrar_contacto_lead. Cada cambio de etapa, con actualizar_etapa_lead.
 4. Cuida el catálogo (listar_productos / crear_producto): qué vender, a quién y a qué precio.
 5. No inventes datos: si falta información, pregúntala. No borres nada (el conector no puede borrar).`,
       },

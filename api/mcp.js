@@ -10,7 +10,8 @@ import { verificarAcceso, SCOPE } from './_lib/os/oauth.js';
 import { CORS, opciones } from './_lib/os/http.js';
 
 const INSTRUCCIONES = `Optimind OS: datos reales de Optimind Partners (CRM de clientes y leads, estrategia, productos y contenido de marca).
-Para ponerte al día llama primero a resumen_empresa (enfoque "ventas" o "marca"). Las listas vienen paginadas y compactas; pide el detalle con las herramientas ver_*.
+Hay dos unidades de negocio (unidad_negocio): web_agenda (webs con agendamiento de citas para pymes unipersonales) y erp_talleres (ERP Tuerkit para talleres mecánicos).
+Para ponerte al día llama primero a resumen_empresa (enfoque "ventas" o "marca", y unidad_negocio si trabajas una sola unidad). Las listas vienen paginadas y compactas; pide el detalle con las herramientas ver_*.
 Puedes crear y actualizar, pero no borrar. Cada escritura queda auditada con el nombre de la persona que autorizó el conector.`;
 
 const mcp = createMcpHandler((server) => {
