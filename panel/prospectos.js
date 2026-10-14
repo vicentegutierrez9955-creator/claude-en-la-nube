@@ -441,6 +441,31 @@ export function iniciarProspectos(u) {
       $(`#guardar-${grupo}`).click();
     });
   }
+  // Origen de los leads antiguos: se sugiere según cómo los contactamos (todos vinieron de nuestra
+  // prospección), se muestra la lista y solo se aplica si el equipo confirma.
+  function origenSugerido(p) {
+    const via = String(p.contactado?.via || (p.mensajes || [])[0]?.via || '').toLowerCase();
+    if (via.includes('whatsapp')) return 'whatsapp_frio';
+    if (via.includes('correo') || via.includes('mail')) return 'correo_frio';
+    return '';
+  }
+  $('#revisar-origen').addEventListener('click', () => {
+    const lista = (estado().data.prospectos || []).filter((p) => !p.origen).map((p) => ({ p, o: origenSugerido(p) }));
+    const con = lista.filter((x) => x.o);
+    const nombre = (o) => (ORIGENES.find(([k]) => k === o) || [])[1];
+    abrir('Completar el origen de los leads', `${lista.length} sin origen · ${con.length} con sugerencia`, [
+      h('p', { class: 'muted' }, 'Se sugiere según el canal por el que los contactamos. Los que nunca se contactaron quedan sin dato. Nada cambia hasta que confirmes.'),
+      con.length ? h('table', { class: 'table' }, h('thead', {}, h('tr', {}, h('th', {}, 'Lead'), h('th', {}, 'Origen sugerido'))),
+        h('tbody', {}, con.map(({ p, o }) => h('tr', {}, h('td', {}, p.negocio), h('td', {}, nombre(o)))))) : h('p', {}, 'No hay sugerencias: los leads sin origen no tienen contactos registrados.'),
+    ], [
+      h('button', { class: 'btn', type: 'button', onclick: cerrar }, 'Cancelar'),
+      con.length ? h('button', { class: 'btn btn-primary', type: 'button', onclick: async () => {
+        const ok = await cambiar((d) => { for (const { p, o } of con) { const x = (d.prospectos || []).find((y) => y.id === p.id); if (x && !x.origen) x.origen = o; } }, `Origen completado en ${con.length} leads`);
+        if (ok) cerrar();
+      } }, `Aplicar a ${con.length} leads`) : null,
+    ]);
+  });
+
   iniciarContactar(u);
   return { render, nombre: (id) => buscar(id)?.negocio };
 }
