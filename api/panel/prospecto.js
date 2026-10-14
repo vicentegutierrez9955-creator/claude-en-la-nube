@@ -2,6 +2,7 @@
 // si el prospecto existe, solo rellena campos vacíos y suma links nuevos a "creado".
 // Con "reemplazar": true, a un prospecto que sigue "por contactar" (el equipo aún no le escribió) se le
 // pueden cambiar el primer mensaje, las notas y la fecha para contactar.
+// "unidad" es la unidad de negocio (web_agenda o erp_talleres); los nuevos sin unidad quedan en web_agenda.
 // GET /api/panel/prospecto?t=<PANEL_API_TOKEN>&d=<JSON en base64url>
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { leerDatos, guardarDatos, datosIniciales, json } from '../_lib/panel.js';
@@ -14,6 +15,7 @@ const REEMPLAZABLES = ['mensaje', 'notas', 'contactarEl'];
 const numero = (v, min, max) => (v === '' || v == null || !Number.isFinite(Number(v)) || Number(v) < min || Number(v) > max ? '' : Number(v));
 const vacio = (v) => v === undefined || v === null || v === '';
 const ESTADOS = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
+const UNIDADES = ['web_agenda', 'erp_talleres'];
 
 export default {
   async fetch(request) {
@@ -33,6 +35,7 @@ export default {
     // Página web actual: si la tiene, el panel le ofrece renovarla en vez de una página nueva.
     limpio.webActual = /^https:\/\//.test(texto(p.webActual, 300)) ? texto(p.webActual, 300) : '';
     limpio.tieneWeb = limpio.webActual ? 'si' : ['si', 'no'].includes(p.tieneWeb) ? p.tieneWeb : '';
+    limpio.unidad = UNIDADES.includes(p.unidad) ? p.unidad : '';
     const creado = (Array.isArray(p.creado) ? p.creado : []).slice(0, 10)
       .map((l) => ({ nombre: texto(l?.nombre, 60), url: texto(l?.url, 500) }))
       .filter((l) => /^https:\/\//.test(l.url));
@@ -44,7 +47,7 @@ export default {
       let actual = d.prospectos.find((x) => x.id === id);
       let cambios = 0;
       if (!actual) {
-        actual = { id, ...limpio, estado: ESTADOS.includes(p.estado) ? p.estado : 'por contactar', creado };
+        actual = { id, ...limpio, unidad: limpio.unidad || 'web_agenda', estado: ESTADOS.includes(p.estado) ? p.estado : 'por contactar', creado };
         d.prospectos.push(actual);
         cambios = 1;
       } else {

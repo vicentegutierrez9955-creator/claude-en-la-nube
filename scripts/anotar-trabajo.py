@@ -8,7 +8,8 @@ Campos: id (único, evita duplicados), titulo, fecha (AAAA-MM-DD), clienteId (id
 cliente del panel, ej. "asesorias-contables-jc") o cliente (texto libre, ej. "Prospectos
 Santiago"), detalle, estado ("hecho", "en curso" o "pendiente") y links [{nombre, url}].
 Con --prospecto: id (ej. "p-negocio"), negocio, rubro, comuna, direccion, contacto,
-whatsapp, telefono, redes, mensaje (primer mensaje sugerido), notas y creado
+whatsapp, telefono, redes, unidad ("web_agenda" o "erp_talleres"; por defecto web_agenda),
+mensaje (primer mensaje sugerido), notas y creado
 [{nombre, url}] (maquetas). Si el prospecto ya existe, solo rellena campos vacíos y
 agrega links nuevos a "creado"; nunca pisa lo que escribió el equipo. Con
 "reemplazar": true, si el prospecto sigue "por contactar", cambia su mensaje, notas y
