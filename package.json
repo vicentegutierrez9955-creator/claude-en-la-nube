@@ -3,6 +3,12 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@vercel/blob": "^2.8.0"
+    "@modelcontextprotocol/server": "2.2.0",
+    "@vercel/blob": "^2.8.0",
+    "mcp-handler": "2.2.0",
+    "zod": "4.6.5"
+  },
+  "scripts": {
+    "test:oauth": "PANEL_STORE=memory PANEL_SECRET=secreto-local OS_USUARIOS=prueba:scrypt:16384:aP6zV-F2XRQOHFLpzInu4Q:69I9ilcuNGUytkudYJ-6FtAwAmRCI5z_IkYR8M9D0Ys node tests/oauth.mjs"
   }
 }

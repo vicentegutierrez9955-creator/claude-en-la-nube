@@ -4,6 +4,18 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/.well-known/oauth-authorization-server",
+      "destination": "/api/oauth/metadatos"
+    },
+    {
+      "source": "/.well-known/oauth-protected-resource/api/mcp",
+      "destination": "/api/oauth/recurso"
+    },
+    {
+      "source": "/.well-known/oauth-protected-resource",
+      "destination": "/api/oauth/recurso"
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -51,7 +63,7 @@
       ]
     },
     {
-      "source": "/(panel|api/panel)(.*)",
+      "source": "/(panel|api/panel|api/oauth|api/mcp)(.*)",
       "headers": [
         {
           "key": "X-Robots-Tag",
