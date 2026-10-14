@@ -51,11 +51,14 @@ export function sesion(request) {
 }
 
 // Almacenamiento en memoria solo para pruebas locales (PANEL_STORE=memory).
-const memoria = (globalThis.__panelMemoria ??= { texto: null, etag: null, n: 0 });
+const memoria = (globalThis.__panelMemoria ??= { docs: {}, n: 0 });
+const enMemoria = () => process.env.PANEL_STORE === 'memory';
 
-export async function leerDatos() {
-  if (process.env.PANEL_STORE === 'memory') {
-    return memoria.texto ? { data: JSON.parse(memoria.texto), etag: memoria.etag } : { data: null, etag: null };
+// Lee un documento JSON del Blob privado junto con su ETag (data null si no existe).
+export async function leerDoc(ruta) {
+  if (enMemoria()) {
+    const m = memoria.docs[ruta];
+    return m ? { data: JSON.parse(m.texto), etag: m.etag } : { data: null, etag: null };
   }
   // El ETag que acepta `ifMatch` es el de la API (head); el de la descarga viene entre comillas.
   // Se comparan sin comillas para asegurar que el contenido leído es el de esa versión.
@@ -63,8 +66,8 @@ export async function leerDatos() {
   try {
     let ultimo;
     for (let intento = 0; intento < 3; intento++) {
-      const info = await head(DATA_PATH);
-      const r = await get(DATA_PATH, { access: 'private', useCache: false });
+      const info = await head(ruta);
+      const r = await get(ruta, { access: 'private', useCache: false });
       if (!r || r.statusCode !== 200) return { data: null, etag: null };
       ultimo = { data: JSON.parse(await new Response(r.stream).text()), etag: info.etag };
       if (limpio(r.blob.etag) === limpio(info.etag)) break;
@@ -76,17 +79,16 @@ export async function leerDatos() {
   }
 }
 
-// Escribe solo si nadie cambió los datos desde `etag` (null = primera vez).
-export async function guardarDatos(data, etag) {
+// Escribe solo si nadie cambió el documento desde `etag` (null = primera vez).
+export async function guardarDoc(ruta, data, etag) {
   const texto = JSON.stringify(data);
-  if (process.env.PANEL_STORE === 'memory') {
-    if ((memoria.etag || null) !== (etag || null)) return { ok: false };
-    memoria.texto = texto;
-    memoria.etag = `m${++memoria.n}`;
-    return { ok: true, etag: memoria.etag };
+  if (enMemoria()) {
+    if ((memoria.docs[ruta]?.etag || null) !== (etag || null)) return { ok: false };
+    memoria.docs[ruta] = { texto, etag: `m${++memoria.n}` };
+    return { ok: true, etag: memoria.docs[ruta].etag };
   }
   try {
-    const r = await put(DATA_PATH, texto, {
+    const r = await put(ruta, texto, {
       access: 'private',
       allowOverwrite: true,
       addRandomSuffix: false,
@@ -100,6 +102,31 @@ export async function guardarDatos(data, etag) {
     throw e;
   }
 }
+
+// Crea un archivo solo si no existe. Devuelve false si ya existía (sirve como marca de "usado una vez").
+export async function crearUnaVez(ruta, data = {}) {
+  if (enMemoria()) {
+    if (memoria.docs[ruta]) return false;
+    memoria.docs[ruta] = { texto: JSON.stringify(data), etag: `m${++memoria.n}` };
+    return true;
+  }
+  try {
+    await put(ruta, JSON.stringify(data), { access: 'private', allowOverwrite: false, addRandomSuffix: false, contentType: 'application/json' });
+    return true;
+  } catch (e) {
+    // Si falló porque ya existe, no es un error: la marca ya estaba.
+    if (await head(ruta).then(() => true, () => false)) return false;
+    throw e;
+  }
+}
+
+export async function existeDoc(ruta) {
+  if (enMemoria()) return Boolean(memoria.docs[ruta]);
+  return head(ruta).then(() => true, (e) => { if (e instanceof BlobNotFoundError) return false; throw e; });
+}
+
+export const leerDatos = () => leerDoc(DATA_PATH);
+export const guardarDatos = (data, etag) => guardarDoc(DATA_PATH, data, etag);
 
 export function datosValidos(d) {
   return d && typeof d === 'object' && Array.isArray(d.clientes) && Array.isArray(d.pagos)
