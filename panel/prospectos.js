@@ -1,5 +1,5 @@
 // Prospectos: negocios a los que les ofrecemos página, con lo que les hemos creado (maquetas, etc.).
-import { esFecha, cambiarEtapa, ORIGENES } from '/panel/alertas.js';
+import { esFecha, cambiarEtapa, ORIGENES, UNIDADES, nombreUnidad } from '/panel/alertas.js';
 import { iniciarContactar } from '/panel/contactar.js';
 
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
@@ -64,7 +64,9 @@ const FRASE_RESENAS = ' y nos gustaron mucho sus reseñas';
 const COLOR_P = { 'por contactar': 'inactivo', contactado: 'mes', interesado: 'pronto', cerrado: 'ok', 'no interesado': 'atrasado' };
 
 export function iniciarProspectos(u) {
-  const { h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy, estado, formulario, trabajosDe } = u;
+  const { h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy, estado, formulario, trabajosDe, unidad } = u;
+  // Con el filtro de unidad activo se ven (y se cuentan) solo los prospectos de esa unidad.
+  const deUnidad = (p) => !unidad() || p.unidad === unidad();
   const lista = () => estado().data.prospectos || [];
   const buscar = (id) => lista().find((p) => p.id === id);
   const conWeb = (p) => p.tieneWeb === 'si' || Boolean(urlSegura(p.webActual));
@@ -186,7 +188,7 @@ export function iniciarProspectos(u) {
       if (document.activeElement !== campoAjustes) campoAjustes.value = plantilla(clave);
     }
     const q = $('#buscar').value.trim().toLowerCase();
-    const todos = lista();
+    const todos = lista().filter(deUnidad);
     const visibles = todos
       .filter((p) => !q || [p.negocio, p.rubro, p.comuna, p.contacto].some((v) => String(v || '').toLowerCase().includes(q)));
     const conteo = ESTADOS_P.map((e) => [e, todos.filter((p) => (p.estado || 'por contactar') === e).length]).filter(([, n]) => n);
@@ -194,7 +196,7 @@ export function iniciarProspectos(u) {
     const cont = $('#prospectos');
     cont.replaceChildren();
     if (!q) cont.append(...planes(todos));
-    if (!visibles.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún prospecto coincide con la búsqueda.' : 'Aún no hay prospectos.')); return; }
+    if (!visibles.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún prospecto coincide con la búsqueda.' : unidad() ? `No hay prospectos de ${nombreUnidad(unidad())}.` : 'Aún no hay prospectos.')); return; }
     // Separados por la fecha en que se agregaron, los más nuevos arriba. Dentro de cada fecha se
     // mantiene el orden del arreglo (el que el equipo arma arrastrando).
     const porFecha = new Map();
@@ -220,7 +222,7 @@ export function iniciarProspectos(u) {
           h('button', { class: 'mover', type: 'button', 'data-id': p.id, title: 'Arrastra para ordenar (o usa las flechas)', 'aria-label': `Mover ${p.negocio}` }, '⠿'),
           h('button', { class: 'link', style: 'text-align:left', onclick: () => detalle(p.id) }, h('h3', {}, p.negocio))),
         etiqueta(p)),
-      h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna].filter(Boolean).join(' · ')),
+      h('div', { class: 'muted', style: 'font-size:14px' }, [p.rubro, p.comuna, !unidad() && (nombreUnidad(p.unidad) || 'sin unidad')].filter(Boolean).join(' · ')),
       h('div', { class: buenasResenas(p) ? 'resenas' : 'muted', style: 'font-size:14px' }, textoResenas(p)),
       h('div', { class: conWeb(p) ? 'conweb' : 'muted', style: 'font-size:14px' }, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null),
       h('div', {}, h('div', { class: 'mini' }, 'Lo que le creamos'), creados(p)),
@@ -239,6 +241,7 @@ export function iniciarProspectos(u) {
       h('div', { class: 'blk' }, h('h3', {}, 'Estado'), h('div', { class: 'row' }, sel, p.clienteId ? h('span', { class: 'muted' }, 'Ya es cliente') : null)),
       h('div', { class: 'blk' }, h('h3', {}, 'Lo que le creamos'), creados(p)),
       h('div', { class: 'blk' }, h('h3', {}, 'Datos'), kv([
+        ['Unidad de negocio', nombreUnidad(p.unidad) || 'Sin unidad'],
         ['Contacto', p.contacto],
         ['WhatsApp', wa ? enlace(wa, `+${String(p.whatsapp).replace(/\D/g, '')}`) : 'Sin WhatsApp'],
         ['Correo', EMAIL_OK.test(p.email || '') ? p.email : 'Sin correo'],
@@ -288,16 +291,17 @@ export function iniciarProspectos(u) {
     const p = buscar(id);
     const web = (p.creado || []).map((l) => urlSegura(l.url)).find(Boolean) || '';
     formulario(null, {
-      negocio: p.negocio, contacto: p.contacto, whatsapp: p.whatsapp, ciudad: p.comuna, web,
+      negocio: p.negocio, unidad: p.unidad || 'web_agenda', contacto: p.contacto, whatsapp: p.whatsapp, ciudad: p.comuna, web,
       notas: [p.notas, `Viene de prospectos (${p.rubro || ''}).`].filter(Boolean).join('\n'),
       accesos: (p.creado || []).filter((l) => urlSegura(l.url)),
     }, id);
   }
 
   function formularioProspecto(id) {
-    const p = id ? structuredClone(buscar(id)) : { estado: 'por contactar', responsable: estado().usuario, desde: hoy(), creado: [] };
+    const p = id ? structuredClone(buscar(id)) : { estado: 'por contactar', unidad: unidad() || 'web_agenda', responsable: estado().usuario, desde: hoy(), creado: [] };
     const f = {
       negocio: campo('Negocio *', p.negocio, { req: true }),
+      unidad: campo('Unidad de negocio', p.unidad || '', { opciones: [...(p.unidad ? [] : [['', 'Sin unidad']]), ...UNIDADES] }),
       rubro: campo('Rubro', p.rubro, { ph: 'Ej: Podología' }),
       comuna: campo('Comuna', p.comuna),
       direccion: campo('Dirección', p.direccion),
@@ -341,7 +345,7 @@ export function iniciarProspectos(u) {
         whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email').toLowerCase(), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
         contactarEl: esFecha(v('contactarEl')) ? v('contactarEl') : '',
         estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
-        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(), origen: v('origen'),
+        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(), origen: v('origen'), unidad: v('unidad') || undefined,
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];

@@ -41,7 +41,17 @@
   </header>
 
   <main class="wrap">
+    <div id="filtro-unidad" class="filtro-unidad">
+      <label for="unidad">Unidad de negocio</label>
+      <select id="unidad">
+        <option value="">Todas</option>
+        <option value="web_agenda">Web con agenda</option>
+        <option value="erp_talleres">ERP talleres</option>
+      </select>
+    </div>
+
     <section id="tab-resumen" class="tab-panel">
+      <div id="inicio"></div>
       <div class="kpis" id="kpis"></div>
       <div class="section-head"><h2>Avisos</h2><span class="muted" id="sync"></span></div>
       <div id="avisos" class="list"></div>
@@ -65,7 +75,7 @@
     </section>
 
     <section id="tab-ventas" class="tab-panel" hidden>
-      <p class="muted intro">Estrategia para conseguir leads y clientes, y los productos que les ofrecemos. Se trabaja con Claude (conector Optimind OS, rol estratega de ventas).</p>
+      <p class="muted intro">Estrategia para conseguir leads y clientes, y los productos que les ofrecemos. Se arma con Claude (conector Optimind OS, rol estratega de ventas); aquí puedes terminar iniciativas y tareas.</p>
       <div id="ventas"></div>
     </section>
 
@@ -127,6 +137,11 @@
         <h2>Origen de los leads</h2>
         <p class="muted">Para medir qué canal termina en ventas, cada lead tiene "¿De dónde llegó?". Para los leads antiguos sin ese dato, revisa la sugerencia (según cómo los contactamos) y confírmala.</p>
         <button id="revisar-origen" class="btn">Revisar origen sugerido</button>
+      </div>
+      <div class="card">
+        <h2>Unidad de negocio</h2>
+        <p class="muted">Cada lead y cliente es de una unidad: "Web con agenda" o "ERP talleres". Para los registros que existían antes, el panel sugiere la unidad (lo que nombra talleres, mecánica o el ERP va a ERP talleres; el resto de leads y clientes, a Web con agenda). Revisa la lista y confírmala; nada cambia antes.</p>
+        <button id="revisar-unidad" class="btn">Revisar y asignar unidad</button>
       </div>
       <div class="card">
         <h2>Correos de aviso</h2>

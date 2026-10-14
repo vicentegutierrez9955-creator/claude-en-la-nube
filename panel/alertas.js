@@ -117,6 +117,10 @@ export function mensajeCobro(cliente, transferencia) {
 }
 
 // Cambia la etapa de un prospecto y la anota en su historial (para medir conversión por fecha).
+// Unidades de negocio: leads y clientes siempre tienen una; productos, objetivos y estrategias sin
+// unidad son generales (de las dos).
+export const UNIDADES = [['web_agenda', 'Web con agenda'], ['erp_talleres', 'ERP talleres']];
+export const nombreUnidad = (u) => (UNIDADES.find(([k]) => k === u) || [])[1] || '';
 export const ORIGENES = [['', 'Sin dato'], ['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['whatsapp_frio', 'WhatsApp frío'], ['correo_frio', 'Correo frío'], ['referido', 'Referido'], ['google', 'Google'], ['web', 'Web'], ['otro', 'Otro']];
 export function cambiarEtapa(p, etapa, por, fecha = hoyChile()) {
   if ((p.estado || 'por contactar') === etapa) return;

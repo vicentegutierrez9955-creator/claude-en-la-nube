@@ -1,5 +1,5 @@
 import {
-  avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro, cambiarEtapa,
+  avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro, cambiarEtapa, UNIDADES, nombreUnidad,
 } from '/panel/alertas.js';
 import { iniciarProspectos } from '/panel/prospectos.js';
 import { iniciarMaquetas } from '/panel/maquetas.js';
@@ -12,6 +12,12 @@ let pestana = 'resumen';
 let prospectos = null;
 let maquetas = null;
 let estrategia = null;
+// Filtro de unidad de negocio ('' = todas). Se recuerda en este navegador.
+let unidad = '';
+try { unidad = localStorage.getItem('panel-unidad') || ''; } catch { /* sin storage */ }
+if (!UNIDADES.some(([k]) => k === unidad)) unidad = '';
+const deUnidad = (x) => !unidad || x.unidad === unidad;
+const PESTANAS_CON_UNIDAD = ['resumen', 'clientes', 'ventas'];
 
 // ---------- utilidades ----------
 function h(tag, props, ...hijos) {
@@ -128,6 +134,8 @@ function render() {
     if (b.dataset.tab === pestana) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   }
   for (const s of document.querySelectorAll('.tab-panel')) s.hidden = s.id !== `tab-${pestana}`;
+  $('#filtro-unidad').hidden = !PESTANAS_CON_UNIDAD.includes(pestana);
+  $('#unidad').value = unidad;
   renderResumen();
   renderClientes();
   prospectos?.render();
@@ -142,7 +150,7 @@ function render() {
 }
 
 function renderResumen() {
-  const d = estado.data;
+  const d = { ...estado.data, clientes: estado.data.clientes.filter(deUnidad) };
   const todos = avisos(d, hoy());
   const activos = d.clientes.filter((c) => c.estado !== 'inactivo').length;
   const atrasados = todos.filter((a) => a.dias < 0);
@@ -193,17 +201,19 @@ function estadoCobro(c) {
 function renderClientes() {
   const q = $('#buscar').value.trim().toLowerCase();
   const lista = estado.data.clientes
+    .filter(deUnidad)
     .filter((c) => !q || [c.negocio, c.contacto, c.dominio?.nombre, c.ciudad].some((v) => String(v || '').toLowerCase().includes(q)))
     .sort((a, b) => (a.estado === 'inactivo') - (b.estado === 'inactivo') || String(a.negocio).localeCompare(String(b.negocio)));
   const cont = $('#clientes');
   cont.replaceChildren();
-  if (!lista.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún cliente coincide con la búsqueda.' : 'Aún no hay clientes.')); return; }
+  if (!lista.length) { cont.append(h('div', { class: 'empty' }, q ? 'Ningún cliente coincide con la búsqueda.' : unidad ? `No hay clientes de ${nombreUnidad(unidad)}.` : 'Aún no hay clientes.')); return; }
   for (const c of lista) {
     const cobro = estadoCobro(c);
     const dom = avisos({ clientes: [c] }, hoy()).find((a) => a.tipo === 'dominio');
     cont.append(h('button', { class: 'ccard', onclick: () => detalle(c.id) },
       h('div', { class: 'row', style: 'justify-content:space-between' }, h('h3', {}, c.negocio), c.estado === 'inactivo' ? badge('inactivo', 'Inactivo') : (cobro ? badge(nivel(cobro)) : null)),
       h('dl', { class: 'meta' },
+        !unidad ? [h('dt', {}, 'Unidad'), h('dd', {}, nombreUnidad(c.unidad) || 'Sin unidad')] : null,
         h('dt', {}, 'Contacto'), h('dd', {}, c.contacto || '—'),
         h('dt', {}, 'Página'), h('dd', {}, (c.web || '—').replace(/^https?:\/\//, '')),
         h('dt', {}, 'Hosting'), h('dd', {}, c.hosting && c.hosting.activo !== false ? `${pesos(c.hosting.monto)} / ${c.hosting.frecuencia === 'anual' ? 'año' : 'mes'}` : 'No se cobra'),
@@ -238,6 +248,16 @@ function renderPagos() {
 
 // ---------- trabajos ----------
 const ESTADO_T = { hecho: 'ok', 'en curso': 'pronto', pendiente: 'mes' };
+const ESTADOS_TRABAJO = ['pendiente', 'en curso', 'hecho'];
+// Cambia el estado de un trabajo; al terminarlo guarda la fecha de término (y la quita si se reabre).
+function estadoTrabajo(id, nuevo) {
+  return cambiar((d) => {
+    const x = (d.trabajos || []).find((y) => y.id === id);
+    if (!x) return;
+    x.estado = nuevo;
+    if (nuevo === 'hecho') x.terminadoEl = x.terminadoEl || hoy(); else delete x.terminadoEl;
+  }, nuevo === 'hecho' ? 'Trabajo terminado' : `Trabajo: ${nuevo}`);
+}
 const trabajos = (clienteId) => (estado.data.trabajos || [])
   .filter((t) => clienteId === undefined || t.clienteId === clienteId)
   .sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)) || String(b.id).localeCompare(String(a.id)));
@@ -251,6 +271,8 @@ function renderTrabajos() {
   for (const t of lista) {
     const c = t.clienteId ? cliente(t.clienteId) : null;
     const links = (t.links || []).filter((l) => urlSegura(l.url));
+    const sel = h('select', { class: 'estado-sel', 'aria-label': `Estado de ${t.titulo}`, onchange: (e) => estadoTrabajo(t.id, e.target.value) },
+      ESTADOS_TRABAJO.map((v) => h('option', { value: v, selected: (t.estado || 'hecho') === v }, v)));
     cont.append(h('div', { class: 'item', style: 'align-items:flex-start' },
       badge(ESTADO_T[t.estado] || 'ok', t.estado || 'hecho'),
       h('div', { class: 'main' },
@@ -259,8 +281,11 @@ function renderTrabajos() {
         t.detalle ? h('p', { class: 'muted', style: 'margin:6px 0 0;white-space:pre-wrap;font-size:14px' }, t.detalle) : null,
         links.length ? h('div', { class: 'chips', style: 'margin-top:8px' }, links.map((l) => h('a', { class: 'btn btn-sm', href: urlSegura(l.url), target: '_blank', rel: 'noopener' }, l.nombre || 'Abrir'))) : null,
       ),
-      h('div', { class: 'when' }, fechaLarga(t.fecha)),
+      h('div', { class: 'when' }, fechaLarga(t.fecha), t.terminadoEl && t.terminadoEl !== t.fecha ? h('small', {}, `terminado ${fechaLarga(t.terminadoEl)}`) : null),
       h('div', { class: 'acts' },
+        sel,
+        (t.estado || 'hecho') !== 'hecho' ? h('button', { class: 'btn btn-sm btn-primary', onclick: () => estadoTrabajo(t.id, 'hecho') }, '✓ Marcar como terminado') : null,
+        h('button', { class: 'btn btn-sm', onclick: () => formularioTrabajo(t.id) }, 'Editar'),
         c ? h('button', { class: 'btn btn-sm', onclick: () => detalle(c.id) }, 'Ver cliente') : null,
         h('button', {
           class: 'btn btn-sm btn-danger',
@@ -271,24 +296,37 @@ function renderTrabajos() {
   }
 }
 
-function formularioTrabajo() {
-  const sel = h('select', {}, h('option', { value: '' }, 'Interno / otro'), estado.data.clientes.map((c) => h('option', { value: c.id }, c.negocio)));
-  const titulo = h('input', { required: true, placeholder: 'Ej: Página web nueva' });
-  const detalleT = h('textarea', { rows: 4, placeholder: 'Qué se hizo' });
-  const estadoT = h('select', {}, ['hecho', 'en curso', 'pendiente'].map((v) => h('option', { value: v }, v)));
-  const fecha = h('input', { type: 'date', value: hoy() });
-  abrir('Anotar trabajo', null, h('div', { class: 'form' },
+// Anotar un trabajo nuevo o editar uno (con `id`): cliente, fecha, título, estado, detalle y links.
+function formularioTrabajo(id) {
+  const t = id ? (estado.data.trabajos || []).find((x) => x.id === id) : null;
+  if (id && !t) return;
+  const sel = h('select', {}, h('option', { value: '' }, 'Interno / otro'), estado.data.clientes.map((c) => h('option', { value: c.id, selected: t?.clienteId === c.id }, c.negocio)));
+  const titulo = h('input', { required: true, placeholder: 'Ej: Página web nueva', value: t?.titulo || '' });
+  const detalleT = h('textarea', { rows: 4, placeholder: 'Qué se hizo', value: t?.detalle || '' });
+  const estadoT = h('select', {}, ESTADOS_TRABAJO.slice().reverse().map((v) => h('option', { value: v, selected: (t?.estado || 'hecho') === v }, v)));
+  const fecha = h('input', { type: 'date', value: t?.fecha || hoy() });
+  const links = filasRepetibles(t?.links || [], [['nombre', 'Qué es (ej: Maqueta)'], ['url', 'https://…']], '', '+ Agregar link');
+  const error = h('p', { class: 'error', hidden: true });
+  abrir(t ? 'Editar trabajo' : 'Anotar trabajo', null, h('div', { class: 'form' },
     h('label', {}, 'Cliente', sel), h('label', {}, 'Fecha', fecha), h('label', { class: 'full' }, 'Trabajo *', titulo),
-    h('label', {}, 'Estado', estadoT), h('label', { class: 'full' }, 'Detalle', detalleT)), [
+    h('label', {}, 'Estado', estadoT), h('label', { class: 'full' }, 'Detalle', detalleT),
+    h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Links'), links), error), [
     h('button', { class: 'btn', onclick: cerrar }, 'Cancelar'),
     h('button', {
       class: 'btn btn-primary',
       onclick: async () => {
         if (!titulo.value.trim()) { titulo.focus(); return; }
+        const ls = links.valores();
+        if (ls.some((l) => !urlSegura(l.url))) { error.textContent = 'Los links deben empezar con https://'; error.hidden = false; return; }
+        const campos = { clienteId: sel.value || null, fecha: fecha.value || hoy(), titulo: titulo.value.trim(), detalle: detalleT.value.trim(), estado: estadoT.value, links: ls };
         const ok = await cambiar((d) => {
           d.trabajos = d.trabajos || [];
-          d.trabajos.push({ id: idNuevo('t'), clienteId: sel.value || null, cliente: '', fecha: fecha.value || hoy(), titulo: titulo.value.trim(), detalle: detalleT.value.trim(), estado: estadoT.value, links: [], por: estado.usuario });
-        }, 'Trabajo anotado');
+          const x = t ? d.trabajos.find((y) => y.id === t.id) : null;
+          const obj = x || { id: idNuevo('t'), cliente: '', por: estado.usuario };
+          Object.assign(obj, campos);
+          if (obj.estado === 'hecho') obj.terminadoEl = obj.terminadoEl || hoy(); else delete obj.terminadoEl;
+          if (!x) d.trabajos.push(obj);
+        }, t ? 'Trabajo actualizado' : 'Trabajo anotado');
         if (ok) cerrar();
       },
     }, 'Guardar'),
@@ -323,6 +361,7 @@ function detalle(id) {
     h('div', { class: 'blk' }, h('h3', {}, 'Contacto'), kv([
       ['WhatsApp', wa ? enlace(wa, `+${String(c.whatsapp).replace(/\D/g, '')}`) : '—'],
       ['Correo', c.email ? h('a', { href: `mailto:${c.email}` }, c.email) : '—'],
+      ['Unidad de negocio', nombreUnidad(c.unidad) || 'Sin unidad'],
       ['Responsable', c.responsable],
       ['Cliente desde', fechaLarga(c.desde) || '—'],
       ['Estado', c.estado === 'inactivo' ? badge('inactivo', 'Inactivo') : badge('ok', 'Activo')],
@@ -440,11 +479,12 @@ function filasRepetibles(items, columnas, clase, textoAgregar) {
 
 // `base` precarga un cliente nuevo; `prospectoId` marca ese prospecto como cerrado al guardar.
 function formulario(id, base, prospectoId) {
-  const c = id ? structuredClone(cliente(id)) : { estado: 'activo', responsable: estado.usuario, desde: hoy(), dominio: { registrador: 'NIC Chile', dns: 'Cloudflare' }, hosting: { proveedor: 'Vercel', frecuencia: 'mensual', activo: true }, productos: [], accesos: [], ...(base || {}) };
+  const c = id ? structuredClone(cliente(id)) : { estado: 'activo', unidad: unidad || 'web_agenda', responsable: estado.usuario, desde: hoy(), dominio: { registrador: 'NIC Chile', dns: 'Cloudflare' }, hosting: { proveedor: 'Vercel', frecuencia: 'mensual', activo: true }, productos: [], accesos: [], ...(base || {}) };
   const d = c.dominio || {};
   const ho = c.hosting || {};
   const f = {
     negocio: campo('Negocio *', c.negocio, { req: true }),
+    unidad: campo('Unidad de negocio', c.unidad || '', { opciones: [...(c.unidad ? [] : [['', 'Sin unidad']]), ...UNIDADES] }),
     contacto: campo('Contacto (dueño)', c.contacto),
     whatsapp: campo('WhatsApp', c.whatsapp, { ph: '56912345678' }),
     email: campo('Correo', c.email, { tipo: 'email' }),
@@ -468,7 +508,7 @@ function formulario(id, base, prospectoId) {
   const accesos = filasRepetibles(c.accesos || [], [['nombre', 'Nombre (ej: Cloudflare)'], ['url', 'https://…']], '', '+ Agregar acceso');
   const error = h('p', { class: 'error', hidden: true });
   const form = h('form', { class: 'form', id: 'form-cliente' },
-    f.negocio.el, f.contacto.el, f.whatsapp.el, f.email.el, f.ciudad.el, f.web.el, f.responsable.el, f.desde.el, f.estado.el,
+    f.negocio.el, f.unidad.el, f.contacto.el, f.whatsapp.el, f.email.el, f.ciudad.el, f.web.el, f.responsable.el, f.desde.el, f.estado.el,
     h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Dominio'), f.domNombre.el, f.domReg.el, f.domDns.el, f.domVence.el),
     h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Hosting'), f.hoProv.el, f.hoMonto.el, f.hoFrec.el, f.hoProx.el, h('label', { class: 'check full' }, cobrar, 'Cobrar hosting a este cliente')),
     h('fieldset', { class: 'fieldset' }, h('legend', {}, 'Productos contratados'), productos),
@@ -485,7 +525,7 @@ function formulario(id, base, prospectoId) {
     const nuevo = {
       ...c,
       id: c.id || idNuevo(v('negocio')),
-      negocio: v('negocio'), contacto: v('contacto'), whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email'), ciudad: v('ciudad'),
+      negocio: v('negocio'), unidad: v('unidad') || undefined, contacto: v('contacto'), whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email'), ciudad: v('ciudad'),
       web: v('web') && !/^https?:\/\//.test(v('web')) ? `https://${v('web')}` : v('web'),
       responsable: v('responsable'), desde: v('desde'), estado: v('estado'), notas: f.notas.input.value.trim(),
       dominio: { nombre: v('domNombre'), registrador: v('domReg'), dns: v('domDns'), vence: v('domVence') },
@@ -508,6 +548,37 @@ function formulario(id, base, prospectoId) {
   f.negocio.input.focus();
 }
 
+// ---------- migración: unidad de negocio de los registros antiguos ----------
+// El servidor arma el plan; se muestra completo y solo se aplica si el equipo confirma.
+const COLECCION = { leads: 'Lead', clientes: 'Cliente', productos: 'Producto', objetivos: 'Objetivo', estrategias: 'Estrategia' };
+async function revisarUnidad() {
+  const r = await api('/api/panel/os', { method: 'POST', body: JSON.stringify({ accion: 'migrar_unidad' }) });
+  if (r.status === 401) return mostrarLogin();
+  if (!r.ok) { toast(r.body?.error || 'No se pudo revisar'); return; }
+  const plan = r.body.plan || [];
+  const cuenta = (u) => plan.filter((x) => x.unidad === u).length;
+  abrir('Asignar unidad de negocio', plan.length ? `${plan.length} registros sin unidad · ${UNIDADES.map(([k, n]) => `${cuenta(k)} a ${n}`).join(' · ')}` : null, [
+    plan.length ? h('p', { class: 'muted', style: 'margin:0' }, 'Esto es lo que se va a cambiar. Lo que no aparece (objetivos y estrategias que no nombran el ERP) queda general, de las dos unidades. Si algo está mal, cancela, corrígelo a mano en su ficha y vuelve a revisar.') : null,
+    plan.length ? h('div', { style: 'overflow-x:auto' }, h('table', { class: 'table' },
+      h('thead', {}, h('tr', {}, h('th', {}, 'Tipo'), h('th', {}, 'Nombre'), h('th', {}, 'Unidad'))),
+      h('tbody', {}, plan.map((x) => h('tr', {}, h('td', {}, COLECCION[x.coleccion] || x.coleccion), h('td', {}, x.nombre || x.id), h('td', {}, nombreUnidad(x.unidad))))))) : h('p', { style: 'margin:0' }, 'Todo ya tiene unidad de negocio. No hay nada que cambiar.'),
+  ], [
+    h('button', { class: 'btn', type: 'button', onclick: cerrar }, plan.length ? 'Cancelar' : 'Cerrar'),
+    plan.length ? h('button', {
+      class: 'btn btn-primary', type: 'button',
+      onclick: async (e) => {
+        e.target.disabled = true;
+        const a = await api('/api/panel/os', { method: 'POST', body: JSON.stringify({ accion: 'migrar_unidad', aplicar: true }) });
+        if (!a.ok) { e.target.disabled = false; toast(a.body?.error || 'No se pudo aplicar'); return; }
+        cerrar();
+        toast(`Unidad asignada a ${a.body.aplicados} registros`);
+        await cargar();
+        estrategia?.recargar();
+      },
+    }, `Aplicar a ${plan.length} registros`) : null,
+  ]);
+}
+
 // ---------- eventos ----------
 $('#login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -523,6 +594,12 @@ $('#login-form').addEventListener('submit', async (e) => {
 $('#salir').addEventListener('click', async () => { await api('/api/panel/login', { method: 'DELETE' }); estado = { data: null, etag: null, usuario: '' }; mostrarLogin(); });
 for (const b of document.querySelectorAll('.tab')) b.addEventListener('click', () => { pestana = b.dataset.tab; render(); });
 $('#buscar').addEventListener('input', () => { renderClientes(); prospectos?.render(); });
+$('#unidad').addEventListener('change', (e) => {
+  unidad = e.target.value;
+  try { localStorage.setItem('panel-unidad', unidad); } catch { /* sin storage */ }
+  render();
+});
+$('#revisar-unidad').addEventListener('click', revisarUnidad);
 $('#nuevo').addEventListener('click', () => formulario(null));
 $('#nuevo-trabajo').addEventListener('click', formularioTrabajo);
 $('#guardar-transferencia').addEventListener('click', () => {
@@ -543,9 +620,12 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 
 prospectos = iniciarProspectos({
   h, $, badge, abrir, cerrar, cambiar, kv, enlace, urlSegura, waLink, idNuevo, campo, filasRepetibles, fechaLarga, hoy,
-  estado: () => estado, formulario, trabajosDe,
+  estado: () => estado, formulario, trabajosDe, unidad: () => unidad,
 });
 maquetas = iniciarMaquetas({ h, $, badge, abrir, urlSegura, estado: () => estado });
-estrategia = iniciarEstrategia({ h, $, badge, abrir, kv, fechaLarga, estado: () => estado });
+estrategia = iniciarEstrategia({
+  h, $, badge, abrir, kv, fechaLarga, toast, hoy, estado: () => estado, unidad: () => unidad,
+  verPestana: (t) => { pestana = t; render(); window.scrollTo(0, 0); },
+});
 
 cargar();
