@@ -115,3 +115,11 @@ export function mensajeCobro(cliente, transferencia) {
   msg += '\n\n¡Muchas gracias!';
   return msg;
 }
+
+// Cambia la etapa de un prospecto y la anota en su historial (para medir conversión por fecha).
+export const ORIGENES = [['', 'Sin dato'], ['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['whatsapp_frio', 'WhatsApp frío'], ['correo_frio', 'Correo frío'], ['referido', 'Referido'], ['google', 'Google'], ['web', 'Web'], ['otro', 'Otro']];
+export function cambiarEtapa(p, etapa, por, fecha = hoyChile()) {
+  if ((p.estado || 'por contactar') === etapa) return;
+  p.estado = etapa;
+  p.historialEtapas = [...(p.historialEtapas || []), { estado: etapa, fecha, por: por || '' }];
+}

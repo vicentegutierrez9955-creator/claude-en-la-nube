@@ -1,8 +1,9 @@
 import {
-  avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro,
+  avisos, nivel, hoyChile, sumarPeriodo, esFecha, ingresoMensual, pesos, fechaLarga, cuando, descripcion, mensajeCobro, cambiarEtapa,
 } from '/panel/alertas.js';
 import { iniciarProspectos } from '/panel/prospectos.js';
 import { iniciarMaquetas } from '/panel/maquetas.js';
+import { iniciarEstrategia } from '/panel/estrategia.js';
 
 const $ = (s) => document.querySelector(s);
 const ETIQUETA = { atrasado: 'Atrasado', pronto: 'Pronto', mes: 'Este mes', ok: 'Al día' };
@@ -10,6 +11,7 @@ let estado = { data: null, etag: null, usuario: '' };
 let pestana = 'resumen';
 let prospectos = null;
 let maquetas = null;
+let estrategia = null;
 
 // ---------- utilidades ----------
 function h(tag, props, ...hijos) {
@@ -130,6 +132,7 @@ function render() {
   renderClientes();
   prospectos?.render();
   maquetas?.render();
+  estrategia?.render();
   renderPagos();
   renderTrabajos();
   const t = $('#transferencia');
@@ -494,7 +497,7 @@ function formulario(id, base, prospectoId) {
       const i = data.clientes.findIndex((x) => x.id === nuevo.id);
       if (i >= 0) data.clientes[i] = nuevo; else data.clientes.push(nuevo);
       const p = prospectoId && (data.prospectos || []).find((x) => x.id === prospectoId);
-      if (p) { p.estado = 'cerrado'; p.clienteId = nuevo.id; }
+      if (p) { cambiarEtapa(p, 'cerrado', estado.usuario); p.clienteId = nuevo.id; }
     }, id ? 'Cliente actualizado' : 'Cliente agregado');
     if (ok) detalle(nuevo.id);
   });
@@ -543,5 +546,6 @@ prospectos = iniciarProspectos({
   estado: () => estado, formulario, trabajosDe,
 });
 maquetas = iniciarMaquetas({ h, $, badge, abrir, urlSegura, estado: () => estado });
+estrategia = iniciarEstrategia({ h, $, badge, abrir, kv, fechaLarga, estado: () => estado });
 
 cargar();

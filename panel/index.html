@@ -29,6 +29,8 @@
       <nav class="tabs" aria-label="Secciones">
         <button class="tab" data-tab="resumen" aria-current="page">Resumen</button>
         <button class="tab" data-tab="clientes">Clientes</button>
+        <button class="tab" data-tab="ventas">Ventas</button>
+        <button class="tab" data-tab="marca">Marca</button>
         <button class="tab" data-tab="maquetas">Maquetas</button>
         <button class="tab" data-tab="trabajos">Trabajos</button>
         <button class="tab" data-tab="pagos">Pagos</button>
@@ -60,6 +62,16 @@
         <div class="row"><span class="muted" id="prospectos-resumen"></span><button id="nuevo-prospecto" class="btn">+ Nuevo prospecto</button></div>
       </div>
       <div id="prospectos" class="pgrupos"></div>
+    </section>
+
+    <section id="tab-ventas" class="tab-panel" hidden>
+      <p class="muted intro">Estrategia para conseguir leads y clientes, y los productos que les ofrecemos. Se trabaja con Claude (conector Optimind OS, rol estratega de ventas).</p>
+      <div id="ventas"></div>
+    </section>
+
+    <section id="tab-marca" class="tab-panel" hidden>
+      <p class="muted intro">Contenido e imagen de marca. Se trabaja con Claude (conector Optimind OS, rol estratega de marca).</p>
+      <div id="marca"></div>
     </section>
 
     <section id="tab-maquetas" class="tab-panel" hidden>

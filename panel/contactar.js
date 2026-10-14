@@ -115,7 +115,11 @@ export function iniciarContactar(u) {
       const p = (d.prospectos || []).find((y) => y.id === x.id);
       if (!p) return;
       const marca = { fecha: hoy(), por: estado().usuario, via: 'WhatsApp', mensaje: m.codigo };
-      if ((m.grupo === 'A' || m.grupo === 'B') && (p.estado || 'por contactar') === 'por contactar') { p.estado = 'contactado'; p.contactado = marca; }
+      if ((m.grupo === 'A' || m.grupo === 'B') && (p.estado || 'por contactar') === 'por contactar') {
+        p.estado = 'contactado';
+        p.contactado = marca;
+        p.historialEtapas = [...(p.historialEtapas || []), { estado: 'contactado', fecha: marca.fecha, por: marca.por }];
+      }
       if (m.grupo === 'S') p.seguimiento = marca;
       p.mensajes = [...(p.mensajes || []), marca].slice(-20);
     }, `${x.negocio}: ${m.codigo} anotado`);

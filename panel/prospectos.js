@@ -1,5 +1,5 @@
 // Prospectos: negocios a los que les ofrecemos página, con lo que les hemos creado (maquetas, etc.).
-import { esFecha } from '/panel/alertas.js';
+import { esFecha, cambiarEtapa, ORIGENES } from '/panel/alertas.js';
 import { iniciarContactar } from '/panel/contactar.js';
 
 export const ESTADOS_P = ['por contactar', 'contactado', 'interesado', 'cerrado', 'no interesado'];
@@ -113,7 +113,7 @@ export function iniciarProspectos(u) {
     cambiar((d) => {
       const x = (d.prospectos || []).find((y) => y.id === p.id);
       if (!x || (x.estado || 'por contactar') !== 'por contactar') return;
-      x.estado = 'contactado';
+      cambiarEtapa(x, 'contactado', estado().usuario);
       x.contactado = { fecha: hoy(), por: estado().usuario, via };
     }, `${p.negocio}: marcado como contactado`).then(() => { if ($('#dlg').open) detalle(p.id); });
   };
@@ -234,7 +234,7 @@ export function iniciarProspectos(u) {
     const wa = waLink(p.whatsapp);
     const trabajos = trabajosDe({ prospectoId: id });
     const sel = h('select', { 'aria-label': 'Estado', style: 'width:auto' }, ESTADOS_P.map((e) => h('option', { value: e, selected: e === (p.estado || 'por contactar') }, e)));
-    sel.addEventListener('change', () => cambiar((d) => { const x = (d.prospectos || []).find((y) => y.id === id); if (x) x.estado = sel.value; }, 'Estado actualizado').then(() => detalle(id)));
+    sel.addEventListener('change', () => cambiar((d) => { const x = (d.prospectos || []).find((y) => y.id === id); if (x) cambiarEtapa(x, sel.value, estado().usuario); }, 'Estado actualizado').then(() => detalle(id)));
     abrir(p.negocio, [p.rubro, p.comuna].filter(Boolean).join(' · '), [
       h('div', { class: 'blk' }, h('h3', {}, 'Estado'), h('div', { class: 'row' }, sel, p.clienteId ? h('span', { class: 'muted' }, 'Ya es cliente') : null)),
       h('div', { class: 'blk' }, h('h3', {}, 'Lo que le creamos'), creados(p)),
@@ -248,6 +248,7 @@ export function iniciarProspectos(u) {
         ['Página web', h('span', {}, textoWeb(p), linkWeb(p) ? [' · ', linkWeb(p)] : null)],
         ['Redes / web', p.redes ? enlace(/^https?:\/\//.test(p.redes) ? p.redes : `https://${p.redes}`, p.redes) : null],
         ['Responsable', p.responsable],
+        ['Origen', (ORIGENES.find(([k]) => k === p.origen) || [])[1]],
         ['Agregado', fechaLarga(p.desde)],
         esFecha(p.contactarEl) ? ['Para contactar el', fechaLarga(p.contactarEl)] : null,
         p.contactado ? ['Contactado', [fechaLarga(p.contactado.fecha), p.contactado.por && `por ${p.contactado.por}`, p.contactado.via && `(${p.contactado.via})`].filter(Boolean).join(' ')] : null,
@@ -308,6 +309,7 @@ export function iniciarProspectos(u) {
       tieneWeb: campo('¿Tiene página web?', conWeb(p) ? 'si' : p.tieneWeb || '', { opciones: [['', 'Sin revisar'], ['no', 'No tiene'], ['si', 'Sí, ya tiene']] }),
       webActual: campo('Su página actual', p.webActual, { ph: 'https://…' }),
       responsable: campo('Responsable', p.responsable),
+      origen: campo('¿De dónde llegó?', p.origen || '', { opciones: ORIGENES }),
       contactarEl: campo('Para contactar el (sale en la lista del día)', p.contactarEl, { tipo: 'date' }),
       estado: campo('Estado', p.estado, { opciones: ESTADOS_P.map((e) => [e, e]) }),
       googleNota: campo('Nota en Google', sinDato(p.googleNota) ? '' : String(p.googleNota).replace('.', ','), { ph: 'Ej: 4,6' }),
@@ -339,11 +341,18 @@ export function iniciarProspectos(u) {
         whatsapp: v('whatsapp').replace(/\D/g, ''), email: v('email').toLowerCase(), telefono: v('telefono'), redes: v('redes'), responsable: v('responsable'),
         contactarEl: esFecha(v('contactarEl')) ? v('contactarEl') : '',
         estado: v('estado'), googleNota: nota ? Number(nota) : '', googleResenas: resenas ? Number(resenas) : '',
-        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(),
+        tieneWeb: webActual ? 'si' : v('tieneWeb'), webActual, mensaje: f.mensaje.input.value.trim(), notas: f.notas.input.value.trim(), creado: creado.valores(), origen: v('origen'),
       };
       const ok = await cambiar((d) => {
         d.prospectos = d.prospectos || [];
         const i = d.prospectos.findIndex((x) => x.id === nuevo.id);
+        // El historial de etapas se toma de lo guardado (puede haber cambiado mientras el formulario estaba abierto).
+        const previo = i >= 0 ? d.prospectos[i] : null;
+        const etapa = nuevo.estado || 'por contactar';
+        nuevo.historialEtapas = previo?.historialEtapas || [];
+        nuevo.estado = previo ? previo.estado || 'por contactar' : null;
+        if (nuevo.estado) cambiarEtapa(nuevo, etapa, estado().usuario);
+        else { nuevo.estado = etapa; nuevo.historialEtapas = [{ estado: etapa, fecha: hoy(), por: estado().usuario }]; }
         if (i >= 0) d.prospectos[i] = nuevo; else d.prospectos.push(nuevo);
       }, id ? 'Prospecto actualizado' : 'Prospecto agregado');
       if (ok) detalle(nuevo.id);

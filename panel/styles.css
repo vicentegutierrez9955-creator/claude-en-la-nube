@@ -174,3 +174,20 @@ body.ordenando{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .check input{width:auto}
 
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:50;max-width:calc(100vw - 32px)}
+
+/* Ventas y Marca (Optimind OS) */
+.intro{margin:0 0 14px}
+#ventas>.section-head,#marca>.section-head{margin-top:26px}
+.vision{max-width:none}
+.vision p{font-size:17px;font-weight:600}
+.obj{cursor:default;gap:8px}
+.est small{display:block}
+.inis{margin:8px 0 0;padding-left:18px;display:grid;gap:4px;font-size:14px}
+.kanban{display:grid;grid-template-columns:repeat(5,minmax(170px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}
+.kcol{background:var(--soft);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:170px}
+.kcol h3{font-size:14px}
+.kcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;font-size:14px}
+.rutina{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.rutina li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.rutina li.hecho{color:var(--muted);text-decoration:line-through}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
