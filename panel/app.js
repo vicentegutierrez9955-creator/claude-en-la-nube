@@ -601,7 +601,7 @@ $('#unidad').addEventListener('change', (e) => {
 });
 $('#revisar-unidad').addEventListener('click', revisarUnidad);
 $('#nuevo').addEventListener('click', () => formulario(null));
-$('#nuevo-trabajo').addEventListener('click', formularioTrabajo);
+$('#nuevo-trabajo').addEventListener('click', () => formularioTrabajo());
 $('#guardar-transferencia').addEventListener('click', () => {
   const t = $('#transferencia').value.trim();
   cambiar((d) => { d.config = { ...(d.config || {}), transferencia: t }; }, 'Datos de transferencia guardados');
