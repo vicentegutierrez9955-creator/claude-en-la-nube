@@ -6,7 +6,7 @@ export const esFecha = (s) => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.tes
 export const sumarDias = (fecha, n) => new Date(Date.parse(fecha + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
 export const lunesDe = (fecha) => { const d = new Date(fecha + 'T12:00:00Z'); return sumarDias(fecha, -((d.getUTCDay() + 6) % 7)); };
 export const nuevoId = (prefijo) => `${prefijo}-${randomBytes(4).toString('base64url').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 6) || Date.now().toString(36)}`;
-export const slug = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
+export const slug = (s) => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 
 // Quita campos vacíos para que las respuestas gasten poco contexto.
 export function compacto(o) {
