@@ -1,6 +1,6 @@
 // Registro dinámico de clientes (RFC 7591). No guarda nada: el client_id lleva firmados sus retornos.
-import { registrarCliente } from '../_lib/os/oauth.js';
-import { jsonCors, opciones } from '../_lib/os/http.js';
+import { registrarCliente } from '../os/oauth.js';
+import { jsonCors, opciones } from '../os/http.js';
 
 export default {
   async fetch(request) {

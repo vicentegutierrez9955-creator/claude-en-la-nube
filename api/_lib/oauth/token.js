@@ -1,9 +1,9 @@
 // Endpoint de tokens: canjea el código (con PKCE) y renueva tokens rotando el refresh token.
 import {
   leerFirmado, s256, emitirTokens, usarUnaVez, revocarFamilia, familiaRevocada, usuarioPermitido, recurso,
-} from '../_lib/os/oauth.js';
-import { jsonCors, opciones, leerCuerpo } from '../_lib/os/http.js';
-import { auditar } from '../_lib/os/auditoria.js';
+} from '../os/oauth.js';
+import { jsonCors, opciones, leerCuerpo } from '../os/http.js';
+import { auditar } from '../os/auditoria.js';
 
 const error = (codigo, descripcion, status = 400) => jsonCors({ error: codigo, error_description: descripcion }, status);
 

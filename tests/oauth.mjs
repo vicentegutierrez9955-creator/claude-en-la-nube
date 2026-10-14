@@ -1,6 +1,6 @@
 // Prueba del flujo OAuth completo en memoria. Uso: npm run test:oauth
 import { createHash, randomBytes } from 'node:crypto';
-const R = new URL('../api/oauth/', import.meta.url).href;
+const R = new URL('../api/_lib/oauth/', import.meta.url).href;
 const [reg, aut, tok, meta, rec] = await Promise.all(['registro','autorizar','token','metadatos','recurso'].map(f=>import(R+f+'.js').then(m=>m.default)));
 const O = 'https://os.test';
 const ok = (c, m) => { console.log(c ? 'OK  ' : 'FALLA', m); if (!c) process.exitCode = 1; };

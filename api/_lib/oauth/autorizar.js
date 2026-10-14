@@ -1,11 +1,11 @@
 // Pantalla de autorización: la persona entra con su usuario y clave personal (OS_USUARIOS) y, si es correcta,
 // se devuelve un código de un solo uso al cliente (claude.ai). Nada se redirige antes de validar cliente y retorno.
-import { escapar } from '../_lib/panel.js';
+import { escapar } from '../panel.js';
 import {
   validarCliente, verificarClave, emitirCodigo, recurso, esLoopback, bloqueado, anotarFallo, SCOPE,
-} from '../_lib/os/oauth.js';
-import { leerCuerpo } from '../_lib/os/http.js';
-import { auditar } from '../_lib/os/auditoria.js';
+} from '../os/oauth.js';
+import { leerCuerpo } from '../os/http.js';
+import { auditar } from '../os/auditoria.js';
 
 const CAMPOS = ['response_type', 'client_id', 'redirect_uri', 'state', 'code_challenge', 'code_challenge_method', 'scope', 'resource'];
 

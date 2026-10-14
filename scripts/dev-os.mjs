@@ -7,14 +7,14 @@ process.env.PANEL_STORE ||= 'memory';
 const PUERTO = Number(process.env.PORT) || 8790;
 const RUTAS = {
   '/api/mcp': '../api/mcp.js',
-  '/api/oauth/autorizar': '../api/oauth/autorizar.js',
-  '/api/oauth/token': '../api/oauth/token.js',
-  '/api/oauth/registro': '../api/oauth/registro.js',
-  '/api/oauth/metadatos': '../api/oauth/metadatos.js',
-  '/api/oauth/recurso': '../api/oauth/recurso.js',
-  '/.well-known/oauth-authorization-server': '../api/oauth/metadatos.js',
-  '/.well-known/oauth-protected-resource/api/mcp': '../api/oauth/recurso.js',
-  '/.well-known/oauth-protected-resource': '../api/oauth/recurso.js',
+  '/api/oauth/autorizar': '../api/oauth/[accion].js',
+  '/api/oauth/token': '../api/oauth/[accion].js',
+  '/api/oauth/registro': '../api/oauth/[accion].js',
+  '/api/oauth/metadatos': '../api/oauth/[accion].js',
+  '/api/oauth/recurso': '../api/oauth/[accion].js',
+  '/.well-known/oauth-authorization-server': '../api/oauth/[accion].js',
+  '/.well-known/oauth-protected-resource/api/mcp': '../api/oauth/[accion].js',
+  '/.well-known/oauth-protected-resource': '../api/oauth/[accion].js',
   '/api/panel/os': '../api/panel/os.js',
 };
 

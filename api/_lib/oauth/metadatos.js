@@ -1,6 +1,6 @@
 // Metadatos del servidor de autorización (RFC 8414). Se sirve en /.well-known/oauth-authorization-server.
-import { origen, SCOPE } from '../_lib/os/oauth.js';
-import { jsonCors, opciones } from '../_lib/os/http.js';
+import { origen, SCOPE } from '../os/oauth.js';
+import { jsonCors, opciones } from '../os/http.js';
 
 export default {
   fetch(request) {
