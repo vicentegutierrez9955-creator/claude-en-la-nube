@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de boleta de honorarios 2026 (retención 15,25%) | Optimind</title>
+<meta name="description" content="Calcula gratis el bruto, la retención y el líquido de tu boleta de honorarios 2026 (15,25%). Descubre cuánto cobrar por sesión si atiendes con hora.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Calculadora de boleta de honorarios 2026">
+<meta property="og:description" content="Bruto, retención 15,25% y líquido en segundos. Gratis y sin registrarte.">
+<meta property="og:locale" content="es_CL">
+<meta name="theme-color" content="#1f6feb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f6feb'/%3E%3Ctext x='32' y='44' font-family='Arial' font-weight='700' font-size='34' text-anchor='middle' fill='%23fff'%3E%24%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f4f6fa;--card:#fff;--ink:#132033;--muted:#5d6b80;--line:#e3e8f0;--soft:#eef2f8;
+  --acc:#1f6feb;--acc-soft:#e8f0fe;--ok:#1e7b3a;--ok-bg:#e7f6ec;--warn:#946c00;--warn-bg:#fff7d6;--red:#c62828;
+  --shadow:0 1px 2px rgba(19,32,51,.06),0 10px 30px -18px rgba(19,32,51,.3);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1420;--card:#152031;--ink:#e8eef7;--muted:#9aa8bc;--line:#24324a;--soft:#1b2a40;
+    --acc:#4c8dff;--acc-soft:#18294a;--ok:#6fd08c;--ok-bg:#15301f;--warn:#f2cf5b;--warn-bg:#352d12;--red:#ff7a7a;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{padding:18px 0}
+.marca{font-weight:800;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+.marca span{color:var(--acc)}
+.marca small{color:var(--muted);font-weight:600;font-size:15px;margin-left:4px}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.02em}
+h2{font-size:21px;margin:0 0 6px;letter-spacing:-.01em}
+h3{font-size:16px;margin:0}
+.bajada{color:var(--muted);margin:0 0 20px;font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.modos{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--soft);border-radius:12px;padding:4px;margin-bottom:16px}
+.modos button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:10px 8px;border-radius:9px;cursor:pointer;line-height:1.25}
+.modos button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+.campo{margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,select{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.monto{position:relative}
+.monto::before{content:"$";position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+.monto input{padding-left:26px;font-size:22px;font-weight:700}
+.resultado{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px}
+.cifra{background:var(--soft);border-radius:12px;padding:12px}
+.cifra small{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.cifra b{display:block;font-size:clamp(17px,4.2vw,22px);font-variant-numeric:tabular-nums;letter-spacing:-.01em;overflow-wrap:anywhere}
+.cifra.principal{background:var(--acc-soft)}
+.cifra.principal b{color:var(--acc)}
+.acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{border-color:var(--acc)}
+.btn-primario{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn-grande{width:100%;padding:13px 16px;font-size:17px}
+.nota{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:14px;margin:14px 0 0}
+.precio{font-size:clamp(30px,8vw,40px);font-weight:800;letter-spacing:-.02em;color:var(--acc);font-variant-numeric:tabular-nums;margin:2px 0}
+.cta{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft),var(--card) 55%)}
+.cta ul{padding-left:20px;margin:10px 0 16px}
+.cta li{margin:4px 0}
+.oculto{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.exito{background:var(--ok-bg);color:var(--ok);border-radius:12px;padding:14px;font-weight:600}
+.error{color:var(--red);font-size:14px;margin:8px 0 0;min-height:1em}
+details{border-top:1px solid var(--line);padding:12px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-size:13px;font-weight:600}
+tr.actual td{font-weight:700;color:var(--acc)}
+footer{padding:10px 0 40px;color:var(--muted);font-size:14px}
+@media (max-width:520px){
+  .resultado{grid-template-columns:1fr}
+  .cifra{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .cifra small{font-size:14px}
+  .grid2{grid-template-columns:1fr}
+  .card{padding:16px}
+}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿Cuánto es la retención de la boleta de honorarios en 2026?","acceptedAnswer":{"@type":"Answer","text":"En 2026 la retención es de 15,25% del monto bruto. Por la Ley 21.133 sube a 16% en 2027 y a 17% en 2028."}},
+{"@type":"Question","name":"¿Cómo calculo el líquido de una boleta de honorarios?","acceptedAnswer":{"@type":"Answer","text":"Multiplica el bruto por 0,8475. Por ejemplo, una boleta de $100.000 bruto deja $84.750 líquido, con una retención de $15.250."}},
+{"@type":"Question","name":"¿Cuánto debo cobrar bruto para recibir un líquido determinado?","acceptedAnswer":{"@type":"Answer","text":"Divide el líquido por 0,8475 y redondea hacia arriba. Para recibir $50.000 líquido, la boleta debe ser de $58.997 bruto."}},
+{"@type":"Question","name":"¿Quién paga la retención de la boleta de honorarios?","acceptedAnswer":{"@type":"Answer","text":"Si la emites a una empresa, ella retiene el monto y lo paga al SII. Si la emites a una persona natural, marcas que la retención la pagas tú y la declaras en el Formulario 29 del mes siguiente."}},
+{"@type":"Question","name":"¿Para qué se usa lo que me retienen?","acceptedAnswer":{"@type":"Answer","text":"En la Operación Renta de abril se usa para pagar tus cotizaciones previsionales y de salud y tu impuesto a la renta. Si sobra, el SII te devuelve la diferencia."}}
+]}
+</script>
+</head>
+<body>
+<header class="wrap"><a class="marca" href="/herramientas">Optimind<span>.</span> <small>Herramientas gratis</small></a></header>
+
+<main class="wrap">
+  <h1>Calculadora de boleta de honorarios 2026</h1>
+  <p class="bajada">Bruto, retención y líquido en segundos, con la tasa vigente de <b>15,25%</b>. Gratis y sin registrarte.</p>
+
+  <section class="card" aria-labelledby="t-calc">
+    <h2 id="t-calc" class="oculto">Calcular boleta</h2>
+    <div class="modos" role="group" aria-label="¿Qué monto conoces?">
+      <button type="button" data-modo="bruto" aria-pressed="true">Tengo el bruto</button>
+      <button type="button" data-modo="liquido" aria-pressed="false">Quiero recibir un líquido</button>
+    </div>
+    <div class="grid2">
+      <div class="campo">
+        <label for="monto" id="etq-monto">Monto bruto de la boleta</label>
+        <div class="monto"><input id="monto" inputmode="numeric" autocomplete="off" value="100.000" aria-describedby="etq-monto"></div>
+      </div>
+      <div class="campo">
+        <label for="anio">Año de la boleta</label>
+        <select id="anio">
+          <option value="0.145">2025 (14,5%)</option>
+          <option value="0.1525" selected>2026 (15,25%)</option>
+          <option value="0.16">2027 (16%)</option>
+          <option value="0.17">2028 (17%)</option>
+        </select>
+      </div>
+    </div>
+    <div class="resultado" aria-live="polite">
+      <div class="cifra" id="c-bruto"><small>Bruto</small><b>$0</b></div>
+      <div class="cifra" id="c-ret"><small>Retención</small><b>$0</b></div>
+      <div class="cifra principal" id="c-liq"><small>Líquido que recibes</small><b>$0</b></div>
+    </div>
+    <div class="acciones">
+      <button type="button" class="btn" id="copiar">Copiar resultado</button>
+      <a class="btn" id="compartir" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="t-sesion">
+    <h2 id="t-sesion">¿Cuánto cobrar por sesión?</h2>
+    <p class="muted chico" style="margin:0 0 14px">Para quienes atienden con hora: podología, kinesiología, psicología, nutrición, estética y otros. Considera la retención y las horas que se pierden porque el paciente no llega.</p>
+    <div class="grid2">
+      <div class="campo"><label for="meta">Quiero ganar líquido al mes</label><div class="monto"><input id="meta" inputmode="numeric" autocomplete="off" value="1.200.000"></div></div>
+      <div class="campo"><label for="gastos">Mis gastos del mes (arriendo, insumos)</label><div class="monto"><input id="gastos" inputmode="numeric" autocomplete="off" value="250.000"></div></div>
+      <div class="campo"><label for="sesiones">Sesiones que puedo dar por semana</label><input id="sesiones" type="number" min="1" max="120" value="25"></div>
+      <div class="campo"><label for="inasist">Pacientes que no llegan</label>
+        <select id="inasist"><option value="0">Ninguno</option><option value="0.05">1 de cada 20 (5%)</option><option value="0.1" selected>1 de cada 10 (10%)</option><option value="0.15">1 de cada 7 (15%)</option><option value="0.2">1 de cada 5 (20%)</option></select>
+      </div>
+    </div>
+    <p class="muted chico" style="margin:0">Deberías cobrar por sesión (bruto, con boleta):</p>
+    <div class="precio" id="precio">$0</div>
+    <p class="chico muted" id="detalle-precio" style="margin:0"></p>
+    <p class="nota" id="perdida" hidden></p>
+  </section>
+
+  <section class="card cta" id="maqueta" aria-labelledby="t-cta">
+    <h2 id="t-cta">¿Atiendes con hora? Que tus pacientes reserven solos</h2>
+    <p style="margin:0">Hacemos webs con agenda online para profesionales independientes y consultas chicas:</p>
+    <ul>
+      <li>Tus pacientes eligen día y hora sin escribirte por WhatsApp.</li>
+      <li>Recordatorios automáticos para que no se te pierdan horas.</li>
+      <li>Apareces en Google cuando buscan tu servicio en tu comuna.</li>
+    </ul>
+    <p style="margin:0 0 14px"><b>Te mostramos gratis cómo quedaría la tuya, sin compromiso.</b> Déjanos tus datos y te escribimos por WhatsApp.</p>
+    <form id="form" novalidate>
+      <div class="grid2">
+        <div class="campo"><label for="f-nombre">Tu nombre</label><input id="f-nombre" name="nombre" autocomplete="name" maxlength="60" required></div>
+        <div class="campo"><label for="f-wsp">Tu WhatsApp</label><input id="f-wsp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="9 1234 5678" maxlength="20" required></div>
+        <div class="campo"><label for="f-rubro">¿A qué te dedicas?</label>
+          <select id="f-rubro" name="rubro"><option value="">Elige una opción</option><option>Podología</option><option>Kinesiología</option><option>Psicología</option><option>Nutrición</option><option>Fonoaudiología</option><option>Odontología</option><option>Estética</option><option>Barbería o peluquería</option><option>Veterinaria</option><option>Otro</option></select>
+        </div>
+        <div class="campo"><label for="f-comuna">Comuna <span class="muted" style="font-weight:400">(opcional)</span></label><input id="f-comuna" name="comuna" autocomplete="address-level2" maxlength="60"></div>
+      </div>
+      <div class="campo"><label for="f-negocio">Nombre de tu consulta o negocio <span class="muted" style="font-weight:400">(opcional)</span></label><input id="f-negocio" name="negocio" autocomplete="organization" maxlength="80"></div>
+      <div class="oculto" aria-hidden="true"><label for="f-web">No llenar</label><input id="f-web" name="web" tabindex="-1" autocomplete="off"></div>
+      <button class="btn btn-primario btn-grande" type="submit" id="enviar">Quiero ver mi web gratis</button>
+      <p class="error" id="error" role="alert"></p>
+      <p class="muted chico" style="margin:6px 0 0">Usamos tus datos solo para escribirte sobre tu web. No los compartimos con nadie.</p>
+    </form>
+    <div class="exito" id="exito" hidden>¡Listo! Te escribiremos por WhatsApp para mostrarte cómo quedaría tu web.</div>
+  </section>
+
+  <section class="card" aria-labelledby="t-tabla">
+    <h2 id="t-tabla">Retención por año</h2>
+    <p class="muted chico" style="margin:0 0 8px">La Ley 21.133 sube la retención de a poco hasta 2028.</p>
+    <table>
+      <thead><tr><th>Año</th><th>Retención</th><th>Líquido de $100.000</th></tr></thead>
+      <tbody>
+        <tr><td>2025</td><td>14,5%</td><td>$85.500</td></tr>
+        <tr class="actual"><td>2026</td><td>15,25%</td><td>$84.750</td></tr>
+        <tr><td>2027</td><td>16%</td><td>$84.000</td></tr>
+        <tr><td>2028</td><td>17%</td><td>$83.000</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" aria-labelledby="t-faq">
+    <h2 id="t-faq">Preguntas frecuentes</h2>
+    <details><summary>¿Cuánto es la retención de la boleta de honorarios en 2026?</summary><p>En 2026 la retención es de 15,25% del monto bruto. Por la Ley 21.133 sube a 16% en 2027 y a 17% en 2028.</p></details>
+    <details><summary>¿Cómo calculo el líquido?</summary><p>Multiplica el bruto por 0,8475. Por ejemplo, una boleta de $100.000 bruto deja $84.750 líquido, con una retención de $15.250.</p></details>
+    <details><summary>¿Cuánto cobro bruto para recibir un líquido determinado?</summary><p>Divide el líquido por 0,8475 y redondea hacia arriba. Para recibir $50.000 líquido, la boleta debe ser de $58.997 bruto.</p></details>
+    <details><summary>¿Quién paga la retención?</summary><p>Si la emites a una empresa, ella retiene el monto y lo paga al SII. Si la emites a una persona natural, marcas que la retención la pagas tú y la declaras en el Formulario 29 del mes siguiente.</p></details>
+    <details><summary>¿Para qué se usa lo que me retienen?</summary><p>En la Operación Renta de abril se usa para pagar tus cotizaciones previsionales y de salud y tu impuesto a la renta. Si sobra, el SII te devuelve la diferencia.</p></details>
+    <details><summary>¿Esta calculadora es oficial?</summary><p>No. Es una herramienta gratuita y referencial de Optimind Partners. Al emitir tu boleta en sii.cl, el SII calcula la retención automáticamente.</p></details>
+  </section>
+</main>
+
+<footer class="wrap">Herramienta gratuita de <b>Optimind Partners</b>: webs con agenda online para negocios chicos de Chile. · <a href="/herramientas">Más herramientas</a></footer>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const clp = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  const num = (el) => Number(String(el.value).replace(/\D/g, '')) || 0;
+  const liquidoDe = (bruto, r) => bruto - Math.round(bruto * r);
+  // Menor bruto cuyo líquido alcanza el monto pedido (la retención se redondea al peso).
+  function brutoPara(liq, r) {
+    let b = Math.ceil(liq / (1 - r));
+    while (b > 0 && liquidoDe(b - 1, r) >= liq) b--;
+    while (liquidoDe(b, r) < liq) b++;
+    return b;
+  }
+  // Muestra los montos con puntos de miles mientras se escriben.
+  function formatear(el) {
+    const n = num(el);
+    el.value = n ? n.toLocaleString('es-CL') : '';
+  }
+
+  let modo = 'bruto';
+  let resumen = '';
+  function calcular() {
+    const r = Number($('#anio').value);
+    const pct = (r * 100).toLocaleString('es-CL') + '%';
+    const m = Math.min(num($('#monto')), 999999999);
+    const bruto = modo === 'bruto' ? m : brutoPara(m, r);
+    const ret = Math.round(bruto * r);
+    const liq = bruto - ret;
+    $('#c-bruto b').textContent = clp.format(bruto);
+    $('#c-ret small').textContent = 'Retención (' + pct + ')';
+    $('#c-ret b').textContent = clp.format(ret);
+    $('#c-liq b').textContent = clp.format(liq);
+    resumen = 'Boleta de honorarios: bruto ' + clp.format(bruto) + ', retención ' + pct + ' ' + clp.format(ret) + ', líquido ' + clp.format(liq) + '.';
+    const link = location.origin + location.pathname;
+    $('#compartir').href = 'https://wa.me/?text=' + encodeURIComponent('Calculadora gratis de boleta de honorarios 2026: ' + link);
+    calcularSesion(r);
+  }
+
+  function calcularSesion(r) {
+    const meta = num($('#meta'));
+    const gastos = num($('#gastos'));
+    const sesiones = Math.max(0, Math.min(120, Number($('#sesiones').value) || 0));
+    const inas = Number($('#inasist').value);
+    if (!sesiones || !(meta + gastos)) { $('#precio').textContent = '—'; $('#detalle-precio').textContent = 'Completa los datos para calcular.'; $('#perdida').hidden = true; return; }
+    const brutoMes = (meta + gastos) / (1 - r);
+    const atendidas = sesiones * 4.33 * (1 - inas);
+    const precio = Math.ceil(brutoMes / atendidas / 500) * 500;
+    $('#precio').textContent = clp.format(precio);
+    $('#detalle-precio').textContent = 'Con ' + sesiones + ' sesiones por semana (unas ' + Math.round(atendidas) + ' atendidas al mes) necesitas facturar ' + clp.format(Math.round(brutoMes)) + ' bruto al mes.';
+    const sinFaltas = Math.ceil(brutoMes / (sesiones * 4.33) / 500) * 500;
+    if (inas > 0 && precio > sinFaltas) {
+      const perdidas = Math.round(sesiones * 4.33 * inas);
+      $('#perdida').innerHTML = '';
+      $('#perdida').append('Las ' + perdidas + ' horas al mes que se pierden te obligan a cobrar ' + clp.format(precio - sinFaltas) + ' más por sesión. Con recordatorios automáticos, la mayoría de esas horas se recuperan. ');
+      const a = document.createElement('a'); a.href = '#maqueta'; a.textContent = 'Ver cómo';
+      $('#perdida').append(a);
+      $('#perdida').hidden = false;
+    } else $('#perdida').hidden = true;
+  }
+
+  document.querySelectorAll('.modos button').forEach((b) => b.addEventListener('click', () => {
+    modo = b.dataset.modo;
+    document.querySelectorAll('.modos button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $('#etq-monto').textContent = modo === 'bruto' ? 'Monto bruto de la boleta' : 'Líquido que quieres recibir';
+    calcular();
+  }));
+  ['#monto', '#meta', '#gastos'].forEach((s) => $(s).addEventListener('input', (e) => { formatear(e.target); calcular(); }));
+  ['#anio', '#sesiones', '#inasist'].forEach((s) => $(s).addEventListener('input', calcular));
+  $('#copiar').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(resumen); $('#copiar').textContent = '¡Copiado!'; }
+    catch { $('#copiar').textContent = 'No se pudo copiar'; }
+    setTimeout(() => { $('#copiar').textContent = 'Copiar resultado'; }, 1800);
+  });
+
+  $('#form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const datos = Object.fromEntries(new FormData(f));
+    const digitos = datos.whatsapp.replace(/\D/g, '');
+    $('#error').textContent = '';
+    if (!datos.nombre.trim()) { $('#error').textContent = 'Escribe tu nombre.'; f.nombre.focus(); return; }
+    if (!/^(569\d{8}|9\d{8})$/.test(digitos)) { $('#error').textContent = 'Revisa tu WhatsApp: debe ser un celular chileno, como 9 1234 5678.'; f.whatsapp.focus(); return; }
+    $('#enviar').disabled = true;
+    $('#enviar').textContent = 'Enviando…';
+    try {
+      const r = await fetch('/api/publico/contacto', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...datos, herramienta: 'boleta-honorarios' }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo enviar, intenta de nuevo.');
+      f.hidden = true;
+      $('#exito').hidden = false;
+    } catch (err) {
+      $('#error').textContent = err.message;
+      $('#enviar').disabled = false;
+      $('#enviar').textContent = 'Quiero ver mi web gratis';
+    }
+  });
+
+  calcular();
+})();
+</script>
+</body>
+</html>

@@ -11,6 +11,7 @@
   "scripts": {
     "test:oauth": "PANEL_STORE=memory PANEL_SECRET=secreto-local OS_USUARIOS=prueba:scrypt:16384:aP6zV-F2XRQOHFLpzInu4Q:69I9ilcuNGUytkudYJ-6FtAwAmRCI5z_IkYR8M9D0Ys node tests/oauth.mjs",
     "dev:os": "node scripts/dev-os.mjs",
-    "test:mcp": "node tests/mcp.mjs"
+    "test:mcp": "node tests/mcp.mjs",
+    "test:contacto": "PANEL_STORE=memory node tests/contacto.mjs"
   }
 }
