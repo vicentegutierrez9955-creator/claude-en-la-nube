@@ -6,7 +6,8 @@
 import { leerDatos, guardarDatos, datosIniciales, enviarCorreo, escapar, json } from '../_lib/panel.js';
 
 const HERRAMIENTAS = {
-  'boleta-honorarios': { nombre: 'Calculadora de boleta de honorarios', unidad: 'web_agenda' },
+  'boleta-honorarios': { nombre: 'Calculadora de boleta de honorarios', unidad: 'web_agenda', pide: 'una maqueta gratis' },
+  'presupuesto-taller': { nombre: 'Generador de presupuestos para talleres', unidad: 'erp_talleres', pide: 'conocer Tuerkit', rubro: 'Taller mecánico' },
 };
 const RUBROS = ['Podología', 'Kinesiología', 'Psicología', 'Nutrición', 'Fonoaudiología', 'Odontología', 'Estética', 'Barbería o peluquería', 'Veterinaria', 'Taller mecánico', 'Otro'];
 const TOPE_DIARIO = 30;
@@ -36,11 +37,11 @@ export default {
     const nombre = texto(b.nombre, 60);
     const whatsapp = celular(b.whatsapp);
     if (!herramienta || !nombre || !whatsapp) return json({ error: 'Revisa tu nombre y tu WhatsApp (celular chileno).' }, 400);
-    const rubro = RUBROS.includes(b.rubro) ? b.rubro : '';
+    const rubro = RUBROS.includes(b.rubro) ? b.rubro : herramienta.rubro || '';
     const negocio = texto(b.negocio, 80) || nombre;
     const comuna = texto(b.comuna, 60);
     const fecha = hoy();
-    const nota = `Llegó solo por la ${herramienta.nombre} (${fecha}) y pidió una maqueta gratis.`;
+    const nota = `Llegó solo por la herramienta ${herramienta.nombre} (${fecha}) y pidió ${herramienta.pide}.`;
     const id = 'web-' + whatsapp;
 
     for (let intento = 0; intento < 3; intento++) {
@@ -70,8 +71,8 @@ export default {
           const filas = [['Nombre', nombre], ['Negocio', negocio], ['Rubro', rubro], ['Comuna', comuna], ['WhatsApp', '+' + whatsapp]].filter(([, v]) => v);
           await enviarCorreo({
             asunto: `Nuevo lead desde ${herramienta.nombre}: ${negocio}`,
-            html: `<p>Llegó un lead nuevo desde la ${escapar(herramienta.nombre)}. Ya está en el panel, en Prospectos, para contactar hoy.</p><ul>${filas.map(([k, v]) => `<li><b>${k}:</b> ${escapar(v)}</li>`).join('')}</ul><p><a href="https://wa.me/${whatsapp}">Escribirle por WhatsApp</a></p>`,
-            texto: `Lead nuevo desde la ${herramienta.nombre}:\n${filas.map(([k, v]) => `${k}: ${v}`).join('\n')}\nhttps://wa.me/${whatsapp}`,
+            html: `<p>Llegó un lead nuevo desde la herramienta ${escapar(herramienta.nombre)}; pidió ${herramienta.pide}. Ya está en el panel, en Prospectos, para contactar hoy.</p><ul>${filas.map(([k, v]) => `<li><b>${k}:</b> ${escapar(v)}</li>`).join('')}</ul><p><a href="https://wa.me/${whatsapp}">Escribirle por WhatsApp</a></p>`,
+            texto: `Lead nuevo desde la herramienta ${herramienta.nombre} (pidió ${herramienta.pide}):\n${filas.map(([k, v]) => `${k}: ${v}`).join('\n')}\nhttps://wa.me/${whatsapp}`,
           }).catch(() => {});
         }
         return json({ ok: true });

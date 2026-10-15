@@ -26,5 +26,8 @@ p = (await prospectos()).filter((x) => x.whatsapp === '56987654321');
 ok(r.status === 200 && p.length === 1, 'no duplica si vuelve a dejar sus datos');
 r = await enviar({ ...base, rubro: 'Inventado', whatsapp: '911111111' });
 ok((await prospectos()).find((x) => x.id === 'web-56911111111').rubro === '', 'ignora rubros fuera de la lista');
+r = await enviar({ herramienta: 'presupuesto-taller', nombre: 'Pedro', whatsapp: '922222222', negocio: 'Taller Don Pedro' });
+p = (await prospectos()).find((x) => x.id === 'web-56922222222');
+ok(r.status === 200 && p.unidad === 'erp_talleres' && p.rubro === 'Taller mecánico' && p.negocio === 'Taller Don Pedro' && p.notas.includes('Tuerkit'), 'presupuestos: crea el prospecto del taller en erp_talleres');
 for (let i = 0; i < 40; i++) r = await enviar({ ...base, whatsapp: '95' + String(i).padStart(7, '0') });
 ok(r.status === 429 && (await prospectos()).filter((x) => x.origen === 'web').length === 30, 'tope de 30 prospectos nuevos por día');
