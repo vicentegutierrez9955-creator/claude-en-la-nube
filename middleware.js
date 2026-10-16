@@ -8,6 +8,10 @@ const SITIOS = [
   { dominio: 'gparrapodologia.cl', dir: '/gustavo-parra-podologia' },
 ];
 
+// La web de la empresa: en stpyme.cl la raíz (y robots.txt y sitemap.xml) son los de la carpeta /stpyme;
+// el resto (/herramientas, /api, /panel) se sirve igual que en el dominio del proyecto.
+const EMPRESA = { dominio: 'stpyme.cl', dir: '/stpyme', raiz: ['/robots.txt', '/sitemap.xml'] };
+
 // Verificación de Google Search Console de Asesorías JC (con y sin .html, por cleanUrls)
 const VERIFICACION = {
   'asesoriascontables-jc.cl': ['/google89224c002784d4bb', 'google-site-verification: google89224c002784d4bb.html'],
@@ -32,6 +36,13 @@ export default function middleware(request) {
   const url = new URL(request.url);
   const path = url.pathname;
   const sitio = sitioDeHost(host);
+
+  if (host === EMPRESA.dominio || host === 'www.' + EMPRESA.dominio) {
+    if (path === '/') return rewrite(EMPRESA.dir, url);
+    if (EMPRESA.raiz.includes(path)) return rewrite(EMPRESA.dir + path, url);
+    if (/^\/stpyme(\/(index(\.html)?)?)?$/.test(path)) return Response.redirect(new URL('/', url), 301);
+    return undefined;
+  }
 
   if (sitio) {
     const verif = VERIFICACION[sitio.dominio];
