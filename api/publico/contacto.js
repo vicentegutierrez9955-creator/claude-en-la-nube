@@ -1,13 +1,17 @@
-// Formulario público de las herramientas gratuitas (/herramientas/...): quien deja sus datos queda como
-// prospecto "por contactar" en el panel, con origen "web" y la herramienta de donde llegó en las notas.
+// Formulario público de las herramientas gratuitas (/herramientas/...) y de la web stpyme.cl: quien deja sus datos queda como
+// prospecto "por contactar" en el panel, con origen "web" y de dónde llegó en las notas.
 // Es lo único del sitio que escribe sin sesión, así que es estricto: solo POST del mismo sitio, campos
 // cortos y validados, trampa para bots, tope diario y nunca pisa lo que ya escribió el equipo.
 // Avisa por correo al equipo si están configurados RESEND_API_KEY y ALERT_EMAILS.
 import { leerDatos, guardarDatos, datosIniciales, enviarCorreo, escapar, json } from '../_lib/panel.js';
 
+// De dónde puede venir un formulario: cada herramienta gratuita y la web de la empresa (según lo que pidió).
 const HERRAMIENTAS = {
-  'boleta-honorarios': { nombre: 'Calculadora de boleta de honorarios', unidad: 'web_agenda', pide: 'una maqueta gratis' },
-  'presupuesto-taller': { nombre: 'Generador de presupuestos para talleres', unidad: 'erp_talleres', pide: 'conocer Tuerkit', rubro: 'Taller mecánico' },
+  'boleta-honorarios': { nombre: 'Calculadora de boleta de honorarios', desde: 'la herramienta Calculadora de boleta de honorarios', unidad: 'web_agenda', pide: 'una maqueta gratis' },
+  'presupuesto-taller': { nombre: 'Generador de presupuestos para talleres', desde: 'la herramienta Generador de presupuestos para talleres', unidad: 'erp_talleres', pide: 'conocer Tuerkit', rubro: 'Taller mecánico' },
+  'sitio-web': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'web_agenda', pide: 'una maqueta gratis de su web con agenda' },
+  'sitio-tuerkit': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'erp_talleres', pide: 'una demo de Tuerkit', rubro: 'Taller mecánico' },
+  'sitio-otro': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'web_agenda', pide: 'que lo contacten (otra consulta)' },
 };
 const RUBROS = ['Podología', 'Kinesiología', 'Psicología', 'Nutrición', 'Fonoaudiología', 'Odontología', 'Estética', 'Barbería o peluquería', 'Veterinaria', 'Taller mecánico', 'Otro'];
 const TOPE_DIARIO = 30;
@@ -40,8 +44,9 @@ export default {
     const rubro = RUBROS.includes(b.rubro) ? b.rubro : herramienta.rubro || '';
     const negocio = texto(b.negocio, 80) || nombre;
     const comuna = texto(b.comuna, 60);
+    const mensaje = texto(b.mensaje, 500);
     const fecha = hoy();
-    const nota = `Llegó solo por la herramienta ${herramienta.nombre} (${fecha}) y pidió ${herramienta.pide}.`;
+    const nota = `Llegó solo por ${herramienta.desde} (${fecha}) y pidió ${herramienta.pide}.` + (mensaje ? ` Mensaje: "${mensaje}"` : '');
     const id = 'web-' + whatsapp;
 
     for (let intento = 0; intento < 3; intento++) {
@@ -68,11 +73,11 @@ export default {
       const r = await guardarDatos(d, etag);
       if (r.ok) {
         if (!actual) {
-          const filas = [['Nombre', nombre], ['Negocio', negocio], ['Rubro', rubro], ['Comuna', comuna], ['WhatsApp', '+' + whatsapp]].filter(([, v]) => v);
+          const filas = [['Nombre', nombre], ['Negocio', negocio], ['Rubro', rubro], ['Comuna', comuna], ['WhatsApp', '+' + whatsapp], ['Mensaje', mensaje]].filter(([, v]) => v);
           await enviarCorreo({
             asunto: `Nuevo lead desde ${herramienta.nombre}: ${negocio}`,
-            html: `<p>Llegó un lead nuevo desde la herramienta ${escapar(herramienta.nombre)}; pidió ${herramienta.pide}. Ya está en el panel, en Prospectos, para contactar hoy.</p><ul>${filas.map(([k, v]) => `<li><b>${k}:</b> ${escapar(v)}</li>`).join('')}</ul><p><a href="https://wa.me/${whatsapp}">Escribirle por WhatsApp</a></p>`,
-            texto: `Lead nuevo desde la herramienta ${herramienta.nombre} (pidió ${herramienta.pide}):\n${filas.map(([k, v]) => `${k}: ${v}`).join('\n')}\nhttps://wa.me/${whatsapp}`,
+            html: `<p>Llegó un lead nuevo desde ${escapar(herramienta.desde)}; pidió ${herramienta.pide}. Ya está en el panel, en Prospectos, para contactar hoy.</p><ul>${filas.map(([k, v]) => `<li><b>${k}:</b> ${escapar(v)}</li>`).join('')}</ul><p><a href="https://wa.me/${whatsapp}">Escribirle por WhatsApp</a></p>`,
+            texto: `Lead nuevo desde ${herramienta.desde} (pidió ${herramienta.pide}):\n${filas.map(([k, v]) => `${k}: ${v}`).join('\n')}\nhttps://wa.me/${whatsapp}`,
           }).catch(() => {});
         }
         return json({ ok: true });
