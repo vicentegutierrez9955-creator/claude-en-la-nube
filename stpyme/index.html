@@ -48,186 +48,382 @@
 ]}
 </script>
 <style>
+/* Colores del logo de STPyme: fondo #0F1A12, lima #C5F33B y blanco */
+@property --pos{syntax:"<percentage>";inherits:true;initial-value:50%}
 :root{
-  /* Colores del logo de STPyme: fondo #0F1A12, lima #C5F33B y blanco */
-  --ink:#f1f5ee;--ink-2:#c9d3ca;--muted:#9aa89c;--line:#26382a;--bg:#0f1a12;--card:#16241a;--soft:#132017;--soft-2:rgba(197,243,59,.11);
-  --acc:#c5f33b;--acc-d:#d6fa6e;--acc-l:#d6fa6e;--ok:#c5f33b;--ok-bg:rgba(197,243,59,.12);--warn:#b45309;--warn-bg:#fff4e0;
-  --night:#0b140d;--night-2:#142218;--night-line:#26392b;
+  --bg:#0f1a12;--bg-2:#0b140d;--card:#16241a;--card-2:#1b2b1f;--line:#26382a;--line-2:#34503a;
+  --ink:#f1f5ee;--ink-2:#c9d3ca;--muted:#9aa89c;--acc:#c5f33b;--acc-d:#d6fa6e;--acc-a:rgba(197,243,59,.12);
   --r:18px;--shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85);
 }
-/* Piezas "de producto" (celular, avisos): siempre claras */
-.pantalla,.flota,.tk-cliente{--ink:#0f1a12;--muted:#5f6b62;--line:#e3e8e3;--soft:#f3f6f2;--soft-2:#eefad0;--acc:#0f1a12;--ok:#3f7d14;--ok-bg:#eefad0;--shadow:0 18px 40px -18px rgba(0,0,0,.6);color:var(--ink)}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;display:block}
 a{color:var(--acc)}
+button{font:inherit}
 .wrap{max-width:1160px;margin:0 auto;padding:0 20px}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:12px;top:12px;background:#fff;padding:8px 12px;border-radius:8px;z-index:99}
+.skip:focus{left:12px;top:12px;background:#fff;color:#000;padding:8px 12px;border-radius:8px;z-index:99}
 h1,h2,h3{letter-spacing:-.025em;line-height:1.12;margin:0}
-h2{font-size:clamp(30px,4.2vw,44px)}
+h2{font-size:clamp(30px,4.2vw,46px)}
 h3{font-size:20px;letter-spacing:-.015em}
 p{margin:0}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
 .kicker::before{content:"";width:18px;height:2px;background:currentColor;border-radius:2px}
 .lead{font-size:clamp(17px,2vw,19px);color:var(--ink-2)}
 .muted{color:var(--muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;border-radius:12px;padding:13px 20px;font:inherit;font-size:16px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .15s,box-shadow .15s,background .15s;white-space:nowrap}
-.btn:hover{transform:translateY(-1px)}
-.btn-primario{background:var(--acc);color:#0f1a12;box-shadow:0 10px 28px -12px rgba(197,243,59,.55)}
-.btn-primario:hover{background:var(--acc-d)}
-.btn-borde{border-color:var(--line);color:var(--ink);background:transparent}
+.lima{color:var(--acc)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;border-radius:12px;padding:13px 20px;font-size:16px;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .2s ease,box-shadow .2s,background .2s,border-color .2s;white-space:nowrap}
+.btn-primario{background:var(--acc);color:#0f1a12;box-shadow:0 10px 30px -12px rgba(197,243,59,.6)}
+.btn-primario:hover{background:var(--acc-d);box-shadow:0 14px 40px -12px rgba(197,243,59,.75)}
+.btn-borde{border-color:var(--line-2);color:var(--ink);background:rgba(255,255,255,.02)}
 .btn-borde:hover{border-color:var(--acc)}
-.btn-claro{background:var(--acc);color:#0f1a12}
-.btn-fantasma{border-color:var(--night-line);color:#fff}
-.btn-fantasma:hover{border-color:var(--acc-l)}
 .icon{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* Encabezado */
-.top{position:sticky;top:0;z-index:50;background:rgba(15,26,18,.86);backdrop-filter:saturate(1.6) blur(12px);-webkit-backdrop-filter:saturate(1.6) blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+/* Barra de progreso y encabezado */
+.progreso{position:fixed;top:0;left:0;right:0;height:2px;background:var(--acc);transform-origin:0 50%;transform:scaleX(0);z-index:60;box-shadow:0 0 12px rgba(197,243,59,.7)}
+.top{position:sticky;top:0;z-index:50;background:rgba(15,26,18,.78);backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
 .top.con-borde{border-bottom-color:var(--line)}
 .top .wrap{display:flex;align-items:center;gap:24px;height:70px}
 .logo{display:flex;align-items:center;text-decoration:none}
 .logo img{height:30px;width:auto}
 .nav{display:flex;gap:26px;margin-left:auto}
-.nav a{color:var(--ink-2);text-decoration:none;font-weight:600;font-size:15px}
+.nav a{color:var(--ink-2);text-decoration:none;font-weight:600;font-size:15px;transition:color .2s}
 .nav a:hover{color:var(--acc)}
 .top .btn{padding:10px 16px;font-size:15px}
 .menu-btn{display:none;margin-left:auto;background:none;border:0;padding:8px;cursor:pointer;color:var(--ink)}
 .menu-btn .icon{width:26px;height:26px}
 
-/* Portada */
-.hero{position:relative;overflow:hidden;padding:64px 0 80px;background:radial-gradient(900px 520px at 85% -10%,rgba(197,243,59,.13),transparent 70%),radial-gradient(700px 400px at -10% 110%,rgba(197,243,59,.06),transparent 70%)}
-.hero .wrap{display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center}
-.hero h1{font-size:clamp(38px,5.6vw,64px);letter-spacing:-.035em;margin:18px 0 20px}
-.hero h1 em{font-style:normal;color:var(--acc)}
+/* Portada con cuadrícula que se ilumina con el mouse */
+.hero{position:relative;overflow:hidden;padding:56px 0 84px;--mx:72%;--my:18%}
+.hero-fondo{position:absolute;inset:0;pointer-events:none;background:radial-gradient(620px circle at var(--mx) var(--my),rgba(197,243,59,.13),transparent 60%),radial-gradient(900px 520px at 85% -10%,rgba(197,243,59,.09),transparent 70%)}
+.hero-fondo::before,.hero-fondo::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(197,243,59,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(197,243,59,.07) 1px,transparent 1px);background-size:56px 56px}
+.hero-fondo::before{-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 25%,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse 75% 70% at 50% 25%,#000 25%,transparent 78%)}
+.hero-fondo::after{background-image:linear-gradient(rgba(197,243,59,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(197,243,59,.35) 1px,transparent 1px);-webkit-mask-image:radial-gradient(240px circle at var(--mx) var(--my),#000,transparent 75%);mask-image:radial-gradient(240px circle at var(--mx) var(--my),#000,transparent 75%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(38px,5.6vw,66px);letter-spacing:-.035em;margin:18px 0 20px}
+.rota{display:block;color:var(--acc);min-height:1.1em}
+.rota::after{content:"";display:inline-block;width:.07em;height:.85em;margin-left:.06em;background:var(--acc);vertical-align:-.06em;animation:parpadeo 1s steps(1) infinite}
+@keyframes parpadeo{50%{opacity:0}}
 .hero .lead{max-width:580px}
 .cta-fila{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .sellos{display:flex;gap:10px 22px;flex-wrap:wrap;margin-top:28px;padding:0;list-style:none;font-size:15px;font-weight:600;color:var(--ink-2)}
 .sellos li{display:flex;align-items:center;gap:8px}
-.sellos .icon{color:var(--ok);width:18px;height:18px}
+.sellos .icon{color:var(--acc);width:18px;height:18px}
 
-/* Teléfono de ejemplo (agenda) */
-.escena{position:relative;display:flex;justify-content:flex-end;padding:10px 24px 10px 0}
-.telefono{width:300px;background:#050a06;border-radius:44px;padding:12px;box-shadow:0 40px 80px -30px rgba(14,27,46,.55),0 0 0 1px rgba(255,255,255,.06) inset;position:relative}
-.telefono::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#000;border-radius:20px;z-index:2}
-.pantalla{background:#fff;border-radius:34px;overflow:hidden;padding:52px 18px 20px;min-height:560px}
+/* Celulares */
+.telefono{width:300px;background:#050a06;border-radius:44px;padding:12px;box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.07) inset,0 0 80px -30px rgba(197,243,59,.35);position:relative}
+.telefono::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:90px;height:24px;background:#000;border-radius:20px;z-index:5}
+.pantalla{--ink:#0f1a12;--muted:#5f6b62;--line:#e3e8e3;--soft:#f3f6f2;color:var(--ink);background:#fff;border-radius:34px;overflow:hidden;padding:52px 18px 20px;height:560px;position:relative;font-size:14px;line-height:1.4}
+.escena{position:relative;display:flex;flex-direction:column;align-items:flex-end;padding:10px 24px 0 0}
 .ag-neg{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.ag-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#14b8a6,#0e7490);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px}
+.ag-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#14b8a6,#0e7490);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
 .ag-neg b{display:block;font-size:14px;line-height:1.2}
 .ag-neg small{color:var(--muted);font-size:12px}
 .ag-t{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:0 0 10px}
-.ag-serv{display:flex;justify-content:space-between;align-items:center;background:var(--soft);border-radius:12px;padding:10px 12px;font-size:13px;font-weight:600;margin-bottom:16px}
-.ag-serv span{color:var(--muted);font-weight:500}
+.ag-serv{display:flex;justify-content:space-between;align-items:center;background:var(--soft);border-radius:12px;padding:10px 12px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ag-serv span+span{color:var(--muted);font-weight:500}
 .ag-l{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
-.ag-dias{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px}
-.ag-dias div{border:1px solid var(--line);border-radius:12px;text-align:center;padding:7px 0;font-size:11px;color:var(--muted);font-weight:600}
-.ag-dias div b{display:block;font-size:17px;color:var(--ink)}
-.ag-dias .sel{background:var(--acc);border-color:var(--acc);color:#c5f33b}
-.ag-dias .sel b{color:#fff}
-.ag-horas{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:18px}
-.ag-horas div{border:1px solid var(--line);border-radius:10px;text-align:center;padding:8px 0;font-size:13px;font-weight:700}
-.ag-horas .sel{border-color:var(--acc);background:var(--soft-2);color:var(--acc)}
-.ag-horas .no{color:#b8c2d0;text-decoration:line-through;background:var(--soft)}
-.ag-btn{background:var(--acc);color:#c5f33b;text-align:center;border-radius:12px;padding:12px;font-weight:700;font-size:14px}
-.flota{position:absolute;z-index:3;background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.35;border:1px solid var(--line);animation:flotar 6s ease-in-out infinite}
+.ag-dias{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.ag-dias button,.ag-horas button{border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;transition:background .2s,border-color .2s,transform .15s}
+.ag-dias button{border-radius:12px;padding:7px 0;font-size:11px;color:var(--muted);font-weight:600}
+.ag-dias button b{display:block;font-size:17px;color:var(--ink)}
+.ag-dias button.sel{background:#0f1a12;border-color:#0f1a12;color:#c5f33b}
+.ag-dias button.sel b{color:#fff}
+.ag-horas{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:16px}
+.ag-horas button{border-radius:10px;padding:8px 0;font-size:13px;font-weight:700}
+.ag-horas button.sel{border-color:#0f1a12;background:#eefad0}
+.ag-horas button:disabled{color:#b8c2bb;text-decoration:line-through;background:var(--soft);cursor:default}
+.ag-dias button:active,.ag-horas button:not(:disabled):active{transform:scale(.95)}
+.ag-btn{width:100%;border:0;background:#0f1a12;color:#c5f33b;border-radius:12px;padding:12px;font-weight:700;font-size:14px;cursor:pointer}
+.ag-btn.sacude{animation:sacude .4s}
+@keyframes sacude{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ag-aviso{min-height:18px;margin-top:8px;font-size:12px;color:#b45309;text-align:center;font-weight:600}
+.ag-listo{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;z-index:3;animation:entra .45s cubic-bezier(.2,.8,.2,1)}
+.ag-listo[hidden]{display:none}
+.ag-check{width:72px;height:72px;border-radius:50%;background:#0f1a12;color:#c5f33b;display:grid;place-items:center;margin-bottom:16px;box-shadow:0 0 0 10px #eefad0}
+.ag-check .icon{width:36px;height:36px;stroke-width:2.6;stroke-dasharray:30;stroke-dashoffset:30;animation:trazo .5s .15s forwards}
+@keyframes trazo{to{stroke-dashoffset:0}}
+@keyframes entra{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.ag-listo b{font-size:19px;letter-spacing:-.02em}
+.ag-listo p{color:var(--muted);margin:6px 0 18px}
+.ag-listo .ag-btn{width:auto;padding:10px 18px;background:#eefad0;color:#0f1a12}
+.ag-listo small{margin-top:12px;color:var(--muted);font-size:11.5px}
+.dedo{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(15,26,18,.22);border:2px solid rgba(15,26,18,.55);pointer-events:none;z-index:4;opacity:0;transform:translate(150px,480px);transition:transform .65s cubic-bezier(.45,.05,.25,1),opacity .3s}
+.dedo.on{opacity:1}
+.dedo.tap{background:rgba(15,26,18,.45);scale:.8}
+.tel-pista{margin-top:16px;font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px;width:300px;justify-content:center;text-align:center}
+.tel-pista b{color:var(--acc)}
+.tel-pista .icon{color:var(--acc);width:18px;height:18px}
+.flota{--ink:#0f1a12;--muted:#5f6b62;position:absolute;z-index:6;background:#fff;color:var(--ink);border-radius:16px;box-shadow:0 18px 40px -18px rgba(0,0,0,.7);padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.35;animation:flotar 6s ease-in-out infinite}
 .flota b{display:block;font-size:13.5px}
 .flota small{color:var(--muted)}
 .flota .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
 .flota-1{left:0;top:96px}
-.flota-1 .ico{background:var(--ok-bg);color:var(--ok)}
-.flota-2{left:0;bottom:44px;animation-delay:-3s}
+.flota-1 .ico{background:#eefad0;color:#3f7d14}
+.flota-1.pop{animation:pop .6s cubic-bezier(.2,1.4,.4,1),flotar 6s 0.6s ease-in-out infinite}
+@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.flota-2{left:0;bottom:120px;animation-delay:-3s}
 .flota-2 .ico{background:#e7f8ec;color:#1aa34a}
 .flota-3{right:0;top:14px;animation-delay:-1.5s}
 .flota-3 .ico{background:#fff7e0;color:#d69e00}
 @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@media (prefers-reduced-motion:reduce){.flota{animation:none}.btn{transition:none}html{scroll-behavior:auto}}
+
+/* Cinta de rubros */
+.cinta{border-block:1px solid var(--line);background:var(--bg-2);overflow:hidden;padding:18px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.cinta-pista{display:flex;width:max-content;animation:cinta 38s linear infinite}
+.cinta:hover .cinta-pista{animation-play-state:paused}
+.cinta span{display:flex;align-items:center;gap:28px;padding-right:28px;font-weight:700;font-size:18px;color:var(--ink-2);white-space:nowrap}
+.cinta span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--acc)}
+@keyframes cinta{to{transform:translateX(-50%)}}
 
 /* Bloques */
 section{scroll-margin-top:76px}
-.bloque{padding:96px 0}
-.bloque-suave{background:var(--soft)}
-.cabeza{max-width:720px;margin-bottom:48px}
+.bloque{padding:100px 0;position:relative}
+.bloque-suave{background:var(--bg-2)}
+.cabeza{max-width:720px;margin-bottom:52px}
 .cabeza.centro{margin-left:auto;margin-right:auto;text-align:center}
 .cabeza h2{margin:14px 0 16px}
 
+/* Tarjetas con borde que brilla donde pasa el mouse */
+.glow{position:relative;--x:50%;--y:50%;isolation:isolate}
+.glow::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(380px circle at var(--x) var(--y),rgba(197,243,59,.75),transparent 45%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s;pointer-events:none;z-index:1}
+.glow::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(520px circle at var(--x) var(--y),rgba(197,243,59,.07),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none;z-index:-1}
+.glow:hover::before,.glow:hover::after{opacity:1}
+.tilt{transition:transform .25s ease,border-color .2s;transform-style:preserve-3d;will-change:transform}
+
 /* Dos soluciones */
 .dos{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.sol{position:relative;border-radius:24px;padding:34px;text-decoration:none;color:inherit;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);transition:transform .2s,border-color .2s;overflow:hidden}
-.sol:hover{transform:translateY(-3px);border-color:var(--acc)}
-.sol .etq{display:inline-block;font-size:12.5px;font-weight:700;border-radius:999px;padding:5px 11px;background:var(--soft-2);color:var(--acc);margin-bottom:18px}
-.sol h3{font-size:26px;margin-bottom:10px}
+.sol{border-radius:24px;padding:34px;text-decoration:none;color:inherit;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);overflow:hidden}
+.sol .etq{display:inline-block;font-size:12.5px;font-weight:700;border-radius:999px;padding:5px 11px;background:var(--acc-a);color:var(--acc);margin-bottom:18px}
+.sol h3{font-size:28px;margin-bottom:10px}
 .sol p{color:var(--ink-2)}
 .sol .para{margin-top:18px;font-size:14.5px;color:var(--muted)}
 .sol .ir{display:inline-flex;align-items:center;gap:6px;margin-top:22px;font-weight:700;color:var(--acc)}
-.sol-oscura{background:linear-gradient(160deg,#1c2d14,#132017 70%);border-color:#34481f;color:#fff}
-.sol-oscura p{color:#b9c6d8}
-.sol-oscura .para{color:#8ea0b8}
-.sol-oscura .etq{background:rgba(110,168,255,.14);color:var(--acc-l)}
-.sol-oscura .ir{color:var(--acc-l)}
+.sol .ir .icon{transition:transform .2s}
+.sol:hover .ir .icon{transform:translateX(4px)}
+.sol-oscura{background:linear-gradient(160deg,#1c2d14,#132017 70%);border-color:#34481f}
 
-/* Web con agenda */
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
-.lista{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:16px}
-.lista li{display:flex;gap:14px;align-items:flex-start}
-.lista .num{width:40px;height:40px;border-radius:12px;background:var(--soft-2);color:var(--acc);display:grid;place-items:center;flex:none}
-.lista b{display:block;font-size:17px}
-.lista span{color:var(--muted);font-size:15.5px}
+/* Bento de la web con agenda */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.bc{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;overflow:hidden;display:flex;flex-direction:column}
+.bc h3{margin-bottom:6px}
+.bc p{color:var(--muted);font-size:15.5px}
+.bc .demo{margin-top:auto;padding-top:22px}
+.b1{grid-column:span 4}
+.b2{grid-column:span 2;grid-row:span 2}
+.b3,.b4{grid-column:span 2}
+.nav-mini{background:#0b140d;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.nav-mini-barra{display:flex;gap:6px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--line)}
+.nav-mini-barra i{width:9px;height:9px;border-radius:50%;background:#33493a}
+.nav-mini-barra span{margin-left:10px;flex:1;background:#16241a;border-radius:6px;font-size:11.5px;color:var(--muted);padding:3px 10px}
+.nav-mini-cuerpo{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;padding:16px}
+.esq{height:10px;border-radius:6px;background:#1f3024;margin-bottom:9px;position:relative;overflow:hidden}
+.esq::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(197,243,59,.18),transparent);transform:translateX(-100%)}
+.vis .esq::after{animation:brillo 2.2s infinite}
+@keyframes brillo{to{transform:translateX(100%)}}
+.esq.t{height:18px;width:80%;background:#2a4030}
+.esq.c{width:60%}
+.mini-btn{display:inline-block;margin-top:6px;background:var(--acc);color:#0f1a12;font-size:12px;font-weight:800;border-radius:8px;padding:6px 12px}
+.mini-precios{display:grid;gap:7px}
+.mini-precios div{display:flex;justify-content:space-between;font-size:12px;background:#16241a;border-radius:8px;padding:7px 10px;color:var(--ink-2)}
+.mini-precios b{color:var(--acc)}
+.semana{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.semana .dia{font-size:11px;color:var(--muted);text-align:center;font-weight:700}
+.semana .slot{height:26px;border-radius:7px;background:#1b2b1f;border:1px dashed #2e4433}
+.vis .semana .slot.r{animation:reserva .5s forwards;animation-delay:var(--d)}
+@keyframes reserva{to{background:var(--acc);border:1px solid var(--acc);box-shadow:0 0 18px -4px rgba(197,243,59,.6)}}
+.semana-pie{margin-top:14px;font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.semana-pie b{color:var(--acc);font-size:22px}
+.mapa-mini{height:120px;border-radius:14px;position:relative;overflow:hidden;background:#13221a;background-image:linear-gradient(#1d3125 2px,transparent 2px),linear-gradient(90deg,#1d3125 2px,transparent 2px),linear-gradient(35deg,transparent 46%,#24402e 46%,#24402e 54%,transparent 54%);background-size:34px 34px,34px 34px,100% 100%}
+.pin{position:absolute;left:50%;top:44%;width:30px;height:30px;margin:-30px 0 0 -15px;color:var(--acc)}
+.vis .pin{animation:salta 1.6s ease-in-out infinite}
+.pin::after{content:"";position:absolute;left:50%;bottom:-8px;width:16px;height:6px;margin-left:-8px;border-radius:50%;background:rgba(197,243,59,.3)}
+@keyframes salta{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.estrellas-mini{position:absolute;left:10px;bottom:10px;background:#0b140d;border-radius:8px;padding:4px 9px;font-size:12px;font-weight:700;color:#f5c400}
+.estado-web{display:grid;gap:9px}
+.estado-web div{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink-2)}
+.estado-web .icon{color:var(--acc);width:17px;height:17px}
+.en-linea{display:flex;align-items:center;gap:9px;font-weight:700;margin-bottom:12px;font-size:14px}
+.punto{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 0 rgba(197,243,59,.6)}
+.vis .punto{animation:late 1.8s infinite}
+@keyframes late{to{box-shadow:0 0 0 12px rgba(197,243,59,0)}}
+
+/* Casos reales */
+.casos-fila{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:center;margin-top:80px}
 .casos{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .caso{text-decoration:none;color:inherit;display:block}
-.marco{background:#26382a;border-radius:34px;padding:9px;box-shadow:0 30px 60px -30px rgba(14,27,46,.5);transition:transform .2s}
-.caso:hover .marco{transform:translateY(-4px) rotate(-.5deg)}
+.marco{background:#26382a;border-radius:34px;padding:9px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
 .marco img{border-radius:26px;width:100%;height:auto;aspect-ratio:540/983;object-fit:cover;object-position:top;background:#fff}
 .caso-txt{padding:14px 4px 0}
 .caso-txt b{display:block;font-size:16px}
 .caso-txt span{font-size:14px;color:var(--muted)}
 .caso-txt .estrellas{color:#f5a400;letter-spacing:1px}
 .caso:nth-child(2){margin-top:44px}
-.nota-caja{margin-top:26px;background:var(--ok-bg);border-radius:14px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;color:#e3f7b0;font-weight:500}
-.nota-caja .icon{color:var(--ok);margin-top:2px}
+.nota-caja{margin-top:26px;background:var(--acc-a);border-radius:14px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;color:#e3f7b0;font-weight:500}
+.nota-caja .icon{color:var(--acc);margin-top:2px}
 
-/* Tuerkit */
-.noche{background:radial-gradient(800px 500px at 100% 0,rgba(197,243,59,.12),transparent 70%),var(--night);color:#fff}
-.noche .lead{color:#b9c6d8}
-.noche .kicker{color:var(--acc-l)}
-.noche .lista .num{background:rgba(110,168,255,.12);color:var(--acc-l)}
-.noche .lista span{color:#93a5bd}
-.panel-tk{background:var(--night-2);border:1px solid var(--night-line);border-radius:22px;padding:20px;box-shadow:0 40px 80px -40px rgba(0,0,0,.8);position:relative}
+/* El camino de tu cliente (pantalla fija al bajar) */
+.camino-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:64px}
+.camino-tel{grid-column:2;grid-row:1/span 5;position:sticky;top:max(86px,calc(50vh - 292px));align-self:start;display:flex;justify-content:center;padding-bottom:20px}
+.paso{grid-column:1;min-height:64vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .45s}
+.paso.on{opacity:1}
+.paso .n{font-size:14px;font-weight:800;color:var(--acc);letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.paso .n::after{content:"";height:1px;width:56px;background:var(--line-2)}
+.paso h3{font-size:clamp(26px,3vw,34px);margin-bottom:12px}
+.paso p{color:var(--ink-2);font-size:18px;max-width:440px}
+.esc{position:absolute;inset:0;padding:50px 14px 16px;opacity:0;transform:translateY(14px) scale(.98);transition:opacity .45s,transform .45s;pointer-events:none}
+.esc.on{opacity:1;transform:none}
+.g-barra{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:10px 14px;font-size:13.5px;box-shadow:0 4px 14px -8px rgba(0,0,0,.3);margin:8px 0 16px}
+.g-barra .icon{width:16px;height:16px;color:var(--muted)}
+.g-tit{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.g-res{border-radius:14px;padding:12px;margin-bottom:10px;background:var(--soft)}
+.g-res.top{background:#fff;border:2px solid #0f1a12;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
+.g-res small{color:#3f7d14;font-size:11.5px}
+.g-res b{display:block;color:#1a4fb4;font-size:14.5px;margin:2px 0}
+.g-res .est{color:#d69e00;font-size:12px;font-weight:700}
+.g-res .est span{color:var(--muted);font-weight:500}
+.g-gris{height:9px;border-radius:5px;background:#e3e8e3;margin:7px 0}
+.esc-mapa{padding:0}
+.esc-mapa .calles{position:absolute;inset:0;background:#e9efe6;background-image:linear-gradient(#fff 5px,transparent 5px),linear-gradient(90deg,#fff 5px,transparent 5px),linear-gradient(30deg,transparent 47%,#cfe3c6 47%,#cfe3c6 53%,transparent 53%);background-size:62px 62px,62px 62px,100% 100%}
+.esc-mapa .pin-g{position:absolute;left:52%;top:30%;width:40px;height:40px;margin-left:-20px;color:#d93025;filter:drop-shadow(0 6px 6px rgba(0,0,0,.3))}
+.esc-mapa .pin-g .icon{width:40px;height:40px;fill:#d93025;stroke:#fff;stroke-width:1.5}
+.ficha{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:14px 16px 18px;box-shadow:0 -10px 30px -12px rgba(0,0,0,.35)}
+.ficha::before{content:"";display:block;width:36px;height:4px;border-radius:2px;background:#d5dbd5;margin:0 auto 12px}
+.ficha b{font-size:16px}
+.ficha .est{color:#d69e00;font-size:13px;font-weight:700;margin:2px 0}
+.ficha .est span{color:var(--muted);font-weight:500}
+.ficha .abierto{font-size:12.5px;color:#1aa34a;font-weight:700}
+.ficha-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.ficha-btns span{border:1px solid var(--line);border-radius:999px;font-size:11.5px;font-weight:700;text-align:center;padding:7px 2px;color:#1a4fb4}
+.ficha-btns .act{background:#0f1a12;color:#c5f33b;border-color:#0f1a12}
+.esc-web{padding:0}
+.web-cab{background:#0b4f55;color:#fff;padding:50px 16px 18px}
+.web-cab small{opacity:.8;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.web-cab b{display:block;font-size:20px;line-height:1.15;margin:6px 0 10px;letter-spacing:-.02em}
+.web-cab span{display:inline-block;background:#25d366;color:#fff;border-radius:999px;font-size:12px;font-weight:800;padding:7px 12px}
+.web-cuerpo{padding:14px 16px}
+.web-cuerpo .fila{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;font-weight:600}
+.web-cuerpo .fila b{color:#0b4f55}
+.web-cuerpo .res{margin-top:14px;background:#0f1a12;color:#c5f33b;text-align:center;border-radius:12px;padding:11px;font-weight:800;font-size:13.5px;box-shadow:0 0 0 0 rgba(15,26,18,.4)}
+.esc.on .res{animation:latido 1.6s infinite}
+@keyframes latido{to{box-shadow:0 0 0 12px rgba(15,26,18,0)}}
+.esc-aviso{background:linear-gradient(170deg,#1d3a2a,#0f1a12 60%);color:#fff;text-align:center}
+.esc-aviso .hora{font-size:52px;font-weight:300;letter-spacing:-.02em;margin-top:18px;line-height:1}
+.esc-aviso .fecha{font-size:13px;opacity:.8;margin-bottom:26px}
+.noti{display:flex;gap:10px;text-align:left;background:rgba(255,255,255,.92);color:#0f1a12;border-radius:16px;padding:11px 12px;margin-bottom:8px;font-size:12.5px;line-height:1.35}
+.noti .ico{width:30px;height:30px;border-radius:8px;background:#0f1a12;color:#c5f33b;display:grid;place-items:center;flex:none}
+.noti .ico .icon{width:17px;height:17px}
+.noti b{display:block;font-size:13px}
+.noti small{color:#5f6b62}
+.esc.on .noti{animation:baja .5s both}
+.esc.on .noti+.noti{animation-delay:.35s}
+@keyframes baja{from{opacity:0;transform:translateY(-12px)}}
+
+/* Antes y después */
+.ad{position:relative;max-width:980px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid var(--line);height:520px;user-select:none;--pos:50%}
+.ad.pista{animation:pista 2.4s ease-in-out}
+@keyframes pista{0%{--pos:50%}30%{--pos:30%}65%{--pos:70%}100%{--pos:50%}}
+.ad-lado{position:absolute;inset:0;padding:28px}
+.ad-antes{background:#0b141a;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:18px 18px}
+.ad-despues{background:var(--card);clip-path:inset(0 0 0 var(--pos))}
+.ad-etq{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:7px 13px;margin-bottom:18px}
+.ad-antes .ad-etq{background:rgba(255,120,100,.14);color:#ff9e8c}
+.ad-despues .ad-etq{background:var(--acc-a);color:var(--acc)}
+.chat{max-width:400px;display:flex;flex-direction:column;gap:8px}
+.chat-cab{display:flex;align-items:center;gap:10px;margin-bottom:6px;color:#dfe8e3}
+.chat-cab .av{width:34px;height:34px;border-radius:50%;background:#2a3942;display:grid;place-items:center;font-weight:800;font-size:13px}
+.chat-cab small{display:block;color:#25d366;font-size:12px}
+.burbuja{max-width:82%;padding:8px 11px 6px;border-radius:12px;font-size:14px;line-height:1.35;color:#e9edef;position:relative}
+.burbuja small{display:block;text-align:right;font-size:10.5px;color:#8696a0;margin-top:2px}
+.burbuja.in{background:#202c33;align-self:flex-start;border-top-left-radius:4px}
+.burbuja.out{background:#005c4b;align-self:flex-end;border-top-right-radius:4px}
+.agenda-dia{max-width:420px;margin-left:auto}
+.agenda-dia h4{margin:0 0 12px;font-size:18px}
+.turno{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:#1b2b1f;border:1px solid var(--line);margin-bottom:8px;font-size:14.5px}
+.turno .h{font-weight:800;color:var(--acc)}
+.turno small{display:block;color:var(--muted);font-size:12.5px}
+.turno .tag{font-size:11.5px;font-weight:800;color:#0f1a12;background:var(--acc);border-radius:999px;padding:4px 9px}
+.turno.libre{background:transparent;border-style:dashed;color:var(--muted)}
+.ad-linea{position:absolute;top:0;bottom:0;left:var(--pos);width:2px;margin-left:-1px;background:var(--acc);box-shadow:0 0 20px rgba(197,243,59,.7);pointer-events:none;z-index:3}
+.ad-mango{position:absolute;top:50%;left:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:var(--acc);color:#0f1a12;display:grid;place-items:center;box-shadow:0 8px 24px -6px rgba(0,0,0,.6)}
+.ad-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0;z-index:4;touch-action:pan-y}
+.ad-range:focus-visible+.ad-linea .ad-mango{outline:3px solid #fff;outline-offset:3px}
+.ad-nota{text-align:center;color:var(--muted);font-size:14px;margin-top:14px}
+
+/* Calculadora */
+.calc{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:stretch}
+.calc-in,.calc-out{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px}
+.deslizador{margin-bottom:26px}
+.deslizador:last-child{margin-bottom:0}
+.deslizador label{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-weight:700;font-size:15px;margin-bottom:12px}
+.deslizador output{font-size:22px;font-weight:800;color:var(--acc);white-space:nowrap}
+input[type=range].rango{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--acc) var(--p,50%),#26382a var(--p,50%));outline:none;cursor:pointer}
+input[type=range].rango::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#fff;border:5px solid var(--acc);box-shadow:0 4px 14px -2px rgba(0,0,0,.6)}
+input[type=range].rango::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:5px solid var(--acc)}
+input[type=range].rango:focus-visible{box-shadow:0 0 0 4px rgba(197,243,59,.3)}
+.calc-out{background:radial-gradient(500px 300px at 100% 0,rgba(197,243,59,.14),transparent 70%),var(--card);display:flex;flex-direction:column}
+.calc-out .grande{font-size:clamp(54px,7vw,84px);font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--acc);margin:10px 0 4px;font-variant-numeric:tabular-nums}
+.calc-out .sub{color:var(--ink-2)}
+.calc-out .plata{margin:22px 0;padding:16px 18px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.calc-out .plata b{font-size:28px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.calc-out .btn{margin-top:auto}
+.calc-nota{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* Tuerkit en vivo */
+.noche{background:radial-gradient(800px 500px at 100% 0,rgba(197,243,59,.11),transparent 70%),var(--bg-2)}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+.lista{list-style:none;padding:0;margin:28px 0 0;display:grid;gap:16px}
+.lista li{display:flex;gap:14px;align-items:flex-start}
+.lista .num{width:40px;height:40px;border-radius:12px;background:var(--acc-a);color:var(--acc);display:grid;place-items:center;flex:none}
+.lista b{display:block;font-size:17px}
+.lista span{color:var(--muted);font-size:15.5px}
+.panel-tk{background:#132017;border:1px solid var(--line-2);border-radius:22px;padding:20px;box-shadow:0 40px 80px -40px rgba(0,0,0,.9),0 0 90px -40px rgba(197,243,59,.3);position:relative}
 .tk-cab{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .tk-cab b{font-size:16px}
-.tk-cab small{color:#8ea0b8;font-size:13px}
-.tk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.tk-stats div{background:rgba(255,255,255,.04);border:1px solid var(--night-line);border-radius:14px;padding:12px}
-.tk-stats small{display:block;color:#8ea0b8;font-size:12px}
-.tk-stats b{font-size:20px;letter-spacing:-.02em}
-.tk-fila{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 4px;border-top:1px solid var(--night-line)}
+.tk-vivo{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--acc);font-weight:700}
+.tk-vivo .punto{width:8px;height:8px}
+.tk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.tk-stats div{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:14px;padding:12px}
+.tk-stats small{display:block;color:var(--muted);font-size:12px}
+.tk-stats b{font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.tk-stats .sube{color:var(--acc)}
+.tk-fila{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:11px 6px;border-top:1px solid var(--line);border-radius:10px;transition:background .5s,opacity .4s,transform .4s}
+.tk-fila.cambio{background:rgba(197,243,59,.08)}
+.tk-fila.sale{opacity:0;transform:translateX(24px)}
+.tk-fila.entra{animation:entraFila .5s both}
+@keyframes entraFila{from{opacity:0;transform:translateX(-24px)}}
 .patente{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;font-size:13px;background:#fff;color:#0f1a12;border-radius:6px;padding:4px 7px;letter-spacing:.05em}
 .tk-fila b{display:block;font-size:14.5px}
-.tk-fila small{color:#8ea0b8;font-size:12.5px}
-.estado{font-size:12px;font-weight:700;border-radius:999px;padding:5px 10px;white-space:nowrap}
+.tk-fila small{color:var(--muted);font-size:12.5px}
+.estado{font-size:12px;font-weight:700;border-radius:999px;padding:5px 10px;white-space:nowrap;transition:background .3s,color .3s}
 .e-diag{background:rgba(250,204,21,.14);color:#facc15}
 .e-rep{background:rgba(251,146,60,.14);color:#fb923c}
 .e-trab{background:rgba(125,196,255,.15);color:#8ccfff}
-.e-listo{background:rgba(197,243,59,.15);color:#c5f33b}
-.tk-cliente{position:absolute;right:-18px;bottom:-34px;width:210px;background:#fff;color:var(--ink);border-radius:20px;padding:14px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);font-size:13px}
-.tk-cliente small{color:var(--muted);display:block}
-.tk-cliente b{display:block;font-size:15px;margin:2px 0 8px}
-.tk-cliente .estado{background:var(--ok-bg);color:var(--ok);display:inline-block}
-.ejemplo{font-size:12.5px;color:#7387a3;margin-top:46px;text-align:right}
+.e-listo{background:rgba(197,243,59,.16);color:#c5f33b}
+.tk-cliente{position:absolute;right:-18px;bottom:-40px;width:220px;background:#fff;color:#0f1a12;border-radius:20px;padding:14px;box-shadow:0 30px 60px -20px rgba(0,0,0,.8);font-size:13px}
+.tk-cliente small{color:#5f6b62;display:flex;align-items:center;gap:6px}
+.tk-cliente small .icon{width:14px;height:14px}
+.tk-cliente b{display:block;font-size:15px;margin:3px 0 8px}
+.tk-cliente .estado{display:inline-block}
+.tk-cliente .e-diag{background:#fff6d1;color:#946200}
+.tk-cliente .e-rep{background:#ffeedd;color:#b45309}
+.tk-cliente .e-trab{background:#e3f1ff;color:#1a5fb4}
+.tk-cliente .e-listo{background:#eefad0;color:#3f7d14}
+.tk-cliente.ping{animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+.ejemplo{font-size:12.5px;color:#7d8c80;margin-top:52px;text-align:right}
 
 /* Proceso */
-.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:paso;list-style:none;padding:0;margin:0}
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:paso;list-style:none;padding:0;margin:0;position:relative}
 .pasos li{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;position:relative}
-.pasos li::before{counter-increment:paso;content:counter(paso);width:38px;height:38px;border-radius:50%;background:var(--acc);color:#0f1a12;display:grid;place-items:center;font-weight:800;margin-bottom:16px}
+.pasos li::before{counter-increment:paso;content:counter(paso);width:38px;height:38px;border-radius:50%;background:var(--acc);color:#0f1a12;display:grid;place-items:center;font-weight:800;margin-bottom:16px;box-shadow:0 0 0 6px var(--acc-a)}
 .pasos h3{font-size:18px;margin-bottom:8px}
 .pasos p{color:var(--muted);font-size:15.5px}
 
 /* Herramientas */
 .herr{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.herr a{display:flex;gap:18px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
-.herr a:hover{border-color:var(--acc);transform:translateY(-2px)}
-.herr .ico{width:52px;height:52px;border-radius:14px;background:var(--soft-2);color:var(--acc);display:grid;place-items:center;flex:none}
+.herr a{display:flex;gap:18px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px;text-decoration:none;color:inherit}
+.herr .ico{width:52px;height:52px;border-radius:14px;background:var(--acc-a);color:var(--acc);display:grid;place-items:center;flex:none}
 .herr .ico .icon{width:26px;height:26px}
 .herr h3{font-size:18px;margin-bottom:6px}
 .herr p{color:var(--muted);font-size:15.5px}
@@ -247,7 +443,7 @@ section{scroll-margin-top:76px}
 .contacto .lead{margin:16px 0 26px}
 .beneficios{list-style:none;padding:0;margin:0;display:grid;gap:12px}
 .beneficios li{display:flex;gap:10px;align-items:flex-start;font-weight:600}
-.beneficios .icon{color:var(--ok);margin-top:3px}
+.beneficios .icon{color:var(--acc);margin-top:3px}
 .form{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow)}
 .form h3{margin-bottom:18px}
 .campos{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
@@ -255,47 +451,55 @@ section{scroll-margin-top:76px}
 .campo.ancho{grid-column:1/-1}
 label,.lbl{display:block;font-weight:700;font-size:14px;margin:0 0 7px}
 label .opc{font-weight:500;color:var(--muted)}
-input,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
-textarea{resize:vertical;min-height:90px}
-input:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px rgba(197,243,59,.18)}
-input::placeholder,textarea::placeholder{color:#6f7d71}
+.form input,.form textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
+.form textarea{resize:vertical;min-height:90px}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px rgba(197,243,59,.18)}
+.form input::placeholder,.form textarea::placeholder{color:#6f7d71}
 .opciones{display:flex;gap:8px;flex-wrap:wrap;margin:0;padding:0;border:0}
 .opciones legend{padding:0}
 .opciones label{margin:0;font-weight:600;font-size:15px;border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
 .opciones input{position:absolute;opacity:0;width:1px;height:1px}
-.opciones label:has(input:checked){border-color:var(--acc);background:var(--soft-2);color:var(--acc)}
+.opciones label:has(input:checked){border-color:var(--acc);background:var(--acc-a);color:var(--acc)}
 .opciones label:has(input:focus-visible){box-shadow:0 0 0 4px rgba(197,243,59,.25)}
 .oculto{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form .btn{width:100%;margin-top:6px;padding:15px}
 .error{color:#ff8a80;font-size:14.5px;min-height:1.2em;margin:10px 0 0}
 .privado{font-size:13.5px;color:var(--muted);margin-top:8px}
 .exito{text-align:center;padding:30px 10px}
-.exito .icon{width:54px;height:54px;color:var(--ok);margin:0 auto 14px}
+.exito .icon{width:54px;height:54px;color:var(--acc);margin:0 auto 14px}
 .exito h3{margin-bottom:8px}
 
 /* Pie */
-.pie{background:#0a120c;border-top:1px solid var(--line);color:#b9c6d8;padding:56px 0 34px;font-size:15px}
+.pie{background:#0a120c;border-top:1px solid var(--line);color:var(--ink-2);padding:56px 0 34px;font-size:15px}
 .pie .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
 .pie h4{color:#fff;margin:0 0 12px;font-size:15px}
-.pie a{color:#b9c6d8;text-decoration:none;display:block;margin:6px 0}
-.pie a:hover{color:#fff}
-.pie .legal{grid-column:1/-1;border-top:1px solid var(--night-line);padding-top:22px;margin-top:10px;font-size:13.5px;color:#7387a3}
+.pie a{color:var(--ink-2);text-decoration:none;display:block;margin:6px 0}
+.pie a:hover{color:var(--acc)}
+.pie .legal{grid-column:1/-1;border-top:1px solid var(--line);padding-top:22px;margin-top:10px;font-size:13.5px;color:var(--muted)}
 
-/* Aparición suave al hacer scroll */
-.aparece{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
-.aparece.visible{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.aparece{opacity:1;transform:none;transition:none}}
+/* Aparición al bajar: sube y se aclara */
+.aparece{opacity:0;transform:translateY(22px);filter:blur(6px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1),filter .7s ease;transition-delay:var(--d,0s)}
+.aparece.visible{opacity:1;transform:none;filter:none}
+.tilt.visible{transition:transform .25s ease,opacity .7s ease,filter .7s ease}
 
 @media (max-width:980px){
-  .hero .wrap,.split,.contacto{grid-template-columns:minmax(0,1fr)}
-  .hero{padding:40px 0 64px}
-  .escena{margin-top:10px;justify-content:center;padding:18px 0 10px}
+  .hero .wrap,.split,.contacto,.calc,.casos-fila{grid-template-columns:minmax(0,1fr)}
+  .hero{padding:36px 0 64px}
+  .escena{align-items:center;margin-top:10px;padding:18px 0 0}
   .flota-1{left:0;top:0}
-  .flota-2{left:auto;right:0;bottom:-12px}
+  .flota-2{left:auto;right:0;bottom:90px}
   .flota-3{display:none}
   .pasos{grid-template-columns:1fr 1fr}
-  .split .orden-2{order:-1}
+  .bento{grid-template-columns:1fr 1fr}
+  .b1{grid-column:span 2}
+  .b2{grid-column:span 1;grid-row:span 2}
+  .b3,.b4{grid-column:span 1}
+  .camino-grid{grid-template-columns:minmax(0,1fr)}
+  .camino-tel{grid-column:1;grid-row:auto;top:70px;z-index:3;padding:10px 0 14px;background:linear-gradient(var(--bg) 88%,transparent)}
+  .camino-tel .telefono{zoom:.6}
+  .paso{min-height:54vh}
   .tk-cliente{right:8px}
+  .casos-fila .orden-2{order:-1}
 }
 @media (max-width:820px){
   .nav,.top .btn{display:none}
@@ -304,36 +508,53 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
   .top.abierto .nav a{padding:12px 0;font-size:17px;border-bottom:1px solid var(--line)}
   .top.abierto .nav a:last-child{border-bottom:0}
   .dos,.herr{grid-template-columns:1fr}
-  .bloque{padding:72px 0}
+  .bloque{padding:76px 0}
+  .ad{height:560px}
+  .ad-lado{padding:20px}
+  .agenda-dia{max-width:none}
 }
 @media (max-width:560px){
   body{font-size:16px}
   .wrap{padding:0 16px}
   .cta-fila .btn{flex:1 1 100%;white-space:normal;text-align:center}
-  .telefono{width:272px}
-  .pantalla{min-height:520px;padding:50px 14px 18px}
+  .telefono{width:280px}
+  .tel-pista{width:280px}
+  .pantalla{height:540px;padding:50px 14px 18px}
   .flota{font-size:12px;padding:10px 12px}
   .flota-1{left:-4px}
   .flota-2{right:-4px}
   .sol{padding:26px 22px}
+  .bento{grid-template-columns:1fr}
+  .b1,.b2,.b3,.b4{grid-column:span 1;grid-row:auto}
+  .nav-mini-cuerpo{grid-template-columns:1fr}
   .pasos{grid-template-columns:1fr}
   .campos{grid-template-columns:1fr}
-  .form{padding:22px 18px}
+  .form,.calc-in,.calc-out{padding:22px 18px}
   .tk-stats b{font-size:16px}
   .tk-cliente{position:relative;right:auto;bottom:auto;width:auto;margin:16px 0 0}
   .ejemplo{margin-top:14px}
   .casos{gap:14px}
   .caso:nth-child(2){margin-top:28px}
+  .chat .burbuja{font-size:13px}
+  .turno{grid-template-columns:48px 1fr;font-size:13.5px}
+  .turno .tag{display:none}
   .pie .wrap{grid-template-columns:1fr 1fr}
   .pie .wrap>div:first-child{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .aparece{opacity:1;transform:none;filter:none}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#inicio">Ir al contenido</a>
+<div class="progreso" id="progreso" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
   <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-flechas" viewBox="0 0 24 24"><path d="M9 6 3 12l6 6M15 6l6 6-6 6"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M8.5 14.5l2 2 4-4"/></symbol>
   <symbol id="i-web" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="15" rx="2.5"/><path d="M2.5 8.5h19M6 6.3h.01M8.5 6.3h.01"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
@@ -347,6 +568,7 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
   <symbol id="i-calc" viewBox="0 0 24 24"><rect x="4.5" y="2.5" width="15" height="19" rx="2.5"/><path d="M8 7h8M8 11.5h.01M12 11.5h.01M16 11.5h.01M8 15.5h.01M12 15.5h.01M16 15.5v2"/></symbol>
   <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2.5H7A2.5 2.5 0 0 0 4.5 5v14A2.5 2.5 0 0 0 7 21.5h10a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 2.5V8h5.5M8.5 13h7M8.5 17h5"/></symbol>
   <symbol id="i-wsp" viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8.4 19z"/><path d="M9.2 8.6c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .5.4l.7 1.7c.1.2 0 .4-.1.6l-.5.6c.6 1.2 1.6 2.1 2.8 2.7l.6-.6c.2-.2.4-.2.6-.1l1.6.8c.3.1.3.3.3.5 0 .9-.7 1.8-1.7 1.8-2.8 0-6.3-3.4-6.3-6.2 0-.7.1-1.2.2-1.7z"/></symbol>
+  <symbol id="i-dedo" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a5 5 0 0 1-4.2-2.3L4.5 15.5a1.6 1.6 0 0 1 2.5-2L9 15"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
 </svg>
@@ -358,26 +580,28 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
     </a>
     <nav class="nav" id="nav" aria-label="Principal">
       <a href="#webs">Webs con agenda</a>
+      <a href="#camino">Cómo funciona</a>
       <a href="#tuerkit">Tuerkit</a>
       <a href="#herramientas">Herramientas gratis</a>
       <a href="#preguntas">Preguntas</a>
     </nav>
-    <a class="btn btn-primario" href="#contacto">Hablemos</a>
+    <a class="btn btn-primario mag" href="#contacto">Hablemos</a>
     <button class="menu-btn" id="menu-btn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><svg class="icon"><use href="#i-menu"/></svg></button>
   </div>
 </header>
 
 <main id="inicio">
 
-  <section class="hero" aria-labelledby="hero-t">
+  <section class="hero" id="hero" aria-labelledby="hero-t">
+    <div class="hero-fondo" aria-hidden="true"></div>
     <div class="wrap">
       <div>
         <span class="kicker">Tecnología simple para pymes de Chile</span>
-        <h1 id="hero-t">Más clientes y menos pega repetitiva para <em>tu pyme</em></h1>
+        <h1 id="hero-t" aria-label="Más clientes y menos pega repetitiva para tu pyme">Más clientes y menos pega repetitiva para tu <span class="rota" id="rota" aria-hidden="true">pyme</span></h1>
         <p class="lead">Hacemos webs con agenda online para profesionales y consultas, y Tuerkit, el sistema para talleres mecánicos. Todo listo para usar, con alguien cercano que te acompaña.</p>
         <div class="cta-fila">
-          <a class="btn btn-primario" href="#contacto" data-interes="sitio-web">Quiero mi maqueta gratis <svg class="icon"><use href="#i-flecha"/></svg></a>
-          <a class="btn btn-borde" href="#tuerkit"><svg class="icon"><use href="#i-auto"/></svg>Tengo un taller mecánico</a>
+          <a class="btn btn-primario mag" href="#contacto" data-interes="sitio-web">Quiero mi maqueta gratis <svg class="icon"><use href="#i-flecha"/></svg></a>
+          <a class="btn btn-borde mag" href="#tuerkit"><svg class="icon"><use href="#i-auto"/></svg>Tengo un taller mecánico</a>
         </div>
         <ul class="sellos">
           <li><svg class="icon"><use href="#i-check"/></svg>Maqueta o demo gratis</li>
@@ -385,25 +609,54 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
           <li><svg class="icon"><use href="#i-check"/></svg>Soporte en español, de verdad</li>
         </ul>
       </div>
-      <div class="escena" aria-label="Ejemplo de una web con agenda online en un celular">
+      <div class="escena">
         <div class="telefono">
-          <div class="pantalla" aria-hidden="true">
-            <div class="ag-neg"><span class="ag-av">GP</span><div><b>Podología Estación Central</b><small>Reserva online · 5,0 ★</small></div></div>
+          <div class="pantalla" id="agenda" role="group" aria-label="Agenda de prueba: elige un día y una hora">
+            <div class="ag-neg"><span class="ag-av" aria-hidden="true">GP</span><div><b>Podología Estación Central</b><small>Reserva online · 5,0 ★</small></div></div>
             <p class="ag-t">Reserva tu hora</p>
-            <div class="ag-serv">Podología general <span>45 min</span></div>
-            <p class="ag-l">Octubre</p>
-            <div class="ag-dias"><div>Lun<b>20</b></div><div class="sel">Mar<b>21</b></div><div>Mié<b>22</b></div><div>Jue<b>23</b></div></div>
+            <div class="ag-serv"><span>Podología general</span><span>45 min</span></div>
+            <p class="ag-l" id="ag-mes">Esta semana</p>
+            <div class="ag-dias" id="ag-dias">
+              <button type="button" aria-pressed="false">Lun<b>20</b></button>
+              <button type="button" aria-pressed="false">Mar<b>21</b></button>
+              <button type="button" aria-pressed="false">Mié<b>22</b></button>
+              <button type="button" aria-pressed="false">Jue<b>23</b></button>
+            </div>
             <p class="ag-l">Horas disponibles</p>
-            <div class="ag-horas"><div>09:00</div><div class="sel">10:30</div><div class="no">12:00</div><div>15:30</div><div>17:00</div><div class="no">18:15</div></div>
-            <div class="ag-btn">Confirmar hora</div>
+            <div class="ag-horas" id="ag-horas">
+              <button type="button" aria-pressed="false">09:00</button>
+              <button type="button" aria-pressed="false">10:30</button>
+              <button type="button" aria-pressed="false" disabled>12:00</button>
+              <button type="button" aria-pressed="false">15:30</button>
+              <button type="button" aria-pressed="false">17:00</button>
+              <button type="button" aria-pressed="false" disabled>18:15</button>
+            </div>
+            <button class="ag-btn" id="ag-ok" type="button">Confirmar hora</button>
+            <p class="ag-aviso" id="ag-aviso" aria-live="polite"></p>
+            <div class="ag-listo" id="ag-listo" hidden>
+              <span class="ag-check"><svg class="icon"><use href="#i-check"/></svg></span>
+              <b>¡Hora reservada!</b>
+              <p id="ag-resumen">Podología general</p>
+              <button class="ag-btn" id="ag-otra" type="button">Reservar otra</button>
+              <small>Es una prueba: no se agenda nada de verdad.</small>
+            </div>
+            <span class="dedo" id="dedo" aria-hidden="true"></span>
           </div>
         </div>
-        <div class="flota flota-1" aria-hidden="true"><span class="ico"><svg class="icon"><use href="#i-cal"/></svg></span><div><b>Nueva reserva</b><small>Carmen · Mar 21, 10:30</small></div></div>
+        <p class="tel-pista" id="tel-pista"><svg class="icon"><use href="#i-dedo"/></svg><span>Es interactivo: <b>tócalo</b> y reserva una hora de prueba</span></p>
+        <div class="flota flota-1" id="flota-reserva" aria-hidden="true"><span class="ico"><svg class="icon"><use href="#i-cal"/></svg></span><div><b>Nueva reserva</b><small id="flota-txt">Carmen · Mar 21, 10:30</small></div></div>
         <div class="flota flota-2" aria-hidden="true"><span class="ico"><svg class="icon"><use href="#i-wsp"/></svg></span><div><b>Reservó sola, a las 23:40</b><small>sin escribirte por WhatsApp</small></div></div>
         <div class="flota flota-3" aria-hidden="true"><span class="ico"><svg class="icon"><use href="#i-lupa"/></svg></span><div><b>Apareces en Google</b><small>"podólogo cerca de mí"</small></div></div>
       </div>
     </div>
   </section>
+
+  <div class="cinta" aria-label="Rubros con los que trabajamos">
+    <div class="cinta-pista">
+      <span>Podología</span><span>Kinesiología</span><span>Psicología</span><span>Nutrición</span><span>Odontología</span><span>Estética</span><span>Barberías</span><span>Contadores</span><span>Veterinarias</span><span>Talleres mecánicos</span>
+      <span aria-hidden="true">Podología</span><span aria-hidden="true">Kinesiología</span><span aria-hidden="true">Psicología</span><span aria-hidden="true">Nutrición</span><span aria-hidden="true">Odontología</span><span aria-hidden="true">Estética</span><span aria-hidden="true">Barberías</span><span aria-hidden="true">Contadores</span><span aria-hidden="true">Veterinarias</span><span aria-hidden="true">Talleres mecánicos</span>
+    </div>
+  </div>
 
   <section class="bloque" aria-labelledby="dos-t">
     <div class="wrap">
@@ -413,14 +666,14 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
         <p class="lead">Elegimos dos cosas y las hacemos bien: que te encuentren y te reserven, y que tu taller funcione ordenado.</p>
       </div>
       <div class="dos">
-        <a class="sol aparece" href="#webs">
+        <a class="sol glow tilt aparece" href="#webs">
           <span class="etq">Para quienes atienden con hora</span>
           <h3>Web con agenda online</h3>
           <p>Tu página profesional, con una agenda donde tus clientes reservan solos y te encuentran en Google.</p>
           <p class="para">Podología, kinesiología, psicología, nutrición, odontología, estética, barberías y más.</p>
           <span class="ir">Ver cómo funciona <svg class="icon"><use href="#i-flecha"/></svg></span>
         </a>
-        <a class="sol sol-oscura aparece" href="#tuerkit">
+        <a class="sol sol-oscura glow tilt aparece" style="--d:.1s" href="#tuerkit">
           <span class="etq">Para talleres mecánicos</span>
           <h3>Tuerkit</h3>
           <p>El sistema para llevar tu taller: cada auto que entra, su estado, la caja y los repuestos, en un solo lugar.</p>
@@ -432,31 +685,204 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
   </section>
 
   <section class="bloque bloque-suave" id="webs" aria-labelledby="webs-t">
-    <div class="wrap split">
-      <div class="aparece">
+    <div class="wrap">
+      <div class="cabeza aparece">
         <span class="kicker">Web con agenda online</span>
-        <h2 id="webs-t" style="margin:14px 0 16px">Que te encuentren, te reserven y lleguen</h2>
+        <h2 id="webs-t">Que te encuentren, te reserven y lleguen</h2>
         <p class="lead">Dejas de coordinar horas por WhatsApp a toda hora. Tus clientes eligen día y hora solos, y tú te dedicas a atender.</p>
-        <ul class="lista">
-          <li><span class="num"><svg class="icon"><use href="#i-web"/></svg></span><div><b>Página web profesional</b><span>Con tus servicios, precios, fotos, reseñas y ubicación. Se ve bien en el celular.</span></div></li>
-          <li><span class="num"><svg class="icon"><use href="#i-cal"/></svg></span><div><b>Agenda para reservar solos</b><span>Tus clientes ven las horas libres y reservan en segundos, de día o de noche.</span></div></li>
-          <li><span class="num"><svg class="icon"><use href="#i-pin"/></svg></span><div><b>Ficha de Google Maps y SEO local</b><span>Para aparecer cuando buscan tu servicio en tu comuna.</span></div></li>
-          <li><span class="num"><svg class="icon"><use href="#i-escudo"/></svg></span><div><b>Hosting y mantención mensual</b><span>Nos encargamos de que todo siga funcionando. Tú no tocas nada técnico.</span></div></li>
-        </ul>
-        <div class="cta-fila"><a class="btn btn-primario" href="#contacto" data-interes="sitio-web">Quiero ver mi maqueta gratis <svg class="icon"><use href="#i-flecha"/></svg></a></div>
       </div>
-      <div class="orden-2">
-        <div class="casos">
-          <a class="caso aparece" href="https://gparrapodologia.cl/" target="_blank" rel="noopener">
+      <div class="bento">
+        <article class="bc b1 glow anima aparece">
+          <h3>Página web profesional</h3>
+          <p>Con tus servicios, precios, fotos, reseñas y ubicación. Se ve bien en el celular.</p>
+          <div class="demo" aria-hidden="true">
+            <div class="nav-mini">
+              <div class="nav-mini-barra"><i></i><i></i><i></i><span>tunegocio.cl</span></div>
+              <div class="nav-mini-cuerpo">
+                <div><div class="esq t"></div><div class="esq"></div><div class="esq c"></div><span class="mini-btn">Reservar hora</span></div>
+                <div class="mini-precios"><div>Consulta <b>$20.000</b></div><div>Control <b>$15.000</b></div><div>Tratamiento <b>$35.000</b></div></div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="bc b2 glow anima aparece" style="--d:.08s">
+          <h3>Agenda para reservar solos</h3>
+          <p>Tus clientes ven las horas libres y reservan en segundos, de día o de noche.</p>
+          <div class="demo" aria-hidden="true">
+            <div class="semana">
+              <span class="dia">L</span><span class="dia">M</span><span class="dia">M</span><span class="dia">J</span><span class="dia">V</span>
+              <i class="slot r" style="--d:.2s"></i><i class="slot"></i><i class="slot r" style="--d:1.1s"></i><i class="slot r" style="--d:.6s"></i><i class="slot"></i>
+              <i class="slot r" style="--d:.9s"></i><i class="slot r" style="--d:.4s"></i><i class="slot"></i><i class="slot r" style="--d:1.5s"></i><i class="slot r" style="--d:.7s"></i>
+              <i class="slot"></i><i class="slot r" style="--d:1.3s"></i><i class="slot r" style="--d:.3s"></i><i class="slot"></i><i class="slot r" style="--d:1.8s"></i>
+              <i class="slot r" style="--d:1s"></i><i class="slot"></i><i class="slot r" style="--d:2s"></i><i class="slot r" style="--d:.5s"></i><i class="slot"></i>
+              <i class="slot r" style="--d:1.6s"></i><i class="slot r" style="--d:2.2s"></i><i class="slot"></i><i class="slot r" style="--d:1.2s"></i><i class="slot r" style="--d:2.4s"></i>
+            </div>
+            <p class="semana-pie"><svg class="icon lima"><use href="#i-cal"/></svg>Horas que se llenan solas, sin que contestes un mensaje.</p>
+          </div>
+        </article>
+        <article class="bc b3 glow anima aparece">
+          <h3>Ficha de Google Maps y SEO local</h3>
+          <p>Para aparecer cuando buscan tu servicio en tu comuna.</p>
+          <div class="demo" aria-hidden="true"><div class="mapa-mini"><svg class="icon pin"><use href="#i-pin"/></svg><span class="estrellas-mini">★★★★★ 5,0</span></div></div>
+        </article>
+        <article class="bc b4 glow anima aparece" style="--d:.08s">
+          <h3>Hosting y mantención</h3>
+          <p>Nos encargamos de que todo siga funcionando. Tú no tocas nada técnico.</p>
+          <div class="demo" aria-hidden="true">
+            <div class="en-linea"><span class="punto"></span>Tu web está en línea</div>
+            <div class="estado-web"><div><svg class="icon"><use href="#i-check"/></svg>Hosting incluido</div><div><svg class="icon"><use href="#i-check"/></svg>Conexión segura (HTTPS)</div><div><svg class="icon"><use href="#i-check"/></svg>Cambios cuando los pidas</div></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="casos-fila">
+        <div class="aparece">
+          <span class="kicker">Clientes reales</span>
+          <h2 style="margin:14px 0 16px">Webs que ya están trabajando</h2>
+          <p class="lead">Profesionales que hoy reciben consultas y reservas desde su web, y aparecen cuando los buscan en Google.</p>
+          <div class="nota-caja"><svg class="icon"><use href="#i-check"/></svg><span>Antes de pagar nada, te mostramos una maqueta de cómo quedaría tu web, con tu nombre y tus servicios.</span></div>
+          <div class="cta-fila"><a class="btn btn-primario mag" href="#contacto" data-interes="sitio-web">Quiero ver mi maqueta gratis <svg class="icon"><use href="#i-flecha"/></svg></a></div>
+        </div>
+        <div class="casos orden-2">
+          <a class="caso tilt aparece" href="https://gparrapodologia.cl/" target="_blank" rel="noopener">
             <div class="marco"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/caso-gustavo.webp" alt="Web de Gustavo Parra Podología vista en un celular" width="540" height="983" loading="lazy"></div>
             <div class="caso-txt"><b>Gustavo Parra Podología</b><span><span class="estrellas">★★★★★</span> 5,0 · cerca de 150 reseñas</span></div>
           </a>
-          <a class="caso aparece" href="https://asesoriascontables-jc.cl/" target="_blank" rel="noopener">
+          <a class="caso tilt aparece" style="--d:.1s" href="https://asesoriascontables-jc.cl/" target="_blank" rel="noopener">
             <div class="marco"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/caso-jc.webp" alt="Web de Asesorías Contables JC vista en un celular" width="540" height="983" loading="lazy"></div>
             <div class="caso-txt"><b>Asesorías Contables JC</b><span>Contador en Melipilla</span></div>
           </a>
         </div>
-        <div class="nota-caja aparece"><svg class="icon"><use href="#i-check"/></svg><span>Antes de pagar nada, te mostramos una maqueta de cómo quedaría tu web, con tu nombre y tus servicios.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" id="camino" aria-labelledby="camino-t">
+    <div class="wrap">
+      <div class="cabeza aparece">
+        <span class="kicker">Cómo funciona</span>
+        <h2 id="camino-t">El camino de tu cliente, de Google a tu agenda</h2>
+        <p class="lead">Así llega un cliente nuevo cuando tienes una web con agenda. Baja y míralo paso a paso.</p>
+      </div>
+      <div class="camino-grid">
+        <div class="camino-tel" aria-hidden="true">
+          <div class="telefono">
+            <div class="pantalla">
+              <div class="esc on">
+                <p class="g-tit">Buscador</p>
+                <div class="g-barra"><svg class="icon"><use href="#i-lupa"/></svg>podólogo cerca de mí</div>
+                <div class="g-res top"><small>tunegocio.cl</small><b>Podología Estación Central</b><span class="est">★★★★★ 5,0 <span>· 148 reseñas · Abierto</span></span></div>
+                <div class="g-res"><div class="g-gris" style="width:40%"></div><div class="g-gris" style="width:85%"></div><div class="g-gris" style="width:60%"></div></div>
+                <div class="g-res"><div class="g-gris" style="width:35%"></div><div class="g-gris" style="width:80%"></div><div class="g-gris" style="width:50%"></div></div>
+              </div>
+              <div class="esc esc-mapa">
+                <div class="calles"></div>
+                <span class="pin-g"><svg class="icon"><use href="#i-pin"/></svg></span>
+                <div class="ficha"><b>Podología Estación Central</b><p class="est">★★★★★ 5,0 <span>(148)</span></p><p class="abierto">Abierto · Cierra a las 19:00</p><div class="ficha-btns"><span>Cómo llegar</span><span>Llamar</span><span class="act">Sitio web</span></div></div>
+              </div>
+              <div class="esc esc-web">
+                <div class="web-cab"><small>Podología Estación Central</small><b>Vuelve a caminar sin dolor</b><span>Pedir hora</span></div>
+                <div class="web-cuerpo">
+                  <div class="fila">Podología general <b>$20.000</b></div>
+                  <div class="fila">Uña encarnada <b>$35.000</b></div>
+                  <div class="fila">Ortonixia <b>$30.000</b></div>
+                  <div class="res">Reservar hora online</div>
+                </div>
+              </div>
+              <div class="esc">
+                <div class="ag-neg"><span class="ag-av">GP</span><div><b>Podología Estación Central</b><small>Reserva online</small></div></div>
+                <p class="ag-t">Reserva tu hora</p>
+                <div class="ag-dias"><button type="button" tabindex="-1">Lun<b>20</b></button><button type="button" tabindex="-1" class="sel">Mar<b>21</b></button><button type="button" tabindex="-1">Mié<b>22</b></button><button type="button" tabindex="-1">Jue<b>23</b></button></div>
+                <div class="ag-horas"><button type="button" tabindex="-1">09:00</button><button type="button" tabindex="-1" class="sel">10:30</button><button type="button" tabindex="-1" disabled>12:00</button><button type="button" tabindex="-1">15:30</button><button type="button" tabindex="-1" disabled>17:00</button><button type="button" tabindex="-1">18:15</button></div>
+                <button class="ag-btn" type="button" tabindex="-1">Confirmar hora</button>
+              </div>
+              <div class="esc esc-aviso">
+                <p class="hora">23:40</p>
+                <p class="fecha">lunes 20</p>
+                <div class="noti"><span class="ico"><svg class="icon"><use href="#i-cal"/></svg></span><div><b>Nueva reserva</b>Carmen reservó Podología general para el martes 21 a las 10:30.<br><small>Agenda · ahora</small></div></div>
+                <div class="noti"><span class="ico"><svg class="icon"><use href="#i-check"/></svg></span><div><b>Mañana tienes 6 horas reservadas</b><small>Agenda · hace 2 min</small></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <article class="paso on" data-paso="0"><p class="n">01</p><h3>Te buscan en Google</h3><p>Alguien escribe "podólogo cerca de mí" y apareces entre los primeros, con tus estrellas y tus reseñas a la vista.</p></article>
+        <article class="paso" data-paso="1"><p class="n">02</p><h3>Ven tu ficha en Maps</h3><p>Tu ficha de Google Maps completa: horario, ubicación, reseñas y un botón directo a tu web.</p></article>
+        <article class="paso" data-paso="2"><p class="n">03</p><h3>Entran a tu web y confían</h3><p>Ven tus servicios, tus precios y quién eres. Sin llamar ni preguntar por WhatsApp.</p></article>
+        <article class="paso" data-paso="3"><p class="n">04</p><h3>Reservan solos</h3><p>Eligen día y hora en segundos, aunque sean las 11 de la noche y tú estés descansando.</p></article>
+        <article class="paso" data-paso="4"><p class="n">05</p><h3>Te llega la reserva</h3><p>Tú solo ves la hora en tu agenda y atiendes. Sin ir y venir de mensajes.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque bloque-suave" aria-labelledby="ad-t">
+    <div class="wrap">
+      <div class="cabeza centro aparece">
+        <span class="kicker">Antes y después</span>
+        <h2 id="ad-t">Del caos de WhatsApp a una agenda ordenada</h2>
+        <p class="lead">Arrastra la línea para comparar cómo se agenda hoy y cómo se agenda con una web con agenda online.</p>
+      </div>
+      <div class="ad aparece" id="ad">
+        <div class="ad-lado ad-antes" aria-hidden="true">
+          <span class="ad-etq">Hoy: todo por WhatsApp</span>
+          <div class="chat">
+            <div class="chat-cab"><span class="av">CN</span><div>Cliente nuevo<small>escribiendo…</small></div></div>
+            <p class="burbuja in">Hola, ¿tiene hora para mañana?<small>23:14</small></p>
+            <p class="burbuja out">¡Hola! Sí, a las 10:00 o a las 12:00<small>07:52</small></p>
+            <p class="burbuja in">¿Y el jueves en la tarde?<small>08:30</small></p>
+            <p class="burbuja out">El jueves tengo a las 15:30<small>10:05</small></p>
+            <p class="burbuja in">Ya, déjeme ver y le confirmo<small>10:41</small></p>
+            <p class="burbuja in">¿Sigue la de las 15:30?<small>18:20</small></p>
+            <p class="burbuja out">Disculpe, se la acabo de dar a otra persona<small>19:02</small></p>
+          </div>
+        </div>
+        <div class="ad-lado ad-despues" aria-hidden="true">
+          <div class="agenda-dia">
+            <span class="ad-etq">Con tu agenda online</span>
+            <h4>Martes 21</h4>
+            <div class="turno"><span class="h">09:00</span><div>Carmen R.<small>Podología general</small></div><span class="tag">Reservó sola</span></div>
+            <div class="turno"><span class="h">10:30</span><div>Pedro S.<small>Uña encarnada</small></div><span class="tag">Reservó sola</span></div>
+            <div class="turno libre"><span class="h">12:00</span><div>Disponible</div></div>
+            <div class="turno"><span class="h">15:30</span><div>Ana M.<small>Ortonixia</small></div><span class="tag">23:40</span></div>
+            <div class="turno"><span class="h">17:00</span><div>Luis P.<small>Podología general</small></div><span class="tag">Reservó sola</span></div>
+          </div>
+        </div>
+        <input class="ad-range" id="ad-range" type="range" min="0" max="100" value="50" aria-label="Comparar: mueve hacia la izquierda para ver la agenda online y hacia la derecha para ver WhatsApp">
+        <div class="ad-linea"><span class="ad-mango"><svg class="icon"><use href="#i-flechas"/></svg></span></div>
+      </div>
+      <p class="ad-nota">Conversación y agenda de ejemplo.</p>
+    </div>
+  </section>
+
+  <section class="bloque" id="calculadora" aria-labelledby="calc-t">
+    <div class="wrap">
+      <div class="cabeza aparece">
+        <span class="kicker">Calculadora</span>
+        <h2 id="calc-t">¿Cuánto tiempo se te va en coordinar horas?</h2>
+        <p class="lead">Mueve los valores según tu negocio y mira cuánto tiempo y plata se van en mensajes que una agenda online contesta sola.</p>
+      </div>
+      <div class="calc">
+        <div class="calc-in aparece">
+          <div class="deslizador">
+            <label for="c-clientes">Clientes que atiendes a la semana <output id="o-clientes" for="c-clientes">40</output></label>
+            <input class="rango" id="c-clientes" type="range" min="5" max="150" step="5" value="40">
+          </div>
+          <div class="deslizador">
+            <label for="c-minutos">Minutos coordinando cada hora por WhatsApp <output id="o-minutos" for="c-minutos">5 min</output></label>
+            <input class="rango" id="c-minutos" type="range" min="2" max="15" step="1" value="5">
+          </div>
+          <div class="deslizador">
+            <label for="c-valor">Lo que vale tu hora de trabajo <output id="o-valor" for="c-valor">$20.000</output></label>
+            <input class="rango" id="c-valor" type="range" min="5000" max="60000" step="1000" value="20000">
+          </div>
+        </div>
+        <div class="calc-out aparece" style="--d:.1s" aria-live="polite">
+          <span class="kicker">Se te van al mes</span>
+          <p class="grande"><span id="r-horas">14</span> h</p>
+          <p class="sub">coordinando horas, respondiendo, reagendando y confirmando.</p>
+          <div class="plata"><span class="muted">Equivale a</span><br><b id="r-plata">$287.000</b> <span class="muted">de tu tiempo al mes</span></div>
+          <a class="btn btn-primario mag" href="#contacto" id="calc-cta">Quiero recuperar ese tiempo <svg class="icon"><use href="#i-flecha"/></svg></a>
+          <p class="calc-nota">Cálculo aproximado: clientes × 4,3 semanas × minutos por cliente.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -475,21 +901,21 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
           <li><span class="num"><svg class="icon"><use href="#i-soporte"/></svg></span><div><b>Soporte mensual</b><span>Te ayudamos a partir y estamos cuando lo necesites.</span></div></li>
         </ul>
         <div class="cta-fila">
-          <a class="btn btn-claro" href="#contacto" data-interes="sitio-tuerkit">Agenda una demo gratis <svg class="icon"><use href="#i-flecha"/></svg></a>
-          <a class="btn btn-fantasma" href="/herramientas/presupuesto-taller"><svg class="icon"><use href="#i-doc"/></svg>Prueba el generador de presupuestos</a>
+          <a class="btn btn-primario mag" href="#contacto" data-interes="sitio-tuerkit">Agenda una demo gratis <svg class="icon"><use href="#i-flecha"/></svg></a>
+          <a class="btn btn-borde mag" href="/herramientas/presupuesto-taller"><svg class="icon"><use href="#i-doc"/></svg>Prueba el generador de presupuestos</a>
         </div>
       </div>
       <div class="aparece">
-        <div class="panel-tk" aria-label="Ejemplo de la pantalla de Tuerkit">
-          <div class="tk-cab"><b>Vehículos en el taller</b><small>Hoy</small></div>
-          <div class="tk-stats" aria-hidden="true"><div><small>En taller</small><b>7</b></div><div><small>Listos hoy</small><b>3</b></div><div><small>Caja del día</small><b>$384.500</b></div></div>
-          <div aria-hidden="true">
-            <div class="tk-fila"><span class="patente">HJKL·23</span><div><b>Chevrolet Sail</b><small>Pastillas y discos de freno</small></div><span class="estado e-listo">Listo para retiro</span></div>
+        <div class="panel-tk" id="panel-tk" aria-label="Ejemplo de la pantalla de Tuerkit funcionando">
+          <div class="tk-cab"><b>Vehículos en el taller</b><span class="tk-vivo"><span class="punto"></span>En vivo</span></div>
+          <div class="tk-stats" aria-hidden="true"><div><small>En taller</small><b id="tk-taller">7</b></div><div><small>Listos hoy</small><b id="tk-listos">3</b></div><div><small>Caja del día</small><b id="tk-caja">$384.500</b></div></div>
+          <div id="tk-filas" aria-hidden="true">
+            <div class="tk-fila"><span class="patente">HJKL·23</span><div><b>Chevrolet Sail</b><small>Pastillas y discos de freno</small></div><span class="estado e-trab">En reparación</span></div>
             <div class="tk-fila"><span class="patente">PRTS·41</span><div><b>Nissan Versa</b><small>Mantención 60.000 km</small></div><span class="estado e-trab">En reparación</span></div>
             <div class="tk-fila"><span class="patente">GBZK·88</span><div><b>Toyota Yaris</b><small>Embrague</small></div><span class="estado e-rep">Esperando repuesto</span></div>
             <div class="tk-fila"><span class="patente">KXWD·17</span><div><b>Kia Morning</b><small>Ruido en suspensión</small></div><span class="estado e-diag">En diagnóstico</span></div>
           </div>
-          <div class="tk-cliente" aria-hidden="true"><small>Lo que ve tu cliente</small><b>Tu Chevrolet Sail</b><span class="estado">Listo para retiro</span></div>
+          <div class="tk-cliente" id="tk-cliente" aria-hidden="true"><small><svg class="icon"><use href="#i-cel"/></svg>Lo que ve tu cliente</small><b id="tk-cli-auto">Tu Chevrolet Sail</b><span class="estado e-trab" id="tk-cli-estado">En reparación</span></div>
         </div>
         <p class="ejemplo">Pantalla de ejemplo, con datos ficticios.</p>
       </div>
@@ -504,9 +930,9 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
       </div>
       <ol class="pasos">
         <li class="aparece"><h3>Conversamos</h3><p>Nos cuentas cómo funciona tu negocio y qué te quita más tiempo.</p></li>
-        <li class="aparece"><h3>Te mostramos una maqueta o demo</h3><p>Gratis y sin compromiso, para que veas cómo quedaría antes de decidir.</p></li>
-        <li class="aparece"><h3>Lo dejamos funcionando</h3><p>Armamos todo, lo publicamos y te enseñamos a usarlo.</p></li>
-        <li class="aparece"><h3>Te acompañamos</h3><p>Mantención y soporte mensual para que siga funcionando.</p></li>
+        <li class="aparece" style="--d:.08s"><h3>Te mostramos una maqueta o demo</h3><p>Gratis y sin compromiso, para que veas cómo quedaría antes de decidir.</p></li>
+        <li class="aparece" style="--d:.16s"><h3>Lo dejamos funcionando</h3><p>Armamos todo, lo publicamos y te enseñamos a usarlo.</p></li>
+        <li class="aparece" style="--d:.24s"><h3>Te acompañamos</h3><p>Mantención y soporte mensual para que siga funcionando.</p></li>
       </ol>
     </div>
   </section>
@@ -519,8 +945,8 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
         <p class="lead">Herramientas simples que hicimos para el día a día de profesionales independientes y talleres.</p>
       </div>
       <div class="herr">
-        <a class="aparece" href="/herramientas/boleta-honorarios"><span class="ico"><svg class="icon"><use href="#i-calc"/></svg></span><div><h3>Calculadora de boleta de honorarios 2026</h3><p>Bruto, retención de 15,25% y líquido, y cuánto cobrar por sesión si atiendes con hora.</p><span class="ir">Usar calculadora →</span></div></a>
-        <a class="aparece" href="/herramientas/presupuesto-taller"><span class="ico"><svg class="icon"><use href="#i-doc"/></svg></span><div><h3>Generador de presupuestos para talleres</h3><p>Repuestos, mano de obra e IVA en un presupuesto profesional, en PDF o por WhatsApp.</p><span class="ir">Hacer un presupuesto →</span></div></a>
+        <a class="glow aparece" href="/herramientas/boleta-honorarios"><span class="ico"><svg class="icon"><use href="#i-calc"/></svg></span><div><h3>Calculadora de boleta de honorarios 2026</h3><p>Bruto, retención de 15,25% y líquido, y cuánto cobrar por sesión si atiendes con hora.</p><span class="ir">Usar calculadora →</span></div></a>
+        <a class="glow aparece" style="--d:.08s" href="/herramientas/presupuesto-taller"><span class="ico"><svg class="icon"><use href="#i-doc"/></svg></span><div><h3>Generador de presupuestos para talleres</h3><p>Repuestos, mano de obra e IVA en un presupuesto profesional, en PDF o por WhatsApp.</p><span class="ir">Hacer un presupuesto →</span></div></a>
       </div>
     </div>
   </section>
@@ -553,7 +979,7 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
           <li><svg class="icon"><use href="#i-check"/></svg>Hecho para pymes chilenas</li>
         </ul>
       </div>
-      <div class="form aparece">
+      <div class="form glow aparece">
         <form id="form" novalidate>
           <h3>Cuéntanos de tu negocio</h3>
           <fieldset class="campo ancho opciones" style="margin-bottom:18px">
@@ -595,6 +1021,7 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
       <h4>Soluciones</h4>
       <a href="#webs">Web con agenda online</a>
       <a href="#tuerkit">Tuerkit para talleres</a>
+      <a href="#calculadora">Calculadora de tiempo</a>
       <a href="#contacto">Pide tu maqueta gratis</a>
     </div>
     <div>
@@ -609,7 +1036,14 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
 
 <script>
 (() => {
-  const $ = (s) => document.querySelector(s);
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fino = matchMedia('(pointer: fine)').matches;
+  const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
+  const pesos = (n) => '$' + Math.round(n).toLocaleString('es-CL');
+
+  // Encabezado, menú y barra de progreso
   const top = $('#top');
   const menuBtn = $('#menu-btn');
   const cerrarMenu = () => { top.classList.remove('abierto'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.querySelector('use').setAttribute('href', '#i-menu'); };
@@ -618,25 +1052,315 @@ input::placeholder,textarea::placeholder{color:#6f7d71}
     menuBtn.setAttribute('aria-expanded', String(abierto));
     menuBtn.querySelector('use').setAttribute('href', abierto ? '#i-cerrar' : '#i-menu');
   });
-  document.querySelectorAll('#nav a').forEach((a) => a.addEventListener('click', cerrarMenu));
-  const borde = () => top.classList.toggle('con-borde', scrollY > 8);
-  addEventListener('scroll', borde, { passive: true });
-  borde();
+  $$('#nav a').forEach((a) => a.addEventListener('click', cerrarMenu));
+  const barra = $('#progreso');
+  let pendiente = false;
+  const alBajar = () => {
+    pendiente = false;
+    const h = document.documentElement;
+    barra.style.transform = 'scaleX(' + (h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight)) + ')';
+    top.classList.toggle('con-borde', scrollY > 8);
+  };
+  addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(alBajar); } }, { passive: true });
+  alBajar();
   $('#anio').textContent = new Date().getFullYear();
 
-  // Los botones de cada sección dejan elegida la opción del formulario.
-  document.querySelectorAll('[data-interes]').forEach((a) => a.addEventListener('click', () => {
+  // Aparición al bajar, y animaciones que corren solo mientras se ven
+  const aparece = $$('.aparece');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    aparece.forEach((el) => io.observe(el));
+    const vis = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('vis', e.isIntersecting)), { threshold: 0.15 });
+    $$('.anima').forEach((el) => vis.observe(el));
+  } else {
+    aparece.forEach((el) => el.classList.add('visible'));
+    $$('.anima').forEach((el) => el.classList.add('vis'));
+  }
+  const alVer = (el, fn, umbral = 0.3) => {
+    if (!('IntersectionObserver' in window)) return fn(true);
+    new IntersectionObserver((es) => es.forEach((e) => fn(e.isIntersecting)), { threshold: umbral }).observe(el);
+  };
+
+  // Luz que sigue al mouse (portada y tarjetas), inclinación 3D y botones magnéticos
+  if (fino && !quieto) {
+    const hero = $('#hero');
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', e.clientX - r.left + 'px');
+      hero.style.setProperty('--my', e.clientY - r.top + 'px');
+    });
+    $$('.glow, .tilt').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        el.style.setProperty('--x', x + 'px');
+        el.style.setProperty('--y', y + 'px');
+        if (el.classList.contains('tilt')) el.style.transform = `perspective(900px) rotateX(${((y / r.height) - 0.5) * -6}deg) rotateY(${((x / r.width) - 0.5) * 6}deg)`;
+      });
+      el.addEventListener('pointerleave', () => { if (el.classList.contains('tilt')) el.style.transform = ''; });
+    });
+    $$('.mag').forEach((b) => {
+      b.addEventListener('pointermove', (e) => {
+        const r = b.getBoundingClientRect();
+        b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.18}px, ${(e.clientY - r.top - r.height / 2) * 0.28}px)`;
+      });
+      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+    });
+  }
+
+  // Palabra que cambia en el título, con efecto de letras que se descifran
+  const rota = $('#rota');
+  if (rota && !quieto) {
+    const palabras = ['pyme', 'consulta', 'taller', 'barbería', 'clínica'];
+    const letras = 'abcdefghijklmnopqrstuvwxyz';
+    let i = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      i = (i + 1) % palabras.length;
+      const destino = palabras[i];
+      let cuadro = 0;
+      const total = 14;
+      const id = setInterval(() => {
+        cuadro++;
+        let s = '';
+        for (let k = 0; k < destino.length; k++) s += k < (destino.length * cuadro) / total ? destino[k] : letras[(Math.random() * 26) | 0];
+        rota.textContent = s;
+        if (cuadro >= total) { clearInterval(id); rota.textContent = destino; }
+      }, 38);
+    }, 2800);
+  }
+
+  // Agenda de la portada: se reserva sola y, al tocarla, la usa el visitante
+  const pant = $('#agenda');
+  if (pant) {
+    const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const DIAS_L = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const OCUPADAS = [[2, 5], [0, 3], [4], [1, 2]];
+    const NOMBRES = ['Carmen', 'Pedro', 'Ana', 'Luis', 'Sofía'];
+    const dias = $$('#ag-dias button'), horas = $$('#ag-horas button');
+    const ok = $('#ag-ok'), listo = $('#ag-listo'), aviso = $('#ag-aviso'), dedo = $('#dedo');
+    const flota = $('#flota-reserva'), pista = $('#tel-pista');
+    const fechas = [];
+    const d = new Date();
+    while (fechas.length < 4) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0) fechas.push(new Date(d)); }
+    dias.forEach((b, i) => { b.innerHTML = DIAS[fechas[i].getDay()] + '<b>' + fechas[i].getDate() + '</b>'; b.setAttribute('aria-label', DIAS_L[fechas[i].getDay()] + ' ' + fechas[i].getDate()); });
+    $('#ag-mes').textContent = MESES[fechas[0].getMonth()].replace(/^./, (c) => c.toUpperCase());
+    let dia = -1, hora = -1, auto = !quieto, ficha = 0, corriendo = false, nombre = 0;
+
+    const pintar = () => {
+      const ocupadas = dia >= 0 ? OCUPADAS[dia] : [2, 5];
+      dias.forEach((b, i) => { b.classList.toggle('sel', i === dia); b.setAttribute('aria-pressed', String(i === dia)); });
+      horas.forEach((b, i) => { b.disabled = ocupadas.includes(i); b.classList.toggle('sel', i === hora); b.setAttribute('aria-pressed', String(i === hora)); });
+    };
+    const reiniciar = () => { dia = -1; hora = -1; listo.hidden = true; aviso.textContent = ''; pintar(); };
+    const elegirDia = (i) => { dia = i; if (OCUPADAS[i].includes(hora)) hora = -1; pintar(); };
+    const elegirHora = (i) => { if (!horas[i].disabled) { hora = i; pintar(); } };
+    const confirmar = (quien) => {
+      if (dia < 0 || hora < 0) {
+        aviso.textContent = dia < 0 ? 'Elige un día' : 'Elige una hora';
+        ok.classList.remove('sacude'); void ok.offsetWidth; ok.classList.add('sacude');
+        return;
+      }
+      const f = fechas[dia], h = horas[hora].textContent;
+      $('#ag-resumen').textContent = `Podología general · ${DIAS_L[f.getDay()]} ${f.getDate()} de ${MESES[f.getMonth()]} a las ${h}`;
+      listo.hidden = false;
+      $('#flota-txt').textContent = `${quien} · ${DIAS[f.getDay()]} ${f.getDate()}, ${h}`;
+      flota.classList.remove('pop'); void flota.offsetWidth; flota.classList.add('pop');
+    };
+    dias.forEach((b, i) => b.addEventListener('click', () => { elegirDia(i); aviso.textContent = ''; }));
+    horas.forEach((b, i) => b.addEventListener('click', () => { elegirHora(i); aviso.textContent = ''; }));
+    ok.addEventListener('click', () => confirmar(auto ? NOMBRES[nombre % NOMBRES.length] : 'Tú (prueba)'));
+    $('#ag-otra').addEventListener('click', reiniciar);
+
+    const tomarControl = () => {
+      if (!auto) return;
+      auto = false; ficha++; corriendo = false;
+      dedo.classList.remove('on');
+      reiniciar();
+      pista.innerHTML = '<svg class="icon"><use href="#i-dedo"/></svg><span><b>¡Ahora tú!</b> Elige día, hora y confirma</span>';
+    };
+    pant.addEventListener('pointerdown', tomarControl, true);
+    pant.addEventListener('focusin', tomarControl);
+
+    const tocar = async (el) => {
+      const p = pant.getBoundingClientRect(), r = el.getBoundingClientRect();
+      dedo.style.transform = `translate(${r.left - p.left + r.width / 2}px, ${r.top - p.top + r.height / 2}px)`;
+      dedo.classList.add('on');
+      await dormir(720);
+      dedo.classList.add('tap'); await dormir(200); dedo.classList.remove('tap');
+    };
+    const demo = async () => {
+      const yo = ++ficha;
+      const sigue = () => yo === ficha && auto;
+      corriendo = true;
+      while (sigue()) {
+        reiniciar();
+        await dormir(1100); if (!sigue()) break;
+        const di = (Math.random() * 4) | 0;
+        await tocar(dias[di]); if (!sigue()) break;
+        elegirDia(di);
+        await dormir(400); if (!sigue()) break;
+        const libres = horas.map((_, i) => i).filter((i) => !OCUPADAS[di].includes(i));
+        const hi = libres[(Math.random() * libres.length) | 0];
+        await tocar(horas[hi]); if (!sigue()) break;
+        elegirHora(hi);
+        await dormir(400); if (!sigue()) break;
+        await tocar(ok); if (!sigue()) break;
+        nombre++;
+        confirmar(NOMBRES[nombre % NOMBRES.length]);
+        dedo.classList.remove('on');
+        await dormir(3400);
+      }
+      if (yo === ficha) corriendo = false;
+    };
+    pintar();
+    if (auto) alVer(pant, (visible) => {
+      if (!auto) return;
+      if (visible && !corriendo) demo();
+      if (!visible) { ficha++; corriendo = false; dedo.classList.remove('on'); }
+    });
+  }
+
+  // El camino de tu cliente: la pantalla cambia según el paso que se está leyendo
+  const pasos = $$('.paso'), escenas = $$('.camino-tel .esc');
+  if (pasos.length && 'IntersectionObserver' in window) {
+    const angosto = matchMedia('(max-width: 980px)').matches;
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const i = +e.target.dataset.paso;
+      pasos.forEach((p, k) => p.classList.toggle('on', k === i));
+      escenas.forEach((s, k) => s.classList.toggle('on', k === i));
+    }), { rootMargin: angosto ? '-74% 0px -25% 0px' : '-48% 0px -50% 0px' });
+    pasos.forEach((p) => io.observe(p));
+  }
+
+  // Antes y después
+  const ad = $('#ad'), rango = $('#ad-range');
+  if (ad) {
+    rango.addEventListener('input', () => { ad.classList.remove('pista'); ad.style.setProperty('--pos', rango.value + '%'); });
+    if (!quieto) {
+      let hecho = false;
+      alVer(ad, (v) => { if (v && !hecho) { hecho = true; setTimeout(() => ad.classList.add('pista'), 500); } }, 0.5);
+      ad.addEventListener('animationend', () => ad.classList.remove('pista'));
+    }
+  }
+
+  // Calculadora de tiempo
+  const cCli = $('#c-clientes'), cMin = $('#c-minutos'), cVal = $('#c-valor');
+  if (cCli) {
+    const rHoras = $('#r-horas'), rPlata = $('#r-plata');
+    let horasAhora = 0, plataAhora = 0, anim = 0;
+    const llenar = (el) => el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min)) * 100 + '%');
+    const calcular = () => {
+      [cCli, cMin, cVal].forEach(llenar);
+      $('#o-clientes').textContent = cCli.value;
+      $('#o-minutos').textContent = cMin.value + ' min';
+      $('#o-valor').textContent = pesos(cVal.value);
+      const h = (cCli.value * 4.3 * cMin.value) / 60;
+      const p = h * cVal.value;
+      const h0 = horasAhora, p0 = plataAhora, t0 = performance.now(), yo = ++anim;
+      const paso = (t) => {
+        if (yo !== anim) return;
+        const k = quieto ? 1 : Math.min(1, (t - t0) / 450);
+        const e = 1 - Math.pow(1 - k, 3);
+        horasAhora = h0 + (h - h0) * e; plataAhora = p0 + (p - p0) * e;
+        rHoras.textContent = Math.round(horasAhora);
+        rPlata.textContent = pesos(Math.round(plataAhora / 1000) * 1000);
+        if (k < 1) requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
+    };
+    [cCli, cMin, cVal].forEach((el) => el.addEventListener('input', calcular));
+    calcular();
+    $('#calc-cta').addEventListener('click', () => {
+      const h = Math.round((cCli.value * 4.3 * cMin.value) / 60);
+      const msj = $('#f-msj');
+      if (!msj.value.trim()) msj.value = `Usé la calculadora: atiendo unos ${cCli.value} clientes a la semana y se me van cerca de ${h} horas al mes coordinando horas.`;
+      $('input[name="herramienta"][value="sitio-web"]').checked = true;
+    });
+  }
+
+  // Tuerkit en vivo: los autos avanzan de estado y la caja sube
+  const filas = $('#tk-filas');
+  if (filas && !quieto) {
+    const ESTADOS = [['e-diag', 'En diagnóstico'], ['e-rep', 'Esperando repuesto'], ['e-trab', 'En reparación'], ['e-listo', 'Listo para retiro']];
+    const autos = [
+      { pat: 'HJKL·23', auto: 'Chevrolet Sail', trabajo: 'Pastillas y discos de freno', e: 2, monto: 148000 },
+      { pat: 'PRTS·41', auto: 'Nissan Versa', trabajo: 'Mantención 60.000 km', e: 2, monto: 96500 },
+      { pat: 'GBZK·88', auto: 'Toyota Yaris', trabajo: 'Embrague', e: 1, monto: 285000 },
+      { pat: 'KXWD·17', auto: 'Kia Morning', trabajo: 'Ruido en suspensión', e: 0, monto: 64000 },
+    ];
+    const nuevos = [
+      { pat: 'LTRP·62', auto: 'Hyundai Accent', trabajo: 'Cambio de aceite y filtros', monto: 54000 },
+      { pat: 'FJCX·35', auto: 'Suzuki Swift', trabajo: 'Frenos traseros', monto: 72000 },
+      { pat: 'BBWS·90', auto: 'Peugeot 208', trabajo: 'Correa de distribución', monto: 320000 },
+      { pat: 'DRHT·14', auto: 'Mazda 3', trabajo: 'Alineación y balanceo', monto: 42000 },
+      { pat: 'CVNT·58', auto: 'Chevrolet Spark', trabajo: 'Batería y alternador', monto: 118000 },
+    ];
+    let listos = 3, caja = 384500, cajaVista = caja, siguiente = 0, enVista = false;
+    const el = { taller: $('#tk-taller'), listos: $('#tk-listos'), caja: $('#tk-caja'), cli: $('#tk-cliente'), cliAuto: $('#tk-cli-auto'), cliEstado: $('#tk-cli-estado') };
+    const html = (a) => `<span class="patente">${a.pat}</span><div><b>${a.auto}</b><small>${a.trabajo}</small></div><span class="estado ${ESTADOS[a.e][0]}">${ESTADOS[a.e][1]}</span>`;
+    const filasEl = () => $$('.tk-fila', filas);
+    const cliente = (a) => {
+      el.cliAuto.textContent = 'Tu ' + a.auto;
+      el.cliEstado.className = 'estado ' + ESTADOS[a.e][0];
+      el.cliEstado.textContent = ESTADOS[a.e][1];
+      el.cli.classList.remove('ping'); void el.cli.offsetWidth; el.cli.classList.add('ping');
+    };
+    const subirCaja = () => {
+      const c0 = cajaVista, t0 = performance.now();
+      const paso = (t) => {
+        const k = Math.min(1, (t - t0) / 900);
+        cajaVista = c0 + (caja - c0) * (1 - Math.pow(1 - k, 3));
+        el.caja.textContent = pesos(Math.round(cajaVista / 100) * 100);
+        if (k < 1) requestAnimationFrame(paso);
+      };
+      el.caja.classList.add('sube'); setTimeout(() => el.caja.classList.remove('sube'), 1200);
+      requestAnimationFrame(paso);
+    };
+    const contar = () => { el.taller.textContent = 3 + autos.filter((a) => a.e < 3).length; el.listos.textContent = listos; };
+    const turno = () => {
+      if (!enVista || document.hidden) return;
+      const i = autos.findIndex((a) => a.e === 3);
+      if (i >= 0 && Math.random() < 0.55) {
+        // El auto listo se retira y entra uno nuevo
+        const fila = filasEl()[i];
+        fila.classList.add('sale');
+        setTimeout(() => {
+          const n = nuevos[siguiente++ % nuevos.length];
+          autos[i] = { ...n, e: 0 };
+          fila.className = 'tk-fila entra';
+          fila.innerHTML = html(autos[i]);
+          contar();
+        }, 420);
+        return;
+      }
+      const candidatos = autos.map((a, k) => k).filter((k) => autos[k].e < 3);
+      if (!candidatos.length) return;
+      const k = candidatos[(Math.random() * candidatos.length) | 0];
+      const a = autos[k];
+      a.e++;
+      const fila = filasEl()[k];
+      fila.className = 'tk-fila cambio';
+      fila.innerHTML = html(a);
+      setTimeout(() => fila.classList.remove('cambio'), 900);
+      if (a.e === 3) { listos++; caja += a.monto; subirCaja(); }
+      contar();
+      cliente(a);
+    };
+    contar();
+    alVer($('#panel-tk'), (v) => { enVista = v; }, 0.25);
+    setInterval(turno, 2300);
+  }
+
+  // Los botones de cada sección dejan elegida la opción del formulario
+  $$('[data-interes]').forEach((a) => a.addEventListener('click', () => {
     const r = document.querySelector('input[name="herramienta"][value="' + a.dataset.interes + '"]');
     if (r) r.checked = true;
   }));
 
-  // Aparición al hacer scroll (si el navegador no lo soporta, todo se ve igual).
-  const items = document.querySelectorAll('.aparece');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
-    items.forEach((el) => io.observe(el));
-  } else items.forEach((el) => el.classList.add('visible'));
-
+  // Formulario de contacto
   $('#form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = e.target;
