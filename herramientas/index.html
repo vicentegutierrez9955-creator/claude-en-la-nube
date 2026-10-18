@@ -3,32 +3,39 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Herramientas gratis para negocios chicos | stpyme</title>
+<title>Herramientas gratis para negocios chicos | STPyme</title>
 <meta name="description" content="Calculadoras y herramientas gratuitas para profesionales independientes, consultas y talleres de Chile. Sin registrarte.">
 <link rel="canonical" href="https://stpyme.cl/herramientas">
-<meta name="theme-color" content="#1f6feb">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%231f6feb'/%3E%3Cpath d='M10.5 28h7v-7.5h7V13h5' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6fa;--card:#fff;--ink:#132033;--muted:#5d6b80;--line:#e3e8f0;--acc:#1f6feb;--shadow:0 1px 2px rgba(19,32,51,.06),0 10px 30px -18px rgba(19,32,51,.3)}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1420;--card:#152031;--ink:#e8eef7;--muted:#9aa8bc;--line:#24324a;--acc:#4c8dff;--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.8)}}
+/* Colores de STPyme, iguales a stpyme.cl */
+:root{color-scheme:dark;--bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--acc:#c5f33b;--shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
 .wrap{max-width:760px;margin:0 auto;padding:0 16px}
-header{padding:18px 0;font-weight:800}
-header span{color:var(--acc)}
-h1{font-size:clamp(26px,5vw,34px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.02em}
+header.wrap{padding-top:18px;padding-bottom:18px}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.025em}
 .bajada{color:var(--muted);margin:0 0 20px;font-size:17px}
 .lista{display:grid;gap:14px}
-a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;color:inherit;text-decoration:none}
-a.card:hover{border-color:var(--acc)}
-.card h2{font-size:19px;margin:0 0 4px}
+a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;color:inherit;text-decoration:none;transition:border-color .2s,transform .2s}
+a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
+.card h2{font-size:19px;margin:0 0 4px;letter-spacing:-.015em}
 .card p{margin:0;color:var(--muted)}
-.card .ir{color:var(--acc);font-weight:600;margin-top:8px}
+.card .ir{color:var(--acc);font-weight:700;margin-top:8px}
 footer{padding:24px 0 40px;color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
-<header class="wrap"><a href="https://stpyme.cl/" style="color:inherit;text-decoration:none">st<span>pyme</span></a></header>
+<header class="wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
 <main class="wrap">
   <h1>Herramientas gratis para negocios chicos</h1>
   <p class="bajada">Calculadoras simples para profesionales independientes, consultas y talleres de Chile. Sin registrarte.</p>
@@ -45,6 +52,6 @@ footer{padding:24px 0 40px;color:var(--muted);font-size:14px}
     </a>
   </div>
 </main>
-<footer class="wrap">Hecho por <a href="https://stpyme.cl/"><b>stpyme</b></a>: webs con agenda online y sistemas para negocios chicos de Chile.</footer>
+<footer class="wrap">Hecho por <a href="https://stpyme.cl/"><b>STPyme</b></a>: webs con agenda online y sistemas para negocios chicos de Chile.</footer>
 </body>
 </html>

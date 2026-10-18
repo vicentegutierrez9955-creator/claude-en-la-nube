@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Generador de presupuestos para talleres mecánicos gratis (PDF y WhatsApp) | stpyme</title>
+<title>Generador de presupuestos para talleres mecánicos gratis (PDF y WhatsApp) | STPyme</title>
 <meta name="description" content="Arma gratis presupuestos para tu taller mecánico: repuestos, mano de obra e IVA. Descárgalos en PDF o envíalos por WhatsApp a tu cliente. Sin registrarte.">
 <link rel="canonical" href="https://stpyme.cl/herramientas/presupuesto-taller">
 <meta property="og:url" content="https://stpyme.cl/herramientas/presupuesto-taller">
@@ -11,29 +11,28 @@
 <meta property="og:title" content="Generador de presupuestos para talleres mecánicos">
 <meta property="og:description" content="Presupuestos profesionales en 2 minutos, en PDF o por WhatsApp. Gratis y sin registrarte.">
 <meta property="og:locale" content="es_CL">
-<meta name="theme-color" content="#1f6feb">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f6feb'/%3E%3Cpath d='M22 18h20v28H22z' fill='none' stroke='%23fff' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M28 27h8M28 34h8' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* Colores de STPyme, iguales a stpyme.cl */
 :root{
-  --bg:#f4f6fa;--card:#fff;--ink:#132033;--muted:#5d6b80;--line:#e3e8f0;--soft:#eef2f8;
-  --acc:#1f6feb;--acc-soft:#e8f0fe;--ok:#1e7b3a;--ok-bg:#e7f6ec;--red:#c62828;--wa:#1aa34a;
-  --shadow:0 1px 2px rgba(19,32,51,.06),0 10px 30px -18px rgba(19,32,51,.3);
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    --bg:#0d1420;--card:#152031;--ink:#e8eef7;--muted:#9aa8bc;--line:#24324a;--soft:#1b2a40;
-    --acc:#4c8dff;--acc-soft:#18294a;--ok:#6fd08c;--ok-bg:#15301f;--red:#ff7a7a;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -18px rgba(0,0,0,.8);
-  }
+  color-scheme:dark;
+  --bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--soft:#1b2b1f;
+  --acc:#c5f33b;--acc-soft:rgba(197,243,59,.12);--ok:#c5f33b;--ok-bg:rgba(197,243,59,.12);--wa:#1aa34a;--red:#ff8a80;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--acc)}
 .wrap{max-width:860px;margin:0 auto;padding:0 16px}
 header.sitio{padding:18px 0}
-.marca{font-weight:800;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
-.marca span{color:var(--acc)}
-.marca small{color:var(--muted);font-weight:600;font-size:15px;margin-left:4px}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
 h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.02em}
 h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
 .bajada{color:var(--muted);margin:0 0 20px;font-size:17px}
@@ -55,7 +54,8 @@ input[type=file]{padding:8px}
 .logo-fila img{width:52px;height:52px;object-fit:contain;border:1px solid var(--line);border-radius:8px;background:#fff}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
 .btn:hover{border-color:var(--acc)}
-.btn-primario{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn-primario{background:var(--acc);border-color:var(--acc);color:#0f1a12}
+.btn-primario:hover{background:#d6fa6e;border-color:#d6fa6e}
 .btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
 .btn-chico{padding:6px 10px;font-size:14px}
 .btn-grande{width:100%;padding:13px 16px;font-size:17px}
@@ -90,7 +90,7 @@ details p{margin:8px 0 0;color:var(--muted)}
 footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 
 /* El presupuesto: siempre en papel blanco, también en modo oscuro */
-.papel{background:#e9edf3;border-radius:16px;padding:16px;margin:0 0 18px}
+.papel{background:#0b140d;border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 18px}
 .doc{background:#fff;color:#1b2533;max-width:780px;margin:0 auto;padding:32px;border-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:14px;line-height:1.45}
 .doc-cab{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:3px solid #1b2533;padding-bottom:14px}
 .doc-taller{display:flex;gap:12px;align-items:flex-start;min-width:0}
@@ -156,7 +156,7 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 </script>
 </head>
 <body>
-<header class="sitio wrap"><a class="marca" href="/herramientas">st<span>pyme</span> <small>Herramientas gratis</small></a></header>
+<header class="sitio wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
 
 <main class="wrap">
   <h1>Generador de presupuestos para talleres mecánicos</h1>
@@ -262,7 +262,7 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 
   <section class="card cta" id="tuerkit" aria-labelledby="t-cta">
     <h2 id="t-cta">¿Haces muchos presupuestos? Conoce Tuerkit</h2>
-    <p style="margin:0">Tuerkit es el sistema para talleres mecánicos que hacemos en stpyme:</p>
+    <p style="margin:0">Tuerkit es el sistema para talleres mecánicos que hacemos en STPyme:</p>
     <ul>
       <li>Ingreso y seguimiento de cada vehículo, con su historial.</li>
       <li>Tu cliente ve el estado de su auto desde el celular, sin llamarte.</li>
@@ -293,7 +293,7 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
   </section>
 </main>
 
-<footer class="sitio wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>stpyme</b></a>, creadores de Tuerkit, el sistema para talleres mecánicos. · <a href="/herramientas">Más herramientas</a></footer>
+<footer class="sitio wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a>, creadores de Tuerkit, el sistema para talleres mecánicos. · <a href="/herramientas">Más herramientas</a></footer>
 
 <script>
 (() => {
