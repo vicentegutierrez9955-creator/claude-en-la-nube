@@ -195,3 +195,76 @@ describe("asistente IA de reservas", () => {
     expect(JSON.stringify(calls[3].messages)).toContain("oculto por privacidad");
   });
 });
+
+describe("recordatorio del día anterior", () => {
+  beforeEach(resetDb);
+
+  it("envía la plantilla con nombre, negocio, día y hora solo a las horas de mañana", async () => {
+    const clinic = await createClinic("MENU");
+    await db.business.update({
+      where: { id: clinic.id },
+      data: { whatsappPhoneNumberId: "123", whatsappAccessToken: (await import("@/lib/crypto")).encryptSecret("token") },
+    });
+    const customer = await db.customer.create({ data: { businessId: clinic.id, waId: "56955556666", name: "Perfil" } });
+    const tomorrow = addDays(todayYmd(), 1);
+    const book = (ymd: string, h: number, patientName: string) =>
+      bookAppointment({
+        businessId: clinic.id,
+        customerId: customer.id,
+        serviceId: clinic.services[0].id,
+        startsAt: localToUtc(ymd, h * 60),
+        source: "WEB",
+        patientName,
+      });
+    const a = await book(tomorrow, 10, "Carmen Rojas");
+    await book(addDays(tomorrow, 1), 10, "Otra");
+
+    const { sendDueReminders } = await import("@/lib/agenda-reminders");
+    const sent: { template: string; to: string; bodyParams: string[] }[] = [];
+    const result = await sendDueReminders({ send: async (o) => (sent.push(o), "wamid.R1") });
+    expect(result).toEqual({ sent: 1, failed: 0, total: 1 });
+    expect(sent[0]).toMatchObject({ template: "recordatorio_hora", to: "56955556666" });
+    expect(sent[0].bodyParams[0]).toBe("Carmen");
+    expect(sent[0].bodyParams[1]).toBe("Podología Gustavo Parra");
+    expect(sent[0].bodyParams[3]).toBe("10:00");
+    expect((await db.appointment.findUniqueOrThrow({ where: { id: a.id } })).reminderSentAt).not.toBeNull();
+
+    // No se repite.
+    expect((await sendDueReminders({ send: async () => "x" })).total).toBe(0);
+  });
+});
+
+describe("página pública de reservas", () => {
+  beforeEach(resetDb);
+
+  it("muestra horas libres y reserva con nombre y celular", async () => {
+    const clinic = await createClinic("MENU");
+    const { GET, POST } = await import("@/app/api/reservas/[slug]/route");
+    const { NextRequest } = await import("next/server");
+    const params = Promise.resolve({ slug: "gustavo-parra" });
+    const res = await GET(new NextRequest(`https://pedidos.test/api/reservas/gustavo-parra?servicio=${clinic.services[0].id}`), { params });
+    const { days } = (await res.json()) as { days: { ymd: string; label: string; times: { iso: string; label: string }[] }[] };
+    expect(days.length).toBeGreaterThan(0);
+    const slot = days[0].times[0];
+
+    const post = (body: object, origin = "https://pedidos.test") =>
+      POST(
+        new NextRequest("https://pedidos.test/api/reservas/gustavo-parra", {
+          method: "POST",
+          headers: { "content-type": "application/json", origin },
+          body: JSON.stringify(body),
+        }),
+        { params },
+      );
+    expect((await post({}, "https://otro.com")).status).toBe(403);
+    expect((await post({ servicio: clinic.services[0].id, hora: slot.iso, nombre: "Ana Pérez", telefono: "1234" })).status).toBe(400);
+    const ok = await post({ servicio: clinic.services[0].id, hora: slot.iso, nombre: "Ana Pérez", telefono: "9 8765 4321" });
+    expect(ok.status).toBe(200);
+    expect(await ok.json()).toMatchObject({ ok: true, number: 1, service: "Podología general" });
+    // La misma hora ya no se puede tomar.
+    expect((await post({ servicio: clinic.services[0].id, hora: slot.iso, nombre: "Luis Soto", telefono: "9 1111 2222" })).status).toBe(409);
+    const appointment = await db.appointment.findFirstOrThrow({ include: { customer: true } });
+    expect(appointment).toMatchObject({ patientName: "Ana Pérez", source: "WEB" });
+    expect(appointment.customer.waId).toBe("56987654321");
+  });
+});

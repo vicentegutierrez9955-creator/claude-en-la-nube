@@ -208,6 +208,12 @@ export async function saveSettingsAction(form: FormData) {
   const section = str(form, "section");
   let data: Record<string, unknown> = {};
   switch (section) {
+    case "tipo":
+      data = { kind: str(form, "kind") === "AGENDA" ? "AGENDA" : "TIENDA" };
+      break;
+    case "negocio":
+      data = { name: str(form, "name") || user.business.name };
+      break;
     case "tienda":
       data = {
         name: str(form, "name") || user.business.name,
@@ -225,7 +231,7 @@ export async function saveSettingsAction(form: FormData) {
         botEnabled: form.get("botEnabled") === "on",
         ...(["MENU", "HIBRIDO", "IA"].includes(str(form, "botMode")) ? { botMode: str(form, "botMode") } : {}),
         ...(form.has("welcomeMessage") ? { welcomeMessage: str(form, "welcomeMessage").slice(0, 1000) } : {}),
-        autoCreateShipment: form.get("autoCreateShipment") === "on",
+        ...(form.has("autoCreateShipment") || user.business.kind === "TIENDA" ? { autoCreateShipment: form.get("autoCreateShipment") === "on" } : {}),
         botInstructions: str(form, "botInstructions").slice(0, 4000),
       };
       break;
