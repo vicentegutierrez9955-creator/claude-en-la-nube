@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 export async function resetDb() {
   // Los ítems de pedido apuntan a productos: se borran los pedidos primero.
   await db.order.deleteMany();
+  await db.appointment.deleteMany();
   await db.business.deleteMany();
 }
 

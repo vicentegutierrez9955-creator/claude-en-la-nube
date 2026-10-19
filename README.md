@@ -18,6 +18,17 @@ Si el bot no puede resolver algo (reclamos, cambios, o si el cliente pide hablar
 - **Respuestas** (sección del panel): preguntas frecuentes con respuesta oficial; la IA las recibe como información de la tienda.
 - **Prueba del vendedor** (`/admin/pruebas`): corre 26 conversaciones típicas (compras, tallas ambiguas, stock, descuentos, reclamos, datos personales…) contra una tienda de prueba con catálogo fijo y la IA real, y muestra el porcentaje de aciertos, el costo y el detalle de cada falla. Sirve para comparar modelos o medir el efecto de cambiar las instrucciones. Escenarios en `src/lib/evals/scenarios.ts`.
 
+## Agenda para negocios que atienden con hora
+
+Además de tiendas, la plataforma sirve para profesionales que atienden con hora (podólogos, kinesiólogos, psicólogos, barberías…). Se elige al registrarse ("Atiendo con hora") o en Configuración → Tipo de negocio. El panel cambia Pedidos/Productos por **Agenda**, **Servicios** y **Horario**.
+
+- **Horas libres reales:** horario semanal (hasta dos tramos por día), duración de cada servicio, cada cuántos minutos se ofrecen horas, anticipación mínima, días hacia adelante y bloqueos (vacaciones, feriados). Todo en hora de Chile (`src/lib/agenda.ts`). Dos personas no pueden tomar la misma hora (candado por negocio en la base de datos).
+- **Asistente IA de reservas:** herramientas `ver_servicios`, `ver_horas_libres`, `reservar_hora`, `mis_horas`, `cancelar_hora` y `derivar_a_humano`. No da indicaciones de salud. Después de reservar, **el sistema** pregunta a nombre de quién queda la hora (privado: la IA no lo ve) y envía la confirmación.
+- **Menú sin IA:** reservar (servicio → día → hora → nombre), ver y cancelar horas con números (`src/lib/agenda-bot.ts`). Es el modo de costo cero y el respaldo si la IA falla.
+- **Página pública de reservas:** `/reservar/<slug>` para poner en la web del negocio, Instagram o Google Maps. Al reservar, el paciente puede agregar la hora a su calendario (con alarmas 1 día y 2 horas antes).
+- **Recordatorio del día anterior:** cron diario (`vercel.json` → `/api/cron/recordatorios`, protegido con `CRON_SECRET`) que envía la plantilla de Meta `recordatorio_hora` con 4 variables (nombre, negocio, día, hora) y botones de respuesta rápida **Confirmo** / **Cancelo**. Las respuestas confirman o cancelan la hora sin IA. La plantilla hay que crearla y aprobarla en WhatsApp Manager (categoría Utilidad); su nombre se puede cambiar en Horario.
+- **Recordatorios en 1 toque:** en la Agenda, un botón por paciente abre el WhatsApp del profesional con el recordatorio escrito (sin costo de mensajes).
+
 ## Conectar WhatsApp con un botón
 
 La pyme aprieta **"Conectar mi WhatsApp Business"**, inicia sesión con Facebook en la ventana oficial de Meta, elige su número y listo (Embedded Signup de Meta).

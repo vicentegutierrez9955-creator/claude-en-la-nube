@@ -130,3 +130,35 @@ export async function sendWhatsAppText(opts: {
   const data = (await res.json()) as { messages?: { id: string }[] };
   return data.messages?.[0]?.id ?? null;
 }
+
+// Mensaje con plantilla aprobada en Meta: es lo único que se puede enviar fuera de las
+// 24 horas desde el último mensaje del cliente (por ejemplo, el recordatorio del día anterior).
+export async function sendWhatsAppTemplate(opts: {
+  phoneNumberId: string;
+  accessToken: string;
+  to: string;
+  template: string;
+  language?: string;
+  bodyParams: string[];
+}): Promise<string | null> {
+  const res = await fetch(`https://graph.facebook.com/${GRAPH_VERSION}/${opts.phoneNumberId}/messages`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${opts.accessToken}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: opts.to,
+      type: "template",
+      template: {
+        name: opts.template,
+        language: { code: opts.language ?? "es" },
+        components: [{ type: "body", parameters: opts.bodyParams.map((text) => ({ type: "text", text })) }],
+      },
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`WhatsApp respondió ${res.status}: ${await res.text()}`);
+  }
+  const data = (await res.json()) as { messages?: { id: string }[] };
+  return data.messages?.[0]?.id ?? null;
+}

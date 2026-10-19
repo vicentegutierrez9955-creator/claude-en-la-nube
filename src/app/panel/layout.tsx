@@ -4,11 +4,23 @@ import { BRAND } from "@/lib/brand";
 import { db } from "@/lib/db";
 import { logout } from "../auth-actions";
 
-const NAV = [
+const NAV_TIENDA = [
   ["/panel", "Resumen"],
   ["/panel/pedidos", "Pedidos"],
   ["/panel/conversaciones", "Conversaciones"],
   ["/panel/productos", "Productos"],
+  ["/panel/respuestas", "Respuestas"],
+  ["/panel/simulador", "Simulador"],
+  ["/panel/configuracion", "Configuración"],
+] as const;
+
+// Negocios que atienden con hora: agenda en vez de pedidos y productos.
+const NAV_AGENDA = [
+  ["/panel", "Resumen"],
+  ["/panel/agenda", "Agenda"],
+  ["/panel/conversaciones", "Conversaciones"],
+  ["/panel/servicios", "Servicios"],
+  ["/panel/horario", "Horario"],
   ["/panel/respuestas", "Respuestas"],
   ["/panel/simulador", "Simulador"],
   ["/panel/configuracion", "Configuración"],
@@ -39,7 +51,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           </div>
         </div>
         <nav className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4">
-          {NAV.map(([href, label]) => (
+          {(user.business.kind === "AGENDA" ? NAV_AGENDA : NAV_TIENDA).map(([href, label]) => (
             <Link
               key={href}
               href={href}

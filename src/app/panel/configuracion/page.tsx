@@ -109,6 +109,7 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
   const user = await requireUser();
   const b = user.business;
   const { ok, error } = await searchParams;
+  const agenda = b.kind === "AGENDA";
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -117,6 +118,24 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
 
       <WhatsAppCard business={b} isAdmin={isAdminEmail(user.email)} saved={ok === "whatsapp"} />
 
+      <Section id="tipo" title="Tipo de negocio" description="Cambia lo que muestra el panel y cómo atiende tu asistente." saved={ok === "tipo"}>
+        <div className="grid gap-2 text-sm sm:grid-cols-2">
+          <label className="flex items-center gap-2 rounded-lg border border-gray-200 p-3">
+            <input type="radio" name="kind" value="TIENDA" defaultChecked={b.kind === "TIENDA"} /> Vendo productos (pedidos, pagos y envíos)
+          </label>
+          <label className="flex items-center gap-2 rounded-lg border border-gray-200 p-3">
+            <input type="radio" name="kind" value="AGENDA" defaultChecked={b.kind === "AGENDA"} /> Atiendo con hora (agenda y recordatorios)
+          </label>
+        </div>
+      </Section>
+
+      {agenda && (
+        <Section id="negocio" title="Negocio" description="El nombre que ven tus clientes. El horario y la dirección se configuran en Horario." saved={ok === "negocio"}>
+          <Field label="Nombre del negocio" name="name" defaultValue={b.name} required />
+        </Section>
+      )}
+
+      {!agenda && (
       <Section id="tienda" title="Tienda y despacho" description="Datos que usa el vendedor IA y que salen como remitente en la etiqueta." saved={ok === "tienda"}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Nombre de la tienda" name="name" defaultValue={b.name} required />
@@ -139,15 +158,18 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           </div>
         </div>
       </Section>
+      )}
 
-      <Section id="bot" title="Vendedor IA" description="Cómo atiende y qué hace solo." saved={ok === "bot"}>
+      <Section id="bot" title={agenda ? "Asistente IA" : "Vendedor IA"} description="Cómo atiende y qué hace solo." saved={ok === "bot"}>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="botEnabled" defaultChecked={b.botEnabled} /> Responder automáticamente a los clientes
         </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="autoCreateShipment" defaultChecked={b.autoCreateShipment} /> Emitir la etiqueta de envío
-          apenas se confirma el pago
-        </label>
+        {!agenda && (
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="autoCreateShipment" defaultChecked={b.autoCreateShipment} /> Emitir la etiqueta de envío
+            apenas se confirma el pago
+          </label>
+        )}
         <div>
           <label className="label" htmlFor="botInstructions">
             Instrucciones para tu vendedor (políticas, tono, datos de la tienda)
@@ -157,18 +179,27 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
             name="botInstructions"
             className="input min-h-32"
             defaultValue={b.botInstructions}
-            placeholder={"Ej: Despachamos de lunes a viernes. Los cambios de talla se aceptan dentro de 10 días. Trata a los clientes de 'tú' y sé cercano."}
+            placeholder={
+              agenda
+                ? "Ej: Atendemos solo a mayores de 15 años. Si alguien viene por pie diabético, pedirle que traiga sus exámenes. Trata a los pacientes de 'tú'."
+                : "Ej: Despachamos de lunes a viernes. Los cambios de talla se aceptan dentro de 10 días. Trata a los clientes de 'tú' y sé cercano."
+            }
           />
           <p className="mt-1 text-xs text-gray-500">
             Las respuestas a preguntas frecuentes se cargan en{" "}
             <a href="/panel/respuestas" className="text-brand-700 underline">
               Respuestas
             </a>
-            . Tu vendedor nunca ve los nombres, teléfonos ni direcciones de tus clientes: los datos de envío los toma el sistema.
+            .{" "}
+            {agenda
+              ? "Tu asistente nunca ve los nombres ni teléfonos de tus pacientes: el nombre para la reserva lo pide el sistema."
+              : "Tu vendedor nunca ve los nombres, teléfonos ni direcciones de tus clientes: los datos de envío los toma el sistema."}
           </p>
         </div>
       </Section>
 
+      {!agenda && (
+      <>
       <Section
         id="mercadopago"
         title="Mercado Pago"
@@ -201,6 +232,8 @@ export default async function SettingsPage({ searchParams }: { searchParams: Pro
           <SecretField label="BX-CLIENT_ACCOUNT" name="bxClientAccount" isSet={Boolean(b.bxClientAccount)} />
         </div>
       </Section>
+      </>
+      )}
     </div>
   );
 }

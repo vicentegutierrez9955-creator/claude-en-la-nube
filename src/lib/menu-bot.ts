@@ -2,6 +2,7 @@ import type { Business, Customer, FaqEntry, Prisma, Product } from "@prisma/clie
 import { contentWords, normalize, searchCatalog, stem } from "./catalog";
 import { db } from "./db";
 import { formatCLP } from "./format";
+import { runAgendaMenu } from "./agenda-bot";
 import { sendToCustomer } from "./messaging";
 import {
   checkout,
@@ -36,8 +37,20 @@ type Step =
   | "CONFIRMAR"
   | "FAQ";
 
+// Pasos del menú de los negocios con agenda (ver agenda-bot.ts).
+export type AgendaStep =
+  | "A_MENU"
+  | "A_SERVICIO"
+  | "A_DIA"
+  | "A_HORA"
+  | "A_REUSAR_NOMBRE"
+  | "A_NOMBRE"
+  | "A_MIS_HORAS"
+  | "A_CANCELAR"
+  | "A_FAQ";
+
 export type MenuState = {
-  step?: Step;
+  step?: Step | AgendaStep;
   // Quién atiende en modo híbrido: el menú o la IA.
   engine?: "menu" | "ia";
   // ids de lo que se mostró numerado, para saber qué eligió el cliente.
@@ -45,7 +58,12 @@ export type MenuState = {
   productId?: string;
   misses?: number;
   // "envio": la IA le pasó al sistema la toma de datos de envío; al terminar, vuelve a la IA.
-  flow?: "envio";
+  // "cita": la IA reservó una hora y el sistema pide el nombre del paciente (privado).
+  flow?: "envio" | "cita";
+  // Agenda: servicio y día elegidos, y la cita en curso.
+  serviceId?: string;
+  ymd?: string;
+  appointmentId?: string;
   updatedAt?: string;
 };
 
@@ -53,35 +71,45 @@ export type MenuState = {
 export const SHIPPING_FLOW_STEPS: Step[] = ["REUSAR_DIRECCION", "NOMBRE", "DIRECCION", "NUMERO", "DEPTO", "COMUNA", "REGION", "CONFIRMAR"];
 
 export function inShippingFlow(state: MenuState): boolean {
-  if (state.flow !== "envio" || !state.step || !SHIPPING_FLOW_STEPS.includes(state.step)) return false;
+  if (state.flow !== "envio" || !state.step || !SHIPPING_FLOW_STEPS.includes(state.step as Step)) return false;
+  return !!state.updatedAt && Date.now() - new Date(state.updatedAt).getTime() < STATE_TTL_MS;
+}
+
+// Pasos donde el sistema pide el nombre de quien reserva. También son privados.
+export const APPOINTMENT_FLOW_STEPS: AgendaStep[] = ["A_REUSAR_NOMBRE", "A_NOMBRE"];
+
+// El sistema está tomando datos personales (envío o nombre para la cita): la IA no participa.
+export function inPrivateFlow(state: MenuState): boolean {
+  if (inShippingFlow(state)) return true;
+  if (state.flow !== "cita" || !state.step || !APPOINTMENT_FLOW_STEPS.includes(state.step as AgendaStep)) return false;
   return !!state.updatedAt && Date.now() - new Date(state.updatedAt).getTime() < STATE_TTL_MS;
 }
 
 // Pasos donde el cliente escribe datos libres: no se buscan palabras clave ahí.
 const FREE_TEXT_STEPS: Step[] = ["NOMBRE", "DIRECCION", "NUMERO", "DEPTO", "COMUNA"];
-const STATE_TTL_MS = 24 * 60 * 60 * 1000;
+export const STATE_TTL_MS = 24 * 60 * 60 * 1000;
 const MAX_LIST = 15;
 
-function parseNumber(text: string): number | null {
+export function parseNumber(text: string): number | null {
   const m = normalize(text).match(/^(?:opcion |numero |el |la )?(\d{1,3})$/);
   return m ? Number(m[1]) : null;
 }
 
-const MENU_WORDS = ["menu", "inicio", "volver", "volver al menu", "atras", "cancelar", "salir"];
-const HUMAN_WORDS = ["persona", "humano", "ejecutivo", "ejecutiva", "asesor", "asesora", "hablar con alguien", "operador"];
-const GREETINGS = /^(hola|holi|holaa+|buenas|buenos dias|buenas tardes|buenas noches|alo|hey|wena|wenas|que tal)\b/;
-const YES = /^(si|sii+|sip|ya|dale|ok|okay|bueno|claro|confirmo|1)$/;
-const NO = /^(no|nop|nones|2)$/;
+export const MENU_WORDS = ["menu", "inicio", "volver", "volver al menu", "atras", "cancelar", "salir"];
+export const HUMAN_WORDS = ["persona", "humano", "ejecutivo", "ejecutiva", "asesor", "asesora", "hablar con alguien", "operador"];
+export const GREETINGS = /^(hola|holi|holaa+|buenas|buenos dias|buenas tardes|buenas noches|alo|hey|wena|wenas|que tal)\b/;
+export const YES = /^(si|sii+|sip|ya|dale|ok|okay|bueno|claro|confirmo|1)$/;
+export const NO = /^(no|nop|nones|2)$/;
 
 function contentWordsAfterGreeting(n: string): string[] {
   return contentWords(n.replace(GREETINGS, "").trim());
 }
 
-function isGreetingOnly(n: string) {
+export function isGreetingOnly(n: string) {
   return GREETINGS.test(n) && contentWordsAfterGreeting(n).length === 0;
 }
 
-function containsPhrase(n: string, phrase: string) {
+export function containsPhrase(n: string, phrase: string) {
   const p = stem(normalize(phrase));
   return p.length > 0 && ` ${stem(n)} `.includes(` ${p} `);
 }
@@ -278,7 +306,8 @@ function backToAi(text: string): Reply {
 async function step(ctx: Ctx, text: string): Promise<Reply> {
   const n = normalize(text);
   const num = parseNumber(text);
-  const current = ctx.state.step;
+  // Los pasos de agenda los atiende agenda-bot.ts; aquí se tratan como conversación nueva.
+  const current = ctx.state.step?.startsWith("A_") ? undefined : (ctx.state.step as Step | undefined);
   const flow = ctx.state.flow === "envio";
 
   // Comandos que funcionan en cualquier momento.
@@ -477,6 +506,7 @@ export async function runMenuBot(opts: {
   text: string;
   allowAi: boolean;
 }): Promise<MenuResult> {
+  if (opts.business.kind === "AGENDA") return runAgendaMenu(opts);
   const faqs = await db.faqEntry.findMany({
     where: { businessId: opts.business.id },
     orderBy: [{ position: "asc" }, { createdAt: "asc" }],
@@ -494,7 +524,7 @@ export async function runMenuBot(opts: {
     return { result: "use_ai", private: wasInFlow };
   }
   // Mientras se toman los datos de envío, el estado conserva la marca del flujo.
-  const keepFlow = wasInFlow && !!reply.state.step && SHIPPING_FLOW_STEPS.includes(reply.state.step);
+  const keepFlow = wasInFlow && !!reply.state.step && SHIPPING_FLOW_STEPS.includes(reply.state.step as Step);
   const next: MenuState = { ...reply.state, engine: reply.state.engine ?? "menu", ...(keepFlow ? { flow: "envio" } : {}) };
   await saveMenuState(opts.conversationId, next);
   await sendToCustomer(opts.conversationId, reply.text, "MENU", { private: wasInFlow || keepFlow });

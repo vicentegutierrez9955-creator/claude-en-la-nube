@@ -24,7 +24,9 @@ export async function register(form: FormData) {
       email,
       name,
       passwordHash: await hashPassword(password),
-      business: { create: { name: businessName, originName: businessName } },
+      business: {
+        create: { name: businessName, originName: businessName, kind: str(form, "kind") === "AGENDA" ? "AGENDA" : "TIENDA" },
+      },
     },
   });
   await startSession(user.id);
