@@ -1,9 +1,11 @@
 // WhatsApp desde el panel (sesión, por POST) o desde Claude (PANEL_API_TOKEN en ?t=, por GET).
 // ?accion=estado  → qué variables están configuradas y los últimos mensajes.
 // ?accion=enviar&para=569...&texto=...  o  &plantilla=hello_world&idioma=en_US
+// ?accion=diagnostico&waba=<id>  → datos del número y apps suscritas a la cuenta de WhatsApp.
+// ?accion=suscribir&waba=<id>    → suscribe la app a la cuenta (para que Meta mande los avisos al webhook).
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { sesion, json } from '../_lib/panel.js';
-import { enviar, leerRegistro, numero } from '../_lib/whatsapp.js';
+import { enviar, leerRegistro, numero, graph } from '../_lib/whatsapp.js';
 
 const hash = (s) => createHash('sha256').update(String(s)).digest();
 
@@ -36,6 +38,16 @@ export default {
         ? await enviar(para, { plantilla: String(p.plantilla), idioma: String(p.idioma || 'es') })
         : await enviar(para, { texto: String(p.texto) });
       return json(r, r.ok ? 200 : 502);
+    }
+    if (p.accion === 'diagnostico' || p.accion === 'suscribir') {
+      if (!porToken && request.method !== 'POST') return json({ error: 'Usa POST' }, 405);
+      const waba = numero(p.waba);
+      if (!waba) return json({ error: 'Falta waba' }, 400);
+      if (p.accion === 'suscribir') return json(await graph(`${waba}/subscribed_apps`, 'POST'));
+      return json({
+        numero: await graph(`${process.env.WHATSAPP_PHONE_NUMBER_ID}?fields=display_phone_number,verified_name,quality_rating`),
+        apps: await graph(`${waba}/subscribed_apps`),
+      });
     }
     return json({ error: 'Acción desconocida' }, 400);
   },

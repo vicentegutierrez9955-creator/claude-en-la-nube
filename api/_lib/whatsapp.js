@@ -46,6 +46,14 @@ export async function enviar(para, { texto, plantilla, idioma = 'es', variables 
   return { ok: true, id };
 }
 
+// Llamada simple a la Graph API con el token del sistema (para diagnóstico). Nunca devuelve el token.
+export async function graph(ruta, method = 'GET') {
+  const token = process.env.WHATSAPP_TOKEN;
+  if (!token) return { error: 'Falta WHATSAPP_TOKEN' };
+  const r = await fetch(`${API}/${ruta}`, { method, headers: { authorization: `Bearer ${token}` } });
+  return r.json().catch(() => ({ error: `Meta respondió ${r.status}` }));
+}
+
 export async function leerRegistro() {
   const { data } = await leerDoc(RUTA);
   return data || { mensajes: [], bajas: {}, eliminar: [] };

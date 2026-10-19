@@ -30,11 +30,15 @@ export default {
     }
     if (request.method !== 'POST') return json({ error: 'Método no permitido' }, 405);
     const crudo = await request.text();
-    if (!firmaValida(crudo, request.headers.get('x-hub-signature-256'))) return json({ error: 'Firma inválida' }, 401);
+    if (!firmaValida(crudo, request.headers.get('x-hub-signature-256'))) {
+      console.warn('whatsapp webhook: firma inválida (revisa WHATSAPP_APP_SECRET)');
+      return json({ error: 'Firma inválida' }, 401);
+    }
     let aviso;
     try { aviso = JSON.parse(crudo); } catch { return json({ error: 'Datos inválidos' }, 400); }
 
     const cambios = (aviso.entry || []).flatMap((e) => e.changes || []).map((c) => c.value || {});
+    console.log('whatsapp webhook:', cambios.reduce((n, v) => n + (v.messages || []).length, 0), 'mensajes,', cambios.reduce((n, v) => n + (v.statuses || []).length, 0), 'estados');
     const respuestas = [];
     await anotar((reg) => {
       respuestas.length = 0; // si se reintenta el guardado, no repetir respuestas
@@ -58,7 +62,10 @@ export default {
         }
       }
     });
-    for (const [para, texto] of respuestas) await enviar(para, { texto });
+    for (const [para, texto] of respuestas) {
+      const r = await enviar(para, { texto });
+      if (!r.ok) console.warn('whatsapp webhook: no se pudo responder:', r.motivo);
+    }
     return json({ ok: true });
   },
 };
