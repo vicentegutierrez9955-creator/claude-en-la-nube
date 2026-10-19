@@ -41,7 +41,7 @@ export default {
     }
     if (p.accion === 'diagnostico' || p.accion === 'suscribir') {
       if (!porToken && request.method !== 'POST') return json({ error: 'Usa POST' }, 405);
-      const waba = numero(p.waba);
+      const waba = String(p.waba || '').replace(/\D/g, '').slice(0, 20); // los IDs de Meta tienen 15 o 16 dígitos
       if (!waba) return json({ error: 'Falta waba' }, 400);
       if (p.accion === 'suscribir') return json(await graph(`${waba}/subscribed_apps`, 'POST'));
       // Los permisos del token dicen a qué cuentas de WhatsApp tiene acceso (sus IDs); el token mismo no se devuelve.
