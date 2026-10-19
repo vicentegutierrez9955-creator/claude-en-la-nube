@@ -44,9 +44,13 @@ export default {
       const waba = numero(p.waba);
       if (!waba) return json({ error: 'Falta waba' }, 400);
       if (p.accion === 'suscribir') return json(await graph(`${waba}/subscribed_apps`, 'POST'));
+      // Los permisos del token dicen a qué cuentas de WhatsApp tiene acceso (sus IDs); el token mismo no se devuelve.
+      const permisos = await graph(`debug_token?input_token=${encodeURIComponent(process.env.WHATSAPP_TOKEN || '')}`);
       return json({
         numero: await graph(`${process.env.WHATSAPP_PHONE_NUMBER_ID}?fields=display_phone_number,verified_name,quality_rating`),
+        cuenta: await graph(`${waba}?fields=id,name`),
         apps: await graph(`${waba}/subscribed_apps`),
+        permisos: permisos.data ? { valido: permisos.data.is_valid, app: permisos.data.app_id, alcances: permisos.data.granular_scopes } : permisos,
       });
     }
     return json({ error: 'Acción desconocida' }, 400);
