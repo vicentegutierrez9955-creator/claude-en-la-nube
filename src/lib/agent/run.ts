@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { Business, FaqEntry } from "@prisma/client";
 import { buildSystemPrompt } from "./prompt";
-import { runTool, TOOL_DEFINITIONS, type ToolContext } from "./tools";
+import { runTool, toolDefinitionsFor, type ToolContext } from "./tools";
 
 export type CreateMessage = (
   params: Anthropic.Beta.MessageCreateParamsNonStreaming,
@@ -69,6 +69,7 @@ export async function runAgentTurn(opts: {
   const createMessage = opts.createMessage ?? defaultCreateMessage;
   const history = [...opts.history, { role: "user" as const, content: opts.userText }];
   const system = buildSystemPrompt(opts.business, opts.faqs ?? []);
+  const toolDefinitions = toolDefinitionsFor(opts.business.kind);
 
   for (let step = 0; step < MAX_STEPS; step++) {
     const deepseek = isDeepSeek(opts.model);
@@ -77,7 +78,7 @@ export async function runAgentTurn(opts: {
       max_tokens: deepseek ? 8000 : 16000,
       system,
       // DeepSeek cachea solo los prefijos repetidos y no conoce "strict"; Claude necesita cache_control.
-      tools: deepseek ? TOOL_DEFINITIONS.map(({ strict: _strict, ...tool }) => tool) : TOOL_DEFINITIONS,
+      tools: deepseek ? toolDefinitions.map(({ strict: _strict, ...tool }) => tool) : toolDefinitions,
       messages: history,
       ...(deepseek ? {} : { cache_control: { type: "ephemeral" as const } }),
     });
@@ -96,7 +97,7 @@ export async function runAgentTurn(opts: {
       const results: Anthropic.Beta.BetaToolResultBlockParam[] = [];
       // En orden: varias herramientas pueden tocar el mismo carrito.
       for (const toolUse of toolUses) {
-        const result = await runTool(toolUse.name, toolUse.input, opts.ctx);
+        const result = await runTool(toolUse.name, toolUse.input, opts.ctx, opts.business.kind);
         results.push({ type: "tool_result", tool_use_id: toolUse.id, content: result.content, is_error: result.isError });
       }
       history.push({ role: "user", content: results });

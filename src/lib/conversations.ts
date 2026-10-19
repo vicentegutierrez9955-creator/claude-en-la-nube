@@ -3,7 +3,8 @@ import { Prisma, type Channel } from "@prisma/client";
 import { runAgentTurn, type CreateMessage } from "./agent/run";
 import { aiBudgetExceeded, modelFor, recordAiUsage } from "./ai-usage";
 import { db } from "./db";
-import { inShippingFlow, isMenuCommand, runMenuBot, saveMenuState, type MenuState } from "./menu-bot";
+import { handleReminderReply } from "./agenda-bot";
+import { inPrivateFlow, isMenuCommand, runMenuBot, saveMenuState, type MenuState } from "./menu-bot";
 import { sendToCustomer } from "./messaging";
 import { redactPersonalData } from "./privacy";
 
@@ -129,6 +130,16 @@ export async function processConversation(conversationId: string, createMessage?
       let conversation = await loadConversation(conversationId);
       if (await skipIfHuman(conversation, pending)) return;
 
+      // Agenda: "Confirmo" / "Cancelo" en respuesta a un recordatorio se atienden sin IA ni menú.
+      if (conversation.business.kind === "AGENDA") {
+        const handled: string[] = [];
+        for (const msg of pending) if (await handleReminderReply(conversationId, msg.text)) handled.push(msg.id);
+        if (handled.length > 0) {
+          await db.message.updateMany({ where: { id: { in: handled } }, data: { processed: true } });
+          continue;
+        }
+      }
+
       // Si la tienda pasó su tope mensual de IA, atiende solo el menú (sin costo).
       const configured = conversation.business.botMode;
       const mode = configured !== "MENU" && (await aiBudgetExceeded(conversation.business)) ? "MENU" : configured;
@@ -140,7 +151,7 @@ export async function processConversation(conversationId: string, createMessage?
         conversation = await loadConversation(conversationId);
         if (await skipIfHuman(conversation, pending.slice(i))) return;
         const state = conversation.botState as MenuState;
-        const shippingFlow = inShippingFlow(state);
+        const shippingFlow = inPrivateFlow(state);
         const hybridAiActive =
           mode === "HIBRIDO" &&
           state.engine === "ia" &&
@@ -181,7 +192,7 @@ export async function processConversation(conversationId: string, createMessage?
         await runAi(conversation, pending.slice(aiFrom), createMessage);
         if (mode === "HIBRIDO") {
           const fresh = (await loadConversation(conversationId)).botState as MenuState;
-          if (!inShippingFlow(fresh)) await saveMenuState(conversationId, { ...fresh, engine: "ia" });
+          if (!inPrivateFlow(fresh)) await saveMenuState(conversationId, { ...fresh, engine: "ia" });
         }
       }
     }
@@ -209,11 +220,13 @@ async function skipIfHuman(conversation: LoadedConversation, pending: PendingMes
 
 // Contexto para la IA con lo que pasó en el chat sin ella. Los mensajes privados
 // (datos de envío) se reemplazan por un aviso y el resto pasa por el filtro de datos personales.
-function outsideContext(messages: { author: string; text: string; private: boolean }[]): string[] {
+function outsideContext(messages: { author: string; text: string; private: boolean }[], agenda: boolean): string[] {
   const lines: string[] = [];
   for (const m of messages) {
     if (m.private) {
-      const note = "[El cliente le dio sus datos de envío al sistema: ocultos por privacidad]";
+      const note = agenda
+        ? "[El sistema tomó el nombre para la reserva y le envió la confirmación al cliente: oculto por privacidad]"
+        : "[El cliente le dio sus datos de envío al sistema: ocultos por privacidad]";
       if (lines[lines.length - 1] !== note) lines.push(note);
     } else {
       lines.push(`${AUTHOR_CONTEXT[m.author] ?? m.author}: ${redactPersonalData(m.text)}`);
@@ -241,7 +254,7 @@ async function runAi(conversation: LoadedConversation, pending: PendingMessage[]
   // La IA nunca recibe el nombre ni el teléfono del cliente.
   const parts = [`[${now.toLocaleString("es-CL", { timeZone: "America/Santiago", dateStyle: "full", timeStyle: "short" })}]`];
   if (outside.length > 0) {
-    parts.push("[Mensajes anteriores en este chat, ya respondidos sin ti:]", ...outsideContext(outside.reverse()));
+    parts.push("[Mensajes anteriores en este chat, ya respondidos sin ti:]", ...outsideContext(outside.reverse(), conversation.business.kind === "AGENDA"));
     parts.push("[Mensaje nuevo del cliente:]");
   }
   parts.push(...pending.map((m) => redactPersonalData(m.text)));

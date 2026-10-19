@@ -14,7 +14,7 @@ model Business {
   createdAt DateTime @default(now())
 
   // WhatsApp Cloud API. Los tokens se guardan cifrados.
-  whatsappPhoneNumberId String? @unique
+  whatsappPhoneNumberId String?   @unique
   whatsappAccessToken   String?
   whatsappWabaId        String?
   whatsappDisplayPhone  String?
@@ -33,8 +33,8 @@ model Business {
   bxUserCode       String?
   bxClientAccount  String?
   // Costo fijo de envío en CLP y monto desde el cual el envío es gratis (0 = nunca)
-  shippingFlatRate  Int @default(3990)
-  freeShippingFrom  Int @default(0)
+  shippingFlatRate Int     @default(3990)
+  freeShippingFrom Int     @default(0)
 
   // Dirección de origen (bodega de la pyme) para la etiqueta
   originName    String?
@@ -44,22 +44,39 @@ model Business {
   originRegion  String?
 
   // Bot
-  botEnabled      Boolean @default(true)
+  botEnabled         Boolean @default(true)
   // MENU: solo respuestas predeterminadas (sin costo de IA)
   // HIBRIDO: menú primero y la IA solo cuando el menú no entiende
   // IA: la IA atiende toda la conversación
-  botMode         BotMode @default(IA)
-  welcomeMessage  String  @default("")
+  botMode            BotMode @default(IA)
+  welcomeMessage     String  @default("")
   // Modelo de IA y tope de gasto mensual: los define el administrador del SaaS.
-  aiModel           String? // null = modelo por defecto (CLAUDE_MODEL)
-  aiMonthlyLimitUsd Float   @default(0) // 0 = sin tope
-  botInstructions String  @default("")
+  aiModel            String? // null = modelo por defecto (CLAUDE_MODEL)
+  aiMonthlyLimitUsd  Float   @default(0) // 0 = sin tope
+  botInstructions    String  @default("")
   // Emitir la etiqueta automáticamente cuando se confirma el pago
   autoCreateShipment Boolean @default(true)
 
-  orderSeq Int @default(0)
+  // Tipo de negocio: TIENDA vende productos con despacho; AGENDA atiende con hora reservada.
+  kind BusinessKind @default(TIENDA)
+
+  // Agenda (solo negocios AGENDA). Horarios en hora de Chile (America/Santiago).
+  // slug: dirección de la página pública de reservas (/reservar/<slug>)
+  slug             String? @unique
+  // Cada cuántos minutos se ofrecen horas (09:00, 09:30, ...)
+  bookingStepMin   Int     @default(30)
+  // Anticipación mínima para reservar (minutos) y hasta cuántos días adelante
+  bookingNoticeMin Int     @default(120)
+  bookingMaxDays   Int     @default(30)
+  // Nombre de la plantilla aprobada en Meta para el recordatorio del día anterior
+  reminderTemplate String  @default("recordatorio_hora")
+  // Dirección donde se atiende (va en la confirmación y en el calendario)
+  serviceAddress   String  @default("")
+
+  orderSeq       Int     @default(0)
+  appointmentSeq Int     @default(0)
   // Tienda interna para las pruebas automáticas del vendedor (no aparece en /admin)
-  sandbox  Boolean @default(false)
+  sandbox        Boolean @default(false)
 
   users         User[]
   faqs          FaqEntry[]
@@ -68,6 +85,15 @@ model Business {
   conversations Conversation[]
   orders        Order[]
   aiUsage       AiUsage[]
+  services      Service[]
+  workingHours  WorkingHour[]
+  timeOff       TimeOff[]
+  appointments  Appointment[]
+}
+
+enum BusinessKind {
+  TIENDA
+  AGENDA
 }
 
 // Una fila por cada llamada a la IA, para medir el costo real de cada tienda.
@@ -147,6 +173,7 @@ model Customer {
 
   conversations Conversation[]
   orders        Order[]
+  appointments  Appointment[]
 
   @@unique([businessId, waId])
 }
@@ -162,16 +189,16 @@ enum Channel {
 }
 
 model Conversation {
-  id         String           @id @default(cuid())
-  businessId String
-  business   Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  customerId String
-  customer   Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  channel    Channel          @default(WHATSAPP)
-  mode       ConversationMode @default(BOT)
-  needsHuman Boolean          @default(false)
+  id            String           @id @default(cuid())
+  businessId    String
+  business      Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customerId    String
+  customer      Customer         @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  channel       Channel          @default(WHATSAPP)
+  mode          ConversationMode @default(BOT)
+  needsHuman    Boolean          @default(false)
   // Si atiende una persona: hasta cuándo (null = hasta que la devuelvan al bot)
-  humanUntil DateTime?
+  humanUntil    DateTime?
   handoffReason String?
 
   // Historial del agente (Anthropic MessageParam[]). Solo se agrega al final.
@@ -185,8 +212,9 @@ model Conversation {
   lastMessageAt DateTime  @default(now())
   createdAt     DateTime  @default(now())
 
-  messages Message[]
-  orders   Order[]
+  messages     Message[]
+  orders       Order[]
+  appointments Appointment[]
 
   @@unique([customerId, channel])
   @@index([businessId, lastMessageAt])
@@ -265,13 +293,13 @@ model Order {
   paidAt         DateTime?
 
   // Envío
-  carrier         String?
-  trackingNumber  String?
-  labelPdf        Bytes?
-  labelCreatedAt  DateTime?
-  labelPrintedAt  DateTime?
-  shipmentError   String?
-  dispatchedAt    DateTime?
+  carrier        String?
+  trackingNumber String?
+  labelPdf       Bytes?
+  labelCreatedAt DateTime?
+  labelPrintedAt DateTime?
+  shipmentError  String?
+  dispatchedAt   DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -293,4 +321,94 @@ model OrderItem {
   quantity  Int
 
   @@unique([orderId, productId])
+}
+
+// ---------- Agenda (negocios que atienden con hora) ----------
+
+model Service {
+  id          String   @id @default(cuid())
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  name        String
+  description String   @default("")
+  durationMin Int      @default(45)
+  price       Int      @default(0) // CLP; 0 = no se muestra precio
+  active      Boolean  @default(true)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  appointments Appointment[]
+
+  @@index([businessId, active])
+}
+
+// Horario semanal. Puede haber varios tramos por día (ej: 09:00-13:00 y 15:00-19:00).
+model WorkingHour {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  weekday    Int // 0 = domingo ... 6 = sábado
+  startMin   Int // minutos desde las 00:00 (540 = 09:00)
+  endMin     Int
+
+  @@index([businessId, weekday])
+}
+
+// Bloqueos: vacaciones, feriados, trámites.
+model TimeOff {
+  id         String   @id @default(cuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  startsAt   DateTime
+  endsAt     DateTime
+  reason     String   @default("")
+  createdAt  DateTime @default(now())
+
+  @@index([businessId, startsAt])
+}
+
+enum AppointmentStatus {
+  RESERVADA
+  CONFIRMADA
+  CANCELADA
+  ASISTIO
+  NO_ASISTIO
+}
+
+enum AppointmentSource {
+  WHATSAPP
+  WEB
+  PANEL
+}
+
+model Appointment {
+  id             String            @id @default(cuid())
+  businessId     String
+  business       Business          @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  number         Int
+  customerId     String
+  customer       Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  conversationId String?
+  conversation   Conversation?     @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  serviceId      String?
+  service        Service?          @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+  // Copia del servicio al momento de reservar
+  serviceName    String
+  price          Int               @default(0)
+  startsAt       DateTime
+  endsAt         DateTime
+  status         AppointmentStatus @default(RESERVADA)
+  source         AppointmentSource @default(WHATSAPP)
+  // A nombre de quién (lo pide el sistema, nunca la IA)
+  patientName    String?
+  notes          String            @default("")
+  reminderSentAt DateTime?
+  reminderError  String?
+  cancelledAt    DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@unique([businessId, number])
+  @@index([businessId, startsAt])
+  @@index([customerId, startsAt])
 }
