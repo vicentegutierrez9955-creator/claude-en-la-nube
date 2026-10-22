@@ -32,6 +32,12 @@ a.card:hover{border-color:var(--acc);transform:translateY(-2px)}
 .card p{margin:0;color:var(--muted)}
 .card .ir{color:var(--acc);font-weight:700;margin-top:8px}
 footer{padding:24px 0 40px;color:var(--muted);font-size:14px}
+.descargas{margin-top:22px;padding:18px 20px;border:1px dashed var(--line);border-radius:16px}
+.descargas h2{font-size:17px;margin:0 0 4px}
+.descargas p{margin:0 0 12px;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{border-color:var(--acc)}
 </style>
 </head>
 <body>
@@ -51,7 +57,16 @@ footer{padding:24px 0 40px;color:var(--muted);font-size:14px}
       <p class="ir">Hacer un presupuesto →</p>
     </a>
   </div>
+  <section class="descargas" aria-labelledby="t-descargas">
+    <h2 id="t-descargas">¿Las quieres en tu computador?</h2>
+    <p>Descárgalas y úsalas sin internet. Son archivos livianos que se abren con tu navegador.</p>
+    <div class="btns">
+      <button type="button" class="btn" data-descargar="boleta-honorarios">⬇ Calculadora de boleta</button>
+      <button type="button" class="btn" data-descargar="presupuesto-taller">⬇ Presupuestos para talleres</button>
+    </div>
+  </section>
 </main>
 <footer class="wrap">Hecho por <a href="https://stpyme.cl/"><b>STPyme</b></a>: webs con agenda online y sistemas para negocios chicos de Chile. · STP CHILE SpA · RUT 78.534.708-0 · <a href="/privacidad">Privacidad</a></footer>
+<script src="/herramientas/descargar.js" defer></script>
 </body>
 </html>

@@ -40,6 +40,7 @@ h3{font-size:16px;margin:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
 .muted{color:var(--muted)}
 .chico{font-size:14px}
+.descarga{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:-8px 0 20px}
 .modos{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--soft);border-radius:12px;padding:4px;margin-bottom:16px}
 .modos button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:10px 8px;border-radius:9px;cursor:pointer;line-height:1.25}
 .modos button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
@@ -104,6 +105,9 @@ footer{padding:10px 0 40px;color:var(--muted);font-size:14px}
 <main class="wrap">
   <h1>Calculadora de boleta de honorarios 2026</h1>
   <p class="bajada">Bruto, retención y líquido en segundos, con la tasa vigente de <b>15,25%</b>. Gratis y sin registrarte.</p>
+  <!-- descarga:inicio -->
+  <p class="descarga"><button type="button" class="btn" data-descargar="boleta-honorarios">⬇ Descargar para usar sin internet</button><span class="muted chico">Un archivo liviano que se abre con tu navegador, sin internet.</span></p>
+  <!-- descarga:fin -->
 
   <section class="card" aria-labelledby="t-calc">
     <h2 id="t-calc" class="oculto">Calcular boleta</h2>
@@ -308,5 +312,6 @@ footer{padding:10px 0 40px;color:var(--muted);font-size:14px}
   calcular();
 })();
 </script>
+<script src="/herramientas/descargar.js" defer></script>
 </body>
 </html>

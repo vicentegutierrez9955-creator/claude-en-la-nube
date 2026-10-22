@@ -39,6 +39,7 @@ h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
 .muted{color:var(--muted)}
 .chico{font-size:14px}
+.descarga{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:-8px 0 20px}
 .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
 label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
 label .opc{font-weight:400;color:var(--muted)}
@@ -161,6 +162,9 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 <main class="wrap">
   <h1>Generador de presupuestos para talleres mecánicos</h1>
   <p class="bajada">Arma un presupuesto profesional en 2 minutos y descárgalo en PDF o mándalo por WhatsApp a tu cliente. Gratis y sin registrarte.</p>
+  <!-- descarga:inicio -->
+  <p class="descarga"><button type="button" class="btn" data-descargar="presupuesto-taller">⬇ Descargar para usar sin internet</button><span class="muted chico">Un archivo liviano que se abre con tu navegador, sin internet.</span></p>
+  <!-- descarga:fin -->
 
   <section class="card" aria-labelledby="t-taller">
     <h2 id="t-taller">Tu taller</h2>
@@ -520,5 +524,6 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
   dibujarDoc();
 })();
 </script>
+<script src="/herramientas/descargar.js" defer></script>
 </body>
 </html>
