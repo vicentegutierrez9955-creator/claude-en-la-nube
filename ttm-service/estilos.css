@@ -30,7 +30,7 @@ button,input,select{font:inherit;color:inherit}
 .demo{background:var(--yel);color:#0a1a3d;font-size:13px;text-align:center;padding:7px 16px;font-weight:500}
 .demo b{font-weight:800}
 
-.mec>*,.lector>*,.cotiza>*,.reserva>*,.toca>*,.segui>*,.ubica>*,.pasos>*,.servicios>*{min-width:0}
+.mec>*,.cotiza>*,.reserva>*,.toca>*,.segui>*,.ubica>*,.pasos>*,.servicios>*{min-width:0}
 .cinta-caja{overflow:hidden;padding:12px 0;margin:-12px 0}
 
 /* Barra superior */
@@ -80,13 +80,13 @@ nav.main a:hover{color:var(--yel)}
 .datos-hero span{display:inline-flex;align-items:center;gap:7px}
 .datos-hero .icon{width:18px;height:18px;color:var(--yel)}
 
-.ruta{position:relative;height:clamp(140px,24vw,300px);flex:none}
+.ruta{position:relative;height:clamp(140px,24vw,300px);flex:none;--w:clamp(250px,44vw,600px)}
 .ruta .asfalto{position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,#191c20,#111316);border-top:2px solid #262a30}
 .ruta .linea{position:absolute;left:0;right:0;bottom:22%;height:6px;background:repeating-linear-gradient(90deg,var(--yel) 0 60px,transparent 60px 120px);opacity:.7}
-.ruta .huella{position:absolute;bottom:13%;right:calc(7% + clamp(62px,12.5vw,180px));height:clamp(8px,1.4vw,14px);width:clamp(140px,34vw,460px);background:linear-gradient(90deg,transparent,rgba(0,0,0,.85) 40%,#050506);border-radius:8px;transform-origin:right center;transform:scaleX(0);filter:blur(1px)}
+.ruta .huella{position:absolute;bottom:12%;right:calc(5% + var(--w)*.74);height:clamp(8px,1.4vw,14px);width:clamp(140px,34vw,460px);background:linear-gradient(90deg,transparent,rgba(0,0,0,.85) 40%,#050506);border-radius:8px;transform-origin:right center;transform:scaleX(0);filter:blur(1px)}
 .ruta .huella.h2{bottom:calc(13% + clamp(12px,2vw,20px));opacity:.55;width:clamp(100px,26vw,360px)}
-.rueda-hero{position:absolute;right:7%;bottom:6%;width:clamp(124px,25vw,360px);height:auto;filter:drop-shadow(0 18px 18px rgba(0,0,0,.6))}
-.humo{position:absolute;right:calc(8% + clamp(40px,7vw,90px));bottom:10%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(200,205,212,.35),transparent 70%);opacity:0;pointer-events:none}
+.auto-hero{position:absolute;right:5%;bottom:5%;width:var(--w);height:auto;overflow:visible;filter:drop-shadow(0 18px 16px rgba(0,0,0,.55))}
+.humo{position:absolute;right:calc(5% + var(--w)*.7);bottom:10%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(200,205,212,.35),transparent 70%);opacity:0;pointer-events:none}
 
 /* Cinta */
 .cinta{background:var(--yel);color:#0a1a3d;overflow:hidden;white-space:nowrap;padding:12px 0;transform:rotate(-1.2deg) scaleX(1.02);position:relative;z-index:2}
@@ -122,21 +122,6 @@ section.sec{padding:84px 0;position:relative}
 .mec-lista{list-style:none;padding:0;margin:0 0 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mec-lista li{display:flex;gap:10px;align-items:center;font-weight:600;font-size:15.5px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;line-height:1.25}
 .mec-lista .icon{color:var(--yel);width:20px;height:20px}
-
-/* Lector de medida */
-.lector{display:grid;gap:28px;align-items:center}
-.codigo{display:flex;flex-wrap:wrap;gap:6px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(31px,8vw,58px);line-height:1}
-.codigo button{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:6px 12px;cursor:pointer;transition:all .2s ease;color:var(--txt)}
-.codigo button.sep{background:none;border-color:transparent;padding:6px 2px;cursor:default;color:var(--mut)}
-.codigo button.on{background:var(--yel);border-color:var(--yel);color:#0a1a3d;transform:translateY(-4px)}
-.explica{margin-top:20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--yel);border-radius:14px;padding:18px 20px;min-height:132px}
-.explica b{display:block;font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;color:var(--yel);line-height:1.05;margin-bottom:6px}
-.explica p{margin:0;color:#d3dcef}
-.lector-svg{background:#0c1d45;border:1px solid var(--line);border-radius:var(--radius);padding:10px}
-.lector-svg svg{width:100%;height:auto}
-.ov{opacity:.12;transition:opacity .35s ease}
-.ov.on{opacity:1}
-.pista-tap{font-size:13px;color:var(--mut);margin-top:12px}
 
 /* Cotizador */
 .cotiza{display:grid;gap:22px}
@@ -270,7 +255,6 @@ footer a{color:var(--yel)}
   nav.main{display:flex}
   .estado{display:inline-flex}
   .servicios{grid-template-columns:repeat(3,1fr)}
-  .lector{grid-template-columns:1.05fr .95fr}
   .mec{grid-template-columns:1fr 1fr}
   .cotiza{grid-template-columns:1.1fr .9fr}
   .reserva{grid-template-columns:1.25fr .75fr}
@@ -282,13 +266,14 @@ footer a{color:var(--yel)}
   .camino i{display:block;height:100%;width:100%;background:repeating-linear-gradient(90deg,var(--yel) 0 26px,transparent 26px 44px);transform-origin:left center;transform:scaleX(0)}
   .ubica{grid-template-columns:1.2fr .8fr}
   .ruta{position:absolute;left:0;right:0;bottom:0}
-  .hero .wrap{padding-top:36px;padding-bottom:calc(clamp(140px,24vw,300px)*.48)}
-  .hero h1{font-size:clamp(50px,7.4vw,104px)}
+  .ruta{--w:clamp(250px,36vw,500px)}
+  .hero .wrap{padding-top:36px;padding-bottom:calc(clamp(140px,24vw,300px)*.56)}
+  .hero h1{font-size:clamp(50px,6.6vw,92px)}
 }
 @media (max-width:420px){
-  .rueda-hero{right:26%}
-  .ruta .huella{right:calc(26% + 62px)}
-  .humo{right:calc(26% + 40px)}
+  .ruta{--w:236px}
+  .auto-hero{right:21%}
+  .ruta .huella,.humo{right:calc(21% + var(--w)*.72)}
   .hero .wrap{padding-top:24px}
   .hero h1{font-size:46px;margin:12px 0 14px}
   .hero p.lead{font-size:16.5px;margin-bottom:20px}
@@ -296,9 +281,7 @@ footer a{color:var(--yel)}
   .hero .cta-row .btn{padding:13px 14px;font-size:15px}
   .hero .cta-row .btn .icon{display:none}
   .datos-hero{margin-top:16px}
-  .codigo{gap:4px}
   .mec-lista li{font-size:14px;padding:11px 10px;gap:8px}
-  .codigo button{padding:4px 8px;border-radius:10px}
   .campos{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .campos label:last-child{grid-column:1/-1}
   .form-fila{grid-template-columns:1fr}

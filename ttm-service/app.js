@@ -31,35 +31,6 @@
     });
   })();
 
-  /* ---------- Lector de medida ---------- */
-  const EXPLICA = {
-    ancho: ['Ancho: 205 mm', 'Es el ancho del neumático de lado a lado, en milímetros.'],
-    perfil: ['Perfil: 55 %', 'Es el alto del costado: el 55 % del ancho, unos 113 mm. Mientras más bajo, más deportivo y más firme.'],
-    radial: ['R: radial', 'Indica cómo está construido por dentro. Hoy casi todos los neumáticos de auto son radiales.'],
-    aro: ['Aro: 16 pulgadas', 'Es el diámetro de la llanta donde va montado el neumático. Tiene que coincidir con tu llanta.'],
-    carga: ['Índice de carga: 91', 'Cada neumático aguanta hasta 615 kg. No conviene poner uno con un índice menor al original.'],
-    vel: ['Velocidad: V', 'Está hecho para andar de forma segura hasta 240 km/h.'],
-  };
-  const botones = $$('#codigo button[data-k]');
-  let auto = true, idx = 0, timerLector;
-  function mostrar(k) {
-    botones.forEach((b) => b.classList.toggle('on', b.dataset.k === k));
-    $$('.ov').forEach((g) => g.classList.toggle('on', g.dataset.k === k));
-    $('#ex-t').textContent = EXPLICA[k][0];
-    $('#ex-p').textContent = EXPLICA[k][1];
-    if (hayGsap && !reducir) gsap.fromTo('.explica', { y: 10, opacity: .4 }, { y: 0, opacity: 1, duration: .35, ease: 'power2.out' });
-  }
-  botones.forEach((b) => b.addEventListener('click', () => { auto = false; clearInterval(timerLector); mostrar(b.dataset.k); }));
-  mostrar('ancho');
-  const ciclo = () => { if (!auto) return; idx = (idx + 1) % botones.length; mostrar(botones[idx].dataset.k); };
-  if (!reducir) {
-    const obs = new IntersectionObserver(([e]) => {
-      clearInterval(timerLector);
-      if (e.isIntersecting && auto) timerLector = setInterval(ciclo, 2600);
-    }, { threshold: .4 });
-    obs.observe($('#medida'));
-  }
-
   /* ---------- Cotizador ---------- */
   const rango = (a, b, p) => Array.from({ length: Math.floor((b - a) / p) + 1 }, (_, i) => a + i * p);
   const llenar = (sel, vals, def) => { sel.innerHTML = vals.map((v) => `<option${v === def ? ' selected' : ''}>${v}</option>`).join(''); };
@@ -187,9 +158,9 @@
   /* ---------- Cuándo me toca ---------- */
   const TAREAS = [
     { n: 'Cambio de aceite y filtros', cada: 10000, serv: 'Mantención (aceite y filtros)' },
-    { n: 'Rotación de neumáticos', cada: 10000, serv: 'Rotación de neumáticos' },
-    { n: 'Alineación y balanceo', cada: 10000, serv: 'Alineación y balanceo' },
     { n: 'Revisión de frenos', cada: 20000, serv: 'Frenos y pastillas' },
+    { n: 'Revisión de suspensión', cada: 20000, serv: 'Suspensión y amortiguadores' },
+    { n: 'Alineación y balanceo', cada: 10000, serv: 'Alineación y balanceo' },
     { n: 'Revisión general', cada: 15000, serv: 'Revisión general' },
   ];
   $('#barras').innerHTML = TAREAS.map((t) => `<div class="barra"><div class="top"><span>${t.n}</span><span></span></div><div class="riel"><div class="lleno"></div></div></div>`).join('');
@@ -222,19 +193,27 @@
   }
   gsap.registerPlugin(ScrollTrigger);
 
-  // Portada: la rueda entra rodando, frena y deja la huella
-  const rueda = $('#rueda-hero');
-  const distancia = () => rueda.getBoundingClientRect().right + 60;
+  // Portada: el auto de TTM entra, frena con huella y humo, y se asienta
+  const auto = $('#auto-hero'), ruedas = ['#rd-1', '#rd-2'].map((id) => $(id));
+  gsap.set(ruedas[0], { svgOrigin: '120 159' }); gsap.set(ruedas[1], { svgOrigin: '400 159' });
+  gsap.set('#carroceria', { svgOrigin: '400 159' });
+  const distancia = () => auto.getBoundingClientRect().right + 80;
+  const giros = () => distancia() / (auto.getBoundingClientRect().width * 92 / 520 * Math.PI) * 360;
   const hero = gsap.timeline({ defaults: { ease: 'power3.out' } });
   hero.from('#titulo .l span', { yPercent: 110, duration: .8, stagger: .12 })
       .from('.hero .kicker, .hero p.lead, .hero .cta-row, .datos-hero', { y: 24, opacity: 0, duration: .6, stagger: .08 }, '-=.5')
-      .from(rueda, { x: () => -distancia(), rotation: () => -distancia() / (rueda.getBoundingClientRect().width * Math.PI) * 360, duration: 1.7, ease: 'power3.out' }, .15)
+      .from(auto, { x: () => -distancia(), duration: 1.7, ease: 'power3.out' }, .15)
+      .from(ruedas, { rotation: () => -giros(), duration: 1.7, ease: 'power3.out' }, .15)
+      .to('#carroceria', { rotation: 2.2, duration: .35, ease: 'power2.out' }, 1.25)
+      .to('#carroceria', { rotation: 0, duration: .6, ease: 'elastic.out(1.2,.4)' }, 1.6)
       .to('#huella1, #huella2', { scaleX: 1, duration: .9, ease: 'power2.out', stagger: .05 }, .95)
       .fromTo('#humo1', { opacity: .9, scale: .4, x: 0, y: 0 }, { opacity: 0, scale: 2.4, x: -60, y: -40, duration: 1.3, ease: 'power1.out' }, 1.15)
       .fromTo('#humo2', { opacity: .7, scale: .3, x: 0, y: 0 }, { opacity: 0, scale: 2, x: -110, y: -20, duration: 1.4, ease: 'power1.out' }, 1.3)
-      .fromTo(rueda, { y: 0 }, { y: -6, duration: .12, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 1.82);
-  // al bajar, la rueda sigue rodando y la línea de la calle avanza
-  gsap.to(rueda, { rotation: '+=360', x: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
+      .fromTo('#faro', { opacity: 0 }, { opacity: .35, duration: .15, yoyo: true, repeat: 3, ease: 'none' }, 1.9)
+      .set('#faro', { opacity: .18 });
+  // al bajar, el auto avanza un poco y la línea de la calle corre
+  gsap.to(auto, { x: 90, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
+  gsap.to(ruedas, { rotation: '+=220', ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
   gsap.fromTo('#linea', { backgroundPositionX: 0 }, { backgroundPositionX: -480, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
 
   // Títulos y tarjetas aparecen al entrar
@@ -244,7 +223,6 @@
   gsap.from('.mec-foto', { clipPath: 'inset(0 100% 0 0 round 18px)', duration: 1.1, ease: 'power3.inOut', scrollTrigger: { trigger: '.mec', start: 'top 80%' } });
   gsap.from('.sello', { scale: 0, rotation: -25, duration: .5, ease: 'back.out(2.2)', delay: .8, scrollTrigger: { trigger: '.mec', start: 'top 80%' } });
   gsap.from('.mec-lista li', { x: -24, opacity: 0, duration: .45, stagger: .07, ease: 'power3.out', scrollTrigger: { trigger: '.mec-lista', start: 'top 85%' } });
-  gsap.from('.lector-svg', { scale: .9, rotation: -4, opacity: 0, duration: .9, ease: 'back.out(1.4)', scrollTrigger: { trigger: '.lector', start: 'top 80%' } });
   gsap.from('.cotiza .panel', { y: 40, opacity: 0, duration: .7, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.cotiza', start: 'top 82%' } });
   gsap.from('.reserva .panel', { y: 40, opacity: 0, duration: .7, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.reserva', start: 'top 82%' } });
   gsap.from('.faq details', { y: 24, opacity: 0, duration: .5, stagger: .08, ease: 'power2.out', scrollTrigger: { trigger: '.faq', start: 'top 85%' } });
@@ -281,30 +259,48 @@
         .to(svg.querySelectorAll('.brillo path'), { scale: 1, duration: .25, stagger: .1, yoyo: true, repeat: 1, ease: 'back.out(3)' }, 1.9);
       return tl;
     },
-    balanceo(svg) {
-      const giro = svg.querySelector('.giro'), eje = svg.querySelector('.eje');
-      gsap.set(giro, { svgOrigin: '160 90' });
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: .4 });
-      tl.set(svg.querySelectorAll('.pesos rect'), { scale: 0, transformOrigin: '50% 50%' }).set(svg.querySelector('.ok'), { opacity: 0, scale: .5, svgOrigin: '262 52' })
-        .to(giro, { rotation: '+=1440', duration: 2.6, ease: 'none' }, 0)
-        .fromTo(eje, { y: -5 }, { y: 5, duration: .08, repeat: 13, yoyo: true, ease: 'sine.inOut' }, 0)
-        .to(svg.querySelectorAll('.pesos rect'), { scale: 1, duration: .3, stagger: .15, ease: 'back.out(3)' }, 1.3)
-        .to(giro, { rotation: '+=720', duration: 1.6, ease: 'power2.out' }, 2.6)
-        .to(eje, { y: 0, duration: .2 }, 2.6)
-        .to(svg.querySelector('.ok'), { opacity: 1, scale: 1, duration: .35, ease: 'back.out(3)' }, 3.4)
-        .to(svg.querySelector('.ok'), { opacity: 0, duration: .3 }, 4.8);
+    aceite(svg) {
+      const gotas = svg.querySelectorAll('.gotas circle'), nivel = svg.querySelector('.nivel');
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .8 });
+      tl.set(svg.querySelector('.bidon'), { rotation: 0, svgOrigin: '128 116' })
+        .set(gotas, { y: 0, opacity: 0 })
+        .set(nivel, { scaleY: .2, transformOrigin: '50% 100%', fill: '#ff4d2e' })
+        .to(svg.querySelector('.bidon'), { rotation: 38, duration: .6, ease: 'power2.inOut' }, .3)
+        .to(gotas, { keyframes: [{ opacity: 1, duration: .05 }, { y: 44, duration: .4, ease: 'power2.in' }, { opacity: 0, duration: .05 }], stagger: { each: .18, repeat: 3 } }, .8)
+        .to(nivel, { scaleY: 1, duration: 2, ease: 'power1.inOut' }, .9)
+        .to(nivel, { fill: '#2bd576', duration: .4 }, 2.4)
+        .to(svg.querySelector('.bidon'), { rotation: 0, duration: .5, ease: 'power2.inOut' }, 3);
       return tl;
     },
-    alineacion(svg) {
-      const g = { v: 3.5 }, txt = svg.querySelector('.grados');
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: .8 });
-      tl.set([svg.querySelector('.rd-i'), svg.querySelector('.rd-d')], { rotation: (i) => i ? -14 : 14, transformOrigin: '50% 50%' })
-        .set(svg.querySelector('.laser'), { opacity: 0 }).set(g, { v: 3.5 }).set(txt, { fill: '#fdcc17' })
-        .to(svg.querySelector('.laser'), { opacity: 1, duration: .2, repeat: 3, yoyo: true }, .3)
-        .set(svg.querySelector('.laser'), { opacity: 1 })
-        .to([svg.querySelector('.rd-i'), svg.querySelector('.rd-d')], { rotation: 0, duration: 1.4, ease: 'elastic.out(1,.5)' }, 1.2)
-        .to(g, { v: 0, duration: 1.2, ease: 'power3.out', onUpdate: () => { txt.textContent = `${g.v.toFixed(1).replace('.', ',')}°`; } }, 1.2)
-        .set(txt, { fill: '#2bd576' }, 2.4);
+    suspension(svg) {
+      const rueda = svg.querySelector('.rueda-s'), resorte = svg.querySelector('.resorte');
+      gsap.set(resorte, { transformOrigin: '50% 0%' });
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .3 });
+      tl.set(svg.querySelector('.camino'), { x: 0 })
+        .to(svg.querySelector('.camino'), { x: -100, duration: 2.4, ease: 'none' }, 0)
+        .to(rueda, { y: -22, duration: .25, ease: 'power2.out' }, .55)
+        .to(resorte, { scaleY: .72, duration: .25, ease: 'power2.out' }, .55)
+        .to(rueda, { y: 0, duration: 1, ease: 'elastic.out(1,.35)' }, .8)
+        .to(resorte, { scaleY: 1, duration: 1, ease: 'elastic.out(1,.35)' }, .8);
+      return tl;
+    },
+    scanner(svg) {
+      const [t1, t2, t3] = ['.t1', '.t2', '.t3'].map((c) => svg.querySelector(c)), barra = svg.querySelector('.barra-s');
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+      tl.set([t2, t3], { opacity: 0 }).set(t1, { opacity: 1 }).set(barra, { scaleX: 0, transformOrigin: '0% 50%', fill: '#fdcc17' })
+        .to(barra, { scaleX: 1, duration: 1.4, ease: 'power1.inOut' }, .2)
+        .to(t1, { opacity: 0, duration: .15 }, 1.6).to(t2, { opacity: 1, duration: .15 }, 1.6)
+        .fromTo(t2, { x: -4 }, { x: 4, duration: .06, repeat: 5, yoyo: true }, 1.7)
+        .to(t2, { opacity: 0, duration: .15 }, 2.8).to(t3, { opacity: 1, duration: .15 }, 2.8)
+        .to(barra, { fill: '#2bd576', duration: .3 }, 2.8);
+      return tl;
+    },
+    correas(svg) {
+      gsap.set(svg.querySelector('.pol1'), { svgOrigin: '110 95' }); gsap.set(svg.querySelector('.pol2'), { svgOrigin: '210 95' });
+      const tl = gsap.timeline({ repeat: -1 });
+      tl.to(svg.querySelector('.pol1'), { rotation: '+=360', duration: 2.4, ease: 'none' }, 0)
+        .to(svg.querySelector('.pol2'), { rotation: '+=720', duration: 2.4, ease: 'none' }, 0)
+        .fromTo(svg.querySelector('.correa-m'), { strokeDashoffset: 0 }, { strokeDashoffset: -240, duration: 2.4, ease: 'none' }, 0);
       return tl;
     },
     frenos(svg) {
@@ -314,23 +310,6 @@
         .fromTo(svg.querySelector('.pinza'), { x: 0 }, { x: -4, duration: .1, repeat: 5, yoyo: true }, 1.2)
         .to(svg.querySelector('.calor'), { opacity: 1, duration: .8, ease: 'power2.in' }, 1.3)
         .to(svg.querySelector('.calor'), { opacity: 0, duration: 1.4, ease: 'power1.out' }, 2.4);
-      return tl;
-    },
-    rotacion(svg) {
-      const [a, b, c, d] = ['.a', '.b', '.c', '.d'].map((s) => svg.querySelector(s));
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: .6 });
-      tl.set([a, b, c, d], { x: 0, y: 0 })
-        .to(a, { x: 112, y: 66, duration: 1, ease: 'power2.inOut' }, .4).to(d, { x: -112, y: -66, duration: 1, ease: 'power2.inOut' }, .4)
-        .to(b, { x: -112, y: 66, duration: 1, ease: 'power2.inOut' }, .6).to(c, { x: 112, y: -66, duration: 1, ease: 'power2.inOut' }, .6)
-        .to([a, b, c, d], { x: 0, y: 0, duration: 1, ease: 'power2.inOut', stagger: .1 }, 2.6);
-      return tl;
-    },
-    revision(svg) {
-      const ticks = svg.querySelectorAll('.ticks path');
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-      tl.set(ticks, { attr: { 'stroke-dasharray': '0 1' } })
-        .to(ticks, { attr: { 'stroke-dasharray': '1 0' }, duration: .35, stagger: .45, ease: 'power2.out' }, .4)
-        .to(ticks, { opacity: 0, duration: .3 }, '+=1.2').set(ticks, { opacity: 1 });
       return tl;
     },
   };

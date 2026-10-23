@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TTM Service | Neumáticos, alineación y frenos en Melipilla</title>
-<meta name="description" content="TTM Service, serviteca en Av. Vicuña Mackenna 609, Melipilla: venta e instalación de neumáticos, balanceo, alineación, frenos y pastillas. Cotiza por medida y reserva tu hora online.">
+<title>TTM Service | Mecánica general y serviteca en Melipilla</title>
+<meta name="description" content="TTM Service, taller de mecánica general y serviteca en Av. Vicuña Mackenna 609, Melipilla: mantención, aceite y filtros, frenos, suspensión, correas, afinamiento, scanner multimarca y neumáticos. Reserva tu hora online.">
 <!-- Maqueta de propuesta: no indexar hasta que el cliente la apruebe -->
 <meta name="robots" content="noindex, nofollow">
-<meta property="og:title" content="TTM Service · Neumáticos y serviteca en Melipilla">
-<meta property="og:description" content="Cotiza tus neumáticos por medida y reserva tu hora de alineación, balanceo o frenos en línea.">
+<meta property="og:title" content="TTM Service · Mecánica general y serviteca en Melipilla">
+<meta property="og:description" content="Mantención, frenos, suspensión, correas y scanner multimarca. Reserva tu hora en línea.">
 <meta name="theme-color" content="#204e9c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,6 +41,9 @@
     <radialGradient id="g-calor" cx="50%" cy="50%" r="50%">
       <stop offset=".35" stop-color="#ff4d2e" stop-opacity="0"/><stop offset=".7" stop-color="#ff4d2e" stop-opacity=".9"/><stop offset="1" stop-color="#ffb02e" stop-opacity=".95"/>
     </radialGradient>
+    <linearGradient id="g-auto" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f74cf"/><stop offset=".55" stop-color="#204e9c"/><stop offset="1" stop-color="#14346e"/>
+    </linearGradient>
     <path id="p-costado" d="M0,-93 A93,93 0 1,1 -0.1,-93"/>
   </defs>
   <symbol id="rueda" viewBox="-110 -110 220 220">
@@ -80,10 +83,10 @@
       <span class="marca"><small>Serviteca</small><span class="fila"><span class="ttm">TTM</span><span class="serv">SERVICE</span></span></span>
     </a>
     <nav class="main" aria-label="Principal">
-      <a href="#servicios">Serviteca</a>
-      <a href="#mecanica">Mecánica</a>
-      <a href="#cotizar">Cotizar neumáticos</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#diagnostico">Diagnóstico</a>
       <a href="#reserva">Reservar hora</a>
+      <a href="#neumaticos">Neumáticos</a>
       <a href="#ubicacion">Ubicación</a>
     </nav>
     <span class="estado" id="estado"><i></i><span>Horario</span></span>
@@ -94,16 +97,16 @@
 <main id="inicio">
   <section class="hero">
     <div class="wrap">
-      <span class="kicker">Serviteca y mecánica general</span>
+      <span class="kicker">Taller en Vicuña Mackenna 609</span>
       <h1 id="titulo">
-        <span class="l"><span>Neumáticos,</span></span>
-        <span class="l"><span>mecánica</span></span>
-        <span class="l"><span>y frenos <em>al tiro</em></span></span>
+        <span class="l"><span>Mecánica</span></span>
+        <span class="l"><span>general y</span></span>
+        <span class="l"><span><em>serviteca</em></span></span>
       </h1>
-      <p class="lead">Neumáticos, alineación, mantención y mecánica general en Melipilla. Cotiza por medida, reserva tu hora en línea y llega directo a que te atiendan.</p>
+      <p class="lead">Mantención, frenos, suspensión, correas y scanner multimarca en Melipilla. Reserva tu hora en línea y llega directo a que te atiendan.</p>
       <div class="cta-row">
-        <a class="btn btn-yel" href="#cotizar">Cotizar neumáticos <svg class="icon"><use href="#i-flecha"/></svg></a>
-        <a class="btn btn-line" href="#reserva"><svg class="icon"><use href="#i-cal"/></svg>Reservar hora</a>
+        <a class="btn btn-yel" href="#reserva"><svg class="icon"><use href="#i-cal"/></svg>Reservar hora</a>
+        <a class="btn btn-line" data-wa="Hola TTM Service, quiero cotizar un trabajo para mi auto.">Cotizar por WhatsApp <svg class="icon"><use href="#i-flecha"/></svg></a>
       </div>
       <div class="datos-hero">
         <span><svg class="icon"><use href="#i-pin"/></svg>Av. Vicuña Mackenna 609, Melipilla</span>
@@ -117,14 +120,29 @@
       <div class="huella h2" id="huella2"></div>
       <div class="humo" id="humo1"></div>
       <div class="humo" id="humo2"></div>
-      <svg class="rueda-hero" id="rueda-hero" viewBox="-110 -110 220 220"><use href="#rueda" x="-110" y="-110" width="220" height="220"/></svg>
+      <svg class="auto-hero" id="auto-hero" viewBox="0 0 520 215" aria-hidden="true">
+        <g id="carroceria">
+          <path d="M30,150 L30,122 Q32,102 62,96 L150,88 Q192,50 252,45 L340,45 Q392,48 432,86 L482,96 Q506,101 506,126 L506,150 Q506,161 495,161 L455,161 A55,55 0 0,0 345,161 L175,161 A55,55 0 0,0 65,161 L41,161 Q30,161 30,150 Z" fill="url(#g-auto)"/>
+          <path d="M166,90 Q200,60 250,57 L290,57 L290,90 Z" fill="#0b1a3d" opacity=".85"/>
+          <path d="M302,57 L338,57 Q374,60 404,89 L302,90 Z" fill="#0b1a3d" opacity=".85"/>
+          <path d="M44,118 L492,118" stroke="#fdcc17" stroke-width="5"/>
+          <text x="196" y="145" font-family="Barlow Condensed, sans-serif" font-style="italic" font-weight="800" font-size="22" fill="#fff">TTM</text>
+          <rect x="240" y="129" width="62" height="20" rx="3" fill="#b4c75a"/>
+          <text x="245" y="145" font-family="Barlow Condensed, sans-serif" font-style="italic" font-weight="800" font-size="16" fill="#0a1a3d">SERVICE</text>
+          <rect x="484" y="102" width="20" height="10" rx="4" fill="#fdcc17"/>
+          <rect x="31" y="104" width="10" height="12" rx="3" fill="#ff4d2e"/>
+          <path id="faro" d="M504,107 L620,82 L620,132 Z" fill="#fdcc17" opacity="0"/>
+        </g>
+        <g class="rd" id="rd-1"><use href="#rueda" x="74" y="113" width="92" height="92"/></g>
+        <g class="rd" id="rd-2"><use href="#rueda" x="354" y="113" width="92" height="92"/></g>
+      </svg>
     </div>
   </section>
 
   <div class="cinta-caja"><div class="cinta" aria-hidden="true">
     <div class="pista">
-      <span>Neumáticos</span><span>Alineación</span><span>Balanceo</span><span>Aceite y filtros</span><span>Frenos</span><span>Scanner</span><span>Suspensión</span><span>Correas</span>
-      <span>Neumáticos</span><span>Alineación</span><span>Balanceo</span><span>Aceite y filtros</span><span>Frenos</span><span>Scanner</span><span>Suspensión</span><span>Correas</span>
+      <span>Mecánica general</span><span>Aceite y filtros</span><span>Frenos</span><span>Suspensión</span><span>Scanner</span><span>Correas</span><span>Afinamiento</span><span>Neumáticos</span>
+      <span>Mecánica general</span><span>Aceite y filtros</span><span>Frenos</span><span>Suspensión</span><span>Scanner</span><span>Correas</span><span>Afinamiento</span><span>Neumáticos</span>
     </div>
   </div></div>
 
@@ -132,59 +150,27 @@
   <section class="sec" id="servicios">
     <div class="wrap">
       <div class="sec-head revela">
-        <span class="kicker">Lo que hacemos</span>
-        <h2>Todo para que tu auto <span class="lima">ruede bien</span></h2>
-        <p>Elige el servicio y cotízalo por WhatsApp o reserva tu hora en un minuto.</p>
+        <span class="kicker">Mecánica general</span>
+        <h2>Todo lo que tu auto <span class="lima">necesita</span></h2>
+        <p>Elige el servicio y reserva tu hora en un minuto, o cotízalo por WhatsApp.</p>
       </div>
       <div class="servicios">
         <article class="serv">
-          <div class="ilus" data-anim="neumaticos">
+          <div class="ilus" data-anim="aceite">
             <svg viewBox="0 0 320 190" aria-hidden="true">
-              <rect x="0" y="150" width="320" height="40" fill="#0f1114"/>
-              <g class="sale"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
-              <g class="entra"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
-              <g class="brillo" fill="#fdcc17"><path d="M232 46l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M84 70l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>
+              <g class="bidon"><rect x="70" y="40" width="58" height="76" rx="10" fill="#fdcc17"/><rect x="118" y="30" width="22" height="16" rx="4" fill="#fdcc17"/><rect x="80" y="58" width="38" height="26" rx="4" fill="#0a1a3d"/><text x="84" y="77" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="15" fill="#fdcc17">OIL</text></g>
+              <g class="gotas" fill="#e0a800"><circle cx="160" cy="70" r="5"/><circle cx="160" cy="70" r="4"/><circle cx="160" cy="70" r="4.5"/></g>
+              <path d="M140,96 L180,96 L168,118 L152,118 Z" fill="#34528f"/>
+              <rect x="146" y="118" width="28" height="44" rx="6" fill="#1b3a7a" stroke="#34528f" stroke-width="2"/>
+              <rect x="222" y="40" width="26" height="122" rx="13" fill="#0a1838" stroke="#34528f" stroke-width="2"/>
+              <rect class="nivel" x="226" y="44" width="18" height="114" rx="9" fill="#2bd576"/>
+              <text x="214" y="182" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="15" fill="#a9b7d6">NIVEL</text>
             </svg>
           </div>
           <div class="cuerpo">
-            <h3>Venta e instalación de neumáticos</h3>
-            <p>Te cotizamos la medida de tu auto en distintas marcas y los instalamos el mismo día.</p>
-            <div class="acciones"><a class="btn btn-yel btn-sm" href="#cotizar">Cotizar por medida</a><button class="btn btn-line btn-sm" data-servicio="Instalación de neumáticos">Reservar</button></div>
-          </div>
-        </article>
-        <article class="serv">
-          <div class="ilus" data-anim="balanceo">
-            <svg viewBox="0 0 320 190" aria-hidden="true">
-              <rect x="70" y="150" width="180" height="10" rx="5" fill="#2a3038"/>
-              <rect x="152" y="95" width="16" height="58" fill="#2a3038"/>
-              <g class="eje"><g class="giro"><use href="#rueda" x="105" y="35" width="110" height="110"/></g>
-                <g class="pesos" fill="#fdcc17"><rect x="154" y="41" width="12" height="7" rx="2"/><rect x="154" y="132" width="12" height="7" rx="2"/></g></g>
-              <g class="ok" opacity="0"><circle cx="262" cy="52" r="18" fill="#2bd576"/><path d="M253 52l6 6 11-12" fill="none" stroke="#0e1013" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
-            </svg>
-          </div>
-          <div class="cuerpo">
-            <h3>Balanceo</h3>
-            <p>Si el volante vibra en carretera, es el balanceo. Lo dejamos parejito para que andes suave.</p>
-            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Balanceo">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar un balanceo.">Cotizar</a></div>
-          </div>
-        </article>
-        <article class="serv">
-          <div class="ilus" data-anim="alineacion">
-            <svg viewBox="0 0 320 190" aria-hidden="true">
-              <rect x="115" y="30" width="90" height="130" rx="34" fill="#1b3a7a" stroke="#34528f" stroke-width="2"/>
-              <g class="laser" stroke="#fdcc17" stroke-width="2" stroke-dasharray="6 6"><line x1="96" y1="10" x2="96" y2="180"/><line x1="224" y1="10" x2="224" y2="180"/></g>
-              <g fill="#0b0c0e" stroke="#4a515b" stroke-width="2">
-                <rect class="rd-i" x="88" y="44" width="16" height="36" rx="5"/>
-                <rect class="rd-d" x="216" y="44" width="16" height="36" rx="5"/>
-                <rect x="88" y="112" width="16" height="36" rx="5"/><rect x="216" y="112" width="16" height="36" rx="5"/>
-              </g>
-              <g font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#fdcc17"><text class="grados" x="248" y="68">3,5°</text></g>
-            </svg>
-          </div>
-          <div class="cuerpo">
-            <h3>Alineación</h3>
-            <p>¿El auto se tira para un lado o el neumático se gasta disparejo? Lo alineamos y cuidas tus neumáticos.</p>
-            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Alineación y balanceo">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar una alineación.">Cotizar</a></div>
+            <h3>Mantención, aceite y filtros</h3>
+            <p>Cambio de aceite y filtros según el kilometraje de tu auto, para que el motor dure más.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Mantención (aceite y filtros)">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar una mantención para mi auto.">Cotizar</a></div>
           </div>
         </article>
         <article class="serv">
@@ -208,190 +194,99 @@
           </div>
         </article>
         <article class="serv">
-          <div class="ilus" data-anim="rotacion">
+          <div class="ilus" data-anim="suspension">
             <svg viewBox="0 0 320 190" aria-hidden="true">
-              <rect x="120" y="25" width="80" height="140" rx="30" fill="#1b3a7a" stroke="#34528f" stroke-width="2"/>
-              <g stroke="#fdcc17" stroke-width="2" fill="none" stroke-dasharray="5 5" opacity=".6"><path d="M104 62 L216 128"/><path d="M216 62 L104 128"/></g>
-              <g class="r4">
-                <g class="w a"><use href="#rueda" x="82" y="40" width="44" height="44"/></g>
-                <g class="w b"><use href="#rueda" x="194" y="40" width="44" height="44"/></g>
-                <g class="w c"><use href="#rueda" x="82" y="106" width="44" height="44"/></g>
-                <g class="w d"><use href="#rueda" x="194" y="106" width="44" height="44"/></g>
-              </g>
+              <rect x="96" y="22" width="128" height="22" rx="8" fill="#1b3a7a" stroke="#34528f" stroke-width="2"/>
+              <g class="amort"><rect x="152" y="44" width="16" height="56" rx="4" fill="#5d646d"/></g>
+              <polyline class="resorte" points="160,44 136,52 184,60 136,68 184,76 136,84 184,92 136,100 184,108 160,116" fill="none" stroke="#fdcc17" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+              <g class="rueda-s"><use href="#rueda" x="126" y="112" width="68" height="68"/></g>
+              <path class="camino" d="M0,182 L90,182 Q110,170 130,182 L320,182" fill="none" stroke="#34528f" stroke-width="3"/>
             </svg>
           </div>
           <div class="cuerpo">
-            <h3>Rotación de neumáticos</h3>
-            <p>Cambiamos los neumáticos de posición para que se gasten parejo y te duren más kilómetros.</p>
-            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Rotación de neumáticos">Reservar hora</button><a class="btn btn-line btn-sm" href="#toca">¿Me toca?</a></div>
+            <h3>Suspensión y amortiguadores</h3>
+            <p>¿Golpes en los hoyos o el auto rebota mucho? Revisamos amortiguadores, bujes y toda la suspensión.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Suspensión y amortiguadores">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero revisar la suspensión de mi auto.">Cotizar</a></div>
           </div>
         </article>
         <article class="serv">
-          <div class="ilus" data-anim="revision">
+          <div class="ilus" data-anim="scanner">
             <svg viewBox="0 0 320 190" aria-hidden="true">
-              <rect x="80" y="22" width="160" height="146" rx="16" fill="#1b3a7a" stroke="#34528f" stroke-width="2"/>
-              <g font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#d3dcef">
-                <text x="128" y="58">Neumáticos</text><text x="128" y="88">Frenos</text><text x="128" y="118">Suspensión</text><text x="128" y="148">Luces</text>
+              <rect x="70" y="30" width="180" height="116" rx="14" fill="#0a1838" stroke="#34528f" stroke-width="3"/>
+              <rect x="84" y="44" width="152" height="70" rx="6" fill="#0c1d45"/>
+              <g font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="18">
+                <text class="t1" x="96" y="72" fill="#d3dcef">ESCANEANDO…</text>
+                <text class="t2" x="96" y="72" fill="#ff4d2e" opacity="0">P0301 · FALLA</text>
+                <text class="t3" x="96" y="72" fill="#2bd576" opacity="0">✓ SIN FALLAS</text>
               </g>
-              <g fill="none" stroke="#34528f" stroke-width="2"><rect x="100" y="45" width="18" height="18" rx="5"/><rect x="100" y="75" width="18" height="18" rx="5"/><rect x="100" y="105" width="18" height="18" rx="5"/><rect x="100" y="135" width="18" height="18" rx="5"/></g>
-              <g class="ticks" fill="none" stroke="#fdcc17" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M103 54l4 4 8-9" pathLength="1"/><path d="M103 84l4 4 8-9" pathLength="1"/><path d="M103 114l4 4 8-9" pathLength="1"/><path d="M103 144l4 4 8-9" pathLength="1"/>
-              </g>
+              <rect x="96" y="88" width="128" height="10" rx="5" fill="#173270"/>
+              <rect class="barra-s" x="96" y="88" width="128" height="10" rx="5" fill="#fdcc17"/>
+              <circle cx="128" cy="130" r="6" fill="#34528f"/><circle cx="160" cy="130" r="6" fill="#fdcc17"/><circle cx="192" cy="130" r="6" fill="#34528f"/>
+              <path d="M160,146 Q160,176 214,176 L250,176" fill="none" stroke="#5d646d" stroke-width="5" stroke-linecap="round"/>
+              <rect x="246" y="166" width="26" height="20" rx="4" fill="#5d646d"/>
             </svg>
           </div>
           <div class="cuerpo">
-            <h3>Revisión antes de viajar</h3>
-            <p>Neumáticos, frenos, suspensión y luces revisados antes de salir a carretera, para que viajes tranquilo.</p>
-            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Revisión general">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero agendar una revisión antes de viajar.">Consultar</a></div>
+            <h3>Scanner multimarca</h3>
+            <p>¿Se prendió una luz en el tablero? Leemos la falla con scanner y te explicamos qué tiene tu auto.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Scanner multimarca">Reservar hora</button><a class="btn btn-line btn-sm" href="#diagnostico">¿Cómo funciona?</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="correas">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <path class="correa" d="M110,40 L210,60 A35,35 0 0 1 210,130 L110,150 A55,55 0 0 1 110,40 Z" fill="none" stroke="#2a2e34" stroke-width="12" stroke-linejoin="round"/>
+              <path class="correa-m" d="M110,40 L210,60 A35,35 0 0 1 210,130 L110,150 A55,55 0 0 1 110,40 Z" fill="none" stroke="#fdcc17" stroke-width="3" stroke-dasharray="10 14"/>
+              <g class="pol1"><circle cx="110" cy="95" r="44" fill="#8d949e"/><circle cx="110" cy="95" r="30" fill="#5d646d"/><rect x="106" y="58" width="8" height="74" fill="#8d949e"/><rect x="73" y="91" width="74" height="8" fill="#8d949e"/><circle cx="110" cy="95" r="9" fill="#fdcc17"/></g>
+              <g class="pol2"><circle cx="210" cy="95" r="26" fill="#8d949e"/><circle cx="210" cy="95" r="16" fill="#5d646d"/><rect x="207" y="74" width="6" height="42" fill="#8d949e"/><circle cx="210" cy="95" r="6" fill="#fdcc17"/></g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Correas y afinamiento</h3>
+            <p>Correa de distribución, correa de accesorios y afinamiento de motor, a tiempo y sin sustos en la carretera.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Correas (distribución o accesorios)">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar un cambio de correa para mi auto.">Cotizar</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="neumaticos">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="0" y="150" width="320" height="40" fill="#0f1114"/>
+              <g class="sale"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
+              <g class="entra"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
+              <g class="brillo" fill="#fdcc17"><path d="M232 46l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M84 70l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Serviteca</h3>
+            <p>Neumáticos, alineación y balanceo en el mismo taller, para que salgas con todo listo.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Alineación y balanceo">Reservar hora</button><a class="btn btn-line btn-sm" href="#neumaticos">Cotizar neumáticos</a></div>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- Mecánica general -->
-  <section class="sec alt" id="mecanica">
+  <!-- Diagnóstico -->
+  <section class="sec alt" id="diagnostico">
     <div class="wrap mec">
       <div class="mec-foto"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@b5e970af37861b6ff0e3f42314c408aea8f39219/ttm-service/img/mecanica.webp" alt="Mecánico cambiando el filtro de aceite de un motor" loading="lazy" width="1000" height="521"><span class="sello cond">Scanner multimarca</span></div>
       <div>
         <div class="sec-head revela" style="margin-bottom:24px">
-          <span class="kicker">Mecánica general</span>
-          <h2>Tu auto completo, <span class="lima">en un solo lugar</span></h2>
-          <p>Además de la serviteca, hacemos la mantención y la mecánica de tu auto, con scanner multimarca para encontrar la falla.</p>
+          <span class="kicker">Diagnóstico</span>
+          <h2>¿Se prendió una luz <span class="lima">en el tablero?</span></h2>
+          <p>Con scanner multimarca leemos la falla, te explicamos qué tiene tu auto y te damos el presupuesto antes de reparar. Cuéntanos qué le pasa:</p>
         </div>
         <ul class="mec-lista">
-          <li><svg class="icon"><use href="#i-check"/></svg>Aceites y filtros</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Correa de accesorios</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Suspensión</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Correa de distribución</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Afinamiento motor</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Pastillas de freno</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Scanner multimarca</li>
-          <li><svg class="icon"><use href="#i-check"/></svg>Amortiguadores</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Luz de check engine</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Ruido al frenar</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Vibra al manejar</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Pierde potencia</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Golpes en la suspensión</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Gasta más bencina</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Chilla la correa</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Le toca mantención</li>
         </ul>
-        <div class="cta-row"><button class="btn btn-yel" data-servicio="Mantención (aceite y filtros)"><svg class="icon"><use href="#i-cal"/></svg>Reservar mantención</button><a class="btn btn-line" data-wa="Hola TTM Service, quiero cotizar un trabajo de mecánica para mi auto.">Cotizar un trabajo</a></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lector de medida -->
-  <section class="sec" id="medida">
-    <div class="wrap">
-      <div class="sec-head revela">
-        <span class="kicker">¿No sabes tu medida?</span>
-        <h2>Lee tu neumático <span class="lima">en 10 segundos</span></h2>
-        <p>La medida está escrita en el costado de tu neumático. Toca cada parte y te explicamos qué significa.</p>
-      </div>
-      <div class="lector">
-        <div>
-          <div class="codigo" id="codigo" role="group" aria-label="Partes de la medida">
-            <button data-k="ancho">205</button><button class="sep" tabindex="-1" aria-hidden="true">/</button><button data-k="perfil">55</button><button data-k="radial">R</button><button data-k="aro">16</button><button data-k="carga">91</button><button data-k="vel">V</button>
-          </div>
-          <div class="explica" aria-live="polite"><b id="ex-t">Ancho: 205 mm</b><p id="ex-p">Es el ancho del neumático de lado a lado, en milímetros.</p></div>
-          <p class="pista-tap">Así se ve en el costado de tu neumático: <b>205/55 R16 91V</b>. ¿Ya la tienes? <a href="#cotizar" class="lima">Cotízala acá</a>.</p>
-        </div>
-        <div class="lector-svg">
-          <svg viewBox="0 0 420 300" aria-hidden="true">
-            <!-- vista lateral -->
-            <circle cx="150" cy="155" r="125" fill="#0b0c0e"/>
-            <circle cx="150" cy="155" r="118" fill="none" stroke="#25292f" stroke-width="12" stroke-dasharray="9 6"/>
-            <circle cx="150" cy="155" r="104" fill="#17191d"/>
-            <text font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="20" fill="#e9ecef" letter-spacing="1"><textPath href="#p-lector">205/55 R16 91V</textPath></text>
-            <path id="p-lector" d="M68,135 A85,85 0 0,1 232,135" fill="none"/>
-            <circle cx="150" cy="155" r="68" fill="url(#g-llanta)"/>
-            <circle cx="150" cy="155" r="60" fill="#2a2e34"/>
-            <circle cx="150" cy="155" r="18" fill="#dfe3e8"/>
-            <!-- vista frontal -->
-            <rect x="322" y="32" width="58" height="246" rx="22" fill="#0b0c0e" stroke="#25292f" stroke-width="3"/>
-            <g stroke="#25292f" stroke-width="4"><line x1="336" y1="40" x2="336" y2="270"/><line x1="351" y1="40" x2="351" y2="270"/><line x1="366" y1="40" x2="366" y2="270"/></g>
-            <!-- capas -->
-            <g class="ov" data-k="ancho" stroke="#fdcc17" stroke-width="3" fill="#fdcc17">
-              <line x1="322" y1="18" x2="380" y2="18"/><path d="M322 18l8-5v10z"/><path d="M380 18l-8-5v10z"/>
-              <text x="331" y="12" font-family="Barlow Condensed" font-weight="800" font-size="16" stroke="none">205 mm</text>
-            </g>
-            <g class="ov" data-k="perfil" stroke="#fdcc17" stroke-width="3" fill="#fdcc17">
-              <line x1="150" y1="87" x2="150" y2="31"/><path d="M150 31l-5 8h10z"/><path d="M150 87l-5-8h10z"/>
-              <text x="158" y="64" font-family="Barlow Condensed" font-weight="800" font-size="16" stroke="none">113 mm</text>
-            </g>
-            <g class="ov" data-k="radial" stroke="#fdcc17" stroke-width="2.5" fill="none">
-              <line x1="150" y1="87" x2="150" y2="31"/><line x1="198" y1="107" x2="238" y2="67"/><line x1="218" y1="155" x2="274" y2="155"/><line x1="198" y1="203" x2="238" y2="243"/><line x1="150" y1="223" x2="150" y2="279"/><line x1="102" y1="203" x2="62" y2="243"/><line x1="82" y1="155" x2="26" y2="155"/><line x1="102" y1="107" x2="62" y2="67"/>
-            </g>
-            <g class="ov" data-k="aro" stroke="#fdcc17" stroke-width="3" fill="#fdcc17">
-              <line x1="82" y1="155" x2="218" y2="155"/><path d="M82 155l8-5v10z"/><path d="M218 155l-8-5v10z"/>
-              <rect x="122" y="164" width="56" height="24" rx="6" stroke="none"/>
-              <text x="129" y="182" font-family="Barlow Condensed" font-weight="800" font-size="17" fill="#0a1a3d" stroke="none">16 pulg</text>
-            </g>
-            <g class="ov" data-k="carga" fill="#fdcc17">
-              <rect x="112" y="0" width="76" height="26" rx="6"/>
-              <text x="122" y="19" font-family="Barlow Condensed" font-weight="800" font-size="17" fill="#0a1a3d">615 kg ↓</text>
-            </g>
-            <g class="ov" data-k="vel" fill="none" stroke="#fdcc17" stroke-width="3">
-              <path d="M240 280 A34 34 0 0 1 308 280" />
-              <line x1="274" y1="280" x2="296" y2="258" stroke-linecap="round"/>
-              <text x="244" y="298" font-family="Barlow Condensed" font-weight="800" font-size="15" fill="#fdcc17" stroke="none">240 km/h</text>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cotizador -->
-  <section class="sec alt" id="cotizar">
-    <div class="wrap">
-      <div class="sec-head revela">
-        <span class="kicker">Cotizador</span>
-        <h2>Cotiza tus neumáticos <span class="lima">por medida</span></h2>
-        <p>Elige tu medida y lo que necesitas. Te llega la cotización por WhatsApp con opciones de marcas y precios.</p>
-      </div>
-      <div class="cotiza">
-        <form class="panel" id="f-cotiza">
-          <div class="campos">
-            <label class="campo">Ancho<select id="c-ancho"></select></label>
-            <label class="campo">Perfil<select id="c-perfil"></select></label>
-            <label class="campo">Aro<select id="c-aro"></select></label>
-          </div>
-          <div class="grupo">
-            <span>¿Cuántos?</span>
-            <div class="chips" id="c-cant">
-              <button type="button" class="chip" data-v="1">1</button><button type="button" class="chip on" data-v="2">2</button><button type="button" class="chip" data-v="4">4</button>
-            </div>
-          </div>
-          <div class="grupo">
-            <span>Prefiero</span>
-            <div class="chips" id="c-pref">
-              <button type="button" class="chip" data-v="la opción más económica">Lo más económico</button><button type="button" class="chip on" data-v="buena relación precio/calidad">Precio/calidad</button><button type="button" class="chip" data-v="una marca premium">Marca premium</button>
-            </div>
-          </div>
-          <div class="grupo">
-            <span>Incluir</span>
-            <div class="chips" id="c-extra">
-              <label class="chip on"><input type="checkbox" value="instalación" checked>Instalación</label>
-              <label class="chip on"><input type="checkbox" value="balanceo" checked>Balanceo</label>
-              <label class="chip"><input type="checkbox" value="alineación">Alineación</label>
-            </div>
-          </div>
-          <div class="grupo">
-            <label class="campo">Tu auto (opcional)<input type="text" id="c-auto" placeholder="Ej: Toyota Yaris 2018" autocomplete="off"></label>
-          </div>
-          <div class="cta-row" style="margin-top:20px">
-            <a class="btn btn-wa" id="c-enviar" target="_blank" rel="noopener"><svg class="icon"><use href="#i-wa"/></svg>Pedir cotización por WhatsApp</a>
-          </div>
-        </form>
-        <div class="panel vista">
-          <div>
-            <svg viewBox="-150 -150 300 300" aria-hidden="true">
-              <circle id="v-ext" r="130" fill="#0b0c0e"/>
-              <circle id="v-banda" r="123" fill="none" stroke="#25292f" stroke-width="12" stroke-dasharray="9 6"/>
-              <circle id="v-cost" r="110" fill="#17191d"/>
-              <circle id="v-llanta" r="80" fill="url(#g-llanta)"/>
-              <circle id="v-centro" r="72" fill="#2a2e34"/>
-              <circle r="20" fill="#dfe3e8"/><circle r="6" fill="#fdcc17"/>
-            </svg>
-            <div class="medida-grande" id="v-medida">205/55 R16</div>
-            <div class="dims" id="v-dims"></div>
-          </div>
-        </div>
+        <div class="cta-row"><button class="btn btn-yel" data-servicio="Scanner multimarca"><svg class="icon"><use href="#i-cal"/></svg>Reservar diagnóstico</button><a class="btn btn-line" data-wa="Hola TTM Service, a mi auto le pasa lo siguiente: ">Contar qué le pasa</a></div>
       </div>
     </div>
   </section>
@@ -409,17 +304,15 @@
           <div class="paso-res">
             <h3><i>1</i>¿Qué necesitas?</h3>
             <div class="chips" id="r-serv">
-              <button type="button" class="chip">Instalación de neumáticos</button>
-              <button type="button" class="chip">Balanceo</button>
-              <button type="button" class="chip">Alineación y balanceo</button>
-              <button type="button" class="chip">Frenos y pastillas</button>
-              <button type="button" class="chip">Rotación de neumáticos</button>
-              <button type="button" class="chip">Revisión general</button>
               <button type="button" class="chip">Mantención (aceite y filtros)</button>
               <button type="button" class="chip">Scanner multimarca</button>
+              <button type="button" class="chip">Frenos y pastillas</button>
               <button type="button" class="chip">Suspensión y amortiguadores</button>
               <button type="button" class="chip">Correas (distribución o accesorios)</button>
               <button type="button" class="chip">Afinamiento motor</button>
+              <button type="button" class="chip">Alineación y balanceo</button>
+              <button type="button" class="chip">Instalación de neumáticos</button>
+              <button type="button" class="chip">Revisión general</button>
             </div>
           </div>
           <div class="paso-res">
@@ -486,8 +379,68 @@
     </div>
   </section>
 
+  <!-- Neumáticos -->
+  <section class="sec" id="neumaticos">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Serviteca</span>
+        <h2>¿Necesitas neumáticos? <span class="lima">Cotízalos acá</span></h2>
+        <p>Elige la medida que sale en el costado de tu neumático (por ejemplo 205/55 R16) y te mandamos opciones por WhatsApp.</p>
+      </div>
+      <div class="cotiza">
+        <form class="panel" id="f-cotiza">
+          <div class="campos">
+            <label class="campo">Ancho<select id="c-ancho"></select></label>
+            <label class="campo">Perfil<select id="c-perfil"></select></label>
+            <label class="campo">Aro<select id="c-aro"></select></label>
+          </div>
+          <div class="grupo">
+            <span>¿Cuántos?</span>
+            <div class="chips" id="c-cant">
+              <button type="button" class="chip" data-v="1">1</button><button type="button" class="chip on" data-v="2">2</button><button type="button" class="chip" data-v="4">4</button>
+            </div>
+          </div>
+          <div class="grupo">
+            <span>Prefiero</span>
+            <div class="chips" id="c-pref">
+              <button type="button" class="chip" data-v="la opción más económica">Lo más económico</button><button type="button" class="chip on" data-v="buena relación precio/calidad">Precio/calidad</button><button type="button" class="chip" data-v="una marca premium">Marca premium</button>
+            </div>
+          </div>
+          <div class="grupo">
+            <span>Incluir</span>
+            <div class="chips" id="c-extra">
+              <label class="chip on"><input type="checkbox" value="instalación" checked>Instalación</label>
+              <label class="chip on"><input type="checkbox" value="balanceo" checked>Balanceo</label>
+              <label class="chip"><input type="checkbox" value="alineación">Alineación</label>
+            </div>
+          </div>
+          <div class="grupo">
+            <label class="campo">Tu auto (opcional)<input type="text" id="c-auto" placeholder="Ej: Toyota Yaris 2018" autocomplete="off"></label>
+          </div>
+          <div class="cta-row" style="margin-top:20px">
+            <a class="btn btn-wa" id="c-enviar" target="_blank" rel="noopener"><svg class="icon"><use href="#i-wa"/></svg>Pedir cotización por WhatsApp</a>
+          </div>
+        </form>
+        <div class="panel vista">
+          <div>
+            <svg viewBox="-150 -150 300 300" aria-hidden="true">
+              <circle id="v-ext" r="130" fill="#0b0c0e"/>
+              <circle id="v-banda" r="123" fill="none" stroke="#25292f" stroke-width="12" stroke-dasharray="9 6"/>
+              <circle id="v-cost" r="110" fill="#17191d"/>
+              <circle id="v-llanta" r="80" fill="url(#g-llanta)"/>
+              <circle id="v-centro" r="72" fill="#2a2e34"/>
+              <circle r="20" fill="#dfe3e8"/><circle r="6" fill="#fdcc17"/>
+            </svg>
+            <div class="medida-grande" id="v-medida">205/55 R16</div>
+            <div class="dims" id="v-dims"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Seguimiento -->
-  <section class="sec" id="seguimiento">
+  <section class="sec alt" id="seguimiento">
     <div class="wrap segui">
       <div class="revela">
         <span class="kicker">Nuevo</span>
@@ -509,9 +462,9 @@
           <span class="pat">KXJT·45</span>
           <div class="linea-tiempo" id="lt">
             <span class="avance" id="lt-avance"></span>
-            <div class="hito"><b>Recibido</b><small>09:05 · Alineación y balanceo</small></div>
-            <div class="hito"><b>En revisión</b><small>09:20 · Revisando dirección</small></div>
-            <div class="hito"><b>Trabajando</b><small>09:45 · Alineando y balanceando</small></div>
+            <div class="hito"><b>Recibido</b><small>09:05 · Mantención 10.000 km</small></div>
+            <div class="hito"><b>En revisión</b><small>09:20 · Scanner sin fallas</small></div>
+            <div class="hito"><b>Trabajando</b><small>09:45 · Cambiando aceite y filtros</small></div>
             <div class="hito"><b>Listo para retirar</b><small>10:15 · ¡Te esperamos!</small></div>
           </div>
         </div>
@@ -520,41 +473,41 @@
   </section>
 
   <!-- Cómo funciona -->
-  <section class="sec alt" id="como">
+  <section class="sec" id="como">
     <div class="wrap">
       <div class="sec-head revela">
         <span class="kicker">Así de simple</span>
-        <h2>De la cotización <span class="lima">a la carretera</span></h2>
+        <h2>Del taller <span class="lima">a la carretera</span></h2>
       </div>
       <div class="pasos" id="pasos">
         <div class="camino"><i id="camino"></i></div>
-        <div class="paso"><div class="n">01</div><h3>Cotizas</h3><p>Por medida, desde el celular, en un minuto.</p></div>
+        <div class="paso"><div class="n">01</div><h3>Nos cuentas</h3><p>Qué le pasa a tu auto, por WhatsApp o en la web.</p></div>
         <div class="paso"><div class="n">02</div><h3>Reservas</h3><p>Eliges el día y la hora que te acomoda.</p></div>
-        <div class="paso"><div class="n">03</div><h3>Llegas</h3><p>Te esperamos con tu hora y tus neumáticos listos.</p></div>
+        <div class="paso"><div class="n">03</div><h3>Llegas</h3><p>Te esperamos con tu hora lista, sin hacer fila.</p></div>
         <div class="paso"><div class="n">04</div><h3>Sales seguro</h3><p>Con todo revisado y el trabajo explicado.</p></div>
       </div>
     </div>
   </section>
 
   <!-- Preguntas -->
-  <section class="sec" id="preguntas">
+  <section class="sec alt" id="preguntas">
     <div class="wrap">
       <div class="sec-head revela">
         <span class="kicker">Preguntas frecuentes</span>
         <h2>Lo que más <span class="lima">nos preguntan</span></h2>
       </div>
       <div class="faq">
+        <details><summary>¿Atienden autos de todas las marcas?</summary><p>Sí. Trabajamos con autos de distintas marcas y tenemos scanner multimarca para leer las fallas del tablero.</p></details>
         <details><summary>¿Tengo que reservar hora?</summary><p>No es obligatorio, puedes llegar directo. Con hora reservada te atendemos sin esperar.</p></details>
-        <details><summary>¿Qué marcas de neumáticos tienen?</summary><p>Trabajamos con distintas marcas y rangos de precio. Cotiza tu medida y te mandamos las opciones disponibles.</p></details>
-        <details><summary>¿Cada cuánto tengo que alinear y balancear?</summary><p>Como referencia, cada 10.000 km, cuando cambias neumáticos o si el auto se tira para un lado o el volante vibra.</p></details>
-        <details><summary>¿Hacen mecánica además de neumáticos?</summary><p>Sí. Hacemos mecánica general: aceites y filtros, suspensión y amortiguadores, correas, afinamiento, frenos y scanner multimarca.</p></details>
-        <details><summary>¿Cómo sé si tengo que cambiar las pastillas?</summary><p>Si los frenos chillan, el pedal se siente largo o el auto demora más en frenar. Pasa y te las revisamos.</p></details>
+        <details><summary>¿Me dicen cuánto sale antes de reparar?</summary><p>Sí. Primero revisamos el auto, te explicamos qué tiene y te damos el presupuesto. No hacemos trabajos extra sin tu aprobación.</p></details>
+        <details><summary>¿Cada cuánto le toca mantención a mi auto?</summary><p>Como referencia, el cambio de aceite y filtros es cada 10.000 km o una vez al año, pero depende del auto. Revisa la calculadora de arriba o pregúntanos.</p></details>
+        <details><summary>¿También venden neumáticos?</summary><p>Sí, somos serviteca: neumáticos, alineación y balanceo en el mismo taller.</p></details>
       </div>
     </div>
   </section>
 
   <!-- Ubicación -->
-  <section class="sec alt" id="ubicacion">
+  <section class="sec" id="ubicacion">
     <div class="wrap">
       <div class="sec-head revela">
         <span class="kicker">Dónde estamos</span>
