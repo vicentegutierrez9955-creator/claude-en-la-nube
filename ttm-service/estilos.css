@@ -68,7 +68,7 @@ nav.main a:hover{color:var(--yel)}
 .hero{position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;min-height:calc(100svh - 124px);background:radial-gradient(1000px 560px at 85% 0%,rgba(32,78,156,.75),transparent 65%),radial-gradient(500px 300px at 10% 100%,rgba(253,204,23,.08),transparent 70%),var(--bg)}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(180deg,#000 30%,transparent 85%)}
 .hero-fondo{position:absolute;inset:0;overflow:hidden;z-index:-1}
-.hero-fondo img{position:absolute;right:0;top:0;width:78%;height:100%;object-fit:cover;object-position:60% 40%;filter:saturate(.9) brightness(.8);-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 60%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 60%)}
+.hero-fondo img{position:absolute;right:0;top:0;width:66%;height:100%;object-fit:cover;object-position:50% 8%;filter:saturate(.95) brightness(.85);-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 60%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 60%)}
 .hero-fondo::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,26,61,.45) 30%,rgba(10,26,61,.15)),linear-gradient(0deg,var(--bg) 0%,rgba(10,26,61,0) 45%),linear-gradient(180deg,rgba(10,26,61,.7) 0%,rgba(10,26,61,0) 25%)}
 .hero .wrap{position:relative;padding-top:44px;padding-bottom:12px;flex:1}
 .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--yel)}
@@ -257,7 +257,7 @@ footer a{color:var(--yel)}
   .pasos{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:899px){
-  .hero-fondo img{width:100%;object-position:54% 50%;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 96%);mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 96%)}
+  .hero-fondo img{width:100%;object-position:22% 0%;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 96%);mask-image:linear-gradient(180deg,#000 0%,#000 60%,transparent 96%)}
   .hero-fondo::after{background:linear-gradient(90deg,rgba(10,26,61,.8) 0%,rgba(10,26,61,.5) 100%),linear-gradient(0deg,var(--bg) 0%,rgba(10,26,61,0) 40%)}
 }
 @media (min-width:900px){
