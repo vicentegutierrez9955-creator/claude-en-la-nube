@@ -202,7 +202,7 @@
   const hero = gsap.timeline({ defaults: { ease: 'power3.out' } });
   hero.from('.hero-fondo img', { scale: 1.12, opacity: 0, duration: 1.8, ease: 'power2.out' }, 0)
       .from('#titulo .l span', { yPercent: 110, duration: .8, stagger: .12 }, 0)
-      .from('.hero .kicker, .hero p.lead, .hero .cta-row, .datos-hero', { y: 24, opacity: 0, duration: .6, stagger: .08 }, '-=.5')
+      .from('.hero .kicker, .hero p.lead, .hero .cta-row, .datos-hero', { y: 24, opacity: 0, duration: .6, stagger: .08 }, .55)
       .from(auto, { x: () => -distancia(), duration: 1.7, ease: 'power3.out' }, .15)
       .from(ruedas, { rotation: () => -giros(), duration: 1.7, ease: 'power3.out' }, .15)
       .to('#carroceria', { rotation: 2.2, duration: .35, ease: 'power2.out' }, 1.25)
