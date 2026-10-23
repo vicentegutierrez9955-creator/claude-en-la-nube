@@ -29,6 +29,7 @@
   }
 }
 </script>
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('anima')</script>
 <link rel="stylesheet" href="/ttm-service/estilos.css">
 </head>
 <body>
@@ -117,26 +118,12 @@
     <div class="ruta" aria-hidden="true">
       <div class="asfalto"></div>
       <div class="linea" id="linea"></div>
-      <div class="huella" id="huella1"></div>
-      <div class="huella h2" id="huella2"></div>
-      <div class="humo" id="humo1"></div>
-      <div class="humo" id="humo2"></div>
-      <svg class="auto-hero" id="auto-hero" viewBox="0 0 520 215" aria-hidden="true">
-        <g id="carroceria">
-          <path d="M30,150 L30,122 Q32,102 62,96 L150,88 Q192,50 252,45 L340,45 Q392,48 432,86 L482,96 Q506,101 506,126 L506,150 Q506,161 495,161 L455,161 A55,55 0 0,0 345,161 L175,161 A55,55 0 0,0 65,161 L41,161 Q30,161 30,150 Z" fill="url(#g-auto)"/>
-          <path d="M166,90 Q200,60 250,57 L290,57 L290,90 Z" fill="#0b1a3d" opacity=".85"/>
-          <path d="M302,57 L338,57 Q374,60 404,89 L302,90 Z" fill="#0b1a3d" opacity=".85"/>
-          <path d="M44,118 L492,118" stroke="#fdcc17" stroke-width="5"/>
-          <text x="196" y="145" font-family="Barlow Condensed, sans-serif" font-style="italic" font-weight="800" font-size="22" fill="#fff">TTM</text>
-          <rect x="240" y="129" width="62" height="20" rx="3" fill="#b4c75a"/>
-          <text x="245" y="145" font-family="Barlow Condensed, sans-serif" font-style="italic" font-weight="800" font-size="16" fill="#0a1a3d">SERVICE</text>
-          <rect x="484" y="102" width="20" height="10" rx="4" fill="#fdcc17"/>
-          <rect x="31" y="104" width="10" height="12" rx="3" fill="#ff4d2e"/>
-          <path id="faro" d="M504,107 L620,82 L620,132 Z" fill="#fdcc17" opacity="0"/>
-        </g>
-        <g class="rd" id="rd-1"><use href="#rueda" x="74" y="113" width="92" height="92"/></g>
-        <g class="rd" id="rd-2"><use href="#rueda" x="354" y="113" width="92" height="92"/></g>
-      </svg>
+      <div class="auto-hero" id="auto-hero">
+        <i class="sombra"></i>
+        <img class="carro" src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@bcd207abe3179b3b4daef98c819fde2701b6d561/ttm-service/img/auto.webp" alt="" width="1262" height="452" fetchpriority="high">
+        <img class="llanta" id="rd-1" src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@da3a049b55b7cab047cf7fd3e0a2a75330fcf47c/ttm-service/img/llanta-1.webp" alt="" width="130" height="130" style="left:15.214%;top:66.35%">
+        <img class="llanta" id="rd-2" src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@da3a049b55b7cab047cf7fd3e0a2a75330fcf47c/ttm-service/img/llanta-2.webp" alt="" width="130" height="130" style="left:78.479%;top:66.217%">
+      </div>
     </div>
   </section>
 

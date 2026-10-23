@@ -187,35 +187,29 @@
 
   /* ---------- Movimiento ---------- */
   if (!hayGsap || reducir) {
+    document.documentElement.classList.remove('anima');
     km();
     $$('.hito').forEach((h) => h.classList.add('hecho'));
     return;
   }
   gsap.registerPlugin(ScrollTrigger);
 
-  // Portada: el auto de TTM entra, frena con huella y humo, y se asienta
+  // Portada: el auto entra andando desde la izquierda y frena suave hasta detenerse
   const auto = $('#auto-hero'), ruedas = ['#rd-1', '#rd-2'].map((id) => $(id));
-  gsap.set(ruedas[0], { svgOrigin: '120 159' }); gsap.set(ruedas[1], { svgOrigin: '400 159' });
-  gsap.set('#carroceria', { svgOrigin: '400 159' });
   const distancia = () => auto.getBoundingClientRect().right + 80;
-  const giros = () => distancia() / (auto.getBoundingClientRect().width * 92 / 520 * Math.PI) * 360;
+  // la rueda mide ~15% del largo del auto: los giros calzan con lo que avanza
+  const vueltas = (px) => px / (auto.getBoundingClientRect().width * .149 * Math.PI) * 360;
   const hero = gsap.timeline({ defaults: { ease: 'power3.out' } });
   hero.from('.hero-fondo img', { scale: 1.12, opacity: 0, duration: 1.8, ease: 'power2.out' }, 0)
       .from('#titulo .l span', { yPercent: 110, duration: .8, stagger: .12 }, 0)
       .from('.hero .kicker, .hero p.lead, .hero .cta-row, .datos-hero', { y: 24, opacity: 0, duration: .6, stagger: .08 }, .55)
-      .from(auto, { x: () => -distancia(), duration: 1.7, ease: 'power3.out' }, .15)
-      .from(ruedas, { rotation: () => -giros(), duration: 1.7, ease: 'power3.out' }, .15)
-      .to('#carroceria', { rotation: 2.2, duration: .35, ease: 'power2.out' }, 1.25)
-      .to('#carroceria', { rotation: 0, duration: .6, ease: 'elastic.out(1.2,.4)' }, 1.6)
-      .to('#huella1, #huella2', { scaleX: 1, duration: .9, ease: 'power2.out', stagger: .05 }, .95)
-      .fromTo('#humo1', { opacity: .9, scale: .4, x: 0, y: 0 }, { opacity: 0, scale: 2.4, x: -60, y: -40, duration: 1.3, ease: 'power1.out' }, 1.15)
-      .fromTo('#humo2', { opacity: .7, scale: .3, x: 0, y: 0 }, { opacity: 0, scale: 2, x: -110, y: -20, duration: 1.4, ease: 'power1.out' }, 1.3)
-      .fromTo('#faro', { opacity: 0 }, { opacity: .35, duration: .15, yoyo: true, repeat: 3, ease: 'none' }, 1.9)
-      .set('#faro', { opacity: .18 });
+      .from(auto, { x: () => -distancia(), duration: 2.4, ease: 'power2.out' }, .1)
+      .from(ruedas, { rotation: () => -vueltas(distancia()), duration: 2.4, ease: 'power2.out' }, .1);
+  document.documentElement.classList.remove('anima');
   // al bajar, el auto avanza un poco y la línea de la calle corre
   gsap.to('.hero-fondo img', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
   gsap.to(auto, { x: 90, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
-  gsap.to(ruedas, { rotation: '+=220', ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
+  gsap.to(ruedas, { rotation: () => `+=${vueltas(90)}`, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
   gsap.fromTo('#linea', { backgroundPositionX: 0 }, { backgroundPositionX: -480, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
 
   // Títulos y tarjetas aparecen al entrar
