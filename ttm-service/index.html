@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTM Service | Neumáticos, alineación y frenos en Melipilla</title>
+<meta name="description" content="TTM Service, serviteca en Av. Vicuña Mackenna 609, Melipilla: venta e instalación de neumáticos, balanceo, alineación, frenos y pastillas. Cotiza por medida y reserva tu hora online.">
+<!-- Maqueta de propuesta: no indexar hasta que el cliente la apruebe -->
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="TTM Service · Neumáticos y serviteca en Melipilla">
+<meta property="og:description" content="Cotiza tus neumáticos por medida y reserva tu hora de alineación, balanceo o frenos en línea.">
+<meta name="theme-color" content="#0e1013">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e1013'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23ffc21a' stroke-width='7' stroke-dasharray='5 3'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23ffc21a'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "TTM Service",
+  "telephone": "+56965768092",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Vicuña Mackenna 609",
+    "addressLocality": "Melipilla",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  }
+}
+</script>
+<style>
+:root{
+  --bg:#0e1013;
+  --bg-2:#14171b;
+  --card:#1a1e23;
+  --card-2:#20252b;
+  --line:#2a3038;
+  --txt:#f2f3f5;
+  --mut:#9aa3ad;
+  --yel:#ffc21a;
+  --yel-2:#ffd65c;
+  --rojo:#ff4d2e;
+  --verde:#2bd576;
+  --radius:18px;
+  --sombra:0 30px 60px -30px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--txt);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 16px}
+.icon{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cond{font-family:"Barlow Condensed","Inter",sans-serif;text-transform:uppercase;letter-spacing:.01em}
+.lima{color:var(--yel)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.demo{background:var(--yel);color:#17140a;font-size:13px;text-align:center;padding:7px 16px;font-weight:500}
+.demo b{font-weight:800}
+
+.lector>*,.cotiza>*,.reserva>*,.toca>*,.segui>*,.ubica>*,.pasos>*,.servicios>*{min-width:0}
+.cinta-caja{overflow:hidden;padding:12px 0;margin:-12px 0}
+
+/* Barra superior */
+header.top{position:sticky;top:0;z-index:40;background:rgba(14,16,19,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo svg{width:40px;height:40px}
+.logo-text{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:27px;letter-spacing:.03em;line-height:.9;text-transform:uppercase}
+.logo-text span{color:var(--yel)}
+.logo-text small{display:block;font-family:"Inter",sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;color:var(--mut);margin-top:4px}
+nav.main{display:none;gap:26px;font-weight:600;font-size:15px}
+nav.main a{text-decoration:none;color:#c7ccd2}
+nav.main a:hover{color:var(--yel)}
+.estado{display:none;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.estado i{width:8px;height:8px;border-radius:50%;background:var(--mut)}
+.estado.abierto i{background:var(--verde);box-shadow:0 0 0 0 rgba(43,213,118,.6);animation:late 1.8s infinite}
+.estado.cerrado i{background:var(--rojo)}
+@keyframes late{to{box-shadow:0 0 0 10px rgba(43,213,118,0)}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:12px;padding:14px 22px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .15s ease,border-color .15s ease;white-space:nowrap;font-size:16px;background:none}
+.btn:hover{transform:translateY(-2px)}
+.btn .icon{width:20px;height:20px}
+.btn-yel{background:var(--yel);color:#17140a}
+.btn-yel:hover{background:var(--yel-2)}
+.btn-line{color:var(--txt);border-color:#3a414a}
+.btn-line:hover{border-color:var(--yel);color:var(--yel)}
+.btn-wa{background:#1faa59;color:#fff}
+.btn-wa:hover{background:#178a48}
+.btn-sm{padding:9px 15px;font-size:14px;border-radius:10px}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+
+/* Portada */
+.hero{position:relative;overflow:hidden;display:flex;flex-direction:column;min-height:calc(100svh - 124px);background:radial-gradient(900px 500px at 80% 0%,rgba(255,194,26,.12),transparent 60%),var(--bg)}
+.hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(180deg,#000 30%,transparent 85%)}
+.hero .wrap{position:relative;padding-top:44px;padding-bottom:12px;flex:1}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--yel)}
+.kicker::before{content:"";width:26px;height:3px;background:var(--yel);border-radius:3px}
+.hero h1{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(50px,10.5vw,118px);line-height:.88;margin:16px 0 18px;letter-spacing:-.005em}
+.hero h1 .l{display:block;overflow:hidden;padding-bottom:.04em}
+.hero h1 .l span{display:inline-block}
+.hero h1 em{font-style:italic;color:var(--yel)}
+.hero p.lead{font-size:clamp(17px,2.2vw,20px);color:#c7ccd2;max-width:560px;margin:0 0 26px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+.datos-hero{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:24px;font-size:14px;color:var(--mut);font-weight:600}
+.datos-hero span{display:inline-flex;align-items:center;gap:7px}
+.datos-hero .icon{width:18px;height:18px;color:var(--yel)}
+
+.ruta{position:relative;height:clamp(140px,24vw,300px);flex:none}
+.ruta .asfalto{position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,#191c20,#111316);border-top:2px solid #262a30}
+.ruta .linea{position:absolute;left:0;right:0;bottom:22%;height:6px;background:repeating-linear-gradient(90deg,var(--yel) 0 60px,transparent 60px 120px);opacity:.7}
+.ruta .huella{position:absolute;bottom:13%;right:calc(7% + clamp(62px,12.5vw,180px));height:clamp(8px,1.4vw,14px);width:clamp(140px,34vw,460px);background:linear-gradient(90deg,transparent,rgba(0,0,0,.85) 40%,#050506);border-radius:8px;transform-origin:right center;transform:scaleX(0);filter:blur(1px)}
+.ruta .huella.h2{bottom:calc(13% + clamp(12px,2vw,20px));opacity:.55;width:clamp(100px,26vw,360px)}
+.rueda-hero{position:absolute;right:7%;bottom:6%;width:clamp(124px,25vw,360px);height:auto;filter:drop-shadow(0 18px 18px rgba(0,0,0,.6))}
+.humo{position:absolute;right:calc(8% + clamp(40px,7vw,90px));bottom:10%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(200,205,212,.35),transparent 70%);opacity:0;pointer-events:none}
+
+/* Cinta */
+.cinta{background:var(--yel);color:#17140a;overflow:hidden;white-space:nowrap;padding:12px 0;transform:rotate(-1.2deg) scaleX(1.02);position:relative;z-index:2}
+.cinta .pista{display:inline-flex;gap:34px;animation:cinta 22s linear infinite;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.03em}
+.cinta .pista span{display:inline-flex;align-items:center;gap:34px}
+.cinta .pista span::after{content:"";width:10px;height:10px;background:#17140a;transform:rotate(45deg)}
+@keyframes cinta{to{transform:translateX(-50%)}}
+
+/* Secciones */
+section.sec{padding:84px 0;position:relative}
+.sec-head{max-width:720px;margin-bottom:38px}
+.sec-head h2{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:clamp(38px,6.4vw,66px);line-height:.92;margin:12px 0 14px}
+.sec-head p{color:var(--mut);font-size:17px;margin:0}
+.alt{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+/* Servicios */
+.servicios{display:grid;gap:18px}
+.serv{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s ease,transform .2s ease}
+.serv:hover{border-color:rgba(255,194,26,.5);transform:translateY(-4px)}
+.serv .ilus{height:190px;background:radial-gradient(300px 160px at 50% 100%,rgba(255,194,26,.1),transparent 70%),#121519;border-bottom:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
+.serv .ilus svg{width:100%;height:100%}
+.serv .cuerpo{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1}
+.serv h3{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:29px;line-height:1;margin:0 0 8px}
+.serv p{color:var(--mut);margin:0 0 16px;font-size:15.5px}
+.serv .acciones{margin-top:auto;display:flex;gap:10px;flex-wrap:wrap}
+
+/* Lector de medida */
+.lector{display:grid;gap:28px;align-items:center}
+.codigo{display:flex;flex-wrap:wrap;gap:6px;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(31px,8vw,58px);line-height:1}
+.codigo button{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:6px 12px;cursor:pointer;transition:all .2s ease;color:var(--txt)}
+.codigo button.sep{background:none;border-color:transparent;padding:6px 2px;cursor:default;color:var(--mut)}
+.codigo button.on{background:var(--yel);border-color:var(--yel);color:#17140a;transform:translateY(-4px)}
+.explica{margin-top:20px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--yel);border-radius:14px;padding:18px 20px;min-height:132px}
+.explica b{display:block;font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:26px;color:var(--yel);line-height:1.05;margin-bottom:6px}
+.explica p{margin:0;color:#c7ccd2}
+.lector-svg{background:#121519;border:1px solid var(--line);border-radius:var(--radius);padding:10px}
+.lector-svg svg{width:100%;height:auto}
+.ov{opacity:.12;transition:opacity .35s ease}
+.ov.on{opacity:1}
+.pista-tap{font-size:13px;color:var(--mut);margin-top:12px}
+
+/* Cotizador */
+.cotiza{display:grid;gap:22px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+label.campo{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+select,input[type=text],input[type=tel],input[type=number]{width:100%;background:#111418;border:1.5px solid #343b44;border-radius:12px;padding:13px 12px;font-size:17px;font-weight:600;outline:none;transition:border-color .15s ease}
+select:focus,input:focus{border-color:var(--yel)}
+.grupo{margin-top:18px}
+.grupo > span{display:block;font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid #3a414a;border-radius:999px;padding:9px 15px;font-size:15px;font-weight:600;cursor:pointer;background:none;transition:all .15s ease;user-select:none}
+.chip:hover{border-color:var(--yel)}
+.chip.on{background:var(--yel);border-color:var(--yel);color:#17140a}
+.chip input{display:none}
+.vista{display:grid;place-items:center;text-align:center;background:radial-gradient(260px 200px at 50% 45%,rgba(255,194,26,.12),transparent 70%),#121519}
+.vista svg{width:min(300px,80%);height:auto}
+.medida-grande{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:44px;line-height:1;margin-top:8px}
+.dims{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;color:var(--mut);font-size:14px;margin-top:8px}
+.dims b{color:var(--txt)}
+
+/* Reserva */
+.reserva{display:grid;gap:22px;align-items:start}
+.pasos-res{display:block}
+.paso-res{padding:18px 0;border-bottom:1px solid var(--line)}
+.paso-res:first-child{padding-top:0}
+.paso-res h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:16px}
+.paso-res h3 i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--yel);color:#17140a;display:grid;place-items:center;font-size:14px;font-weight:800}
+.dias{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.dia{flex:none;width:66px;border:1.5px solid #3a414a;border-radius:14px;padding:9px 0;text-align:center;cursor:pointer;background:none;transition:all .15s ease}
+.dia small{display:block;font-size:12px;color:var(--mut);font-weight:700;text-transform:uppercase}
+.dia b{display:block;font-size:22px;line-height:1.1}
+.dia.on{background:var(--yel);border-color:var(--yel);color:#17140a}
+.dia.on small{color:#17140a}
+.horas{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.horas .nota{grid-column:1/-1}
+.hora{border:1.5px solid #3a414a;border-radius:10px;padding:9px 0;text-align:center;font-weight:700;cursor:pointer;background:none;transition:all .15s ease}
+.hora:hover:not([disabled]){border-color:var(--yel)}
+.hora.on{background:var(--yel);border-color:var(--yel);color:#17140a}
+.hora[disabled]{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.form-fila{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+.form-fila .ancho{grid-column:1/-1}
+.resumen{position:relative;overflow:hidden}
+.resumen h3{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:30px;margin:0 0 14px;line-height:1}
+.resumen dl{margin:0 0 18px;display:grid;gap:10px}
+.resumen dl div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed #333a42;padding-bottom:9px}
+.resumen dt{color:var(--mut)}
+.resumen dd{margin:0;font-weight:700;text-align:right}
+.nota{font-size:13px;color:var(--mut);margin:12px 0 0}
+.listo{display:none;text-align:center;padding:10px 0}
+.listo svg{width:96px;height:96px;margin:0 auto 10px}
+.listo h3{font-size:34px}
+.listo p{color:#c7ccd2;margin:0 0 18px}
+
+/* Cuándo me toca */
+.toca{display:grid;gap:22px;align-items:center}
+.km-num{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:clamp(56px,10vw,96px);line-height:1}
+.km-num small{font-size:.4em;color:var(--mut);margin-left:6px}
+input[type=range]{width:100%;accent-color:var(--yel);height:34px}
+.barras{display:grid;gap:16px}
+.barra .top{display:flex;justify-content:space-between;gap:10px;font-weight:700;margin-bottom:7px;font-size:15px}
+.barra .top span:last-child{color:var(--mut);font-weight:600;font-size:14px;text-align:right}
+.barra .riel{height:12px;background:#111418;border-radius:99px;overflow:hidden;border:1px solid #2c323a}
+.barra .lleno{height:100%;width:0;border-radius:99px;background:var(--verde)}
+.barra.toca-ya .top span:last-child{color:var(--rojo)}
+
+/* Seguimiento */
+.segui{display:grid;gap:30px;align-items:center}
+.telefono{width:min(320px,86%);margin:0 auto;border-radius:44px;background:#050607;padding:12px;box-shadow:var(--sombra),0 0 0 2px #2a3038}
+.pantalla{border-radius:34px;background:#101317;padding:22px 18px 26px;min-height:470px;position:relative;overflow:hidden}
+.pantalla .barra-app{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:18px}
+.pantalla h4{margin:0 0 4px;font-family:"Barlow Condensed",sans-serif;font-size:28px;text-transform:uppercase;line-height:1}
+.pantalla .pat{display:inline-block;background:#fff;color:#111;font-weight:800;border-radius:6px;padding:2px 8px;font-size:13px;letter-spacing:.08em;margin-bottom:20px}
+.linea-tiempo{position:relative;display:grid;gap:22px;padding-left:34px}
+.linea-tiempo::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;background:#2a3038;border-radius:3px}
+.linea-tiempo .avance{position:absolute;left:11px;top:6px;width:3px;height:0;background:var(--yel);border-radius:3px}
+.hito{position:relative}
+.hito::before{content:"";position:absolute;left:-30px;top:3px;width:17px;height:17px;border-radius:50%;background:#101317;border:3px solid #3a414a;transition:all .3s ease}
+.hito.hecho::before{background:var(--yel);border-color:var(--yel)}
+.hito b{display:block;font-size:15px}
+.hito small{color:var(--mut);font-size:13px}
+.aviso-wa{position:absolute;left:12px;right:12px;top:12px;background:#1d2a22;border:1px solid #2f5a40;border-radius:16px;padding:10px 12px;font-size:13px;display:flex;gap:10px;align-items:flex-start;opacity:0;transform:translateY(-30px)}
+.aviso-wa .ico{width:30px;height:30px;border-radius:8px;background:#1faa59;display:grid;place-items:center;flex:none}
+.aviso-wa .ico .icon{width:18px;height:18px;color:#fff}
+.lista-check{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:12px}
+.lista-check li{display:flex;gap:10px;align-items:flex-start;color:#c7ccd2}
+.lista-check .icon{color:var(--yel);margin-top:2px}
+
+/* Pasos */
+.pasos{display:grid;gap:18px;position:relative}
+.paso{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;position:relative;z-index:1}
+.paso .n{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:64px;line-height:.9;color:var(--yel)}
+.paso h3{margin:8px 0 6px;font-size:19px}
+.paso p{margin:0;color:var(--mut);font-size:15px}
+.camino{display:none}
+
+/* Preguntas */
+.faq{display:grid;gap:12px;max-width:820px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px}
+.faq summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none;display:flex;justify-content:space-between;gap:12px;font-size:17px}
+.faq summary::after{content:"+";color:var(--yel);font-size:24px;line-height:1;transition:transform .2s ease}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0 0 16px;color:var(--mut)}
+
+/* Ubicación */
+.ubica{display:grid;gap:22px}
+.mapa{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:340px;background:#121519}
+.mapa iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.6) contrast(1.05) brightness(.85)}
+.horario{width:100%;border-collapse:collapse;margin:14px 0 20px}
+.horario td{padding:9px 0;border-bottom:1px dashed #333a42}
+.horario td:last-child{text-align:right;font-weight:700}
+.horario tr.hoy td{color:var(--yel)}
+.contacto-lista{display:grid;gap:12px;margin:0 0 20px}
+.contacto-lista a,.contacto-lista span{display:flex;gap:10px;align-items:center;text-decoration:none;color:#c7ccd2}
+.contacto-lista .icon{color:var(--yel)}
+
+footer{border-top:1px solid var(--line);padding:34px 0 100px;color:var(--mut);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px 30px;justify-content:space-between;align-items:center}
+footer a{color:var(--yel)}
+
+.wa-flota{position:fixed;right:16px;bottom:16px;z-index:50;width:60px;height:60px;border-radius:50%;background:#1faa59;display:grid;place-items:center;box-shadow:0 14px 30px -10px rgba(0,0,0,.7)}
+.wa-flota::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid #1faa59;animation:onda 2s infinite}
+.wa-flota svg{width:30px;height:30px;color:#fff}
+@keyframes onda{from{transform:scale(1);opacity:.8}to{transform:scale(1.6);opacity:0}}
+
+@media (min-width:640px){
+  .servicios{grid-template-columns:repeat(2,1fr)}
+  .pasos{grid-template-columns:repeat(2,1fr)}
+}
+@media (min-width:900px){
+  nav.main{display:flex}
+  .estado{display:inline-flex}
+  .servicios{grid-template-columns:repeat(3,1fr)}
+  .lector{grid-template-columns:1.05fr .95fr}
+  .cotiza{grid-template-columns:1.1fr .9fr}
+  .reserva{grid-template-columns:1.25fr .75fr}
+  .resumen{position:sticky;top:90px}
+  .toca{grid-template-columns:.9fr 1.1fr}
+  .segui{grid-template-columns:1fr 1fr}
+  .pasos{grid-template-columns:repeat(4,1fr)}
+  .camino{display:block;position:absolute;left:0;right:0;top:50%;height:4px;z-index:0}
+  .camino i{display:block;height:100%;width:100%;background:repeating-linear-gradient(90deg,var(--yel) 0 26px,transparent 26px 44px);transform-origin:left center;transform:scaleX(0)}
+  .ubica{grid-template-columns:1.2fr .8fr}
+  .ruta{position:absolute;left:0;right:0;bottom:0}
+  .hero .wrap{padding-top:36px;padding-bottom:calc(clamp(140px,24vw,300px)*.48)}
+  .hero h1{font-size:clamp(50px,7.4vw,104px)}
+}
+@media (max-width:420px){
+  .rueda-hero{right:26%}
+  .ruta .huella{right:calc(26% + 62px)}
+  .humo{right:calc(26% + 40px)}
+  .hero .wrap{padding-top:24px}
+  .hero h1{font-size:46px;margin:12px 0 14px}
+  .hero p.lead{font-size:16.5px;margin-bottom:20px}
+  .hero .cta-row{flex-wrap:nowrap;gap:8px}
+  .hero .cta-row .btn{padding:13px 14px;font-size:15px}
+  .hero .cta-row .btn .icon{display:none}
+  .datos-hero{margin-top:16px}
+  .codigo{gap:4px}
+  .codigo button{padding:4px 8px;border-radius:10px}
+  .campos{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .campos label:last-child{grid-column:1/-1}
+  .form-fila{grid-template-columns:1fr}
+  .btn{padding:13px 18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="g-llanta" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#eef1f4"/><stop offset=".6" stop-color="#aeb5bf"/><stop offset="1" stop-color="#6d747e"/>
+    </radialGradient>
+    <radialGradient id="g-calor" cx="50%" cy="50%" r="50%">
+      <stop offset=".35" stop-color="#ff4d2e" stop-opacity="0"/><stop offset=".7" stop-color="#ff4d2e" stop-opacity=".9"/><stop offset="1" stop-color="#ffb02e" stop-opacity=".95"/>
+    </radialGradient>
+    <path id="p-costado" d="M0,-93 A93,93 0 1,1 -0.1,-93"/>
+  </defs>
+  <symbol id="rueda" viewBox="-110 -110 220 220">
+    <circle r="106" fill="#0b0c0e"/>
+    <circle r="99" fill="none" stroke="#25292f" stroke-width="13" stroke-dasharray="8 5"/>
+    <circle r="88" fill="#17191d"/>
+    <text font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="800" font-size="10.5" letter-spacing="2.2" fill="#ffc21a"><textPath href="#p-costado">TTM SERVICE · MELIPILLA · TTM SERVICE · MELIPILLA ·</textPath></text>
+    <circle r="64" fill="url(#g-llanta)"/>
+    <circle r="57" fill="#2a2e34"/>
+    <g fill="#c8cdd4">
+      <path d="M-8,-55 L8,-55 L5,-15 L-5,-15Z"/>
+      <path d="M-8,-55 L8,-55 L5,-15 L-5,-15Z" transform="rotate(72)"/>
+      <path d="M-8,-55 L8,-55 L5,-15 L-5,-15Z" transform="rotate(144)"/>
+      <path d="M-8,-55 L8,-55 L5,-15 L-5,-15Z" transform="rotate(216)"/>
+      <path d="M-8,-55 L8,-55 L5,-15 L-5,-15Z" transform="rotate(288)"/>
+    </g>
+    <circle r="17" fill="#dfe3e8"/>
+    <g fill="#5b616a"><circle cy="-10" r="2.6"/><circle cy="-10" r="2.6" transform="rotate(72)"/><circle cy="-10" r="2.6" transform="rotate(144)"/><circle cy="-10" r="2.6" transform="rotate(216)"/><circle cy="-10" r="2.6" transform="rotate(288)"/></g>
+    <circle r="5" fill="#ffc21a"/>
+  </symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-ruta" viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8-8-2Z"/></symbol>
+</svg>
+
+<div class="demo">Propuesta de diseño · <b>maqueta de muestra</b>, no es el sitio oficial · horarios y servicios por confirmar</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="TTM Service, inicio">
+      <svg viewBox="-110 -110 220 220" aria-hidden="true"><use href="#rueda" x="-110" y="-110" width="220" height="220"/></svg>
+      <span class="logo-text">TTM <span>Service</span><small>Serviteca · Melipilla</small></span>
+    </a>
+    <nav class="main" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#cotizar">Cotizar neumáticos</a>
+      <a href="#reserva">Reservar hora</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+    <span class="estado" id="estado"><i></i><span>Horario</span></span>
+    <a class="btn btn-yel btn-sm" href="#reserva"><svg class="icon"><use href="#i-cal"/></svg>Reservar</a>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <span class="kicker">Serviteca en Vicuña Mackenna 609</span>
+      <h1 id="titulo">
+        <span class="l"><span>Neumáticos,</span></span>
+        <span class="l"><span>alineación</span></span>
+        <span class="l"><span>y frenos <em>al tiro</em></span></span>
+      </h1>
+      <p class="lead">Cotiza tus neumáticos por medida, reserva tu hora en línea y llega directo a que te atiendan. Sin llamar, sin esperar.</p>
+      <div class="cta-row">
+        <a class="btn btn-yel" href="#cotizar">Cotizar neumáticos <svg class="icon"><use href="#i-flecha"/></svg></a>
+        <a class="btn btn-line" href="#reserva"><svg class="icon"><use href="#i-cal"/></svg>Reservar hora</a>
+      </div>
+      <div class="datos-hero">
+        <span><svg class="icon"><use href="#i-pin"/></svg>Av. Vicuña Mackenna 609, Melipilla</span>
+        <span><svg class="icon"><use href="#i-reloj"/></svg><span id="estado-hero">Lunes a sábado</span></span>
+      </div>
+    </div>
+    <div class="ruta" aria-hidden="true">
+      <div class="asfalto"></div>
+      <div class="linea" id="linea"></div>
+      <div class="huella" id="huella1"></div>
+      <div class="huella h2" id="huella2"></div>
+      <div class="humo" id="humo1"></div>
+      <div class="humo" id="humo2"></div>
+      <svg class="rueda-hero" id="rueda-hero" viewBox="-110 -110 220 220"><use href="#rueda" x="-110" y="-110" width="220" height="220"/></svg>
+    </div>
+  </section>
+
+  <div class="cinta-caja"><div class="cinta" aria-hidden="true">
+    <div class="pista">
+      <span>Neumáticos</span><span>Balanceo</span><span>Alineación</span><span>Frenos</span><span>Pastillas</span><span>Rotación</span><span>Revisión</span>
+      <span>Neumáticos</span><span>Balanceo</span><span>Alineación</span><span>Frenos</span><span>Pastillas</span><span>Rotación</span><span>Revisión</span>
+    </div>
+  </div></div>
+
+  <!-- Servicios -->
+  <section class="sec" id="servicios">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Lo que hacemos</span>
+        <h2>Todo para que tu auto <span class="lima">ruede bien</span></h2>
+        <p>Elige el servicio y cotízalo por WhatsApp o reserva tu hora en un minuto.</p>
+      </div>
+      <div class="servicios">
+        <article class="serv">
+          <div class="ilus" data-anim="neumaticos">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="0" y="150" width="320" height="40" fill="#0f1114"/>
+              <g class="sale"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
+              <g class="entra"><use href="#rueda" x="105" y="40" width="110" height="110"/></g>
+              <g class="brillo" fill="#ffc21a"><path d="M232 46l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M84 70l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Venta e instalación de neumáticos</h3>
+            <p>Te cotizamos la medida de tu auto en distintas marcas y los instalamos el mismo día.</p>
+            <div class="acciones"><a class="btn btn-yel btn-sm" href="#cotizar">Cotizar por medida</a><button class="btn btn-line btn-sm" data-servicio="Instalación de neumáticos">Reservar</button></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="balanceo">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="70" y="150" width="180" height="10" rx="5" fill="#2a3038"/>
+              <rect x="152" y="95" width="16" height="58" fill="#2a3038"/>
+              <g class="eje"><g class="giro"><use href="#rueda" x="105" y="35" width="110" height="110"/></g>
+                <g class="pesos" fill="#ffc21a"><rect x="154" y="41" width="12" height="7" rx="2"/><rect x="154" y="132" width="12" height="7" rx="2"/></g></g>
+              <g class="ok" opacity="0"><circle cx="262" cy="52" r="18" fill="#2bd576"/><path d="M253 52l6 6 11-12" fill="none" stroke="#0e1013" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Balanceo</h3>
+            <p>Si el volante vibra en carretera, es el balanceo. Lo dejamos parejito para que andes suave.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Balanceo">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar un balanceo.">Cotizar</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="alineacion">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="115" y="30" width="90" height="130" rx="34" fill="#20252b" stroke="#3a414a" stroke-width="2"/>
+              <g class="laser" stroke="#ffc21a" stroke-width="2" stroke-dasharray="6 6"><line x1="96" y1="10" x2="96" y2="180"/><line x1="224" y1="10" x2="224" y2="180"/></g>
+              <g fill="#0b0c0e" stroke="#4a515b" stroke-width="2">
+                <rect class="rd-i" x="88" y="44" width="16" height="36" rx="5"/>
+                <rect class="rd-d" x="216" y="44" width="16" height="36" rx="5"/>
+                <rect x="88" y="112" width="16" height="36" rx="5"/><rect x="216" y="112" width="16" height="36" rx="5"/>
+              </g>
+              <g font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="22" fill="#ffc21a"><text class="grados" x="248" y="68">3,5°</text></g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Alineación</h3>
+            <p>¿El auto se tira para un lado o el neumático se gasta disparejo? Lo alineamos y cuidas tus neumáticos.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Alineación y balanceo">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar una alineación.">Cotizar</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="frenos">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <g class="disco">
+                <circle cx="160" cy="95" r="70" fill="#8d949e"/>
+                <circle class="calor" cx="160" cy="95" r="70" fill="url(#g-calor)" opacity="0"/>
+                <circle cx="160" cy="95" r="70" fill="none" stroke="#5d646d" stroke-width="2"/>
+                <g fill="#5d646d"><circle cx="160" cy="45" r="4"/><circle cx="210" cy="95" r="4"/><circle cx="160" cy="145" r="4"/><circle cx="110" cy="95" r="4"/><circle cx="195" cy="60" r="4"/><circle cx="195" cy="130" r="4"/><circle cx="125" cy="130" r="4"/><circle cx="125" cy="60" r="4"/></g>
+                <circle cx="160" cy="95" r="26" fill="#3a4049"/><circle cx="160" cy="95" r="8" fill="#ffc21a"/>
+              </g>
+              <rect class="pinza" x="198" y="40" width="40" height="70" rx="12" fill="#ffc21a"/>
+              <text x="207" y="83" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="16" fill="#17140a">TTM</text>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Frenos y pastillas</h3>
+            <p>Si chillan o el pedal está largo, revisamos discos y pastillas y te decimos qué cambiar, sin sorpresas.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Frenos y pastillas">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero cotizar un cambio de pastillas de freno.">Cotizar</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="rotacion">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="120" y="25" width="80" height="140" rx="30" fill="#20252b" stroke="#3a414a" stroke-width="2"/>
+              <g stroke="#ffc21a" stroke-width="2" fill="none" stroke-dasharray="5 5" opacity=".6"><path d="M104 62 L216 128"/><path d="M216 62 L104 128"/></g>
+              <g class="r4">
+                <g class="w a"><use href="#rueda" x="82" y="40" width="44" height="44"/></g>
+                <g class="w b"><use href="#rueda" x="194" y="40" width="44" height="44"/></g>
+                <g class="w c"><use href="#rueda" x="82" y="106" width="44" height="44"/></g>
+                <g class="w d"><use href="#rueda" x="194" y="106" width="44" height="44"/></g>
+              </g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Rotación de neumáticos</h3>
+            <p>Cambiamos los neumáticos de posición para que se gasten parejo y te duren más kilómetros.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Rotación de neumáticos">Reservar hora</button><a class="btn btn-line btn-sm" href="#toca">¿Me toca?</a></div>
+          </div>
+        </article>
+        <article class="serv">
+          <div class="ilus" data-anim="revision">
+            <svg viewBox="0 0 320 190" aria-hidden="true">
+              <rect x="80" y="22" width="160" height="146" rx="16" fill="#20252b" stroke="#3a414a" stroke-width="2"/>
+              <g font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#c7ccd2">
+                <text x="128" y="58">Neumáticos</text><text x="128" y="88">Frenos</text><text x="128" y="118">Suspensión</text><text x="128" y="148">Luces</text>
+              </g>
+              <g fill="none" stroke="#3a414a" stroke-width="2"><rect x="100" y="45" width="18" height="18" rx="5"/><rect x="100" y="75" width="18" height="18" rx="5"/><rect x="100" y="105" width="18" height="18" rx="5"/><rect x="100" y="135" width="18" height="18" rx="5"/></g>
+              <g class="ticks" fill="none" stroke="#ffc21a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M103 54l4 4 8-9" pathLength="1"/><path d="M103 84l4 4 8-9" pathLength="1"/><path d="M103 114l4 4 8-9" pathLength="1"/><path d="M103 144l4 4 8-9" pathLength="1"/>
+              </g>
+            </svg>
+          </div>
+          <div class="cuerpo">
+            <h3>Revisión antes de viajar</h3>
+            <p>Neumáticos, frenos, suspensión y luces revisados antes de salir a carretera, para que viajes tranquilo.</p>
+            <div class="acciones"><button class="btn btn-yel btn-sm" data-servicio="Revisión general">Reservar hora</button><a class="btn btn-line btn-sm" data-wa="Hola TTM Service, quiero agendar una revisión antes de viajar.">Consultar</a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lector de medida -->
+  <section class="sec alt" id="medida">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">¿No sabes tu medida?</span>
+        <h2>Lee tu neumático <span class="lima">en 10 segundos</span></h2>
+        <p>La medida está escrita en el costado de tu neumático. Toca cada parte y te explicamos qué significa.</p>
+      </div>
+      <div class="lector">
+        <div>
+          <div class="codigo" id="codigo" role="group" aria-label="Partes de la medida">
+            <button data-k="ancho">205</button><button class="sep" tabindex="-1" aria-hidden="true">/</button><button data-k="perfil">55</button><button data-k="radial">R</button><button data-k="aro">16</button><button data-k="carga">91</button><button data-k="vel">V</button>
+          </div>
+          <div class="explica" aria-live="polite"><b id="ex-t">Ancho: 205 mm</b><p id="ex-p">Es el ancho del neumático de lado a lado, en milímetros.</p></div>
+          <p class="pista-tap">Así se ve en el costado de tu neumático: <b>205/55 R16 91V</b>. ¿Ya la tienes? <a href="#cotizar" class="lima">Cotízala acá</a>.</p>
+        </div>
+        <div class="lector-svg">
+          <svg viewBox="0 0 420 300" aria-hidden="true">
+            <!-- vista lateral -->
+            <circle cx="150" cy="155" r="125" fill="#0b0c0e"/>
+            <circle cx="150" cy="155" r="118" fill="none" stroke="#25292f" stroke-width="12" stroke-dasharray="9 6"/>
+            <circle cx="150" cy="155" r="104" fill="#17191d"/>
+            <text font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="20" fill="#e9ecef" letter-spacing="1"><textPath href="#p-lector">205/55 R16 91V</textPath></text>
+            <path id="p-lector" d="M68,135 A85,85 0 0,1 232,135" fill="none"/>
+            <circle cx="150" cy="155" r="68" fill="url(#g-llanta)"/>
+            <circle cx="150" cy="155" r="60" fill="#2a2e34"/>
+            <circle cx="150" cy="155" r="18" fill="#dfe3e8"/>
+            <!-- vista frontal -->
+            <rect x="322" y="32" width="58" height="246" rx="22" fill="#0b0c0e" stroke="#25292f" stroke-width="3"/>
+            <g stroke="#25292f" stroke-width="4"><line x1="336" y1="40" x2="336" y2="270"/><line x1="351" y1="40" x2="351" y2="270"/><line x1="366" y1="40" x2="366" y2="270"/></g>
+            <!-- capas -->
+            <g class="ov" data-k="ancho" stroke="#ffc21a" stroke-width="3" fill="#ffc21a">
+              <line x1="322" y1="18" x2="380" y2="18"/><path d="M322 18l8-5v10z"/><path d="M380 18l-8-5v10z"/>
+              <text x="331" y="12" font-family="Barlow Condensed" font-weight="800" font-size="16" stroke="none">205 mm</text>
+            </g>
+            <g class="ov" data-k="perfil" stroke="#ffc21a" stroke-width="3" fill="#ffc21a">
+              <line x1="150" y1="87" x2="150" y2="31"/><path d="M150 31l-5 8h10z"/><path d="M150 87l-5-8h10z"/>
+              <text x="158" y="64" font-family="Barlow Condensed" font-weight="800" font-size="16" stroke="none">113 mm</text>
+            </g>
+            <g class="ov" data-k="radial" stroke="#ffc21a" stroke-width="2.5" fill="none">
+              <line x1="150" y1="87" x2="150" y2="31"/><line x1="198" y1="107" x2="238" y2="67"/><line x1="218" y1="155" x2="274" y2="155"/><line x1="198" y1="203" x2="238" y2="243"/><line x1="150" y1="223" x2="150" y2="279"/><line x1="102" y1="203" x2="62" y2="243"/><line x1="82" y1="155" x2="26" y2="155"/><line x1="102" y1="107" x2="62" y2="67"/>
+            </g>
+            <g class="ov" data-k="aro" stroke="#ffc21a" stroke-width="3" fill="#ffc21a">
+              <line x1="82" y1="155" x2="218" y2="155"/><path d="M82 155l8-5v10z"/><path d="M218 155l-8-5v10z"/>
+              <rect x="122" y="164" width="56" height="24" rx="6" stroke="none"/>
+              <text x="129" y="182" font-family="Barlow Condensed" font-weight="800" font-size="17" fill="#17140a" stroke="none">16 pulg</text>
+            </g>
+            <g class="ov" data-k="carga" fill="#ffc21a">
+              <rect x="112" y="0" width="76" height="26" rx="6"/>
+              <text x="122" y="19" font-family="Barlow Condensed" font-weight="800" font-size="17" fill="#17140a">615 kg ↓</text>
+            </g>
+            <g class="ov" data-k="vel" fill="none" stroke="#ffc21a" stroke-width="3">
+              <path d="M240 280 A34 34 0 0 1 308 280" />
+              <line x1="274" y1="280" x2="296" y2="258" stroke-linecap="round"/>
+              <text x="244" y="298" font-family="Barlow Condensed" font-weight="800" font-size="15" fill="#ffc21a" stroke="none">240 km/h</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cotizador -->
+  <section class="sec" id="cotizar">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Cotizador</span>
+        <h2>Cotiza tus neumáticos <span class="lima">por medida</span></h2>
+        <p>Elige tu medida y lo que necesitas. Te llega la cotización por WhatsApp con opciones de marcas y precios.</p>
+      </div>
+      <div class="cotiza">
+        <form class="panel" id="f-cotiza">
+          <div class="campos">
+            <label class="campo">Ancho<select id="c-ancho"></select></label>
+            <label class="campo">Perfil<select id="c-perfil"></select></label>
+            <label class="campo">Aro<select id="c-aro"></select></label>
+          </div>
+          <div class="grupo">
+            <span>¿Cuántos?</span>
+            <div class="chips" id="c-cant">
+              <button type="button" class="chip" data-v="1">1</button><button type="button" class="chip on" data-v="2">2</button><button type="button" class="chip" data-v="4">4</button>
+            </div>
+          </div>
+          <div class="grupo">
+            <span>Prefiero</span>
+            <div class="chips" id="c-pref">
+              <button type="button" class="chip" data-v="la opción más económica">Lo más económico</button><button type="button" class="chip on" data-v="buena relación precio/calidad">Precio/calidad</button><button type="button" class="chip" data-v="una marca premium">Marca premium</button>
+            </div>
+          </div>
+          <div class="grupo">
+            <span>Incluir</span>
+            <div class="chips" id="c-extra">
+              <label class="chip on"><input type="checkbox" value="instalación" checked>Instalación</label>
+              <label class="chip on"><input type="checkbox" value="balanceo" checked>Balanceo</label>
+              <label class="chip"><input type="checkbox" value="alineación">Alineación</label>
+            </div>
+          </div>
+          <div class="grupo">
+            <label class="campo">Tu auto (opcional)<input type="text" id="c-auto" placeholder="Ej: Toyota Yaris 2018" autocomplete="off"></label>
+          </div>
+          <div class="cta-row" style="margin-top:20px">
+            <a class="btn btn-wa" id="c-enviar" target="_blank" rel="noopener"><svg class="icon"><use href="#i-wa"/></svg>Pedir cotización por WhatsApp</a>
+          </div>
+        </form>
+        <div class="panel vista">
+          <div>
+            <svg viewBox="-150 -150 300 300" aria-hidden="true">
+              <circle id="v-ext" r="130" fill="#0b0c0e"/>
+              <circle id="v-banda" r="123" fill="none" stroke="#25292f" stroke-width="12" stroke-dasharray="9 6"/>
+              <circle id="v-cost" r="110" fill="#17191d"/>
+              <circle id="v-llanta" r="80" fill="url(#g-llanta)"/>
+              <circle id="v-centro" r="72" fill="#2a2e34"/>
+              <circle r="20" fill="#dfe3e8"/><circle r="6" fill="#ffc21a"/>
+            </svg>
+            <div class="medida-grande" id="v-medida">205/55 R16</div>
+            <div class="dims" id="v-dims"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reserva -->
+  <section class="sec alt" id="reserva">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Reserva online</span>
+        <h2>Reserva tu hora <span class="lima">y llega directo</span></h2>
+        <p>Elige el servicio, el día y la hora. Te esperamos con todo listo.</p>
+      </div>
+      <div class="reserva">
+        <div class="panel pasos-res">
+          <div class="paso-res">
+            <h3><i>1</i>¿Qué necesitas?</h3>
+            <div class="chips" id="r-serv">
+              <button type="button" class="chip">Instalación de neumáticos</button>
+              <button type="button" class="chip">Balanceo</button>
+              <button type="button" class="chip">Alineación y balanceo</button>
+              <button type="button" class="chip">Frenos y pastillas</button>
+              <button type="button" class="chip">Rotación de neumáticos</button>
+              <button type="button" class="chip">Revisión general</button>
+            </div>
+          </div>
+          <div class="paso-res">
+            <h3><i>2</i>Elige el día</h3>
+            <div class="dias" id="r-dias"></div>
+          </div>
+          <div class="paso-res">
+            <h3><i>3</i>Elige la hora</h3>
+            <div class="horas" id="r-horas"><p class="nota" style="margin:0">Primero elige un día.</p></div>
+          </div>
+          <div class="paso-res">
+            <h3><i>4</i>Tus datos</h3>
+            <div class="form-fila">
+              <label class="campo">Nombre<input type="text" id="r-nombre" autocomplete="name" placeholder="Tu nombre"></label>
+              <label class="campo">Patente<input type="text" id="r-patente" placeholder="Ej: KXJT-45" autocomplete="off" style="text-transform:uppercase"></label>
+              <label class="campo ancho">Teléfono<input type="tel" id="r-tel" autocomplete="tel" placeholder="+56 9 1234 5678"></label>
+            </div>
+          </div>
+        </div>
+        <div class="panel resumen" id="resumen">
+          <div id="res-form">
+            <h3>Tu reserva</h3>
+            <dl>
+              <div><dt>Servicio</dt><dd id="s-serv">—</dd></div>
+              <div><dt>Día</dt><dd id="s-dia">—</dd></div>
+              <div><dt>Hora</dt><dd id="s-hora">—</dd></div>
+              <div><dt>Nombre</dt><dd id="s-nombre">—</dd></div>
+              <div><dt>Patente</dt><dd id="s-patente">—</dd></div>
+            </dl>
+            <button class="btn btn-yel" id="r-confirmar" style="width:100%" disabled><svg class="icon"><use href="#i-check"/></svg>Reservar mi hora</button>
+            <p class="nota" id="r-falta">Completa el servicio, el día, la hora y tu nombre.</p>
+          </div>
+          <div class="listo" id="res-listo">
+            <svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="44" fill="none" stroke="#2bd576" stroke-width="6" pathLength="1" id="ok-c"/><path d="M28 50l13 13 27-29" fill="none" stroke="#2bd576" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1" id="ok-p"/></svg>
+            <h3 class="cond">¡Listo, <span id="l-nombre"></span>!</h3>
+            <p id="l-texto"></p>
+            <a class="btn btn-wa" id="l-wa" target="_blank" rel="noopener" style="width:100%"><svg class="icon"><use href="#i-wa"/></svg>Enviar a TTM por WhatsApp</a>
+            <p class="nota">Te recordamos tu hora por WhatsApp el día antes.</p>
+            <button class="btn btn-line btn-sm" id="l-otra" style="margin-top:12px">Hacer otra reserva</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cuándo me toca -->
+  <section class="sec" id="toca">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Calculadora</span>
+        <h2>¿Cuándo me toca <span class="lima">pasar por el taller?</span></h2>
+        <p>Mueve la barra con los kilómetros que llevas desde tu última visita y te decimos qué le toca a tu auto.</p>
+      </div>
+      <div class="toca">
+        <div class="panel">
+          <label for="km" class="campo" style="margin-bottom:6px">Km desde tu última mantención</label>
+          <div class="km-num"><span id="km-v">8.000</span><small>km</small></div>
+          <input type="range" id="km" min="0" max="25000" step="500" value="8000">
+          <div class="cta-row" style="margin-top:14px"><button class="btn btn-yel" id="km-agendar"><svg class="icon"><use href="#i-cal"/></svg>Agendar lo que me toca</button></div>
+          <p class="nota">Intervalos de referencia. Revisa también el manual de tu auto.</p>
+        </div>
+        <div class="barras" id="barras"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seguimiento -->
+  <section class="sec alt" id="seguimiento">
+    <div class="wrap segui">
+      <div class="revela">
+        <span class="kicker">Nuevo</span>
+        <div class="sec-head" style="margin-bottom:0">
+          <h2>Sigue tu auto <span class="lima">desde el celular</span></h2>
+          <p>Deja tu auto y te avisamos por WhatsApp en cada paso: cuando lo recibimos, qué encontramos y cuando está listo para retirar.</p>
+        </div>
+        <ul class="lista-check">
+          <li><svg class="icon"><use href="#i-check"/></svg>Presupuesto claro antes de cualquier trabajo extra.</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Fotos de lo que cambiamos, si las quieres.</li>
+          <li><svg class="icon"><use href="#i-check"/></svg>Aviso automático cuando tu auto está listo.</li>
+        </ul>
+      </div>
+      <div class="telefono">
+        <div class="pantalla">
+          <div class="aviso-wa" id="aviso"><span class="ico"><svg class="icon"><use href="#i-wa"/></svg></span><span><b>TTM Service</b><br><span id="aviso-t">Tu auto está listo para retirar 🚗</span></span></div>
+          <div class="barra-app"><span>9:41</span><span>TTM Service</span></div>
+          <h4>Tu auto</h4>
+          <span class="pat">KXJT·45</span>
+          <div class="linea-tiempo" id="lt">
+            <span class="avance" id="lt-avance"></span>
+            <div class="hito"><b>Recibido</b><small>09:05 · Alineación y balanceo</small></div>
+            <div class="hito"><b>En revisión</b><small>09:20 · Revisando dirección</small></div>
+            <div class="hito"><b>Trabajando</b><small>09:45 · Alineando y balanceando</small></div>
+            <div class="hito"><b>Listo para retirar</b><small>10:15 · ¡Te esperamos!</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section class="sec" id="como">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Así de simple</span>
+        <h2>De la cotización <span class="lima">a la carretera</span></h2>
+      </div>
+      <div class="pasos" id="pasos">
+        <div class="camino"><i id="camino"></i></div>
+        <div class="paso"><div class="n">01</div><h3>Cotizas</h3><p>Por medida, desde el celular, en un minuto.</p></div>
+        <div class="paso"><div class="n">02</div><h3>Reservas</h3><p>Eliges el día y la hora que te acomoda.</p></div>
+        <div class="paso"><div class="n">03</div><h3>Llegas</h3><p>Te esperamos con tu hora y tus neumáticos listos.</p></div>
+        <div class="paso"><div class="n">04</div><h3>Sales seguro</h3><p>Con todo revisado y el trabajo explicado.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas -->
+  <section class="sec alt" id="preguntas">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Preguntas frecuentes</span>
+        <h2>Lo que más <span class="lima">nos preguntan</span></h2>
+      </div>
+      <div class="faq">
+        <details><summary>¿Tengo que reservar hora?</summary><p>No es obligatorio, puedes llegar directo. Con hora reservada te atendemos sin esperar.</p></details>
+        <details><summary>¿Qué marcas de neumáticos tienen?</summary><p>Trabajamos con distintas marcas y rangos de precio. Cotiza tu medida y te mandamos las opciones disponibles.</p></details>
+        <details><summary>¿Cada cuánto tengo que alinear y balancear?</summary><p>Como referencia, cada 10.000 km, cuando cambias neumáticos o si el auto se tira para un lado o el volante vibra.</p></details>
+        <details><summary>¿Cómo sé si tengo que cambiar las pastillas?</summary><p>Si los frenos chillan, el pedal se siente largo o el auto demora más en frenar. Pasa y te las revisamos.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ubicación -->
+  <section class="sec" id="ubicacion">
+    <div class="wrap">
+      <div class="sec-head revela">
+        <span class="kicker">Dónde estamos</span>
+        <h2>En plena <span class="lima">Vicuña Mackenna</span></h2>
+      </div>
+      <div class="ubica">
+        <div class="mapa">
+          <iframe title="Mapa de TTM Service" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Av.+Vicu%C3%B1a+Mackenna+609,+Melipilla,+Chile&output=embed"></iframe>
+        </div>
+        <div class="panel">
+          <div class="contacto-lista">
+            <span><svg class="icon"><use href="#i-pin"/></svg>Av. Vicuña Mackenna 609, Melipilla</span>
+            <a href="tel:+56965768092"><svg class="icon"><use href="#i-tel"/></svg>+56 9 6576 8092</a>
+            <a href="tel:+56228324191"><svg class="icon"><use href="#i-tel"/></svg>(2) 2832 4191</a>
+          </div>
+          <table class="horario" id="horario">
+            <tr data-d="1"><td>Lunes a viernes</td><td>9:00 – 18:30</td></tr>
+            <tr data-d="6"><td>Sábado</td><td>9:00 – 14:00</td></tr>
+            <tr data-d="0"><td>Domingo</td><td>Cerrado</td></tr>
+          </table>
+          <div class="cta-row">
+            <a class="btn btn-yel" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=Av.+Vicu%C3%B1a+Mackenna+609,+Melipilla,+Chile"><svg class="icon"><use href="#i-ruta"/></svg>Cómo llegar</a>
+            <a class="btn btn-wa" data-wa="Hola TTM Service, tengo una consulta."><svg class="icon"><use href="#i-wa"/></svg>WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b style="color:var(--txt)">TTM Service</b> · Av. Vicuña Mackenna 609, Melipilla</span>
+    <span>Maqueta de propuesta hecha por <a href="https://stpyme.cl" target="_blank" rel="noopener">STPyme</a></span>
+  </div>
+</footer>
+
+<a class="wa-flota" data-wa="Hola TTM Service, tengo una consulta." aria-label="Escríbenos por WhatsApp"><svg><use href="#i-wa"/></svg></a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  const WA = '56965768092';
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const wa = (texto) => `https://wa.me/${WA}?text=${encodeURIComponent(texto)}`;
+  const miles = (n) => n.toLocaleString('es-CL');
+  const reducir = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hayGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+
+  $$('[data-wa]').forEach((a) => { a.href = wa(a.dataset.wa); a.target = '_blank'; a.rel = 'noopener'; });
+
+  /* ---------- Abierto / cerrado (hora de Chile) ---------- */
+  const HORARIO = { 1: [9, 18.5], 2: [9, 18.5], 3: [9, 18.5], 4: [9, 18.5], 5: [9, 18.5], 6: [9, 14], 0: null };
+  function ahoraChile() {
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Santiago', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+    const dias = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    return { d: dias[p.weekday], h: (+p.hour % 24) + (+p.minute) / 60 };
+  }
+  const fmtH = (h) => `${Math.floor(h)}:${h % 1 ? '30' : '00'}`;
+  (() => {
+    const { d, h } = ahoraChile();
+    const hoy = HORARIO[d];
+    const abierto = hoy && h >= hoy[0] && h < hoy[1];
+    const est = $('#estado');
+    est.classList.add(abierto ? 'abierto' : 'cerrado');
+    est.querySelector('span').textContent = abierto ? `Abierto · cierra ${fmtH(hoy[1])}` : 'Cerrado ahora';
+    $('#estado-hero').textContent = abierto ? `Abierto ahora · hasta las ${fmtH(hoy[1])}` : 'Cerrado ahora · lunes a sábado desde las 9:00';
+    $$('#horario tr').forEach((tr) => {
+      const dd = +tr.dataset.d;
+      if (dd === d || (dd === 1 && d >= 1 && d <= 5)) tr.classList.add('hoy');
+    });
+  })();
+
+  /* ---------- Lector de medida ---------- */
+  const EXPLICA = {
+    ancho: ['Ancho: 205 mm', 'Es el ancho del neumático de lado a lado, en milímetros.'],
+    perfil: ['Perfil: 55 %', 'Es el alto del costado: el 55 % del ancho, unos 113 mm. Mientras más bajo, más deportivo y más firme.'],
+    radial: ['R: radial', 'Indica cómo está construido por dentro. Hoy casi todos los neumáticos de auto son radiales.'],
+    aro: ['Aro: 16 pulgadas', 'Es el diámetro de la llanta donde va montado el neumático. Tiene que coincidir con tu llanta.'],
+    carga: ['Índice de carga: 91', 'Cada neumático aguanta hasta 615 kg. No conviene poner uno con un índice menor al original.'],
+    vel: ['Velocidad: V', 'Está hecho para andar de forma segura hasta 240 km/h.'],
+  };
+  const botones = $$('#codigo button[data-k]');
+  let auto = true, idx = 0, timerLector;
+  function mostrar(k) {
+    botones.forEach((b) => b.classList.toggle('on', b.dataset.k === k));
+    $$('.ov').forEach((g) => g.classList.toggle('on', g.dataset.k === k));
+    $('#ex-t').textContent = EXPLICA[k][0];
+    $('#ex-p').textContent = EXPLICA[k][1];
+    if (hayGsap && !reducir) gsap.fromTo('.explica', { y: 10, opacity: .4 }, { y: 0, opacity: 1, duration: .35, ease: 'power2.out' });
+  }
+  botones.forEach((b) => b.addEventListener('click', () => { auto = false; clearInterval(timerLector); mostrar(b.dataset.k); }));
+  mostrar('ancho');
+  const ciclo = () => { if (!auto) return; idx = (idx + 1) % botones.length; mostrar(botones[idx].dataset.k); };
+  if (!reducir) {
+    const obs = new IntersectionObserver(([e]) => {
+      clearInterval(timerLector);
+      if (e.isIntersecting && auto) timerLector = setInterval(ciclo, 2600);
+    }, { threshold: .4 });
+    obs.observe($('#medida'));
+  }
+
+  /* ---------- Cotizador ---------- */
+  const rango = (a, b, p) => Array.from({ length: Math.floor((b - a) / p) + 1 }, (_, i) => a + i * p);
+  const llenar = (sel, vals, def) => { sel.innerHTML = vals.map((v) => `<option${v === def ? ' selected' : ''}>${v}</option>`).join(''); };
+  llenar($('#c-ancho'), rango(155, 285, 10), 205);
+  llenar($('#c-perfil'), rango(30, 80, 5), 55);
+  llenar($('#c-aro'), rango(13, 21, 1), 16);
+  function elegirUno(cont) {
+    cont.addEventListener('click', (e) => {
+      const b = e.target.closest('.chip'); if (!b) return;
+      $$('.chip', cont).forEach((c) => c.classList.toggle('on', c === b));
+      cotizar();
+    });
+  }
+  elegirUno($('#c-cant')); elegirUno($('#c-pref'));
+  $$('#c-extra input').forEach((i) => i.addEventListener('change', () => { i.parentElement.classList.toggle('on', i.checked); cotizar(); }));
+  ['#c-ancho', '#c-perfil', '#c-aro'].forEach((s) => $(s).addEventListener('change', cotizar));
+  $('#c-auto').addEventListener('input', cotizar);
+
+  function cotizar() {
+    const an = +$('#c-ancho').value, pe = +$('#c-perfil').value, aro = +$('#c-aro').value;
+    const cant = $('#c-cant .on').dataset.v, pref = $('#c-pref .on').dataset.v;
+    const extras = $$('#c-extra input:checked').map((i) => i.value);
+    const autoTxt = $('#c-auto').value.trim();
+    const costado = Math.round(an * pe / 100), llantaMm = Math.round(aro * 25.4), total = llantaMm + 2 * costado;
+    const medida = `${an}/${pe} R${aro}`;
+    $('#v-medida').textContent = medida;
+    $('#v-dims').innerHTML = `<span>Costado <b>${costado} mm</b></span><span>Llanta <b>${llantaMm} mm</b></span><span>Diámetro total <b>${total} mm</b></span>`;
+    // dibujo a escala: el diámetro más grande posible (~860 mm) ocupa todo el círculo
+    const k = 140 / 430, rExt = total / 2 * k, rLl = llantaMm / 2 * k;
+    const radios = { '#v-ext': rExt, '#v-banda': rExt - 6, '#v-cost': rExt - 18, '#v-llanta': rLl, '#v-centro': rLl - 7 };
+    Object.entries(radios).forEach(([s, r]) => {
+      if (hayGsap && !reducir) gsap.to(s, { attr: { r }, duration: .6, ease: 'back.out(1.6)' });
+      else $(s).setAttribute('r', r);
+    });
+    let msg = `Hola TTM Service 👋 Quiero cotizar ${cant} neumático${cant === '1' ? '' : 's'} ${medida}, ${pref}.`;
+    if (extras.length) msg += ` Con ${extras.join(', ').replace(/, ([^,]*)$/, ' y $1')}.`;
+    if (autoTxt) msg += ` Mi auto es un ${autoTxt}.`;
+    $('#c-enviar').href = wa(msg);
+  }
+  cotizar();
+
+  /* ---------- Reserva ---------- */
+  const DIAS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const DIAS_LARGOS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  const res = { serv: null, dia: null, hora: null };
+  const servCont = $('#r-serv');
+  function elegirServicio(nombre) {
+    $$('.chip', servCont).forEach((c) => c.classList.toggle('on', c.textContent === nombre));
+    res.serv = nombre; resumen();
+  }
+  servCont.addEventListener('click', (e) => { const b = e.target.closest('.chip'); if (b) elegirServicio(b.textContent); });
+  $$('[data-servicio]').forEach((b) => b.addEventListener('click', () => {
+    elegirServicio(b.dataset.servicio);
+    $('#reserva').scrollIntoView({ behavior: reducir ? 'auto' : 'smooth' });
+  }));
+
+  const diasCont = $('#r-dias');
+  const hoy = new Date();
+  const fechas = [];
+  for (let i = 0; fechas.length < 10; i++) {
+    const f = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + i);
+    if (f.getDay() !== 0) fechas.push(f);
+  }
+  diasCont.innerHTML = fechas.map((f, i) => `<button type="button" class="dia" data-i="${i}"><small>${i === 0 && f.getDay() === hoy.getDay() ? 'Hoy' : DIAS[f.getDay()]}</small><b>${f.getDate()}</b></button>`).join('');
+  diasCont.addEventListener('click', (e) => {
+    const b = e.target.closest('.dia'); if (!b) return;
+    $$('.dia', diasCont).forEach((d) => d.classList.toggle('on', d === b));
+    res.dia = fechas[+b.dataset.i]; res.hora = null;
+    pintarHoras(); resumen();
+  });
+  // horas ocupadas de ejemplo, siempre las mismas para el mismo día
+  const ocupada = (f, h) => ((f.getDate() * 7 + f.getMonth() * 3 + h * 5) % 9) < 3;
+  function pintarHoras() {
+    const f = res.dia, cierre = f.getDay() === 6 ? 13.5 : 17.5;
+    const esHoy = f.toDateString() === hoy.toDateString();
+    const ahora = hoy.getHours() + hoy.getMinutes() / 60;
+    const horas = [];
+    for (let h = 9; h <= cierre; h += .5) horas.push(h);
+    $('#r-horas').innerHTML = horas.map((h) => {
+      const no = ocupada(f, h * 2) || (esHoy && h <= ahora + .5);
+      return `<button type="button" class="hora" data-h="${h}" ${no ? 'disabled' : ''}>${fmtH(h)}</button>`;
+    }).join('');
+    if (hayGsap && !reducir) gsap.from('#r-horas .hora', { y: 12, opacity: 0, duration: .3, stagger: .02, ease: 'power2.out' });
+  }
+  $('#r-horas').addEventListener('click', (e) => {
+    const b = e.target.closest('.hora'); if (!b || b.disabled) return;
+    $$('.hora', $('#r-horas')).forEach((x) => x.classList.toggle('on', x === b));
+    res.hora = +b.dataset.h; resumen();
+  });
+  ['#r-nombre', '#r-patente', '#r-tel'].forEach((s) => $(s).addEventListener('input', resumen));
+  const fechaLarga = (f) => `${DIAS_LARGOS[f.getDay()]} ${f.getDate()} de ${MESES[f.getMonth()]}`;
+  function resumen() {
+    const nombre = $('#r-nombre').value.trim(), patente = $('#r-patente').value.trim().toUpperCase();
+    $('#s-serv').textContent = res.serv || '—';
+    $('#s-dia').textContent = res.dia ? fechaLarga(res.dia) : '—';
+    $('#s-hora').textContent = res.hora != null ? fmtH(res.hora) : '—';
+    $('#s-nombre').textContent = nombre || '—';
+    $('#s-patente').textContent = patente || '—';
+    const ok = res.serv && res.dia && res.hora != null && nombre;
+    $('#r-confirmar').disabled = !ok;
+    $('#r-falta').style.display = ok ? 'none' : '';
+  }
+  $('#r-confirmar').addEventListener('click', () => {
+    const nombre = $('#r-nombre').value.trim(), patente = $('#r-patente').value.trim().toUpperCase(), tel = $('#r-tel').value.trim();
+    const cuando = `el ${fechaLarga(res.dia)} a las ${fmtH(res.hora)}`;
+    $('#l-nombre').textContent = nombre.split(' ')[0];
+    $('#l-texto').textContent = `Tu hora para ${res.serv.toLowerCase()} quedó ${cuando}. Te esperamos en Av. Vicuña Mackenna 609.`;
+    let msg = `Hola TTM Service 👋 Reservé una hora en la web: ${res.serv}, ${cuando}. Nombre: ${nombre}.`;
+    if (patente) msg += ` Patente: ${patente}.`;
+    if (tel) msg += ` Teléfono: ${tel}.`;
+    $('#l-wa').href = wa(msg);
+    $('#res-form').style.display = 'none';
+    $('#res-listo').style.display = 'block';
+    if (hayGsap && !reducir) {
+      gsap.timeline()
+        .from('#res-listo', { scale: .9, opacity: 0, duration: .35, ease: 'back.out(2)' })
+        .fromTo('#ok-c', { attr: { 'stroke-dasharray': '0 1' } }, { attr: { 'stroke-dasharray': '1 0' }, duration: .5, ease: 'power2.out' }, '<.1')
+        .fromTo('#ok-p', { attr: { 'stroke-dasharray': '0 1' } }, { attr: { 'stroke-dasharray': '1 0' }, duration: .35, ease: 'power2.out' }, '-=.15');
+    }
+    if (innerWidth < 900) $('#resumen').scrollIntoView({ behavior: reducir ? 'auto' : 'smooth', block: 'center' });
+  });
+  $('#l-otra').addEventListener('click', () => { $('#res-listo').style.display = 'none'; $('#res-form').style.display = ''; });
+
+  /* ---------- Cuándo me toca ---------- */
+  const TAREAS = [
+    { n: 'Rotación de neumáticos', cada: 10000, serv: 'Rotación de neumáticos' },
+    { n: 'Alineación y balanceo', cada: 10000, serv: 'Alineación y balanceo' },
+    { n: 'Revisión de frenos', cada: 20000, serv: 'Frenos y pastillas' },
+    { n: 'Revisión general', cada: 15000, serv: 'Revisión general' },
+  ];
+  $('#barras').innerHTML = TAREAS.map((t) => `<div class="barra"><div class="top"><span>${t.n}</span><span></span></div><div class="riel"><div class="lleno"></div></div></div>`).join('');
+  const color = (p) => p < .6 ? '#2bd576' : p < .9 ? '#ffc21a' : '#ff4d2e';
+  function km() {
+    const v = +$('#km').value;
+    $('#km-v').textContent = miles(v);
+    $$('#barras .barra').forEach((b, i) => {
+      const t = TAREAS[i], p = Math.min(v / t.cada, 1), falta = t.cada - v;
+      b.classList.toggle('toca-ya', falta <= 0);
+      b.querySelector('.top span:last-child').textContent = falta <= 0 ? '¡Ya te toca!' : `faltan ${miles(falta)} km`;
+      const l = b.querySelector('.lleno');
+      if (hayGsap && !reducir) gsap.to(l, { width: `${p * 100}%`, backgroundColor: color(p), duration: .5, ease: 'power3.out' });
+      else { l.style.width = `${p * 100}%`; l.style.background = color(p); }
+    });
+  }
+  $('#km').addEventListener('input', km);
+  $('#km-agendar').addEventListener('click', () => {
+    const v = +$('#km').value;
+    const urgente = TAREAS.map((t) => ({ ...t, p: v / t.cada })).sort((a, b) => b.p - a.p)[0];
+    elegirServicio(urgente.serv);
+    $('#reserva').scrollIntoView({ behavior: reducir ? 'auto' : 'smooth' });
+  });
+
+  /* ---------- Movimiento ---------- */
+  if (!hayGsap || reducir) {
+    km();
+    $$('.hito').forEach((h) => h.classList.add('hecho'));
+    return;
+  }
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Portada: la rueda entra rodando, frena y deja la huella
+  const rueda = $('#rueda-hero');
+  const distancia = () => rueda.getBoundingClientRect().right + 60;
+  const hero = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  hero.from('#titulo .l span', { yPercent: 110, duration: .8, stagger: .12 })
+      .from('.hero .kicker, .hero p.lead, .hero .cta-row, .datos-hero', { y: 24, opacity: 0, duration: .6, stagger: .08 }, '-=.5')
+      .from(rueda, { x: () => -distancia(), rotation: () => -distancia() / (rueda.getBoundingClientRect().width * Math.PI) * 360, duration: 1.7, ease: 'power3.out' }, .15)
+      .to('#huella1, #huella2', { scaleX: 1, duration: .9, ease: 'power2.out', stagger: .05 }, .95)
+      .fromTo('#humo1', { opacity: .9, scale: .4, x: 0, y: 0 }, { opacity: 0, scale: 2.4, x: -60, y: -40, duration: 1.3, ease: 'power1.out' }, 1.15)
+      .fromTo('#humo2', { opacity: .7, scale: .3, x: 0, y: 0 }, { opacity: 0, scale: 2, x: -110, y: -20, duration: 1.4, ease: 'power1.out' }, 1.3)
+      .fromTo(rueda, { y: 0 }, { y: -6, duration: .12, yoyo: true, repeat: 1, ease: 'sine.inOut' }, 1.82);
+  // al bajar, la rueda sigue rodando y la línea de la calle avanza
+  gsap.to(rueda, { rotation: '+=360', x: 80, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
+  gsap.fromTo('#linea', { backgroundPositionX: 0 }, { backgroundPositionX: -480, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: .6 } });
+
+  // Títulos y tarjetas aparecen al entrar
+  $$('.revela').forEach((el) => gsap.from(el.children, { y: 34, opacity: 0, duration: .7, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 82%' } }));
+  ScrollTrigger.batch('.serv', { start: 'top 88%', onEnter: (els) => gsap.from(els, { y: 50, opacity: 0, duration: .7, stagger: .12, ease: 'power3.out' }) });
+  gsap.from('.lector-svg', { scale: .9, rotation: -4, opacity: 0, duration: .9, ease: 'back.out(1.4)', scrollTrigger: { trigger: '.lector', start: 'top 80%' } });
+  gsap.from('.cotiza .panel', { y: 40, opacity: 0, duration: .7, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.cotiza', start: 'top 82%' } });
+  gsap.from('.reserva .panel', { y: 40, opacity: 0, duration: .7, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.reserva', start: 'top 82%' } });
+  gsap.from('.faq details', { y: 24, opacity: 0, duration: .5, stagger: .08, ease: 'power2.out', scrollTrigger: { trigger: '.faq', start: 'top 85%' } });
+  gsap.from('.ubica > *', { y: 40, opacity: 0, duration: .7, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.ubica', start: 'top 82%' } });
+
+  // Barras de "¿cuándo me toca?" se llenan al aparecer
+  ScrollTrigger.create({ trigger: '#toca', start: 'top 70%', once: true, onEnter: km });
+
+  // Camino entre los pasos
+  gsap.to('#camino', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '#pasos', start: 'top 75%', end: 'bottom 55%', scrub: .5 } });
+  gsap.from('.paso', { y: 40, opacity: 0, duration: .6, stagger: .15, ease: 'back.out(1.6)', scrollTrigger: { trigger: '#pasos', start: 'top 80%' } });
+
+  // Seguimiento: el auto avanza por los estados y llega el aviso de WhatsApp
+  const hitos = $$('.hito');
+  const seg = gsap.timeline({ repeat: -1, repeatDelay: 1.2, paused: true });
+  seg.add(() => hitos.forEach((h) => h.classList.remove('hecho'))).set('#lt-avance', { height: 0 }).set('#aviso', { opacity: 0, y: -30 });
+  hitos.forEach((h, i) => {
+    seg.to('#lt-avance', { height: () => h.offsetTop + 10, duration: .7, ease: 'power2.inOut' }, i ? '+=.5' : 0)
+       .add(() => h.classList.add('hecho'))
+       .from(h, { x: -8, duration: .3, ease: 'back.out(3)' });
+  });
+  seg.to('#aviso', { opacity: 1, y: 0, duration: .5, ease: 'back.out(1.8)' }, '+=.2').to('#aviso', { opacity: 0, y: -30, duration: .4, ease: 'power2.in' }, '+=2.2');
+  ScrollTrigger.create({ trigger: '#seguimiento', start: 'top 75%', end: 'bottom top', onToggle: (s) => s.isActive ? seg.play() : seg.pause() });
+
+  // Ilustraciones de los servicios: cada una se anima solo cuando está en pantalla
+  const ANIM = {
+    neumaticos(svg) {
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .6 });
+      tl.set(svg.querySelector('.entra'), { x: -260, rotation: -300, svgOrigin: '160 95' })
+        .set(svg.querySelector('.sale'), { x: 0, rotation: 0, svgOrigin: '160 95' })
+        .set(svg.querySelectorAll('.brillo path'), { scale: 0, transformOrigin: '50% 50%' })
+        .to(svg.querySelector('.sale'), { x: 260, rotation: 300, duration: .9, ease: 'power2.in' }, .4)
+        .to(svg.querySelector('.entra'), { x: 0, rotation: 0, duration: 1, ease: 'power3.out' }, 1.05)
+        .to(svg.querySelectorAll('.brillo path'), { scale: 1, duration: .25, stagger: .1, yoyo: true, repeat: 1, ease: 'back.out(3)' }, 1.9);
+      return tl;
+    },
+    balanceo(svg) {
+      const giro = svg.querySelector('.giro'), eje = svg.querySelector('.eje');
+      gsap.set(giro, { svgOrigin: '160 90' });
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .4 });
+      tl.set(svg.querySelectorAll('.pesos rect'), { scale: 0, transformOrigin: '50% 50%' }).set(svg.querySelector('.ok'), { opacity: 0, scale: .5, svgOrigin: '262 52' })
+        .to(giro, { rotation: '+=1440', duration: 2.6, ease: 'none' }, 0)
+        .fromTo(eje, { y: -5 }, { y: 5, duration: .08, repeat: 13, yoyo: true, ease: 'sine.inOut' }, 0)
+        .to(svg.querySelectorAll('.pesos rect'), { scale: 1, duration: .3, stagger: .15, ease: 'back.out(3)' }, 1.3)
+        .to(giro, { rotation: '+=720', duration: 1.6, ease: 'power2.out' }, 2.6)
+        .to(eje, { y: 0, duration: .2 }, 2.6)
+        .to(svg.querySelector('.ok'), { opacity: 1, scale: 1, duration: .35, ease: 'back.out(3)' }, 3.4)
+        .to(svg.querySelector('.ok'), { opacity: 0, duration: .3 }, 4.8);
+      return tl;
+    },
+    alineacion(svg) {
+      const g = { v: 3.5 }, txt = svg.querySelector('.grados');
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .8 });
+      tl.set([svg.querySelector('.rd-i'), svg.querySelector('.rd-d')], { rotation: (i) => i ? -14 : 14, transformOrigin: '50% 50%' })
+        .set(svg.querySelector('.laser'), { opacity: 0 }).set(g, { v: 3.5 }).set(txt, { fill: '#ffc21a' })
+        .to(svg.querySelector('.laser'), { opacity: 1, duration: .2, repeat: 3, yoyo: true }, .3)
+        .set(svg.querySelector('.laser'), { opacity: 1 })
+        .to([svg.querySelector('.rd-i'), svg.querySelector('.rd-d')], { rotation: 0, duration: 1.4, ease: 'elastic.out(1,.5)' }, 1.2)
+        .to(g, { v: 0, duration: 1.2, ease: 'power3.out', onUpdate: () => { txt.textContent = `${g.v.toFixed(1).replace('.', ',')}°`; } }, 1.2)
+        .set(txt, { fill: '#2bd576' }, 2.4);
+      return tl;
+    },
+    frenos(svg) {
+      gsap.set(svg.querySelector('.disco'), { svgOrigin: '160 95' });
+      const tl = gsap.timeline({ repeat: -1 });
+      tl.to(svg.querySelector('.disco'), { rotation: '+=1080', duration: 3, ease: 'power2.inOut' }, 0)
+        .fromTo(svg.querySelector('.pinza'), { x: 0 }, { x: -4, duration: .1, repeat: 5, yoyo: true }, 1.2)
+        .to(svg.querySelector('.calor'), { opacity: 1, duration: .8, ease: 'power2.in' }, 1.3)
+        .to(svg.querySelector('.calor'), { opacity: 0, duration: 1.4, ease: 'power1.out' }, 2.4);
+      return tl;
+    },
+    rotacion(svg) {
+      const [a, b, c, d] = ['.a', '.b', '.c', '.d'].map((s) => svg.querySelector(s));
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: .6 });
+      tl.set([a, b, c, d], { x: 0, y: 0 })
+        .to(a, { x: 112, y: 66, duration: 1, ease: 'power2.inOut' }, .4).to(d, { x: -112, y: -66, duration: 1, ease: 'power2.inOut' }, .4)
+        .to(b, { x: -112, y: 66, duration: 1, ease: 'power2.inOut' }, .6).to(c, { x: 112, y: -66, duration: 1, ease: 'power2.inOut' }, .6)
+        .to([a, b, c, d], { x: 0, y: 0, duration: 1, ease: 'power2.inOut', stagger: .1 }, 2.6);
+      return tl;
+    },
+    revision(svg) {
+      const ticks = svg.querySelectorAll('.ticks path');
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+      tl.set(ticks, { attr: { 'stroke-dasharray': '0 1' } })
+        .to(ticks, { attr: { 'stroke-dasharray': '1 0' }, duration: .35, stagger: .45, ease: 'power2.out' }, .4)
+        .to(ticks, { opacity: 0, duration: .3 }, '+=1.2').set(ticks, { opacity: 1 });
+      return tl;
+    },
+  };
+  $$('.ilus[data-anim]').forEach((el) => {
+    const tl = ANIM[el.dataset.anim](el.querySelector('svg'));
+    tl.pause();
+    ScrollTrigger.create({ trigger: el, start: 'top bottom', end: 'bottom top', onToggle: (s) => s.isActive ? tl.play() : tl.pause() });
+  });
+})();
+</script>
+</body>
+</html>
