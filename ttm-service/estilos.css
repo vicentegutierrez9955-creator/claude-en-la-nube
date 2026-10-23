@@ -106,8 +106,10 @@ section.sec{padding:84px 0;position:relative}
 .servicios{display:grid;gap:18px}
 .serv{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s ease,transform .2s ease}
 .serv:hover{border-color:rgba(253,204,23,.5);transform:translateY(-4px)}
-.serv .ilus{height:190px;background:radial-gradient(300px 160px at 50% 100%,rgba(253,204,23,.1),transparent 70%),#0c1d45;border-bottom:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
-.serv .ilus svg{width:100%;height:100%}
+.serv .foto{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0c1d45;border-bottom:3px solid var(--yel)}
+.serv .foto img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.serv .foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,26,61,.55))}
+.serv:hover .foto img{transform:scale(1.06)}
 .serv .cuerpo{padding:20px 20px 22px;display:flex;flex-direction:column;flex:1}
 .serv h3{font-family:"Barlow Condensed",sans-serif;font-weight:800;text-transform:uppercase;font-size:29px;line-height:1;margin:0 0 8px}
 .serv p{color:var(--mut);margin:0 0 16px;font-size:15.5px}
