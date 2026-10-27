@@ -11,6 +11,7 @@ const HERRAMIENTAS = {
   'presupuesto-taller': { nombre: 'Generador de presupuestos para talleres', desde: 'la herramienta Generador de presupuestos para talleres', unidad: 'erp_talleres', pide: 'conocer Tuerkit', rubro: 'Taller mecánico' },
   'sitio-web': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'web_agenda', pide: 'una maqueta gratis de su web con agenda' },
   'sitio-tuerkit': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'erp_talleres', pide: 'una demo de Tuerkit', rubro: 'Taller mecánico' },
+  'sitio-bot': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl (Bot de WhatsApp)', unidad: 'web_agenda', pide: 'la prueba gratis del bot de WhatsApp' },
   'sitio-otro': { nombre: 'stpyme.cl', desde: 'la web stpyme.cl', unidad: 'web_agenda', pide: 'que lo contacten (otra consulta)' },
 };
 const RUBROS = ['Podología', 'Kinesiología', 'Psicología', 'Nutrición', 'Fonoaudiología', 'Odontología', 'Estética', 'Barbería o peluquería', 'Veterinaria', 'Taller mecánico', 'Otro'];
