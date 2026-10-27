@@ -2,8 +2,8 @@
 // que le mandamos desde el panel (un solo uso, vence a los 14 días). Sin invitación vigente no se hace nada.
 // GET  ?i=<invitación>                              → nombre del negocio (para saludarlo en la página).
 // POST { i, code, waba, telefono, tipo } (mismo sitio) → termina el registro insertado y marca la invitación como usada.
-import { json, enviarCorreo, escapar } from '../_lib/panel.js';
-import { conectarCuenta, invitacionVigente, marcarInvitacionUsada } from '../_lib/whatsapp.js';
+import { json, enviarCorreo, escapar } from '../panel.js';
+import { conectarCuenta, invitacionVigente, marcarInvitacionUsada } from '../whatsapp.js';
 
 export default {
   async fetch(request) {

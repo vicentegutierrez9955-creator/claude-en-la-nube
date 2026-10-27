@@ -62,7 +62,7 @@ const est = await (await panel.fetch(new Request(H + '/api/panel/whatsapp?t=api&
 ok(est.mensajes.some((m) => m.id === 'c1' && m.linea === '333'), 'webhook: registra el mensaje con su línea');
 
 // Invitaciones: el panel crea un link y el negocio conecta desde la página pública, una sola vez.
-const { default: publico } = await import('../api/publico/whatsapp.js');
+const { default: publico } = await import('../api/publico/[accion].js');
 r = await post({ accion: 'invitar', negocio: 'TTM Service' });
 j = await r.json();
 const inv = new URL(j.link).searchParams.get('i');

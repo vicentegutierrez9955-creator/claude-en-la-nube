@@ -3,7 +3,7 @@
 // Es lo único del sitio que escribe sin sesión, así que es estricto: solo POST del mismo sitio, campos
 // cortos y validados, trampa para bots, tope diario y nunca pisa lo que ya escribió el equipo.
 // Avisa por correo al equipo si están configurados RESEND_API_KEY y ALERT_EMAILS.
-import { leerDatos, guardarDatos, datosIniciales, enviarCorreo, escapar, json } from '../_lib/panel.js';
+import { leerDatos, guardarDatos, datosIniciales, enviarCorreo, escapar, json } from '../panel.js';
 
 // De dónde puede venir un formulario: cada herramienta gratuita y la web de la empresa (según lo que pidió).
 const HERRAMIENTAS = {

@@ -1,6 +1,6 @@
 // Prueba del formulario público de las herramientas gratuitas, en memoria. Uso: npm run test:contacto
 import { leerDatos } from '../api/_lib/panel.js';
-const { default: api, celular } = await import('../api/publico/contacto.js');
+const { default: api, celular } = await import('../api/_lib/publico/contacto.js');
 const O = 'https://sitio.test';
 const ok = (c, m) => { console.log(c ? 'OK  ' : 'FALLA', m); if (!c) process.exitCode = 1; };
 const enviar = (body, { origin = O, method = 'POST' } = {}) => api.fetch(new Request(O + '/api/publico/contacto', {
