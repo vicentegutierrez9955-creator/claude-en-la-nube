@@ -16,7 +16,11 @@
   .cuenta{border-top:1px solid #eef1f5;padding:12px 0;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
   .cuenta:first-child{border-top:0}
   .prueba{display:flex;flex-wrap:wrap;gap:8px}
-  .prueba input{padding:8px 10px;border:1px solid #d5dbe3;border-radius:8px;min-width:0}
+  .prueba input,.plantillas input,.plantillas select,.plantillas textarea{padding:8px 10px;border:1px solid #d5dbe3;border-radius:8px;min-width:0;font:inherit}
+  .plantillas{flex-basis:100%;background:#f6f8fb;border-radius:10px;padding:12px}
+  .plantillas form{display:grid;gap:8px;margin-top:10px}
+  .plantillas table{width:100%;border-collapse:collapse;font-size:14px}
+  .plantillas td{padding:4px 6px;border-top:1px solid #e3e8ef}
 </style>
 </head>
 <body>
@@ -120,7 +124,7 @@
         const info = document.createElement('div');
         info.innerHTML = '<b></b><br><span class="muted"></span>';
         info.querySelector('b').textContent = `${c.nombre || 'Sin nombre'} ${c.numero ? `· ${c.numero}` : ''}`;
-        info.querySelector('span').textContent = `${c.tipo === 'coexistencia' ? 'Coexistencia' : 'Número nuevo'} · conectada ${new Date(c.conectada).toLocaleString('es-CL')}${c.por ? ` por ${c.por}` : ''}`;
+        info.querySelector('span').textContent = `${c.tipo === 'coexistencia' ? 'Coexistencia' : 'Número nuevo'} · conectada ${new Date(c.conectada).toLocaleString('es-CL')}${c.por ? ` por ${c.por}` : ''} · bot ${c.botActivo ? 'activo' : 'apagado'}`;
         const prueba = document.createElement('form'); prueba.className = 'prueba';
         prueba.innerHTML = '<input name="para" inputmode="tel" placeholder="Enviar prueba a 569…" required><button class="btn btn-sm">Enviar hello_world</button>';
         prueba.addEventListener('submit', async (ev) => {
@@ -131,9 +135,54 @@
             estado(`✅ Mensaje de prueba enviado desde ${c.numero || 'el número conectado'}.`);
           } catch (e) { estado(`No se pudo enviar: ${e.message}`); }
         });
-        fila.append(info, prueba); caja.append(fila);
+        const acciones = document.createElement('div'); acciones.className = 'prueba';
+        const panelCli = document.createElement('button'); panelCli.className = 'btn btn-sm btn-primary'; panelCli.type = 'button'; panelCli.textContent = 'Panel del cliente';
+        panelCli.onclick = async () => {
+          try {
+            const { link } = await api({ accion: 'acceso', waba: c.waba });
+            try { await navigator.clipboard.writeText(link); } catch {}
+            estado(`Link del panel de ${c.negocio || c.nombre || 'el negocio'} (copiado). Mándaselo solo al dueño: con él lee y responde sus chats y configura el bot.\n${link}`);
+            window.open(link, '_blank', 'noopener');
+          } catch (e) { estado(`No se pudo crear el link: ${e.message}`); }
+        };
+        const verPl = document.createElement('button'); verPl.className = 'btn btn-sm'; verPl.type = 'button'; verPl.textContent = 'Plantillas';
+        const caja2 = document.createElement('div'); caja2.className = 'plantillas'; caja2.hidden = true;
+        verPl.onclick = () => { caja2.hidden = !caja2.hidden; if (!caja2.hidden) plantillas(c, caja2); };
+        acciones.append(panelCli, verPl);
+        fila.append(info, prueba, acciones, caja2); caja.append(fila);
       }
     } catch (e) { caja.innerHTML = ''; const p = document.createElement('p'); p.className = 'error'; p.textContent = e.message; caja.append(p); }
+  }
+
+  // Plantillas de mensaje de la cuenta: lista con su estado y formulario para crear una (Meta la revisa).
+  async function plantillas(c, caja) {
+    caja.innerHTML = '<p class="muted">Cargando plantillas…</p>';
+    let lista = [];
+    try { lista = (await api({ accion: 'plantillas', waba: c.waba })).plantillas; } catch (e) { caja.innerHTML = ''; caja.append(Object.assign(document.createElement('p'), { className: 'error', textContent: e.message })); return; }
+    caja.textContent = '';
+    const t = document.createElement('table');
+    for (const p of lista) {
+      const tr = t.insertRow();
+      for (const v of [p.name, p.language, p.category, p.status + (p.rejected_reason && p.rejected_reason !== 'NONE' ? ` (${p.rejected_reason})` : '')]) tr.insertCell().textContent = v;
+    }
+    if (!lista.length) caja.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: 'Esta cuenta no tiene plantillas.' }));
+    else caja.append(t);
+    const f = document.createElement('form');
+    f.innerHTML = '<b>Nueva plantilla</b>'
+      + '<input name="nombre" placeholder="Nombre (ej: confirmacion_hora)" required maxlength="60">'
+      + '<select name="categoria"><option value="UTILITY">Utilidad (confirmaciones, recordatorios)</option><option value="MARKETING">Marketing (promociones)</option></select>'
+      + '<textarea name="cuerpo" rows="3" required maxlength="1024" placeholder="Hola {{1}}, tu hora quedó reservada para el {{2}}. Responde CAMBIAR si necesitas moverla."></textarea>'
+      + '<input name="ejemplos" placeholder="Ejemplos de las variables, separados por coma (ej: Carmen, martes 14 a las 10:00)">'
+      + '<button class="btn btn-primary btn-sm">Crear y mandar a revisión de Meta</button>';
+    f.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      try {
+        const r = await api({ accion: 'crearPlantilla', waba: c.waba, nombre: f.nombre.value, categoria: f.categoria.value, cuerpo: f.cuerpo.value, ejemplos: f.ejemplos.value, idioma: 'es' });
+        estado(`✅ Plantilla "${r.nombre}" creada. Estado: ${r.estado || 'en revisión'}.`);
+        plantillas(c, caja);
+      } catch (e) { estado(`Meta no aceptó la plantilla: ${e.message}`); }
+    });
+    caja.append(f);
   }
 
   const mensajeInvitacion = (i) => `Hola, este es el link para conectar el WhatsApp de ${i.negocio} a STPyme. Toma unos 5 minutos y sigues usando tu WhatsApp como siempre: ${i.link}`;

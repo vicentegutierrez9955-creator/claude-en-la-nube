@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Mi WhatsApp · STPyme</title>
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f1a12'/%3E%3Ctext x='5' y='22' font-family='Arial' font-weight='700' font-size='14' fill='%23c5f33b'%3EST%3C/text%3E%3C/svg%3E">
+<style>
+  :root{color-scheme:dark;--bg:#0f1a12;--card:#16241a;--card2:#1c2d20;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--acc:#c5f33b;--wa:#1faa59;--warn:#f5b941;--err:#ff7a6b}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:15px}
+  button,input,textarea,select{font:inherit;color:inherit}
+  .muted{color:var(--muted)}
+  header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .logo{font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .logo span{color:var(--acc)}
+  .negocio{font-weight:700}
+  .interruptor{margin-left:auto;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 14px;cursor:pointer}
+  .interruptor b{font-size:14px}
+  .pista{width:44px;height:26px;border-radius:99px;background:#3a4a3d;position:relative;transition:background .2s;flex:none}
+  .pista::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+  .interruptor[aria-checked="true"] .pista{background:var(--wa)}
+  .interruptor[aria-checked="true"] .pista::after{transform:translateX(18px)}
+  nav{display:flex;gap:4px;padding:8px 12px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+  nav button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;cursor:pointer;color:var(--muted);font-weight:600;white-space:nowrap}
+  nav button[aria-selected="true"]{color:var(--ink);border-color:var(--acc)}
+  .burbuja-n{display:inline-block;min-width:18px;padding:0 5px;border-radius:9px;background:var(--wa);color:#fff;font-size:12px;text-align:center;margin-left:4px}
+  main{max-width:1100px;margin:0 auto}
+  .vista{display:none;padding:16px}
+  .vista.activa{display:block}
+  .aviso{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--warn);border-radius:10px;padding:10px 14px;margin:0 0 14px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:var(--card2);border:1px solid var(--line)}
+  .btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+  .btn-acc{background:var(--acc);border-color:var(--acc);color:#0f1a12}
+  .btn:disabled{opacity:.5;cursor:wait}
+  /* Chats */
+  .bandeja{display:grid;grid-template-columns:320px 1fr;gap:14px;height:calc(100vh - 150px);min-height:420px}
+  .lista{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow-y:auto}
+  .item{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:12px 14px;cursor:pointer}
+  .item:hover,.item[aria-current="true"]{background:var(--card2)}
+  .item .fila1{display:flex;justify-content:space-between;gap:8px}
+  .item .nom{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item .hora{font-size:12px;color:var(--muted);flex:none}
+  .item .prev{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .etq{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:1px 6px;margin-right:4px}
+  .etq-der{background:#4a3410;color:var(--warn)}
+  .etq-pau{background:#2a3a2d;color:var(--muted)}
+  .conversacion{background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:0}
+  .conv-cab{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+  .volver{display:none}
+  .mensajes{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:6px;background:#0c150e}
+  .msg{max-width:78%;padding:7px 11px;border-radius:12px;white-space:pre-wrap;word-wrap:break-word}
+  .msg small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .msg.cliente{align-self:flex-start;background:var(--card2)}
+  .msg.bot,.msg.dueño{align-self:flex-end;background:#144d2c}
+  .msg.bot{background:#1d3b2a;border:1px dashed #2f6b48}
+  .responder{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line)}
+  .responder textarea{flex:1;resize:none;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;min-height:44px;max-height:140px}
+  .vacio{display:grid;place-items:center;height:100%;padding:30px;text-align:center}
+  /* Config */
+  .form{display:grid;gap:14px;max-width:760px}
+  .campo label{display:block;font-weight:700;margin-bottom:4px}
+  .campo .ayuda{font-size:13px;color:var(--muted);margin:0 0 6px}
+  .campo input,.campo textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .campo textarea{min-height:90px;resize:vertical}
+  .dos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fija{display:grid;grid-template-columns:1fr 2fr auto;gap:8px;margin-bottom:8px}
+  .fija input,.fija textarea{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+  .fija textarea{min-height:42px;resize:vertical}
+  .quitar{background:none;border:1px solid var(--line);border-radius:10px;padding:0 10px;cursor:pointer;color:var(--muted)}
+  .barra-guardar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:18px 0 10px;display:flex;gap:12px;align-items:center}
+  /* Simulador */
+  .sim{max-width:520px;background:var(--card);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;height:calc(100vh - 230px);min-height:380px}
+  .uso{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .uso div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+  .uso b{display:block;font-size:20px}
+  #estado{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;max-width:calc(100% - 32px);display:none;z-index:5}
+  #estado.err{border-color:var(--err)}
+  @media (max-width:760px){
+    .vista{padding:12px}
+    .bandeja{grid-template-columns:1fr;height:calc(100vh - 200px);height:calc(100dvh - 200px);min-height:360px}
+    .bandeja.abierta .lista{display:none}
+    .bandeja:not(.abierta) .conversacion{display:none}
+    .volver{display:inline-flex}
+    .dos,.fija{grid-template-columns:1fr}
+    .interruptor{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div id="sin-acceso" hidden style="max-width:560px;margin:60px auto;padding:0 16px">
+  <div class="logo">ST<span>Pyme</span></div>
+  <h1>Este link no es válido</h1>
+  <p class="muted">Pídele a STPyme un link nuevo para entrar al panel de tu WhatsApp.</p>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="logo">ST<span>Pyme</span></div>
+    <div><div class="negocio" id="negocio"></div><div class="muted" style="font-size:13px" id="numero"></div></div>
+    <button class="interruptor" id="interruptor" role="switch" aria-checked="false" type="button"><b id="interruptor-txt">Bot apagado</b><span class="pista"></span></button>
+  </header>
+  <nav role="tablist">
+    <button role="tab" data-vista="chats" aria-selected="true">Chats <span id="n-pend"></span></button>
+    <button role="tab" data-vista="config" aria-selected="false">Lo que sabe el bot</button>
+    <button role="tab" data-vista="probar" aria-selected="false">Probar el bot</button>
+  </nav>
+  <main>
+    <section class="vista activa" id="v-chats">
+      <div id="aviso-ia" class="aviso" hidden></div>
+      <div class="bandeja" id="bandeja">
+        <div class="lista" id="lista"></div>
+        <div class="conversacion" id="conversacion">
+          <div class="vacio muted" id="conv-vacia">Elige un chat para leerlo y responder.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="vista" id="v-config">
+      <form class="form" id="f-config">
+        <p class="muted" style="margin:0">El bot responde solo con lo que escribas aquí. Si no sabe algo, no inventa: le avisa al cliente que una persona le responderá y deja ese chat para ti.</p>
+        <div class="dos">
+          <div class="campo"><label for="c-negocio">Nombre del negocio</label><input id="c-negocio" name="negocio" maxlength="80"></div>
+          <div class="campo"><label for="c-rubro">Rubro</label><input id="c-rubro" name="rubro" maxlength="60" placeholder="Ej: podología, taller mecánico, tienda de ropa"></div>
+        </div>
+        <div class="campo"><label for="c-direccion">Dirección</label><input id="c-direccion" name="direccion" maxlength="200"></div>
+        <div class="campo"><label for="c-horario">Horario de atención</label><textarea id="c-horario" name="horario" maxlength="400" placeholder="Lunes a viernes de 9:00 a 19:00. Sábado de 10:00 a 14:00."></textarea></div>
+        <div class="campo"><label for="c-servicios">Servicios o productos y precios</label><p class="ayuda">Uno por línea. Lo que no esté aquí, el bot no lo ofrece.</p><textarea id="c-servicios" name="servicios" maxlength="3000" style="min-height:140px" placeholder="Atención podológica: $18.000 (45 min)&#10;Uña encarnada: desde $25.000"></textarea></div>
+        <div class="campo"><label for="c-preguntas">Preguntas frecuentes</label><textarea id="c-preguntas" name="preguntas" maxlength="3000" style="min-height:120px" placeholder="¿Atienden a domicilio? Sí, en Melipilla centro, con recargo de $5.000.&#10;¿Cómo pago? Efectivo, transferencia o tarjeta."></textarea></div>
+        <div class="campo"><label for="c-extra">Indicaciones para el bot</label><p class="ayuda">Ej: "Para reservar, manda este link: …", "No damos presupuestos por WhatsApp".</p><textarea id="c-extra" name="extra" maxlength="1500"></textarea></div>
+        <div class="campo"><label for="c-tono">Tono</label><input id="c-tono" name="tono" maxlength="300"></div>
+        <div class="campo">
+          <label>Respuestas fijas (no gastan IA)</label>
+          <p class="ayuda">Si el mensaje del cliente contiene alguna de estas palabras, el bot responde exactamente tu texto.</p>
+          <div id="fijas"></div>
+          <button type="button" class="btn" id="agregar-fija">+ Agregar respuesta fija</button>
+        </div>
+        <div class="campo"><label for="c-derivar">Mensaje cuando el bot pasa el chat a una persona</label><input id="c-derivar" name="mensajeDerivar" maxlength="300"></div>
+        <div class="barra-guardar"><button class="btn btn-acc" id="guardar">Guardar</button><span class="muted" id="guardado"></span></div>
+      </form>
+    </section>
+
+    <section class="vista" id="v-probar">
+      <p class="muted" style="margin-top:0">Escribe como si fueras un cliente. Usa lo que está en "Lo que sabe el bot" (aunque no lo hayas guardado) y no envía nada por WhatsApp.</p>
+      <div class="sim">
+        <div class="mensajes" id="sim-msgs"></div>
+        <form class="responder" id="f-sim"><textarea name="texto" rows="1" placeholder="Hola, ¿cuánto cuesta…?" required></textarea><button class="btn btn-wa">Enviar</button></form>
+      </div>
+      <p><button class="btn" id="sim-borrar" type="button">Empezar de nuevo</button></p>
+      <div class="uso" id="uso"></div>
+    </section>
+  </main>
+</div>
+<div id="estado" role="status"></div>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const k = new URLSearchParams(location.hash.slice(1)).get('k') || '';
+  let datos = null, actual = null, simHistorial = [];
+
+  const estado = (texto, error) => {
+    const e = $('#estado'); e.textContent = texto; e.className = error ? 'err' : ''; e.style.display = 'block';
+    clearTimeout(estado.t); estado.t = setTimeout(() => { e.style.display = 'none'; }, error ? 7000 : 3000);
+  };
+  const api = async (accion, extra = {}) => {
+    const r = await fetch('/api/publico/cliente', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ k, accion, ...extra }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) { $('#app').hidden = true; $('#sin-acceso').hidden = false; throw new Error(j.error); }
+    if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+    return j;
+  };
+  const hora = (f) => {
+    const d = new Date(f), hoy = new Date();
+    return d.toDateString() === hoy.toDateString() ? d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }) : d.toLocaleDateString('es-CL', { day: 'numeric', month: 'short' });
+  };
+  const QUIEN = { cliente: '', bot: '🤖 Bot · ', dueño: 'Tú · ' };
+  const el = (tag, cls, texto) => { const e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; };
+
+  // ---- Pestañas ----
+  document.querySelectorAll('nav button').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === `v-${b.dataset.vista}`));
+  }));
+
+  // ---- Interruptor del bot ----
+  function pintarInterruptor() {
+    const on = Boolean(datos.config.activo);
+    $('#interruptor').setAttribute('aria-checked', String(on));
+    $('#interruptor-txt').textContent = on ? 'Bot respondiendo' : 'Bot apagado';
+  }
+  $('#interruptor').addEventListener('click', async () => {
+    const config = { ...datos.config, activo: !datos.config.activo };
+    if (config.activo && !String(config.servicios || config.preguntas || '').trim()) {
+      if (!confirm('Todavía no le has contado nada al bot en "Lo que sabe el bot". ¿Prenderlo igual?')) return;
+    }
+    try { const r = await api('guardar', { config }); datos.config = r.config; pintarInterruptor(); estado(r.config.activo ? 'El bot quedó respondiendo' : 'El bot quedó apagado'); }
+    catch (e) { estado(e.message, true); }
+  });
+
+  // ---- Chats ----
+  function pintarLista() {
+    const lista = $('#lista'); lista.textContent = '';
+    if (!datos.chats.length) { lista.append(el('p', 'muted', 'Aún no hay chats. Cuando un cliente te escriba, aparecerá aquí.')); lista.firstChild.style.padding = '14px'; }
+    let pend = 0;
+    for (const c of datos.chats) {
+      if (c.derivado || c.noLeidos) pend++;
+      const b = el('button', 'item'); b.type = 'button';
+      b.setAttribute('aria-current', String(actual === c.numero));
+      const f1 = el('div', 'fila1');
+      const nom = el('span', 'nom', c.nombre || `+${c.numero}`);
+      if (c.noLeidos) nom.append(el('span', 'burbuja-n', String(c.noLeidos)));
+      f1.append(nom, el('span', 'hora', c.actualizado ? hora(c.actualizado) : ''));
+      const prev = el('div', 'prev');
+      if (c.derivado) prev.append(el('span', 'etq etq-der', 'Necesita respuesta'));
+      else if (c.pausado) prev.append(el('span', 'etq etq-pau', 'Bot en pausa'));
+      prev.append(document.createTextNode(c.ultimo ? `${QUIEN[c.ultimo.por] || ''}${c.ultimo.texto}` : ''));
+      b.append(f1, prev);
+      b.addEventListener('click', () => abrir(c.numero));
+      lista.append(b);
+    }
+    $('#n-pend').innerHTML = pend ? `<span class="burbuja-n">${pend}</span>` : '';
+  }
+
+  async function abrir(numero, silencioso) {
+    actual = numero;
+    $('#bandeja').classList.add('abierta');
+    let c;
+    try { c = await api('chat', { numero }); } catch (e) { estado(e.message, true); return; }
+    const conv = $('#conversacion');
+    const abajo = !silencioso || (() => { const m = conv.querySelector('.mensajes'); return !m || m.scrollHeight - m.scrollTop - m.clientHeight < 60; })();
+    const borrador = conv.querySelector('textarea')?.value || '';
+    const conFoco = document.activeElement === conv.querySelector('textarea');
+    conv.textContent = '';
+    const cab = el('div', 'conv-cab');
+    const izq = el('div');
+    const volver = el('button', 'btn volver', '←'); volver.type = 'button'; volver.onclick = () => { actual = null; $('#bandeja').classList.remove('abierta'); pintarLista(); };
+    const t = el('div'); t.append(el('b', '', c.nombre || `+${c.numero}`), el('div', 'muted', `+${c.numero}`)); t.lastChild.style.fontSize = '13px';
+    izq.style.display = 'flex'; izq.style.gap = '10px'; izq.style.alignItems = 'center'; izq.append(volver, t);
+    const pausa = el('button', 'btn', c.pausado ? '▶ Reactivar bot en este chat' : '⏸ Pausar bot en este chat'); pausa.type = 'button';
+    pausa.onclick = async () => {
+      try { await api('pausar', { numero, horas: c.pausado ? 0 : 24 }); estado(c.pausado ? 'El bot vuelve a responder en este chat' : 'El bot no responderá este chat por 24 horas'); await cargar(); abrir(numero); }
+      catch (e) { estado(e.message, true); }
+    };
+    cab.append(izq, pausa);
+    const msgs = el('div', 'mensajes');
+    for (const m of c.mensajes) {
+      const d = el('div', `msg ${m.por}`, m.texto);
+      d.append(el('small', '', `${QUIEN[m.por] || ''}${hora(m.fecha)}`));
+      msgs.append(d);
+    }
+    const f = el('form', 'responder');
+    const ta = el('textarea'); ta.rows = 1; ta.required = true; ta.value = borrador;
+    ta.placeholder = c.ventana ? 'Escribe tu respuesta…' : 'Pasaron más de 24 h: respóndele desde tu celular';
+    ta.disabled = !c.ventana;
+    const enviarB = el('button', 'btn btn-wa', 'Enviar'); enviarB.disabled = !c.ventana;
+    f.append(ta, enviarB);
+    f.addEventListener('submit', async (ev) => {
+      ev.preventDefault(); enviarB.disabled = true;
+      try { await api('responder', { numero, texto: ta.value }); ta.value = ''; estado('Enviado. El bot queda en pausa en este chat por 12 horas.'); await cargar(); await abrir(numero); }
+      catch (e) { estado(e.message, true); enviarB.disabled = false; }
+    });
+    ta.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.shiftKey && matchMedia('(min-width:761px)').matches) { ev.preventDefault(); f.requestSubmit(); } });
+    conv.append(cab, msgs, f);
+    if (abajo) msgs.scrollTop = msgs.scrollHeight;
+    if (conFoco) ta.focus();
+    const item = datos.chats.find((x) => x.numero === numero); if (item) item.noLeidos = 0;
+    pintarLista();
+  }
+
+  // ---- Configuración ----
+  const CAMPOS = ['negocio', 'rubro', 'direccion', 'horario', 'servicios', 'preguntas', 'extra', 'tono', 'mensajeDerivar'];
+  function filaFija(r = { palabras: '', respuesta: '' }) {
+    const f = el('div', 'fija');
+    const p = el('input'); p.placeholder = 'Palabras, separadas por coma (ej: horario, a qué hora)'; p.value = r.palabras; p.maxLength = 200;
+    const t = el('textarea'); t.placeholder = 'Respuesta'; t.value = r.respuesta; t.maxLength = 600;
+    const q = el('button', 'quitar', '✕'); q.type = 'button'; q.title = 'Quitar'; q.onclick = () => f.remove();
+    f.append(p, t, q); $('#fijas').append(f);
+  }
+  function pintarConfig() {
+    const f = $('#f-config');
+    for (const c of CAMPOS) f[c].value = datos.config[c] || '';
+    $('#fijas').textContent = '';
+    (datos.config.respuestas || []).forEach(filaFija);
+  }
+  function leerForm() {
+    const f = $('#f-config'), c = { ...datos.config };
+    for (const n of CAMPOS) c[n] = f[n].value;
+    c.respuestas = [...document.querySelectorAll('.fija')].map((x) => ({ palabras: x.querySelector('input').value, respuesta: x.querySelector('textarea').value }));
+    return c;
+  }
+  $('#agregar-fija').addEventListener('click', () => filaFija());
+  $('#f-config').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const b = $('#guardar'); b.disabled = true;
+    try { const r = await api('guardar', { config: leerForm() }); datos.config = r.config; pintarConfig(); $('#guardado').textContent = `Guardado ${new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}`; }
+    catch (e) { estado(e.message, true); }
+    finally { b.disabled = false; }
+  });
+
+  // ---- Simulador ----
+  function pintarSim() {
+    const m = $('#sim-msgs'); m.textContent = '';
+    for (const x of simHistorial) {
+      const d = el('div', `msg ${x.por === 'cliente' ? 'cliente' : 'bot'}`, x.texto || '(no responde)');
+      if (x.nota) d.append(el('small', '', x.nota));
+      m.append(d);
+    }
+    m.scrollTop = m.scrollHeight;
+  }
+  $('#f-sim').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const ta = ev.target.texto, b = ev.target.querySelector('button');
+    simHistorial.push({ por: 'cliente', texto: ta.value }); ta.value = ''; pintarSim(); b.disabled = true;
+    try {
+      const r = await api('simular', { config: leerForm(), mensajes: simHistorial.filter((x) => x.texto) });
+      simHistorial.push({ por: 'bot', texto: r.texto, nota: r.nota || '' });
+    } catch (e) { simHistorial.push({ por: 'bot', texto: '', nota: `Error: ${e.message}` }); }
+    b.disabled = false; pintarSim(); cargar();
+  });
+  $('#sim-borrar').addEventListener('click', () => { simHistorial = []; pintarSim(); });
+
+  function pintarUso() {
+    const u = datos.uso || {};
+    const caja = $('#uso'); caja.textContent = '';
+    const dato = (n, t) => { const d = el('div'); d.append(el('b', '', String(n)), el('span', 'muted', t)); caja.append(d); };
+    dato(u.respuestas || 0, 'respuestas con IA este mes');
+    dato(u.sinIA || 0, 'respuestas fijas (gratis)');
+    dato(`${Math.round(((u.tokens || 0) / (datos.config.topeTokensMes || 1)) * 100)}%`, 'del uso del plan');
+  }
+
+  // ---- Carga ----
+  async function cargar() {
+    datos = await api('datos');
+    $('#negocio').textContent = datos.negocio || 'Mi negocio';
+    $('#numero').textContent = datos.numero || '';
+    const aviso = $('#aviso-ia');
+    aviso.hidden = datos.iaLista && datos.config.activo;
+    aviso.textContent = !datos.iaLista ? 'El bot aún se está configurando: por ahora solo verás tus chats.' : 'El bot está apagado: los mensajes llegan aquí y a tu celular, pero nadie responde automáticamente. Cuéntale tu negocio en "Lo que sabe el bot" y préndelo arriba.';
+    pintarInterruptor(); pintarLista(); pintarUso();
+  }
+
+  if (!/^[\w-]{24,64}$/.test(k)) { $('#sin-acceso').hidden = false; return; }
+  cargar().then(() => { $('#app').hidden = false; pintarConfig(); }).catch(() => {});
+  // Revisa mensajes nuevos cada 15 s mientras la página está a la vista.
+  setInterval(async () => {
+    if (document.hidden || !datos) return;
+    try { await cargar(); if (actual) await abrir(actual, true); } catch {}
+  }, 15000);
+})();
+</script>
+</body>
+</html>

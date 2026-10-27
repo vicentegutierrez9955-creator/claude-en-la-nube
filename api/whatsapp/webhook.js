@@ -1,7 +1,9 @@
 // Webhook de WhatsApp (Meta). GET: verificación de la suscripción. POST: mensajes entrantes y estados de los enviados.
 // Solo acepta avisos firmados con WHATSAPP_APP_SECRET. Responde SALIR, VOLVER y ELIMINAR (ver /privacidad).
+// Los avisos de las líneas de clientes conectados los atiende el bot de cada negocio (api/_lib/bot.js).
 import { json } from '../_lib/panel.js';
 import { firmaValida, enviar, anotar, numero } from '../_lib/whatsapp.js';
+import { atenderLinea, textoDe } from '../_lib/bot.js';
 
 const RESPUESTAS = {
   salir: 'Listo, no te enviaremos más mensajes de reseñas ni de controles. Los avisos de tus horas reservadas siguen llegando. Si fue un error, responde VOLVER.',
@@ -10,11 +12,11 @@ const RESPUESTAS = {
   hola: 'Hola, este es el número de STPyme para confirmar y recordar horas reservadas. Estamos en pruebas. Responde SALIR para no recibir más mensajes o ELIMINAR para que borremos tus datos.',
 };
 
-function textoDe(m) {
-  if (m.type === 'text') return m.text?.body || '';
-  if (m.type === 'button') return m.button?.text || '';
-  if (m.type === 'interactive') return m.interactive?.button_reply?.title || m.interactive?.list_reply?.title || '';
-  return `[${m.type}]`;
+// Deja trabajando al bot después de responder a Meta (Vercel espera la promesa); fuera de Vercel, se espera aquí.
+function enSegundoPlano(promesa) {
+  const waitUntil = globalThis[Symbol.for('@vercel/request-context')]?.get?.()?.waitUntil;
+  if (typeof waitUntil === 'function') { waitUntil(promesa); return null; }
+  return promesa;
 }
 
 export default {
@@ -67,10 +69,16 @@ export default {
         }
       }
     });
+    const lineasClientes = cambios.filter((v) => v.metadata?.phone_number_id && v.metadata.phone_number_id !== process.env.WHATSAPP_PHONE_NUMBER_ID
+      && ((v.messages || []).length || (v.message_echoes || []).length));
+    const bot = lineasClientes.length
+      ? enSegundoPlano(Promise.all(lineasClientes.map((v) => atenderLinea(v).catch((e) => console.error('bot:', e)))))
+      : null;
     for (const [para, texto] of respuestas) {
       const r = await enviar(para, { texto });
       if (!r.ok) console.warn('whatsapp webhook: no se pudo responder:', r.motivo);
     }
+    if (bot) await bot;
     return json({ ok: true });
   },
 };

@@ -9,9 +9,12 @@
 // accion=probar { waba, para, texto | plantilla } → envía un mensaje desde el número conectado.
 // accion=invitar { negocio }                      → link de un solo uso para que el negocio conecte desde /conectar-whatsapp.
 // accion=invitaciones                             → últimas invitaciones y su estado.
-import { createHash, timingSafeEqual } from 'node:crypto';
+// accion=acceso { waba, nuevo }                    → link del panel del negocio (/mi-whatsapp); con nuevo, invalida el anterior.
+// accion=plantillas { waba }                       → plantillas de mensaje de la cuenta y su estado de aprobación.
+// accion=crearPlantilla { waba, nombre, categoria, idioma, cuerpo, ejemplos } → la manda a revisión de Meta.
+import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { sesion, json } from '../_lib/panel.js';
-import { enviar, leerRegistro, numero, graph, conectarCuenta, leerCuentas, crearInvitacion, leerInvitaciones } from '../_lib/whatsapp.js';
+import { enviar, leerRegistro, numero, graph, graphCon, conectarCuenta, leerCuentas, guardarCuenta, crearInvitacion, leerInvitaciones } from '../_lib/whatsapp.js';
 
 const id = (v) => String(v || '').replace(/\D/g, '').slice(0, 20);
 
@@ -63,9 +66,9 @@ export default {
     }
     if (p.accion === 'cuentas') {
       const { cuentas } = await leerCuentas();
-      return json({ cuentas: Object.values(cuentas).map(({ token, pin, ...c }) => c) });
+      return json({ cuentas: Object.values(cuentas).map(({ token, pin, acceso, bot, ...c }) => ({ ...c, panelCliente: Boolean(acceso), botActivo: Boolean(bot?.activo) })) });
     }
-    if (p.accion === 'conectar' || p.accion === 'probar' || p.accion === 'invitar') {
+    if (['conectar', 'probar', 'invitar', 'acceso', 'crearPlantilla'].includes(p.accion)) {
       // Solo desde el panel con sesión: el código del registro insertado lo entrega el navegador de quien conecta.
       if (porToken || request.method !== 'POST') return json({ error: 'Usa POST desde el panel' }, 405);
     }
@@ -103,6 +106,37 @@ export default {
         ? await enviar(para, { plantilla: String(p.plantilla), idioma: String(p.idioma || 'en_US') }, cuenta)
         : await enviar(para, { texto: String(p.texto || '') }, cuenta);
       return json(r, r.ok ? 200 : 502);
+    }
+    if (p.accion === 'acceso' || p.accion === 'plantillas' || p.accion === 'crearPlantilla') {
+      const { cuentas } = await leerCuentas();
+      const cuenta = cuentas[id(p.waba)];
+      if (!cuenta) return json({ error: 'Esa cuenta no está conectada' }, 404);
+      if (p.accion === 'acceso') {
+        let acceso = cuenta.acceso;
+        if (!acceso || p.nuevo) {
+          acceso = randomBytes(24).toString('base64url');
+          if (!(await guardarCuenta({ waba: cuenta.waba, acceso }))) return json({ error: 'No se pudo guardar, intenta de nuevo' }, 503);
+        }
+        // La clave va después de "#": el navegador no la manda al servidor ni la deja en los registros.
+        return json({ ok: true, link: `https://stpyme.cl/mi-whatsapp#k=${acceso}` });
+      }
+      if (p.accion === 'plantillas') {
+        const r = await graphCon(cuenta.token, `${cuenta.waba}/message_templates?fields=name,status,category,language,rejected_reason&limit=50`);
+        if (r.error) return json({ error: r.error.message || 'Meta no respondió' }, 502);
+        return json({ plantillas: r.data || [] });
+      }
+      // Plantilla nueva: nombre en minúsculas con guiones bajos; las variables {{1}}, {{2}}… necesitan ejemplos.
+      const nombre = String(p.nombre || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 60);
+      const cuerpo = String(p.cuerpo || '').trim().slice(0, 1024);
+      const categoria = ['UTILITY', 'MARKETING'].includes(p.categoria) ? p.categoria : 'UTILITY';
+      if (!nombre || !cuerpo) return json({ error: 'Falta el nombre o el texto de la plantilla' }, 400);
+      const variables = [...new Set(cuerpo.match(/\{\{\d+\}\}/g) || [])].length;
+      const ejemplos = String(p.ejemplos || '').split(',').map((s) => s.trim()).filter(Boolean);
+      const componente = { type: 'BODY', text: cuerpo };
+      if (variables) componente.example = { body_text: [Array.from({ length: variables }, (_, i) => ejemplos[i] || `ejemplo ${i + 1}`)] };
+      const r = await graphCon(cuenta.token, `${cuenta.waba}/message_templates`, 'POST', { name: nombre, language: String(p.idioma || 'es'), category: categoria, components: [componente] });
+      if (r.error) return json({ error: r.error.error_user_msg || r.error.message || 'Meta rechazó la plantilla' }, 502);
+      return json({ ok: true, id: r.id, nombre, estado: r.status, categoria: r.category });
     }
     return json({ error: 'Acción desconocida' }, 400);
   },
