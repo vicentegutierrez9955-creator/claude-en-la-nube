@@ -17,7 +17,7 @@ const AUDIO = 'Por ahora no puedo escuchar audios 🙏 ¿Me lo puedes escribir?'
 
 const rutaChats = (waba) => `whatsapp/chats/${waba}.json`;
 const mesActual = () => new Date().toISOString().slice(0, 7);
-const normal = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+const normal = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
 export const CONFIG_INICIAL = {
   activo: false,

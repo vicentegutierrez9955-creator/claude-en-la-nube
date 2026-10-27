@@ -60,7 +60,7 @@ export default {
           const nombre = (v.contacts || []).find((c) => c.wa_id === m.from)?.profile?.name || '';
           reg.mensajes.push({ id: m.id, dir: 'entra', numero: de, nombre, texto, linea, fecha: new Date(Number(m.timestamp) * 1000 || Date.now()).toISOString() });
           if (!propia) continue;
-          const palabra = texto.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/\s+/)[0];
+          const palabra = texto.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/\s+/)[0];
           if (palabra === 'salir') reg.bajas[de] = new Date().toISOString();
           if (palabra === 'volver') delete reg.bajas[de];
           if (palabra === 'eliminar' && !reg.eliminar.some((x) => x.numero === de && !x.hecho)) reg.eliminar.push({ numero: de, fecha: new Date().toISOString(), hecho: false });
