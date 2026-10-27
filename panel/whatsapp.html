@@ -35,6 +35,16 @@
   </section>
 
   <section class="tarjeta">
+    <h2>Link para que el negocio conecte su WhatsApp</h2>
+    <p class="muted">Crea un link de un solo uso (vence en 14 días) y mándaselo al cliente. Lo abre en su celular o computador y conecta su número sin entrar al panel.</p>
+    <form id="f-invitar" class="prueba" style="margin-top:12px">
+      <input name="negocio" placeholder="Nombre del negocio (ej: TTM Service)" required maxlength="80" style="flex:1">
+      <button class="btn btn-primary btn-sm">Crear link</button>
+    </form>
+    <div id="invitaciones" style="margin-top:12px"></div>
+  </section>
+
+  <section class="tarjeta">
     <h2>Cuentas conectadas</h2>
     <div id="cuentas"><p class="muted">Cargando…</p></div>
   </section>
@@ -125,6 +135,47 @@
       }
     } catch (e) { caja.innerHTML = ''; const p = document.createElement('p'); p.className = 'error'; p.textContent = e.message; caja.append(p); }
   }
+
+  const mensajeInvitacion = (i) => `Hola, este es el link para conectar el WhatsApp de ${i.negocio} a STPyme. Toma unos 5 minutos y sigues usando tu WhatsApp como siempre: ${i.link}`;
+
+  async function cargarInvitaciones() {
+    const caja = $('#invitaciones');
+    try {
+      const { invitaciones } = await api({ accion: 'invitaciones' });
+      caja.textContent = '';
+      for (const i of invitaciones) {
+        const fila = document.createElement('div'); fila.className = 'cuenta';
+        const info = document.createElement('div');
+        info.innerHTML = '<b></b><br><span class="muted"></span>';
+        info.querySelector('b').textContent = i.negocio;
+        const vencida = !i.usada && !i.link;
+        info.querySelector('span').textContent = i.usada
+          ? `✅ Conectado el ${new Date(i.usada.fecha).toLocaleDateString('es-CL')}`
+          : vencida ? 'Venció sin usarse' : `Pendiente · vence el ${new Date(i.vence).toLocaleDateString('es-CL')}`;
+        fila.append(info);
+        if (i.link) {
+          const acciones = document.createElement('div'); acciones.className = 'prueba';
+          const copiar = document.createElement('button'); copiar.className = 'btn btn-sm'; copiar.type = 'button'; copiar.textContent = 'Copiar link';
+          copiar.onclick = async () => { try { await navigator.clipboard.writeText(i.link); copiar.textContent = 'Copiado ✓'; } catch { prompt('Copia el link:', i.link); } };
+          const wa = document.createElement('a'); wa.className = 'btn btn-wa btn-sm'; wa.target = '_blank'; wa.rel = 'noopener'; wa.textContent = 'Mandar por WhatsApp';
+          wa.href = `https://wa.me/?text=${encodeURIComponent(mensajeInvitacion(i))}`;
+          acciones.append(copiar, wa); fila.append(acciones);
+        }
+        caja.append(fila);
+      }
+    } catch (e) { caja.textContent = e.message; }
+  }
+
+  $('#f-invitar').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const f = ev.target;
+    try {
+      await api({ accion: 'invitar', negocio: f.negocio.value });
+      f.reset();
+      cargarInvitaciones();
+    } catch (e) { estado(`No se pudo crear el link: ${e.message}`); }
+  });
+  cargarInvitaciones();
 
   window.fbAsyncInit = () => {
     FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v25.0' });

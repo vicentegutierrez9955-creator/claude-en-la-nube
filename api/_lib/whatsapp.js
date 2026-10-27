@@ -1,6 +1,6 @@
 // WhatsApp Business Platform (Cloud API de Meta): envío de mensajes y registro de conversaciones en el Blob privado.
 // Variables en Vercel: WHATSAPP_TOKEN y WHATSAPP_APP_SECRET (secretas), WHATSAPP_VERIFY_TOKEN y WHATSAPP_PHONE_NUMBER_ID.
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { leerDoc, guardarDoc } from './panel.js';
 
 const API = 'https://graph.facebook.com/v25.0';
@@ -92,6 +92,85 @@ export async function canjearCodigo(code) {
   const r = await fetch(`${API}/oauth/access_token?${q}`);
   return r.json().catch(() => ({ error: { message: `Meta respondió ${r.status}` } }));
 }
+
+const idMeta = (v) => String(v || '').replace(/\D/g, '').slice(0, 20);
+const motivo = (r) => r?.error?.message || null;
+
+// Termina el registro insertado: canjea el código, suscribe la app a la cuenta del negocio, registra el número
+// si es nuevo y guarda la cuenta. `extra` se guarda junto a la cuenta (quién conectó, invitación, negocio).
+export async function conectarCuenta({ code, waba, telefono, tipo, extra = {} }) {
+  code = String(code || '').slice(0, 2000);
+  if (!code) return { status: 400, error: 'Falta el código de Meta' };
+  const tok = await canjearCodigo(code);
+  if (!tok.access_token) return { status: 502, error: `No se pudo canjear el código: ${motivo(tok) || 'sin token'}` };
+  const token = tok.access_token;
+  waba = idMeta(waba);
+  telefono = idMeta(telefono);
+  // Si el navegador no alcanzó a recibir los IDs, se sacan de los permisos que el negocio le dio a la app.
+  if (!waba && process.env.WHATSAPP_APP_SECRET) {
+    const d = await graphCon(`${APP_ID}|${process.env.WHATSAPP_APP_SECRET}`, `debug_token?input_token=${encodeURIComponent(token)}`);
+    waba = idMeta((d.data?.granular_scopes || []).find((s) => s.scope === 'whatsapp_business_management')?.target_ids?.[0]);
+  }
+  if (!waba) return { status: 502, error: 'Meta no informó la cuenta de WhatsApp conectada' };
+  if (!telefono) telefono = idMeta((await graphCon(token, `${waba}/phone_numbers?fields=id`)).data?.[0]?.id);
+  const suscripcion = await graphCon(token, `${waba}/subscribed_apps`, 'POST');
+  // Un número nuevo hay que registrarlo en la Cloud API; con coexistencia (WhatsApp Business) ya está registrado.
+  tipo = tipo === 'coexistencia' ? 'coexistencia' : 'nuevo';
+  let pin = null, registro = null;
+  if (tipo === 'nuevo' && telefono) {
+    pin = String(randomInt(0, 1e6)).padStart(6, '0');
+    registro = await graphCon(token, `${telefono}/register`, 'POST', { messaging_product: 'whatsapp', pin });
+    if (!registro.success) pin = null;
+  }
+  const info = telefono ? await graphCon(token, `${telefono}?fields=display_phone_number,verified_name`) : {};
+  const cuenta = {
+    waba, phoneNumberId: telefono || null, numero: info.display_phone_number || null, nombre: info.verified_name || null,
+    tipo, conectada: new Date().toISOString(), ...extra, token, ...(pin ? { pin } : {}),
+  };
+  if (!(await guardarCuenta(cuenta))) return { status: 503, error: 'No se pudo guardar la cuenta, intenta de nuevo' };
+  return {
+    status: 200, ok: true, waba, telefono: cuenta.phoneNumberId, numero: cuenta.numero, nombre: cuenta.nombre, tipo,
+    suscrita: Boolean(suscripcion.success), errorSuscripcion: motivo(suscripcion),
+    registrado: registro ? Boolean(registro.success) : null, errorRegistro: motivo(registro),
+  };
+}
+
+// Invitaciones: un link de un solo uso para que un negocio conecte su WhatsApp sin entrar al panel.
+const INVITACIONES = 'whatsapp/invitaciones.json';
+const DIAS_INVITACION = 14;
+
+export async function leerInvitaciones() {
+  const { data, etag } = await leerDoc(INVITACIONES);
+  return { invitaciones: data || {}, etag };
+}
+
+async function cambiarInvitaciones(cambio) {
+  for (let intento = 0; intento < 4; intento++) {
+    const { invitaciones, etag } = await leerInvitaciones();
+    const r = cambio(invitaciones);
+    if (r === false) return false;
+    if ((await guardarDoc(INVITACIONES, invitaciones, etag)).ok) return r ?? true;
+  }
+  return false;
+}
+
+export async function crearInvitacion({ negocio, por }) {
+  const id = randomBytes(18).toString('base64url');
+  const inv = { negocio: String(negocio).trim().slice(0, 80), creada: new Date().toISOString(), vence: new Date(Date.now() + DIAS_INVITACION * 864e5).toISOString(), por: por || null, usada: null };
+  const ok = await cambiarInvitaciones((todas) => { todas[id] = inv; });
+  return ok ? { id, ...inv } : null;
+}
+
+// Devuelve la invitación si existe, no venció y no se usó.
+export async function invitacionVigente(id) {
+  if (!/^[\w-]{20,40}$/.test(String(id || ''))) return null;
+  const { invitaciones } = await leerInvitaciones();
+  const inv = invitaciones[id];
+  return inv && !inv.usada && new Date(inv.vence) > new Date() ? inv : null;
+}
+
+export const marcarInvitacionUsada = (id, waba) =>
+  cambiarInvitaciones((todas) => { if (!todas[id]) return false; todas[id].usada = { fecha: new Date().toISOString(), waba }; });
 
 export async function leerRegistro() {
   const { data } = await leerDoc(RUTA);

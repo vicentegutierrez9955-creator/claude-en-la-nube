@@ -7,12 +7,13 @@
 // accion=conectar { code, waba, telefono, tipo }  → canjea el código, suscribe la app y guarda la cuenta del negocio.
 // accion=cuentas                                  → cuentas conectadas (sin tokens).
 // accion=probar { waba, para, texto | plantilla } → envía un mensaje desde el número conectado.
-import { createHash, randomInt, timingSafeEqual } from 'node:crypto';
+// accion=invitar { negocio }                      → link de un solo uso para que el negocio conecte desde /conectar-whatsapp.
+// accion=invitaciones                             → últimas invitaciones y su estado.
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { sesion, json } from '../_lib/panel.js';
-import { enviar, leerRegistro, numero, graph, graphCon, canjearCodigo, leerCuentas, guardarCuenta, APP_ID } from '../_lib/whatsapp.js';
+import { enviar, leerRegistro, numero, graph, conectarCuenta, leerCuentas, crearInvitacion, leerInvitaciones } from '../_lib/whatsapp.js';
 
 const id = (v) => String(v || '').replace(/\D/g, '').slice(0, 20);
-const motivo = (r) => r?.error?.message || null;
 
 const hash = (s) => createHash('sha256').update(String(s)).digest();
 
@@ -64,43 +65,31 @@ export default {
       const { cuentas } = await leerCuentas();
       return json({ cuentas: Object.values(cuentas).map(({ token, pin, ...c }) => c) });
     }
-    if (p.accion === 'conectar' || p.accion === 'probar') {
+    if (p.accion === 'conectar' || p.accion === 'probar' || p.accion === 'invitar') {
       // Solo desde el panel con sesión: el código del registro insertado lo entrega el navegador de quien conecta.
       if (porToken || request.method !== 'POST') return json({ error: 'Usa POST desde el panel' }, 405);
     }
     if (p.accion === 'conectar') {
-      const code = String(p.code || '').slice(0, 2000);
-      if (!code) return json({ error: 'Falta el código de Meta' }, 400);
-      const tok = await canjearCodigo(code);
-      if (!tok.access_token) return json({ error: `No se pudo canjear el código: ${motivo(tok) || 'sin token'}` }, 502);
-      const token = tok.access_token;
-      let waba = id(p.waba), telefono = id(p.telefono);
-      // Si el navegador no alcanzó a recibir los IDs, se sacan de los permisos que el negocio le dio a la app.
-      if (!waba && process.env.WHATSAPP_APP_SECRET) {
-        const d = await graphCon(`${APP_ID}|${process.env.WHATSAPP_APP_SECRET}`, `debug_token?input_token=${encodeURIComponent(token)}`);
-        waba = id((d.data?.granular_scopes || []).find((s) => s.scope === 'whatsapp_business_management')?.target_ids?.[0]);
-      }
-      if (!waba) return json({ error: 'Meta no informó la cuenta de WhatsApp conectada' }, 502);
-      if (!telefono) telefono = id((await graphCon(token, `${waba}/phone_numbers?fields=id`)).data?.[0]?.id);
-      const suscripcion = await graphCon(token, `${waba}/subscribed_apps`, 'POST');
-      // Un número nuevo hay que registrarlo en la Cloud API; con coexistencia (WhatsApp Business) ya está registrado.
-      const tipo = p.tipo === 'coexistencia' ? 'coexistencia' : 'nuevo';
-      let pin = null, registro = null;
-      if (tipo === 'nuevo' && telefono) {
-        pin = String(randomInt(0, 1e6)).padStart(6, '0');
-        registro = await graphCon(token, `${telefono}/register`, 'POST', { messaging_product: 'whatsapp', pin });
-        if (!registro.success) pin = null;
-      }
-      const info = telefono ? await graphCon(token, `${telefono}?fields=display_phone_number,verified_name`) : {};
-      const cuenta = {
-        waba, phoneNumberId: telefono || null, numero: info.display_phone_number || null, nombre: info.verified_name || null,
-        tipo, conectada: new Date().toISOString(), por: sesion(request)?.nombre || null, token, ...(pin ? { pin } : {}),
-      };
-      if (!(await guardarCuenta(cuenta))) return json({ error: 'No se pudo guardar la cuenta, intenta de nuevo' }, 503);
+      const { status, ...r } = await conectarCuenta({ code: p.code, waba: p.waba, telefono: p.telefono, tipo: p.tipo, extra: { por: sesion(request)?.nombre || null } });
+      return json(r, status);
+    }
+    if (p.accion === 'invitar') {
+      if (porToken || request.method !== 'POST') return json({ error: 'Usa POST desde el panel' }, 405);
+      const negocio = String(p.negocio || '').trim();
+      if (!negocio) return json({ error: 'Escribe el nombre del negocio' }, 400);
+      const inv = await crearInvitacion({ negocio, por: sesion(request)?.nombre });
+      if (!inv) return json({ error: 'No se pudo crear la invitación, intenta de nuevo' }, 503);
+      return json({ ok: true, link: `https://stpyme.cl/conectar-whatsapp?i=${inv.id}`, negocio: inv.negocio, vence: inv.vence });
+    }
+    if (p.accion === 'invitaciones') {
+      const { invitaciones } = await leerInvitaciones();
+      // Solo las pendientes llevan el link; las usadas o vencidas se muestran sin él.
+      const ahora = new Date();
       return json({
-        ok: true, waba, telefono: cuenta.phoneNumberId, numero: cuenta.numero, nombre: cuenta.nombre, tipo,
-        suscrita: Boolean(suscripcion.success), errorSuscripcion: motivo(suscripcion),
-        registrado: registro ? Boolean(registro.success) : null, errorRegistro: motivo(registro),
+        invitaciones: Object.entries(invitaciones)
+          .map(([i, v]) => ({ ...v, link: !v.usada && new Date(v.vence) > ahora ? `https://stpyme.cl/conectar-whatsapp?i=${i}` : null }))
+          .sort((a, b) => b.creada.localeCompare(a.creada))
+          .slice(0, 30),
       });
     }
     if (p.accion === 'probar') {

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Conecta tu WhatsApp · STPyme</title>
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f1a12'/%3E%3Ctext x='5' y='22' font-family='Arial' font-weight='700' font-size='14' fill='%23c5f33b'%3EST%3C/text%3E%3C/svg%3E">
+<style>
+  :root{color-scheme:dark;--bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--acc:#c5f33b;--wa:#1faa59}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .caja{max-width:640px;margin:0 auto;padding:28px 16px 60px}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .logo span{color:var(--acc)}
+  h1{font-size:clamp(26px,6vw,34px);line-height:1.15;margin:22px 0 10px}
+  p{margin:0 0 14px}
+  .muted{color:var(--muted)}
+  .tarjeta{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:18px 0}
+  .tarjeta h2{font-size:18px;margin:0 0 6px}
+  .btn{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;font:inherit;font-weight:700;font-size:16px;border:0;border-radius:12px;padding:15px 18px;cursor:pointer;margin-top:12px}
+  .btn[disabled]{opacity:.5;cursor:wait}
+  .btn-wa{background:var(--wa);color:#fff}
+  .btn-sec{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  ol{padding-left:20px;margin:8px 0 0}
+  li{margin-bottom:6px}
+  .estado{white-space:pre-wrap;border-radius:12px;padding:14px;margin-top:16px;background:#0b130d;border:1px solid var(--line)}
+  .ok{border-color:var(--acc)}
+  a{color:var(--acc)}
+  footer{margin-top:30px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="caja">
+  <div class="logo">ST<span>Pyme</span></div>
+
+  <div id="invalida" hidden>
+    <h1>Este link no está disponible</h1>
+    <p class="muted">Puede que ya se haya usado o que haya vencido. Escríbenos y te mandamos uno nuevo.</p>
+  </div>
+
+  <div id="contenido" hidden>
+    <h1>Conecta el WhatsApp de <span id="negocio">tu negocio</span></h1>
+    <p class="muted">Así podemos enviar desde tu número las confirmaciones y recordatorios de horas, y responder a tus clientes. Se hace con la ventana oficial de Meta (Facebook) y toma unos 5 minutos.</p>
+
+    <section class="tarjeta">
+      <h2>Ya uso WhatsApp Business en mi celular</h2>
+      <p class="muted">Sigues usando la app como siempre, con tus chats. Solo escaneas un código QR desde tu WhatsApp Business.</p>
+      <button id="btn-coex" class="btn btn-wa" disabled>Conectar mi WhatsApp Business</button>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Quiero usar un número nuevo</h2>
+      <p class="muted">El número no puede estar en ninguna app de WhatsApp. Meta te manda un código por SMS o llamada.</p>
+      <button id="btn-nuevo" class="btn btn-sec" disabled>Conectar un número nuevo</button>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Qué vas a ver</h2>
+      <ol class="muted">
+        <li>Inicias sesión con tu Facebook (el tuyo o el de tu negocio).</li>
+        <li>Eliges o creas el portafolio comercial de tu negocio.</li>
+        <li>Eliges tu número y lo confirmas (QR o código).</li>
+        <li>Listo: esta página te avisa que quedó conectado.</li>
+      </ol>
+    </section>
+
+    <div id="estado" class="estado" hidden></div>
+  </div>
+
+  <footer>
+    STP CHILE SpA · <a href="/privacidad">Política de privacidad</a> · Puedes desconectar a STPyme cuando quieras desde tu cuenta de Meta.
+  </footer>
+</main>
+
+<script>
+(() => {
+  const APP_ID = '2621913031556176';
+  const CONFIG_ID = '1109319252016506';
+  const $ = (s) => document.querySelector(s);
+  const inv = new URLSearchParams(location.search).get('i') || '';
+  const estado = (texto, ok) => { const e = $('#estado'); e.hidden = false; e.textContent = texto; e.classList.toggle('ok', Boolean(ok)); e.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); };
+
+  let sesionMeta = null, codigo = null, tipo = 'nuevo', enviando = false, listo = false;
+
+  window.addEventListener('message', (ev) => {
+    let host = '';
+    try { host = new URL(ev.origin).hostname; } catch { return; }
+    if (!/(^|\.)facebook\.com$/.test(host)) return;
+    let d; try { d = JSON.parse(ev.data); } catch { return; }
+    if (d.type !== 'WA_EMBEDDED_SIGNUP') return;
+    if (String(d.event).startsWith('FINISH')) { sesionMeta = d.data || {}; terminar(); }
+    else if (d.event === 'CANCEL') estado('Se cerró la ventana antes de terminar. Puedes intentarlo de nuevo cuando quieras.');
+    else if (d.event === 'ERROR') estado(`Meta informó un problema: ${d.data?.error_message || 'sin detalle'}. Intenta de nuevo o escríbenos.`);
+  });
+
+  async function terminar() {
+    if (!codigo || enviando || listo) return;
+    enviando = true;
+    estado('Guardando la conexión…');
+    try {
+      const r = await fetch('/api/publico/whatsapp', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ i: inv, code: codigo, waba: sesionMeta?.waba_id || '', telefono: sesionMeta?.phone_number_id || '', tipo }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || `Error ${r.status}`);
+      listo = true;
+      $('#btn-coex').disabled = true; $('#btn-nuevo').disabled = true;
+      estado(`✅ ¡Listo! Tu WhatsApp ${j.numero || ''} quedó conectado a STPyme. Ya puedes cerrar esta página.`.replace('  ', ' '), true);
+    } catch (e) {
+      estado(`No se pudo terminar: ${e.message}`);
+    } finally { codigo = null; enviando = false; }
+  }
+
+  function conectar(conTipo) {
+    tipo = conTipo; codigo = null; sesionMeta = null;
+    estado('Abriendo la ventana de Meta… Si no aparece, revisa que tu navegador no esté bloqueando ventanas emergentes.');
+    FB.login((resp) => {
+      if (!resp.authResponse?.code) { estado('No se completó la conexión. Puedes intentarlo de nuevo.'); return; }
+      codigo = resp.authResponse.code;
+      setTimeout(terminar, sesionMeta ? 0 : 3000);
+    }, {
+      config_id: CONFIG_ID,
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: { setup: {}, sessionInfoVersion: '3', ...(conTipo === 'coexistencia' ? { featureType: 'whatsapp_business_app_onboarding' } : {}) },
+    });
+  }
+
+  fetch(`/api/publico/whatsapp?i=${encodeURIComponent(inv)}`)
+    .then((r) => r.json().then((j) => ({ ok: r.ok, j })))
+    .then(({ ok, j }) => {
+      if (!ok) { $('#invalida').hidden = false; return; }
+      $('#negocio').textContent = j.negocio;
+      $('#contenido').hidden = false;
+      const s = document.createElement('script');
+      s.async = true; s.defer = true; s.crossOrigin = 'anonymous';
+      s.src = 'https://connect.facebook.net/es_LA/sdk.js';
+      document.body.append(s);
+    })
+    .catch(() => { $('#invalida').hidden = false; });
+
+  window.fbAsyncInit = () => {
+    FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v25.0' });
+    $('#btn-coex').disabled = false; $('#btn-nuevo').disabled = false;
+  };
+  $('#btn-coex').addEventListener('click', () => conectar('coexistencia'));
+  $('#btn-nuevo').addEventListener('click', () => conectar('nuevo'));
+})();
+</script>
+</body>
+</html>

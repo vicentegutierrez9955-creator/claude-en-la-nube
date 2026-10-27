@@ -60,3 +60,25 @@ await hook.fetch(new Request(H + '/api/whatsapp/webhook', { method: 'POST', body
 ok(!llamadas.some((l) => l.ruta.endsWith('/messages')), 'webhook: no responde automáticamente en la línea de un cliente');
 const est = await (await panel.fetch(new Request(H + '/api/panel/whatsapp?t=api&accion=estado'))).json();
 ok(est.mensajes.some((m) => m.id === 'c1' && m.linea === '333'), 'webhook: registra el mensaje con su línea');
+
+// Invitaciones: el panel crea un link y el negocio conecta desde la página pública, una sola vez.
+const { default: publico } = await import('../api/publico/whatsapp.js');
+r = await post({ accion: 'invitar', negocio: 'TTM Service' });
+j = await r.json();
+const inv = new URL(j.link).searchParams.get('i');
+ok(r.status === 200 && j.link.startsWith('https://stpyme.cl/conectar-whatsapp?i=') && inv.length >= 20, 'el panel crea un link de invitación');
+ok((await panel.fetch(new Request(H + '/api/panel/whatsapp?t=api&accion=invitar&negocio=X'))).status === 405, 'con el token de Claude no crea invitaciones');
+r = await publico.fetch(new Request(H + '/api/publico/whatsapp?i=' + inv));
+ok(r.status === 200 && (await r.json()).negocio === 'TTM Service', 'la página pública muestra el negocio de la invitación');
+ok((await publico.fetch(new Request(H + '/api/publico/whatsapp?i=inventado-no-existe-123456'))).status === 404, 'rechaza una invitación inventada');
+const pub = (b, origin = H) => publico.fetch(new Request(H + '/api/publico/whatsapp', { method: 'POST', body: JSON.stringify(b), headers: { 'content-type': 'application/json', ...(origin ? { origin } : {}) } }));
+ok((await pub({ i: inv, code: 'bueno', tipo: 'coexistencia' }, 'https://otro.sitio')).status === 403, 'no acepta conexiones desde otro sitio');
+r = await pub({ i: inv, code: 'bueno', waba: '5555555555555555', telefono: '666', tipo: 'coexistencia' });
+j = await r.json();
+ok(r.status === 200 && j.ok && !JSON.stringify(j).includes('tk-negocio'), 'el negocio conecta con su link (sin ver el token)');
+ok((await pub({ i: inv, code: 'bueno', tipo: 'coexistencia' })).status === 404, 'el link no sirve dos veces');
+const cs = (await (await panel.fetch(new Request(H + '/api/panel/whatsapp?t=api&accion=cuentas'))).json()).cuentas;
+ok(cs.some((c) => c.waba === '5555555555555555' && c.negocio === 'TTM Service'), 'la cuenta queda guardada con el nombre del negocio');
+r = await post({ accion: 'invitaciones' });
+j = await r.json();
+ok(j.invitaciones[0].usada?.waba === '5555555555555555' && j.invitaciones[0].link === null, 'el panel ve la invitación como usada');
