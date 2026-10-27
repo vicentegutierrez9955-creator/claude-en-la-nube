@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Conectar WhatsApp · Panel</title>
+<meta name="theme-color" content="#0f1b2d">
+<link rel="stylesheet" href="/panel/styles.css">
+<style>
+  .caja{max-width:720px;margin:32px auto;padding:0 16px}
+  .tarjeta{background:#fff;border:1px solid #e3e8ef;border-radius:14px;padding:20px;margin:0 0 16px}
+  .tarjeta h2{margin:0 0 6px;font-size:18px}
+  .fila{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .estado{white-space:pre-wrap;font-size:14px;background:#f6f8fb;border-radius:10px;padding:12px;margin-top:14px}
+  .cuenta{border-top:1px solid #eef1f5;padding:12px 0;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+  .cuenta:first-child{border-top:0}
+  .prueba{display:flex;flex-wrap:wrap;gap:8px}
+  .prueba input{padding:8px 10px;border:1px solid #d5dbe3;border-radius:8px;min-width:0}
+</style>
+</head>
+<body>
+<main class="caja">
+  <p><a href="/panel">← Volver al panel</a></p>
+
+  <section class="tarjeta">
+    <h2>Conectar WhatsApp de un negocio</h2>
+    <p class="muted">Abre la ventana de Meta para que el negocio conecte su número a STPyme. Al terminar, la cuenta queda guardada y los mensajes llegan al webhook de stpyme.cl.</p>
+    <div class="fila">
+      <button id="btn-coex" class="btn btn-wa" disabled>Conectar mi WhatsApp Business (sigo usando la app)</button>
+      <button id="btn-nuevo" class="btn btn-primary" disabled>Conectar un número nuevo</button>
+    </div>
+    <p class="muted" style="margin-top:10px">Con <b>"sigo usando la app"</b> (coexistencia), el negocio escanea un QR desde su WhatsApp Business y no pierde sus chats. Con <b>número nuevo</b>, el número no puede estar en uso en ninguna app de WhatsApp.</p>
+    <div id="estado" class="estado" hidden></div>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Cuentas conectadas</h2>
+    <div id="cuentas"><p class="muted">Cargando…</p></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const APP_ID = '2621913031556176';
+  const CONFIG_ID = '1109319252016506';
+  const $ = (s) => document.querySelector(s);
+  const estado = (texto) => { const e = $('#estado'); e.hidden = false; e.textContent = texto; };
+
+  const api = async (cuerpo) => {
+    const r = await fetch('/api/panel/whatsapp', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(cuerpo) });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) throw new Error('Tu sesión del panel expiró. Entra al panel y vuelve a esta página.');
+    if (!r.ok) throw new Error(j.error || j.motivo || `Error ${r.status}`);
+    return j;
+  };
+
+  // El registro insertado avisa por postMessage la cuenta y el número elegidos; FB.login entrega el código.
+  let sesionMeta = null, codigo = null, tipo = 'nuevo';
+  window.addEventListener('message', (ev) => {
+    if (!/(^|\.)facebook\.com$/.test(new URL(ev.origin).hostname)) return;
+    let d; try { d = JSON.parse(ev.data); } catch { return; }
+    if (d.type !== 'WA_EMBEDDED_SIGNUP') return;
+    if (String(d.event).startsWith('FINISH')) { sesionMeta = d.data || {}; terminar(); }
+    else if (d.event === 'CANCEL') estado(`Se cerró la ventana sin terminar${d.data?.current_step ? ` (paso: ${d.data.current_step})` : ''}.`);
+    else if (d.event === 'ERROR') estado(`Meta informó un error: ${d.data?.error_message || 'sin detalle'}`);
+  });
+
+  let enviando = false;
+  async function terminar() {
+    // Espera a tener el código; los IDs pueden no llegar y el servidor los busca con el token.
+    if (!codigo || enviando) return;
+    enviando = true;
+    estado('Guardando la conexión…');
+    try {
+      const r = await api({ accion: 'conectar', code: codigo, waba: sesionMeta?.waba_id || '', telefono: sesionMeta?.phone_number_id || '', tipo });
+      const lineas = [`✅ Conectado: ${r.nombre || 'negocio'} ${r.numero ? `(${r.numero})` : ''}`.trim(), `Cuenta de WhatsApp: ${r.waba}`];
+      lineas.push(r.suscrita ? 'App suscrita a la cuenta: sí' : `App suscrita: no (${r.errorSuscripcion || 'sin detalle'})`);
+      if (r.registrado !== null) lineas.push(r.registrado ? 'Número registrado en la API: sí' : `Número registrado: no (${r.errorRegistro || 'sin detalle'})`);
+      estado(lineas.join('\n'));
+      cargarCuentas();
+    } catch (e) { estado(`No se pudo guardar: ${e.message}`); }
+    finally { codigo = null; sesionMeta = null; enviando = false; }
+  }
+
+  function conectar(conTipo) {
+    tipo = conTipo; codigo = null; sesionMeta = null;
+    estado('Abriendo la ventana de Meta…');
+    FB.login((resp) => {
+      if (!resp.authResponse?.code) { estado('No se completó la conexión (la ventana se cerró o se rechazó el permiso).'); return; }
+      codigo = resp.authResponse.code;
+      // Si el aviso con los IDs no llega en unos segundos, se guarda igual y el servidor los busca.
+      setTimeout(terminar, sesionMeta ? 0 : 3000);
+    }, {
+      config_id: CONFIG_ID,
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: { setup: {}, sessionInfoVersion: '3', ...(conTipo === 'coexistencia' ? { featureType: 'whatsapp_business_app_onboarding' } : {}) },
+    });
+  }
+
+  async function cargarCuentas() {
+    const caja = $('#cuentas');
+    try {
+      const { cuentas } = await api({ accion: 'cuentas' });
+      caja.textContent = '';
+      if (!cuentas.length) { caja.innerHTML = '<p class="muted">Todavía no hay cuentas conectadas.</p>'; return; }
+      for (const c of cuentas) {
+        const fila = document.createElement('div'); fila.className = 'cuenta';
+        const info = document.createElement('div');
+        info.innerHTML = '<b></b><br><span class="muted"></span>';
+        info.querySelector('b').textContent = `${c.nombre || 'Sin nombre'} ${c.numero ? `· ${c.numero}` : ''}`;
+        info.querySelector('span').textContent = `${c.tipo === 'coexistencia' ? 'Coexistencia' : 'Número nuevo'} · conectada ${new Date(c.conectada).toLocaleString('es-CL')}${c.por ? ` por ${c.por}` : ''}`;
+        const prueba = document.createElement('form'); prueba.className = 'prueba';
+        prueba.innerHTML = '<input name="para" inputmode="tel" placeholder="Enviar prueba a 569…" required><button class="btn btn-sm">Enviar hello_world</button>';
+        prueba.addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          estado('Enviando mensaje de prueba…');
+          try {
+            await api({ accion: 'probar', waba: c.waba, para: prueba.para.value, plantilla: 'hello_world', idioma: 'en_US' });
+            estado(`✅ Mensaje de prueba enviado desde ${c.numero || 'el número conectado'}.`);
+          } catch (e) { estado(`No se pudo enviar: ${e.message}`); }
+        });
+        fila.append(info, prueba); caja.append(fila);
+      }
+    } catch (e) { caja.innerHTML = ''; const p = document.createElement('p'); p.className = 'error'; p.textContent = e.message; caja.append(p); }
+  }
+
+  window.fbAsyncInit = () => {
+    FB.init({ appId: APP_ID, autoLogAppEvents: true, xfbml: false, version: 'v25.0' });
+    $('#btn-coex').disabled = false; $('#btn-nuevo').disabled = false;
+  };
+  $('#btn-coex').addEventListener('click', () => conectar('coexistencia'));
+  $('#btn-nuevo').addEventListener('click', () => conectar('nuevo'));
+  cargarCuentas();
+})();
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js"></script>
+</body>
+</html>

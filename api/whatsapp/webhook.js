@@ -43,6 +43,10 @@ export default {
     await anotar((reg) => {
       respuestas.length = 0; // si se reintenta el guardado, no repetir respuestas
       for (const v of cambios) {
+        // Los números de clientes conectados con "Conectar WhatsApp" llegan a este mismo webhook: esos mensajes
+        // solo se registran; las respuestas automáticas y las bajas son del número de STPyme.
+        const linea = v.metadata?.phone_number_id || null;
+        const propia = !linea || linea === process.env.WHATSAPP_PHONE_NUMBER_ID;
         for (const s of v.statuses || []) {
           const m = reg.mensajes.find((x) => x.id === s.id);
           if (m) m.estado = s.status === 'failed' ? `falló: ${s.errors?.[0]?.title || ''}`.trim() : s.status;
@@ -52,7 +56,8 @@ export default {
           const de = numero(m.from);
           const texto = textoDe(m).slice(0, 1000);
           const nombre = (v.contacts || []).find((c) => c.wa_id === m.from)?.profile?.name || '';
-          reg.mensajes.push({ id: m.id, dir: 'entra', numero: de, nombre, texto, fecha: new Date(Number(m.timestamp) * 1000 || Date.now()).toISOString() });
+          reg.mensajes.push({ id: m.id, dir: 'entra', numero: de, nombre, texto, linea, fecha: new Date(Number(m.timestamp) * 1000 || Date.now()).toISOString() });
+          if (!propia) continue;
           const palabra = texto.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').split(/\s+/)[0];
           if (palabra === 'salir') reg.bajas[de] = new Date().toISOString();
           if (palabra === 'volver') delete reg.bajas[de];
