@@ -4,7 +4,7 @@
 ## Servicios
 - [Contabilidad para pymes](https://asesoriascontables-jc.cl/contabilidad-pymes): contabilidad mensual, libros, IVA, sueldos e imposiciones.
 - [Declaración de IVA (F29)](https://asesoriascontables-jc.cl/declaracion-iva-f29): IVA, PPM y retenciones todos los meses.
-- [Operación Renta](https://asesoriascontables-jc.cl/operacion-renta): declaración de renta (Formulario 22) de personas, independientes y empresas.
+- [Declaración de renta (Operación Renta)](https://asesoriascontables-jc.cl/operacion-renta): declaración de renta (Formulario 22) de personas, independientes y empresas.
 - [Remuneraciones](https://asesoriascontables-jc.cl/remuneraciones): liquidaciones de sueldo, Previred, contratos, finiquitos y certificados F30.
 - [Inicio de actividades](https://asesoriascontables-jc.cl/inicio-de-actividades): inicio de actividades en el SII, Empresa en un Día y régimen tributario.
 - [Trámites y deudas con el SII](https://asesoriascontables-jc.cl/tramites-sii): declaraciones atrasadas, multas, convenios de pago y modificaciones.
