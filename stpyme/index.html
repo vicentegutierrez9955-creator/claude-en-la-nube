@@ -520,6 +520,10 @@ label .opc{font-weight:500;color:var(--muted)}
 .bot-precio{margin:0 0 6px}
 .bot-precio b{font-size:36px;letter-spacing:-.02em}
 .bot-precio span{color:var(--muted);margin-left:4px}
+.bot-plan-pronto{border-style:dashed;background:transparent}
+.bot-plan-pronto ul{flex:0}
+.bot-plan-pronto .nota-pronto{margin-top:auto}
+.bot-etq-pronto{background:var(--card);color:var(--acc);border:1px solid var(--acc)}
 .bot-letra{margin:22px auto 0;max-width:760px;text-align:center;font-size:13.5px;color:var(--muted)}
 @media (max-width:980px){
   .hero .wrap,.split,.contacto,.calc,.casos-fila{grid-template-columns:minmax(0,1fr)}
@@ -725,7 +729,7 @@ label .opc{font-weight:500;color:var(--muted)}
         <a class="sol sol-bot glow aparece" style="--d:.2s" href="#bot">
           <span class="etq">Nuevo · Para cualquier negocio</span>
           <h3>Bot de WhatsApp con IA</h3>
-          <p>Tu WhatsApp responde, agenda, vende y avisa solo, las 24 horas. Se suma a tu web o a Tuerkit, o funciona por su cuenta.</p>
+          <p>Tu WhatsApp responde solo, las 24 horas, con la información de tu negocio, y te pasa lo que necesita a una persona. Se suma a tu web o funciona por su cuenta.</p>
           <span class="ir">Ver qué hace el bot <svg class="icon"><use href="#i-flecha"/></svg></span>
         </a>
       </div>
@@ -975,26 +979,26 @@ label .opc{font-weight:500;color:var(--muted)}
       <div class="bot-intro">
         <div class="aparece">
           <span class="kicker">Nuevo · Bot de WhatsApp con IA</span>
-          <h2 id="bot-t" style="margin:14px 0 16px">Tu WhatsApp atiende y vende solo, las 24 horas</h2>
-          <p class="lead">Responde a tus clientes al instante, agenda horas, toma pedidos, cobra y avisa. Tú solo entras cuando de verdad te necesitan, desde un panel donde ves todas las conversaciones.</p>
+          <h2 id="bot-t" style="margin:14px 0 16px">Nunca más un cliente sin respuesta</h2>
+          <p class="lead">Tu WhatsApp responde al instante, a cualquier hora, con la información de tu negocio. Tú solo entras cuando de verdad te necesitan, desde tu celular o desde un panel donde ves todas las conversaciones.</p>
           <ul class="bot-hace">
-            <li><svg class="icon"><use href="#i-wsp"/></svg><div><b>Responde dudas</b><span>Horario, precios, servicios y dirección, con la información de tu negocio.</span></div></li>
-            <li><svg class="icon"><use href="#i-cal"/></svg><div><b>Agenda, cambia y cancela horas</b><span>Directo en tu agenda, con recordatorio el día antes.</span></div></li>
-            <li><svg class="icon"><use href="#i-cajas"/></svg><div><b>Vende y cobra</b><span>Muestra tu catálogo, arma el pedido y manda el link de pago.</span></div></li>
-            <li><svg class="icon"><use href="#i-check"/></svg><div><b>Avisa solo</b><span>Confirmaciones, "tu auto está listo" o "tu pedido va en camino".</span></div></li>
-            <li><svg class="icon"><use href="#i-soporte"/></svg><div><b>Te pasa lo importante</b><span>Si algo necesita a una persona, te avisa y tomas la conversación.</span></div></li>
+            <li><svg class="icon"><use href="#i-wsp"/></svg><div><b>Responde dudas al instante</b><span>Horario, precios, servicios, dirección y cómo reservar, con lo que tú le enseñas.</span></div></li>
+            <li><svg class="icon"><use href="#i-check"/></svg><div><b>No inventa</b><span>Si no sabe algo, le dice al cliente que una persona le responderá y te deja ese chat marcado.</span></div></li>
+            <li><svg class="icon"><use href="#i-cajas"/></svg><div><b>Respuestas fijas</b><span>Para las preguntas de siempre, el bot responde exactamente lo que tú escribiste.</span></div></li>
+            <li><svg class="icon"><use href="#i-soporte"/></svg><div><b>Se hace a un lado cuando respondes tú</b><span>Si contestas un chat, el bot se pausa en esa conversación para no interrumpirte.</span></div></li>
+            <li><svg class="icon"><use href="#i-cal"/></svg><div><b>Panel con todas tus conversaciones</b><span>Ves qué respondió el bot, qué chats te esperan y lo pruebas antes de prenderlo.</span></div></li>
           </ul>
           <div class="nota-caja"><svg class="icon"><use href="#i-check"/></svg><span>Funciona con tu mismo número de WhatsApp Business: sigues usando la app en tu celular, con todos tus chats.</span></div>
         </div>
         <div class="bot-chat aparece" style="--d:.1s" aria-hidden="true">
           <div class="bot-chat-top"><span class="bot-avatar">P</span><div><b>Podología Carmen</b><small>en línea</small></div></div>
           <div class="bot-msgs">
-            <p class="bm bm-c aparece" style="--d:.2s">Hola! ¿tienen hora para mañana? 🙏<small>23:40</small></p>
-            <p class="bm bm-b aparece" style="--d:.45s">¡Hola! Sí 😊 Mañana tengo libre a las 10:30, 12:00 y 16:00. ¿Cuál te acomoda?<small>23:40</small></p>
-            <p class="bm bm-c aparece" style="--d:.7s">12:00 porfa<small>23:41</small></p>
-            <p class="bm bm-b aparece" style="--d:.95s">Listo, quedaste agendada mañana a las 12:00 ✅ Te aviso el día antes. ¡Nos vemos!<small>23:41</small></p>
+            <p class="bm bm-c aparece" style="--d:.2s">Hola! ¿cuánto sale la atención y atienden mañana? 🙏<small>23:40</small></p>
+            <p class="bm bm-b aparece" style="--d:.45s">¡Hola! 😊 La atención podológica cuesta $20.000 y dura unos 45 minutos. Mañana atendemos de 9:00 a 19:00. Puedes elegir tu hora aquí: podologiacarmen.cl/reservar<small>23:40</small></p>
+            <p class="bm bm-c aparece" style="--d:.7s">Listo, reservé a las 12 🙌<small>23:42</small></p>
+            <p class="bm bm-b aparece" style="--d:.95s">¡Perfecto! Nos vemos mañana. Cualquier duda, escríbenos por aquí ✅<small>23:42</small></p>
           </div>
-          <div class="bot-chat-pie"><svg class="icon"><use href="#i-check"/></svg>Respondió y agendó solo, a medianoche</div>
+          <div class="bot-chat-pie"><svg class="icon"><use href="#i-check"/></svg>Respondió solo, a medianoche</div>
         </div>
       </div>
 
@@ -1002,14 +1006,14 @@ label .opc{font-weight:500;color:var(--muted)}
         <h3 class="bot-sub">Hecho para tu tipo de negocio</h3>
       </div>
       <div class="bot-rubros">
-        <div class="bot-rubro glow aparece"><span class="ico"><svg class="icon"><use href="#i-cal"/></svg></span><h4>Consultas y profesionales</h4><p>Podología, kine, psicología, estética, barberías. Agenda sola, confirma, recuerda y pide reseñas en Google.</p></div>
-        <div class="bot-rubro glow aparece" style="--d:.08s"><span class="ico"><svg class="icon"><use href="#i-auto"/></svg></span><h4>Talleres mecánicos</h4><p>Cotiza, agenda la revisión y avisa "tu auto está listo". Con Tuerkit, el cliente aprueba el presupuesto con un botón.</p></div>
-        <div class="bot-rubro glow aparece" style="--d:.16s"><span class="ico"><svg class="icon"><use href="#i-cajas"/></svg></span><h4>Tiendas</h4><p>Muestra productos con stock real, arma el pedido, cobra con link de pago y avisa el despacho.</p></div>
+        <div class="bot-rubro glow aparece"><span class="ico"><svg class="icon"><use href="#i-cal"/></svg></span><h4>Consultas y profesionales</h4><p>Podología, kine, psicología, estética, barberías. Responde precios, horarios y cómo llegar, y manda el link de tu agenda para que reserven solos.</p></div>
+        <div class="bot-rubro glow aparece" style="--d:.08s"><span class="ico"><svg class="icon"><use href="#i-auto"/></svg></span><h4>Talleres mecánicos</h4><p>Responde qué servicios haces, horarios y dónde estás, y te pasa las cotizaciones para que las respondas tú.</p></div>
+        <div class="bot-rubro glow aparece" style="--d:.16s"><span class="ico"><svg class="icon"><use href="#i-cajas"/></svg></span><h4>Tiendas</h4><p>Responde por productos, precios, despachos y medios de pago, y te pasa los pedidos para que los cierres tú.</p></div>
       </div>
 
       <div class="cabeza centro aparece" style="margin-top:84px">
         <h3 class="bot-sub">Planes</h3>
-        <p class="lead">Pruébalo gratis 14 días. Sin contrato: si no te sirve, lo dejas.</p>
+        <p class="lead">Lo configuramos nosotros con la información de tu negocio y queda funcionando en 1 día hábil. Pruébalo gratis 14 días, sin contrato: si no te sirve, lo dejas.</p>
       </div>
       <div class="bot-planes">
         <article class="bot-plan glow aparece">
@@ -1017,40 +1021,42 @@ label .opc{font-weight:500;color:var(--muted)}
           <p class="bot-precio"><b>$19.990</b><span>/mes</span></p>
           <p class="muted">Para que ningún cliente se quede sin respuesta.</p>
           <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Responde dudas 24/7</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Responde dudas 24/7 con IA</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Respuestas fijas para las preguntas de siempre</li>
             <li><svg class="icon"><use href="#i-check"/></svg>Te pasa los casos que necesitan a una persona</li>
             <li><svg class="icon"><use href="#i-check"/></svg>Panel con todas tus conversaciones</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Respondes tú cuando quieras</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Lo configuramos nosotros</li>
           </ul>
           <a class="btn btn-borde" href="#contacto" data-interes="sitio-bot">Probar gratis</a>
         </article>
         <article class="bot-plan bot-plan-top glow aparece" style="--d:.08s">
           <span class="bot-etq">El más elegido</span>
-          <h4>Asistente + Agenda o Ventas</h4>
+          <h4>Asistente Plus</h4>
           <p class="bot-precio"><b>$34.990</b><span>/mes</span></p>
-          <p class="muted">Para que tu WhatsApp agende o venda solo.</p>
+          <p class="muted">Para negocios con más consultas, que no quieren preocuparse de nada.</p>
           <ul>
             <li><svg class="icon"><use href="#i-check"/></svg>Todo lo del plan Asistente</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Agenda horas o toma pedidos y cobra</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Confirmaciones y recordatorios automáticos</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Avisos de "listo" o "va en camino"</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>El doble de conversaciones con IA al mes</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Actualizamos lo que sabe el bot cuando cambias precios o promociones</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Informe mensual de lo que te preguntan tus clientes</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Soporte prioritario por WhatsApp</li>
           </ul>
           <a class="btn btn-primario" href="#contacto" data-interes="sitio-bot">Probar gratis</a>
         </article>
-        <article class="bot-plan glow aparece" style="--d:.16s">
-          <h4>Pro</h4>
-          <p class="bot-precio"><b>$49.990</b><span>/mes</span></p>
-          <p class="muted">Para negocios con equipo y más movimiento.</p>
+        <article class="bot-plan bot-plan-pronto glow aparece" style="--d:.16s">
+          <span class="bot-etq bot-etq-pronto">Próximamente</span>
+          <h4>Agenda y recordatorios</h4>
+          <p class="muted">Que el bot reserve directo en tu agenda y le recuerde la hora a tu cliente el día antes.</p>
           <ul>
-            <li><svg class="icon"><use href="#i-check"/></svg>Todo lo del plan anterior</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Varios usuarios en el panel</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Pide reseñas y recuerda controles</li>
-            <li><svg class="icon"><use href="#i-check"/></svg>Informe mensual de lo que atendió</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Agenda, cambia y cancela horas</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Recordatorio el día antes</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>Pide reseñas en Google después de la atención</li>
           </ul>
-          <a class="btn btn-borde" href="#contacto" data-interes="sitio-bot">Probar gratis</a>
+          <p class="muted nota-pronto" style="font-size:14px">Los clientes de los planes Asistente lo reciben primero.</p>
+          <a class="btn btn-borde" href="#contacto" data-interes="sitio-bot">Quiero que me avisen</a>
         </article>
       </div>
-      <p class="bot-letra">Precios con IVA incluido. Los mensajes que tu negocio envía primero (recordatorios, avisos) tienen un costo de Meta que va incluido hasta cierto volumen según el plan. Precio fundador congelado para los primeros clientes.</p>
+      <p class="bot-letra">Precios con IVA incluido. Responder a tus clientes no tiene costo extra de WhatsApp. Precio fundador congelado para los primeros clientes.</p>
     </div>
   </section>
 
