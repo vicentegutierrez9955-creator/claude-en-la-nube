@@ -203,10 +203,33 @@ section+section,.franja+section{border-top:1px solid #1c2b20}
 details{border-color:#23362a}
 summary{color:#fff}summary::after{color:var(--lima)}
 footer{background:var(--osc);border-top:1px solid #1c2b20}
+
+/* Lanzamiento, garantía y comparación */
+.lanz{background:var(--lima);color:var(--osc);text-align:center;font-size:14px;font-weight:700;padding:9px 16px;position:relative;z-index:6}
+.lanz b{font-weight:800}
+.top{position:relative;top:0;background:var(--osc)}
+.hero{padding-top:56px}
+.seguro{display:block}
+.precio s{display:block;font-size:15px;color:#7f8c81;font-weight:600;margin-top:6px}
+.garantia-mini{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:#dfe8de;margin-top:8px}
+.garantia{display:grid;grid-template-columns:auto 1fr;gap:34px;align-items:center;background:var(--osc2);border:1px solid rgba(197,243,59,.35);border-radius:26px;padding:38px 42px}
+.sello-g{width:150px;height:150px;border-radius:50%;border:3px dashed var(--lima);display:grid;place-items:center;text-align:center;color:var(--lima);font-weight:800;line-height:1.05}
+.sello-g b{display:block;font-size:46px}.sello-g span{font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.garantia h2{font-size:clamp(26px,3.4vw,36px)}
+.garantia p{margin:0;color:#a9b6aa;font-size:17px}
+.compara{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+.compara div{border-radius:18px;padding:22px 24px;border:1px solid #23362a;background:var(--osc2)}
+.compara div.yo{border-color:rgba(197,243,59,.45);background:rgba(197,243,59,.08)}
+.compara small{display:block;color:#a9b6aa;font-size:14px;margin-bottom:6px}
+.compara b{font-size:30px;color:#fff;letter-spacing:-.02em}
+.compara div.yo b{color:var(--lima)}
+.compara p{margin:6px 0 0;color:#a9b6aa;font-size:14.5px}
+@media(max-width:900px){.lanz{font-size:12.5px}.hero{padding-top:36px}.garantia{grid-template-columns:1fr;text-align:center;padding:30px 24px}.sello-g{margin:0 auto;width:130px;height:130px}.compara{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
+<div class="lanz">🚀 Precio de lanzamiento: <b>$5.000</b> hasta el <b>30 de noviembre</b><span id="dias"></span> · después sube a $7.990</div>
 <header class="top"><div class="env"><a class="logo" href="https://stpyme.cl">ST<span>Pyme</span></a><a class="mini pagar" href="#comprar">Comprar · $5.000</a></div></header>
 
 <section class="hero">
@@ -222,10 +245,10 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
         <li>Botones de WhatsApp y link de pago para vender</li>
       </ul>
       <div class="precio-fila">
-        <div class="precio"><small>Pago único</small><b>$5.000</b></div>
+        <div class="precio"><small>Precio de lanzamiento</small><b>$5.000</b><s>Después $7.990</s></div>
         <a class="btn pagar" href="#comprar">Quiero mi ebook <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <p class="seguro">🔒 Pago seguro con <b>Mercado Pago</b> · PDF de 34 páginas</p>
+      <p class="seguro">🔒 Pago seguro con <b>Mercado Pago</b> · PDF de 34 páginas · Garantía de 7 días</p>
     </div>
     <div class="mock" aria-hidden="true">
       <img class="libro" src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/pag-1.jpg" alt="" width="760" height="1078">
@@ -289,8 +312,12 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
       <div class="item bonus"><span class="n">BONUS</span><div><h3>Tu dominio .cl</h3><p>Cómo comprar tu dominio en NIC Chile y conectarlo a tu web, paso a paso.</p></div></div>
       <div class="item bonus"><span class="n">BONUS</span><div><h3>Aparece en Google</h3><p>Prompt para optimizar tu web, Perfil de Empresa, Search Console, reseñas y checklist final.</p></div></div>
     </div>
+    <div class="compara">
+      <div><small>Si te la hacemos nosotros en STPyme</small><b>$50.000</b><p>Por una web, y los cambios grandes se cotizan aparte.</p></div>
+      <div class="yo"><small>Si la haces tú con esta guía</small><b>$5.000</b><p>Precio de lanzamiento. Y puedes hacer todas las webs que quieras.</p></div>
+    </div>
     <div class="total">
-      <div><h3>Todo esto por $5.000</h3><p>Pago único. Sin mensualidades. Lo que aprendes te sirve para hacer todas las webs que quieras.</p></div>
+      <div><h3>Todo esto por $5.000</h3><p>Pago único, sin mensualidades. Lo que aprendes te sirve para hacer todas las webs que quieras.</p></div>
       <a class="btn pagar" href="#comprar">Quiero mi ebook</a>
     </div>
   </div>
@@ -338,6 +365,15 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
 
 <section>
   <div class="env">
+    <div class="garantia">
+      <div class="sello-g"><div><b>7</b><span>días de<br>garantía</span></div></div>
+      <div><span class="kicker">Compra sin riesgo</span><h2>Si no te sirve, te devolvemos tu plata</h2><p>Tienes 7 días desde tu compra para probar la guía. Si no te convence, responde el correo con el que te enviamos el ebook y te devolvemos tus $5.000. Sin preguntas.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="env">
     <div class="centro"><span class="kicker">Preguntas frecuentes</span><h2>Lo que nos preguntan</h2></div>
     <div class="faq">
       <details><summary>¿Necesito saber programar?</summary><p>No. La inteligencia artificial escribe el código. Tú le explicas lo que quieres con tus palabras, usando los prompts del ebook como base.</p></details>
@@ -345,6 +381,7 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
       <details><summary>¿Funciona en Mac?</summary><p>Sí. OpenCode tiene app de escritorio para Windows y Mac. Las capturas del ebook son de Windows, pero los pasos son los mismos.</p></details>
       <details><summary>¿Puedo hacer una tienda online?</summary><p>Sí, una tienda donde muestras tus productos con precio y el cliente te compra por WhatsApp o con un link de pago de Mercado Pago. Lo que no trae es un carrito con stock automático: para eso se necesita otro tipo de sistema.</p></details>
       <details><summary>¿Cómo recibo el ebook?</summary><p>Después de pagar con Mercado Pago te lo enviamos en PDF al correo que usaste en la compra. Lo puedes leer en el computador, la tablet o el celular.</p></details>
+      <details><summary>¿Y si no me sirve?</summary><p>Tienes garantía de 7 días: responde el correo con el que te enviamos el ebook y te devolvemos tus $5.000, sin preguntas.</p></details>
       <details><summary>¿Y si me complico?</summary><p>El ebook va paso a paso y con capturas, pero si prefieres que lo hagamos nosotros, en <a href="https://stpyme.cl">STPyme</a> hacemos webs para pymes y te mostramos una maqueta gratis antes de que pagues.</p></details>
     </div>
   </div>
@@ -355,9 +392,9 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
     <img class="libro-mini" src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/pag-1.jpg" alt="Portada del ebook Tu web profesional gratis con IA" loading="lazy" width="760" height="1078">
     <h2>Tu web, hecha por ti, esta semana</h2>
     <p class="lead centro" style="margin-left:auto;margin-right:auto">Guía de 34 páginas, prompts listos para copiar, 5 webs de ejemplo y 2 bonus.</p>
-    <div class="precio" style="margin-bottom:22px"><small>Pago único</small><b>$5.000</b></div>
+    <div class="precio" style="margin-bottom:22px"><small>Precio de lanzamiento hasta el 30 de noviembre</small><b>$5.000</b><s>Después $7.990</s></div>
     <a class="btn pagar" href="#comprar" style="font-size:20px;padding:20px 36px">Quiero mi ebook por $5.000</a>
-    <p class="seguro">🔒 Pago seguro con <b>Mercado Pago</b></p>
+    <p class="seguro">🔒 Pago seguro con <b>Mercado Pago</b> · ✅ Garantía de 7 días</p>
   </div>
 </section>
 
@@ -366,7 +403,7 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
   <span><a href="/privacidad">Privacidad</a> · OpenCode, DeepSeek, Cloudflare y Mercado Pago son marcas de sus dueños; STPyme no tiene relación comercial con ellos.</span>
 </div></footer>
 
-<div class="barra" id="barra"><span>$5.000<small>Ebook en PDF · pago único</small></span><a class="btn pagar" href="#comprar">Comprar</a></div>
+<div class="barra" id="barra"><span>$5.000<small>Lanzamiento · garantía 7 días</small></span><a class="btn pagar" href="#comprar">Comprar</a></div>
 
 <script>
 // Link de pago de Mercado Pago (Tus ventas > Link de pago). Pegar aquí el link de $5.000.
@@ -374,6 +411,9 @@ var LINK_PAGO = '';
 document.querySelectorAll('a.pagar').forEach(function (a) {
   if (LINK_PAGO) { a.href = LINK_PAGO; a.target = '_blank'; a.rel = 'noopener'; }
 });
+var fin = new Date('2026-12-01T00:00:00-03:00'), dias = Math.ceil((fin - new Date()) / 864e5);
+if (dias > 1) document.getElementById('dias').textContent = ' (quedan ' + dias + ' días)';
+else if (dias === 1) document.getElementById('dias').textContent = ' (último día)';
 var barra = document.getElementById('barra'), cierre = document.getElementById('comprar');
 addEventListener('scroll', function () {
   var y = scrollY, fin = cierre.getBoundingClientRect().top < innerHeight;
