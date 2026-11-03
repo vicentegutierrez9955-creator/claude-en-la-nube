@@ -225,6 +225,53 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
 .compara div.yo b{color:var(--lima)}
 .compara p{margin:6px 0 0;color:#a9b6aa;font-size:14.5px}
 @media(max-width:900px){.lanz{font-size:12.5px}.hero{padding-top:36px}.garantia{grid-template-columns:1fr;text-align:center;padding:30px 24px}.sello-g{margin:0 auto;width:130px;height:130px}.compara{grid-template-columns:1fr}}
+
+/* Vitrina de webs */
+.cinta{background:var(--osc);padding:34px 0 30px;overflow:hidden;border-top:1px solid #1c2b20}
+.cinta p{text-align:center;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7f8c81;margin:0 0 18px}
+.pista{display:flex;gap:22px;width:max-content;animation:correr 60s linear infinite}
+.cinta:hover .pista{animation-play-state:paused}
+.mini-nav{width:360px;flex:none;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 18px 40px -18px rgba(0,0,0,.8);transform:rotate(-1.2deg)}
+.mini-nav:nth-child(even){transform:rotate(1.2deg) translateY(10px)}
+.mini-nav i{display:flex;gap:5px;padding:7px 10px;background:#e9eee9}
+.mini-nav i::before{content:"";width:7px;height:7px;border-radius:50%;background:#c9d0c9;box-shadow:12px 0 #c9d0c9,24px 0 #c9d0c9}
+.mini-nav img{aspect-ratio:16/9;object-fit:cover;object-position:top;width:100%}
+@keyframes correr{to{transform:translateX(-50%)}}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 30px}
+.tabs button{font:inherit;font-weight:700;font-size:15px;color:#dfe8de;background:var(--osc2);border:1px solid #2a3d2f;border-radius:999px;padding:11px 18px;cursor:pointer;transition:all .2s}
+.tabs button:hover{border-color:var(--lima)}
+.tabs button[aria-selected=true]{background:var(--lima);color:var(--osc);border-color:var(--lima)}
+.ejemplos .env{max-width:1280px}
+.panel{display:grid;grid-template-columns:1fr 290px;gap:44px;align-items:center}
+.panel[hidden]{display:none}
+.escena{position:relative;padding:0 70px 40px 0}
+.navg{border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 0 1px #2a3d2f}
+.navg .barra-n{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#eef1ee}
+.navg .barra-n i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.navg .barra-n i+i{background:#febc2e}.navg .barra-n i+i+i{background:#28c840}
+.navg .barra-n span{margin-left:10px;flex:1;background:#fff;border-radius:8px;padding:5px 12px;font-size:12.5px;color:#5f6b62;font-family:"JetBrains Mono",monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pantalla{aspect-ratio:16/10;overflow:hidden;position:relative}
+.pantalla img{width:100%;animation:bajar 14s ease-in-out infinite}
+@keyframes bajar{0%,12%{transform:translateY(0)}45%,58%{transform:translateY(var(--dist,0px))}92%,100%{transform:translateY(0)}}
+.escena .cel{position:absolute;right:0;bottom:0;width:190px;background:#050806;border-radius:30px;padding:7px;box-shadow:0 30px 60px -16px rgba(0,0,0,.9),0 0 0 1px #2a3d2f}
+.escena .cel img{border-radius:23px}
+.ficha small{display:block;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lima);margin-bottom:8px}
+.ficha h3{font-size:30px;margin-bottom:6px}
+.ficha p{color:#a9b6aa;margin:0 0 18px}
+.ficha ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.ficha li{background:var(--osc2);border:1px solid #23362a;border-radius:12px;padding:11px 14px;font-size:15px;color:#dfe8de}
+.ficha li::before{content:"✦";color:var(--lima);margin-right:9px}
+@media(max-width:900px){
+  .tabs{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:6px;margin-left:-22px;margin-right:-22px;padding-left:22px;padding-right:22px}
+  .tabs button{flex:none;font-size:14px;padding:10px 15px}
+  .panel{grid-template-columns:1fr;gap:26px}
+  .escena{padding:0 46px 34px 0}
+  .escena .cel{width:120px;border-radius:20px;padding:5px}.escena .cel img{border-radius:16px}
+  .navg .barra-n{padding:8px 10px}.navg .barra-n i{width:8px;height:8px}.navg .barra-n span{font-size:10.5px}
+  .pantalla{aspect-ratio:4/3.4}
+  .ficha h3{font-size:24px}
+  .mini-nav{width:250px}
+}
+@media(prefers-reduced-motion:reduce){.pista,.pantalla img{animation:none}}
 </style>
 </head>
 <body>
@@ -258,6 +305,8 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
   </div>
 </section>
 
+<div class="cinta" aria-hidden="true"><p>Webs hechas con el método del ebook</p><div class="pista"><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/ej-v2-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-vivero-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-pasteleria-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-jabones-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-ropa-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/ej-v2-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-vivero-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-pasteleria-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-jabones-d.jpg" alt="" loading="lazy"></div><div class="mini-nav"><i></i><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-ropa-d.jpg" alt="" loading="lazy"></div></div></div>
+
 <div class="franja"><div class="env">
   <span>💻 App para crear la web: <b>gratis</b></span>
   <span>🤖 Modelo de inteligencia artificial: <b>gratis*</b></span>
@@ -277,19 +326,48 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
   </div>
 </section>
 
-<section class="ejemplos">
+<section class="ejemplos" id="ejemplos">
   <div class="env">
     <div class="centro">
       <span class="kicker">Lo que vas a poder hacer</span>
       <h2>Webs como estas, hechas por ti</h2>
-      <p class="lead">Todas se hicieron con el método del ebook. Cada una viene con el prompt exacto para lograr algo parecido.</p>
+      <p class="lead">Todas se hicieron con el método del ebook, y cada una trae el prompt exacto para lograr algo parecido. Toca un rubro para verla.</p>
     </div>
-    <div class="galeria">
-      <figure><div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/ej-v2-m.jpg" alt="Web de ejemplo de una barbería" loading="lazy"></div><figcaption>Barbería<span>Reservas por WhatsApp</span></figcaption></figure>
-      <figure><div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-vivero-m.jpg" alt="Web de ejemplo de un vivero" loading="lazy"></div><figcaption>Vivero<span>Catálogo con filtros</span></figcaption></figure>
-      <figure><div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-pasteleria-m.jpg" alt="Web de ejemplo de una pastelería" loading="lazy"></div><figcaption>Pastelería<span>Cotizador de tortas</span></figcaption></figure>
-      <figure><div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-jabones-m.jpg" alt="Web de ejemplo de jabones artesanales" loading="lazy"></div><figcaption>Cosmética natural<span>Pago con link</span></figcaption></figure>
-      <figure><div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@9ff79ee74a3c04a11e1d0b08feb4dc0ff2170442/ebook/img/t-ropa-m.jpg" alt="Web de ejemplo de una tienda de ropa" loading="lazy"></div><figcaption>Ropa<span>Tallas y ofertas</span></figcaption></figure>
+    <div class="tabs" role="tablist"><button role="tab" id="tab-barberia" aria-controls="p-barberia" aria-selected="true">💈 Barbería</button><button role="tab" id="tab-vivero" aria-controls="p-vivero" aria-selected="false">🪴 Vivero</button><button role="tab" id="tab-pasteleria" aria-controls="p-pasteleria" aria-selected="false">🎂 Pastelería</button><button role="tab" id="tab-jabones" aria-controls="p-jabones" aria-selected="false">🧼 Cosmética</button><button role="tab" id="tab-ropa" aria-controls="p-ropa" aria-selected="false">👕 Ropa</button></div>
+    <div class="panel" id="p-barberia" role="tabpanel" aria-labelledby="tab-barberia">
+      <div class="escena">
+        <div class="navg"><div class="barra-n"><i></i><i></i><i></i><span>barberiadonlucho.cl</span></div><div class="pantalla"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/full-barberia.jpg" alt="Web de ejemplo de Barbería Don Lucho en computador" loading="lazy"></div></div>
+        <div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/cel-barberia.jpg" alt="Web de ejemplo de Barbería Don Lucho en celular" loading="lazy"></div>
+      </div>
+      <div class="ficha"><small>Ejemplo del ebook</small><h3>Barbería Don Lucho</h3><p>Talagante · reservas por WhatsApp</p><ul><li>Portada con foto que vende</li><li>Precios con foto en cada servicio</li><li>Botón flotante de WhatsApp</li></ul></div>
+    </div>
+    <div class="panel" id="p-vivero" role="tabpanel" aria-labelledby="tab-vivero" hidden>
+      <div class="escena">
+        <div class="navg"><div class="barra-n"><i></i><i></i><i></i><span>calm-leaf-3f2a.hojaviva.workers.dev</span></div><div class="pantalla"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/full-vivero.jpg" alt="Web de ejemplo de Hoja Viva en computador" loading="lazy"></div></div>
+        <div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/cel-vivero.jpg" alt="Web de ejemplo de Hoja Viva en celular" loading="lazy"></div>
+      </div>
+      <div class="ficha"><small>Ejemplo del ebook</small><h3>Hoja Viva</h3><p>Peñaflor · catálogo de plantas</p><ul><li>Filtros por tipo de planta</li><li>Despacho gratis bien visible</li><li>"Lo quiero" directo a WhatsApp</li></ul></div>
+    </div>
+    <div class="panel" id="p-pasteleria" role="tabpanel" aria-labelledby="tab-pasteleria" hidden>
+      <div class="escena">
+        <div class="navg"><div class="barra-n"><i></i><i></i><i></i><span>sweet-sun-81bd.dulceabril.workers.dev</span></div><div class="pantalla"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/full-pasteleria.jpg" alt="Web de ejemplo de Dulce Abril en computador" loading="lazy"></div></div>
+        <div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/cel-pasteleria.jpg" alt="Web de ejemplo de Dulce Abril en celular" loading="lazy"></div>
+      </div>
+      <div class="ficha"><small>Ejemplo del ebook</small><h3>Dulce Abril</h3><p>Maipú · tortas por encargo</p><ul><li>Foto grande que da antojo</li><li>Precio según cantidad de personas</li><li>Cotizador que llega a tu WhatsApp</li></ul></div>
+    </div>
+    <div class="panel" id="p-jabones" role="tabpanel" aria-labelledby="tab-jabones" hidden>
+      <div class="escena">
+        <div class="navg"><div class="barra-n"><i></i><i></i><i></i><span>quiet-moss-5c07.bruma.workers.dev</span></div><div class="pantalla"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/full-jabones.jpg" alt="Web de ejemplo de Bruma en computador" loading="lazy"></div></div>
+        <div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/cel-jabones.jpg" alt="Web de ejemplo de Bruma en celular" loading="lazy"></div>
+      </div>
+      <div class="ficha"><small>Ejemplo del ebook</small><h3>Bruma</h3><p>Valparaíso · envíos a todo Chile</p><ul><li>Botón "Pagar ahora" con Mercado Pago</li><li>3 garantías que dan confianza</li><li>Estilo elegante de marca</li></ul></div>
+    </div>
+    <div class="panel" id="p-ropa" role="tabpanel" aria-labelledby="tab-ropa" hidden>
+      <div class="escena">
+        <div class="navg"><div class="barra-n"><i></i><i></i><i></i><span>bold-wool-9e41.trama.workers.dev</span></div><div class="pantalla"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/full-ropa.jpg" alt="Web de ejemplo de Trama en computador" loading="lazy"></div></div>
+        <div class="cel"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@6c93e1a0027bc69614fcd0854b323057d1f4727f/ebook/img/cel-ropa.jpg" alt="Web de ejemplo de Trama en celular" loading="lazy"></div>
+      </div>
+      <div class="ficha"><small>Ejemplo del ebook</small><h3>Trama</h3><p>Concepción · tejidos de invierno</p><ul><li>Tallas en cada prenda</li><li>Ofertas con precio tachado</li><li>Pedido con talla por WhatsApp</li></ul></div>
     </div>
     <p class="nota centro">Negocios ficticios creados para los ejemplos del ebook. Fotos de Pexels.</p>
   </div>
@@ -414,6 +492,18 @@ document.querySelectorAll('a.pagar').forEach(function (a) {
 var fin = new Date('2026-12-01T00:00:00-03:00'), dias = Math.ceil((fin - new Date()) / 864e5);
 if (dias > 1) document.getElementById('dias').textContent = ' (quedan ' + dias + ' días)';
 else if (dias === 1) document.getElementById('dias').textContent = ' (último día)';
+// Vitrina: pestañas, rotación automática y desplazamiento de la captura
+var tabs = [].slice.call(document.querySelectorAll('.tabs button')), auto = true, actual = 0;
+function medir(p) { var img = p.querySelector('.pantalla img'), caja = p.querySelector('.pantalla');
+  var hacer = function () { img.style.setProperty('--dist', Math.min(0, caja.clientHeight - img.clientHeight) + 'px'); };
+  if (img.complete) hacer(); else img.addEventListener('load', hacer); }
+function mostrar(i) { actual = i; tabs.forEach(function (t, k) {
+  var p = document.getElementById(t.getAttribute('aria-controls'));
+  t.setAttribute('aria-selected', k === i ? 'true' : 'false'); p.hidden = k !== i; if (k === i) medir(p); }); }
+tabs.forEach(function (t, i) { t.addEventListener('click', function () { auto = false; mostrar(i); }); });
+mostrar(0);
+addEventListener('resize', function () { mostrar(actual); });
+setInterval(function () { if (auto && !document.hidden) mostrar((actual + 1) % tabs.length); }, 7000);
 var barra = document.getElementById('barra'), cierre = document.getElementById('comprar');
 addEventListener('scroll', function () {
   var y = scrollY, fin = cierre.getBoundingClientRect().top < innerHeight;
