@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cartas con QR · Panel</title>
+<meta name="theme-color" content="#0f1b2d">
+<link rel="stylesheet" href="/panel/styles.css">
+<style>
+  .caja{max-width:860px;margin:32px auto;padding:0 16px}
+  .tarjeta{background:#fff;border:1px solid #e3e8ef;border-radius:14px;padding:20px;margin:0 0 16px}
+  .tarjeta h2{margin:0 0 6px;font-size:18px}
+  .filtros{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+  .filtros input{flex:1 1 220px;padding:8px 10px;border:1px solid #d5dbe3;border-radius:8px;font:inherit}
+  .carta{border-top:1px solid #eef1f5;padding:14px 0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;align-items:center}
+  .carta:first-child{border-top:0}
+  .carta h3{margin:0;font-size:16px}
+  .carta .meta{font-size:13.5px;color:#5b6675;overflow-wrap:anywhere}
+  .carta .acc{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+  .chip{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+  .chip.pausa{background:#fdecea;color:#b3261e}
+  .chip.rep{background:#fff4e5;color:#8a5300}
+  .vacio{color:#5b6675;padding:12px 0}
+  @media (max-width:600px){.carta{grid-template-columns:1fr}.carta .acc{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<main class="caja">
+  <p><a href="/panel">← Volver al panel</a></p>
+  <section class="tarjeta">
+    <h2>Cartas con QR</h2>
+    <p class="muted">Cartas de restaurantes publicadas desde la herramienta gratis (stpyme.cl/carta/…). Quien publica queda como prospecto. Si una carta no es de un negocio real o tiene contenido inapropiado, páusala: deja de verse, pero no se borra.</p>
+    <div class="filtros"><input id="buscar" type="search" placeholder="Buscar por local, link o WhatsApp"><button class="btn" id="recargar" type="button">Recargar</button></div>
+  </section>
+  <section class="tarjeta">
+    <div id="estado" class="muted">Cargando…</div>
+    <div id="lista"></div>
+  </section>
+</main>
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const el = (tag, props, ...hijos) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...hijos.filter((h) => h != null && h !== false)); return n; };
+  let cartas = [];
+  const api = async (cuerpo) => {
+    const r = await fetch('/api/publico/carta', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(cuerpo) });
+    if (r.status === 401) { location.href = '/panel'; throw new Error('Inicia sesión en el panel'); }
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || 'No se pudo cargar');
+    return j;
+  };
+  const fecha = (s) => (s ? new Date(s.length === 10 ? s + 'T12:00:00' : s).toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' }) : '');
+  function pintar() {
+    const q = $('#buscar').value.trim().toLowerCase();
+    const vis = cartas.filter((c) => !q || [c.negocio, c.local, c.nombre, c.whatsapp].join(' ').toLowerCase().includes(q));
+    $('#estado').textContent = cartas.length ? `${cartas.length} cartas publicadas · ${cartas.filter((c) => c.oculta).length} pausadas · ${cartas.filter((c) => c.reportes).length} con reportes` : '';
+    $('#lista').replaceChildren(...(vis.length ? vis.map((c) => {
+      const boton = el('button', { type: 'button', className: c.oculta ? 'btn btn-primary' : 'btn', textContent: c.oculta ? 'Volver a mostrar' : 'Pausar' });
+      boton.addEventListener('click', async () => {
+        boton.disabled = true;
+        try { await api({ accion: 'ocultar', local: c.local, oculta: !c.oculta }); c.oculta = !c.oculta; pintar(); }
+        catch (e) { alert(e.message); boton.disabled = false; }
+      });
+      return el('div', { className: 'carta' },
+        el('div', {},
+          el('h3', {}, c.negocio || c.local, c.oculta ? el('span', { className: 'chip pausa', textContent: 'Pausada' }) : null, c.reportes ? el('span', { className: 'chip rep', textContent: c.reportes + (c.reportes === 1 ? ' reporte' : ' reportes') }) : null),
+          el('div', { className: 'meta' }, el('a', { href: c.url, target: '_blank', rel: 'noopener', textContent: c.url.replace('https://', '') })),
+          el('div', { className: 'meta', textContent: `${c.nombre} · +${c.whatsapp} · publicada ${fecha(c.creada)} · actualizada ${fecha(c.actualizada)}` }),
+          c.ultimoReporte ? el('div', { className: 'meta', textContent: 'Último reporte: "' + c.ultimoReporte + '"' }) : null),
+        el('div', { className: 'acc' },
+          el('a', { className: 'btn btn-wa', href: 'https://wa.me/' + c.whatsapp, target: '_blank', rel: 'noopener', textContent: 'WhatsApp' }),
+          boton));
+    }) : [el('p', { className: 'vacio', textContent: cartas.length ? 'Ninguna carta coincide con la búsqueda.' : 'Todavía no hay cartas publicadas.' })]));
+  }
+  async function cargar() {
+    $('#estado').textContent = 'Cargando…';
+    try { cartas = (await api({ accion: 'lista' })).cartas; pintar(); }
+    catch (e) { $('#estado').textContent = e.message; }
+  }
+  $('#buscar').addEventListener('input', pintar);
+  $('#recargar').addEventListener('click', cargar);
+  cargar();
+})();
+</script>
+</body>
+</html>

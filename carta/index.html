@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carta · STPyme</title>
+<meta name="description" content="Carta digital del local, hecha gratis con STPyme.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#fbf6ec">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<script src="/herramientas/menu-restaurante/motor.js" defer></script>
+<style>
+:root{--bg:#fbf6ec;--ink:#2b2118;--muted:#76675a;--acc:#9c2f22;--linea:rgba(0,0,0,.1);--tarjeta:rgba(255,255,255,.55);--letra:Georgia,"Times New Roman",serif;--titulo:Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 var(--letra);-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+.barra-sup{height:6px;background:var(--acc)}
+.cab{text-align:center;padding:30px 0 18px}
+.cab img{max-height:96px;max-width:220px;width:auto;height:auto;margin:0 auto 14px;display:block}
+.cab h1{font-family:var(--titulo);font-size:clamp(30px,8vw,42px);line-height:1.1;margin:0;letter-spacing:-.01em}
+.cab p{margin:8px 0 0;color:var(--muted);font-style:italic}
+.raya{width:70px;height:2px;background:var(--acc);margin:18px auto 0;border:0}
+.nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--linea);margin:0 -18px;padding:10px 18px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex:none;text-decoration:none;color:var(--ink);border:1px solid var(--linea);background:var(--tarjeta);border-radius:999px;padding:6px 13px;font:600 14px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.nav a.activa{background:var(--acc);border-color:var(--acc);color:var(--sobre-acc,#fff)}
+.sec{padding:22px 0 6px}
+.sec h2{font-family:var(--titulo);font-size:22px;margin:0 0 4px;color:var(--acc)}
+.mayus .sec h2{text-transform:uppercase;letter-spacing:.06em;font-size:19px}
+.sec .nota{margin:0 0 6px;color:var(--muted);font-style:italic;font-size:15px}
+.plato{padding:11px 0;border-bottom:1px dashed var(--linea)}
+.plato:last-child{border-bottom:0}
+.fila{display:flex;align-items:baseline;gap:8px}
+.fila b{font-weight:700}
+.fila i{flex:1;border-bottom:2px dotted var(--linea);transform:translateY(-4px);min-width:12px}
+.fila span{font-weight:700;color:var(--acc);white-space:nowrap}
+.plato p{margin:3px 0 0;color:var(--muted);font-size:15px}
+.datos{margin:26px 0 0;padding:18px;border-radius:16px;background:var(--tarjeta);border:1px solid var(--linea);text-align:center}
+.datos p{margin:0 0 6px;color:var(--muted);font-size:15px}
+.botones{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.boton{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--linea);background:var(--bg);color:var(--ink);text-decoration:none;border-radius:999px;padding:9px 15px;font:600 15px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
+.boton.fuerte{background:var(--acc);border-color:var(--acc);color:var(--sobre-acc,#fff)}
+.boton[disabled]{opacity:.6;cursor:wait}
+.pie{margin:30px 0 0;padding:20px 0 34px;border-top:1px solid var(--linea);text-align:center;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--muted)}
+.pie a{font-weight:700}
+.reporte{margin-top:14px}
+.reporte summary{cursor:pointer;display:inline}
+.reporte form{margin:10px auto 0;max-width:420px;display:grid;gap:8px}
+.reporte textarea{font:inherit;border:1px solid var(--linea);border-radius:10px;padding:10px;min-height:70px;background:var(--bg);color:var(--ink)}
+.estado{min-height:1.3em;font-size:14px;color:var(--muted);text-align:center;margin:8px 0 0}
+.aviso{text-align:center;padding:80px 0;font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.aviso h1{font-size:26px;margin:0 0 8px}
+.cargando{height:22px;border-radius:8px;background:var(--linea);margin:12px 0;animation:pulso 1.2s ease-in-out infinite}
+@keyframes pulso{50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="barra-sup"></div>
+<main class="wrap" id="carta" aria-live="polite">
+  <div style="padding:40px 0"><div class="cargando" style="width:60%;margin:0 auto 20px;height:36px"></div><div class="cargando"></div><div class="cargando"></div><div class="cargando" style="width:80%"></div></div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const M = window.CartaMotor;
+  const raiz = document.getElementById('carta');
+  const local = decodeURIComponent(location.pathname.split('/').filter(Boolean)[1] || '');
+  const el = (tag, props, ...hijos) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...hijos.filter((h) => h != null && h !== false)); return n; };
+  const HERRAMIENTA = 'https://stpyme.cl/herramientas/menu-restaurante';
+
+  const aviso = (titulo, texto) => {
+    document.title = titulo + ' · STPyme';
+    raiz.replaceChildren(el('div', { className: 'aviso' },
+      el('h1', { textContent: titulo }), el('p', { textContent: texto }),
+      el('p', {}, el('a', { href: HERRAMIENTA, textContent: '¿Tienes un local? Haz tu carta con QR gratis →' }))));
+  };
+
+  let datos;
+  try {
+    const r = await fetch('/api/publico/carta?local=' + encodeURIComponent(local));
+    if (r.status === 404) return aviso('Esta carta no existe', 'Revisa el link o pídele al local su carta nueva.');
+    if (r.status === 410) return aviso('Esta carta está pausada', 'El local no tiene su carta disponible por ahora.');
+    if (!r.ok) throw new Error();
+    datos = await r.json();
+  } catch {
+    return aviso('No pudimos cargar la carta', 'Revisa tu conexión a internet y vuelve a intentarlo.');
+  }
+
+  const c = datos.carta;
+  const est = M.estiloDe(c);
+  const L = c.local;
+  const raizCss = document.documentElement.style;
+  const serif = est.cab === 'times';
+  raizCss.setProperty('--bg', est.bg);
+  raizCss.setProperty('--ink', est.ink);
+  raizCss.setProperty('--muted', est.muted);
+  raizCss.setProperty('--acc', est.acc);
+  raizCss.setProperty('--sobre-acc', est.bg === '#23272b' ? '#23272b' : '#ffffff');
+  const oscuro = est.bg === '#23272b';
+  raizCss.setProperty('--linea', oscuro ? 'rgba(255,255,255,.16)' : 'rgba(0,0,0,.12)');
+  raizCss.setProperty('--tarjeta', oscuro ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.6)');
+  raizCss.setProperty('--letra', serif ? 'Georgia, "Times New Roman", serif' : 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif');
+  raizCss.setProperty('--titulo', serif ? 'Georgia, "Times New Roman", serif' : 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif');
+  document.querySelector('meta[name="theme-color"]').content = est.bg;
+  if (est.mayus) document.body.classList.add('mayus');
+  document.title = L.nombre + ' · Carta';
+
+  const secciones = c.secciones.filter((s) => s.items.length || s.titulo);
+  const idSec = (i) => 'sec-' + (i + 1);
+  const nav = secciones.length > 1 ? el('nav', { className: 'nav', ariaLabel: 'Secciones de la carta' },
+    ...secciones.map((s, i) => el('a', { href: '#' + idSec(i), textContent: s.titulo || 'Sección ' + (i + 1) }))) : null;
+
+  // Contacto: WhatsApp si es un celular chileno, si no, llamar; Instagram y cómo llegar.
+  const dig = String(L.tel || '').replace(/\D/g, '');
+  const cel = /^(?:56)?9\d{8}$/.test(dig) ? (dig.length === 9 ? '56' + dig : dig) : '';
+  const ig = String(L.ig || '').trim().replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/.*$/, '');
+  const botones = [
+    cel ? el('a', { className: 'boton fuerte', href: 'https://wa.me/' + cel, target: '_blank', rel: 'noopener', textContent: 'WhatsApp' }) : null,
+    !cel && dig.length >= 8 ? el('a', { className: 'boton fuerte', href: 'tel:+' + (dig.length === 9 ? '56' + dig : dig), textContent: 'Llamar' }) : null,
+    /^[A-Za-z0-9._]{1,30}$/.test(ig) ? el('a', { className: 'boton', href: 'https://instagram.com/' + ig, target: '_blank', rel: 'noopener', textContent: 'Instagram' }) : null,
+    L.dir ? el('a', { className: 'boton', href: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(L.dir + ', Chile'), target: '_blank', rel: 'noopener', textContent: 'Cómo llegar' }) : null,
+  ].filter(Boolean);
+
+  const estado = el('p', { className: 'estado', role: 'status' });
+  const btnPdf = el('button', { type: 'button', className: 'boton', textContent: 'Descargar en PDF' });
+  btnPdf.addEventListener('click', async () => {
+    btnPdf.disabled = true; estado.textContent = 'Preparando el PDF…';
+    try { await M.cargar(M.LIB.pdf); M.aPDF(c).save(M.archivo(c)); estado.textContent = '✓ Listo.'; }
+    catch { estado.textContent = 'No se pudo preparar el PDF. Intenta de nuevo.'; }
+    btnPdf.disabled = false;
+  });
+  const btnCompartir = el('button', { type: 'button', className: 'boton', textContent: 'Compartir' });
+  btnCompartir.addEventListener('click', async () => {
+    const url = 'https://stpyme.cl/carta/' + local;
+    try {
+      if (navigator.share) await navigator.share({ title: L.nombre, text: 'Mira la carta de ' + L.nombre, url });
+      else { await navigator.clipboard.writeText(url); estado.textContent = '✓ Link copiado.'; }
+    } catch { /* cancelado */ }
+  });
+
+  const reporteEstado = el('p', { className: 'estado' });
+  const motivo = el('textarea', { maxLength: 300, placeholder: 'Cuéntanos qué está mal (ej: no es un local real, contenido ofensivo)', required: true, ariaLabel: 'Motivo del reporte' });
+  const formRep = el('form', {}, motivo, el('button', { type: 'submit', className: 'boton', textContent: 'Enviar reporte' }), reporteEstado);
+  formRep.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!motivo.value.trim()) return;
+    try {
+      const r = await fetch('/api/publico/carta', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'reportar', local, motivo: motivo.value }) });
+      if (!r.ok) throw new Error();
+      formRep.replaceChildren(el('p', { className: 'estado', textContent: 'Gracias, vamos a revisar esta carta.' }));
+    } catch { reporteEstado.textContent = 'No se pudo enviar. Intenta de nuevo.'; }
+  });
+
+  raiz.replaceChildren(
+    el('header', { className: 'cab' },
+      L.logo ? el('img', { src: L.logo, alt: 'Logo de ' + L.nombre }) : null,
+      el('h1', { textContent: L.nombre }),
+      L.frase ? el('p', { textContent: L.frase }) : null,
+      el('hr', { className: 'raya' })),
+    nav,
+    ...secciones.map((s, i) => el('section', { className: 'sec', id: idSec(i) },
+      s.titulo ? el('h2', { textContent: s.titulo }) : null,
+      s.nota ? el('p', { className: 'nota', textContent: s.nota }) : null,
+      ...s.items.map((it) => el('div', { className: 'plato' },
+        el('div', { className: 'fila' }, el('b', { textContent: it.nombre }), M.precioTxt(it.precio) ? el('i', { ariaHidden: 'true' }) : null, M.precioTxt(it.precio) ? el('span', { textContent: M.precioTxt(it.precio) }) : null),
+        it.desc ? el('p', { textContent: it.desc }) : null)))),
+    el('section', { className: 'datos' },
+      L.horario ? el('p', { textContent: L.horario }) : null,
+      L.dir ? el('p', { textContent: L.dir }) : null,
+      botones.length ? el('div', { className: 'botones' }, ...botones) : null,
+      el('div', { className: 'botones' }, btnPdf, btnCompartir),
+      estado),
+    el('footer', { className: 'pie' },
+      el('p', { style: 'margin:0' }, 'Carta digital hecha gratis con ', el('a', { href: HERRAMIENTA, textContent: 'STPyme' }), '.'),
+      el('p', { style: 'margin:4px 0 0' }, el('a', { href: HERRAMIENTA, textContent: '¿Tienes un local? Haz tu carta con QR gratis →' })),
+      el('details', { className: 'reporte' }, el('summary', { textContent: 'Reportar esta carta' }), formRep)),
+  );
+
+  // Marca en el menú de arriba la sección que se está viendo.
+  if (nav && 'IntersectionObserver' in window) {
+    const links = [...nav.querySelectorAll('a')];
+    const io = new IntersectionObserver((es) => es.forEach((x) => {
+      if (!x.isIntersecting) return;
+      links.forEach((a) => a.classList.toggle('activa', a.hash === '#' + x.target.id));
+      const activo = links.find((a) => a.hash === '#' + x.target.id);
+      if (activo) nav.scrollTo({ left: activo.offsetLeft - 18, behavior: 'smooth' });
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('.sec').forEach((s) => io.observe(s));
+  }
+});
+</script>
+</body>
+</html>

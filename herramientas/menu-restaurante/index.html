@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Crear menú o carta para restaurante gratis en PDF | STPyme</title>
-<meta name="description" content="Crea gratis la carta de tu restaurante, cafetería o local de comida y descárgala en PDF para imprimirla o mandarla por WhatsApp. Con tu logo, precios y 4 diseños. Sin registrarte.">
+<title>Crear carta o menú para restaurante gratis en PDF y con QR | STPyme</title>
+<meta name="description" content="Crea gratis la carta de tu restaurante, cafetería o local de comida: descárgala en PDF o publícala con un código QR para tus mesas. Con tu logo, precios y 4 diseños.">
 <link rel="canonical" href="https://stpyme.cl/herramientas/menu-restaurante">
 <meta property="og:url" content="https://stpyme.cl/herramientas/menu-restaurante">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Crea la carta de tu restaurante gratis en PDF">
+<meta property="og:title" content="Crea la carta de tu restaurante gratis, en PDF y con QR">
 <meta property="og:description" content="Escribe tus platos y precios, elige un diseño y descarga tu carta en PDF. Gratis y sin registrarte.">
 <meta property="og:locale" content="es_CL">
 <meta name="theme-color" content="#0f1a12">
@@ -17,6 +17,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<script src="/herramientas/menu-restaurante/motor.js" defer></script>
 <style>
 /* Colores de STPyme, iguales a stpyme.cl */
 :root{
@@ -112,6 +114,26 @@ details:first-of-type{border-top:0}
 summary{cursor:pointer;font-weight:600}
 details p{margin:8px 0 0;color:var(--muted)}
 footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
+.error{color:var(--red);font-size:14px;margin:8px 0 0;min-height:1em}
+.oculto{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Carta publicada con QR */
+.qr-card{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft),var(--card) 45%);margin-top:16px}
+.link-campo{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.link-campo span{padding:10px 0 10px 12px;color:var(--muted);white-space:nowrap;font-size:15px}
+.link-campo input{border:0;background:transparent;padding-left:2px;font-weight:700;min-width:0}
+.link-campo:focus-within{outline:2px solid var(--acc);outline-offset:1px}
+.link-campo input:focus{outline:none}
+#p-disp{min-height:1.4em;margin:6px 0 12px}
+#p-disp.bien{color:var(--acc)}
+#p-disp.mal{color:var(--red)}
+.qr-fila{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:center;margin:0 0 14px}
+.qr-img{background:#fff;border-radius:12px;padding:6px;line-height:0}
+.qr-img svg{width:100%;height:auto}
+.link-final{margin:2px 0 10px;font-weight:800;font-size:17px;overflow-wrap:anywhere}
+.acciones{display:flex;flex-wrap:wrap;gap:8px}
+.cambios{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;background:rgba(242,193,78,.12);border:1px solid rgba(242,193,78,.45);border-radius:12px;padding:10px 12px;margin-top:12px;font-size:15px}
+@media (max-width:420px){.qr-fila{grid-template-columns:110px minmax(0,1fr)}}
 .solo-cel{display:none}
 
 @media (max-width:980px){
@@ -142,6 +164,7 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"¿Es gratis crear la carta del restaurante?","acceptedAnswer":{"@type":"Answer","text":"Sí, es gratis y no necesitas registrarte. Tu carta queda guardada solo en tu dispositivo; no se envía a ningún servidor."}},
+{"@type":"Question","name":"¿Cómo funciona el código QR de la carta?","acceptedAnswer":{"@type":"Answer","text":"Publicas tu carta en un link propio (stpyme.cl/carta/tu-local) y descargas el QR. Tus clientes lo escanean con la cámara del celular y ven la carta al tiro. Si cambias un precio, actualizas la carta y el mismo QR muestra la nueva."}},
 {"@type":"Question","name":"¿Cómo comparto la carta con mis clientes?","acceptedAnswer":{"@type":"Answer","text":"Descarga el PDF y mándalo por WhatsApp, súbelo a tus historias o al link de tu Instagram, o imprímelo para las mesas y el mostrador."}},
 {"@type":"Question","name":"¿Puedo cambiar los precios después?","acceptedAnswer":{"@type":"Answer","text":"Sí. La carta queda guardada en este dispositivo: cambias lo que necesites y descargas el PDF de nuevo."}},
 {"@type":"Question","name":"¿Qué debe tener la carta de un restaurante?","acceptedAnswer":{"@type":"Answer","text":"El nombre y logo del local, los platos ordenados por secciones con una descripción corta y su precio, y los datos para encontrarte: dirección, WhatsApp, Instagram y horario."}}
@@ -152,8 +175,8 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 <header class="sitio wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
 
 <main class="wrap">
-  <h1>Crea la carta de tu restaurante en PDF</h1>
-  <p class="bajada">Escribe tus platos y precios, elige un diseño y descarga tu carta en PDF para imprimirla o mandarla por WhatsApp. Gratis y sin registrarte.</p>
+  <h1>Crea la carta de tu restaurante en PDF y con QR</h1>
+  <p class="bajada">Escribe tus platos y precios, elige un diseño y descarga tu carta en PDF o publícala con un código QR para tus mesas. Gratis y sin registrarte.</p>
 
   <div class="lienzo">
     <div class="editor">
@@ -209,14 +232,51 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
         <button type="button" class="btn" id="imprimir">Imprimir</button>
       </div>
       <p class="estado" id="estado" role="status"></p>
+
+      <section class="card qr-card" id="publicar" aria-labelledby="t-qr">
+        <h2 id="t-qr">Tu carta con código QR</h2>
+        <div id="qr-nuevo">
+          <p class="sub">Publica tu carta en un link propio y descarga el QR para tus mesas. Cuando cambies un precio, actualizas la carta y el mismo QR muestra la nueva, sin volver a imprimir. Gratis.</p>
+          <form id="form-pub" novalidate>
+            <label for="p-local">Tu link</label>
+            <div class="link-campo"><span>stpyme.cl/carta/</span><input id="p-local" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="tu-local"></div>
+            <p class="chico" id="p-disp" aria-live="polite"></p>
+            <div class="grid">
+              <div class="campo"><label for="p-nombre">Tu nombre</label><input id="p-nombre" maxlength="60" autocomplete="name"></div>
+              <div class="campo"><label for="p-wsp">Tu WhatsApp</label><input id="p-wsp" type="tel" inputmode="tel" placeholder="9 1234 5678" maxlength="20" autocomplete="tel"></div>
+            </div>
+            <div class="oculto" aria-hidden="true"><label for="p-web">No llenar</label><input id="p-web" tabindex="-1" autocomplete="off"></div>
+            <button class="btn btn-primario btn-grande" type="submit" id="p-enviar" style="width:100%">Publicar mi carta con QR</button>
+            <p class="error" id="p-error" role="alert"></p>
+            <p class="muted chico" style="margin:6px 0 0">Tu WhatsApp no aparece en la carta: lo usamos para avisarte si hay un problema con ella y para contarte de nuestras páginas web. Revisamos las cartas publicadas y podemos pausar las que no sean de un negocio real o tengan contenido inapropiado. <a href="/privacidad">Privacidad</a></p>
+          </form>
+        </div>
+        <div id="qr-listo" hidden>
+          <div class="qr-fila">
+            <div class="qr-img" id="qr-img"></div>
+            <div>
+              <p class="chico muted" style="margin:0">Tu carta está publicada en:</p>
+              <p class="link-final"><a id="q-link" target="_blank" rel="noopener"></a></p>
+              <div class="acciones"><button type="button" class="btn btn-chico" id="q-copiar">Copiar link</button><a class="btn btn-chico btn-wa" id="q-wsp" target="_blank" rel="noopener">Compartir</a></div>
+            </div>
+          </div>
+          <div class="barra" style="margin-top:0">
+            <button type="button" class="btn btn-primario" id="q-png">⬇ Descargar QR</button>
+            <button type="button" class="btn" id="q-tarjetas">⬇ Tarjetas para mesas (PDF)</button>
+          </div>
+          <div class="cambios" id="q-cambios" hidden><span>Tienes cambios que aún no están en tu carta publicada.</span><button type="button" class="btn btn-primario btn-chico" id="q-actualizar">Actualizar carta publicada</button></div>
+          <p class="estado" id="q-estado" role="status"></p>
+          <p class="muted chico" style="margin:6px 0 0">Para editar tu carta publicada usa este mismo celular o computador: aquí queda guardada tu clave.</p>
+        </div>
+      </section>
     </section>
   </div>
 
   <section class="card cta" aria-labelledby="t-cta" style="margin-top:10px">
-    <h2 id="t-cta">¿Quieres tu carta en internet?</h2>
+    <h2 id="t-cta">¿Quieres una página web para tu local?</h2>
     <p style="margin:0">En STPyme hacemos páginas web para restaurantes y locales de comida:</p>
     <ul>
-      <li>Tu carta siempre al día, con fotos de tus platos.</li>
+      <li>Tu carta con fotos de tus platos, tu historia y cómo llegar.</li>
       <li>Pedidos directo a tu WhatsApp, sin pagar comisión a las apps.</li>
       <li>Te ayudamos a aparecer en Google cuando buscan comida en tu comuna.</li>
     </ul>
@@ -226,6 +286,7 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
   <section class="card" aria-labelledby="t-faq">
     <h2 id="t-faq">Preguntas frecuentes</h2>
     <details><summary>¿Es gratis?</summary><p>Sí, es gratis y no necesitas registrarte. Tu carta queda guardada solo en tu dispositivo; no se envía a ningún servidor.</p></details>
+    <details><summary>¿Cómo funciona el código QR?</summary><p>Publicas tu carta en un link propio (stpyme.cl/carta/tu-local) y descargas el QR. Tus clientes lo escanean con la cámara del celular y ven la carta al tiro, sin descargar nada. Si cambias un precio, actualizas la carta y el mismo QR muestra la nueva.</p></details>
     <details><summary>¿Cómo comparto la carta con mis clientes?</summary><p>Descarga el PDF y mándalo por WhatsApp, súbelo a tus historias o al link de tu Instagram, o imprímelo para las mesas y el mostrador.</p></details>
     <details><summary>¿Puedo cambiar los precios después?</summary><p>Sí. La carta queda guardada en este dispositivo: cambias lo que necesites y descargas el PDF de nuevo.</p></details>
     <details><summary>¿Qué debe tener la carta de un restaurante?</summary><p>El nombre y logo del local, los platos ordenados por secciones con una descripción corta y su precio, y los datos para encontrarte: dirección, WhatsApp, Instagram y horario.</p></details>
@@ -238,18 +299,9 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 document.addEventListener('DOMContentLoaded', () => {
   const $ = (s, c = document) => c.querySelector(s);
   const CLAVE = 'stpyme-menu-v1';
-  const PT = 0.3528; // 1 punto tipográfico en mm
   const uid = () => Math.random().toString(36).slice(2, 9);
 
-  const ESTILOS = {
-    clasico: { nombre: 'Clásico', bg: '#fbf6ec', ink: '#2b2118', muted: '#76675a', acc: '#9c2f22', cab: 'times', txt: 'times', marco: true, mayus: true, centro: true },
-    moderno: { nombre: 'Moderno', bg: '#ffffff', ink: '#1d1d1f', muted: '#6b6b70', acc: '#e4572e', cab: 'helvetica', txt: 'helvetica', barra: true },
-    pizarra: { nombre: 'Pizarra', bg: '#23272b', ink: '#f4f1ea', muted: '#b8b2a7', acc: '#f2c14e', cab: 'helvetica', txt: 'helvetica', mayus: true },
-    fresco: { nombre: 'Fresco', bg: '#f2f7ee', ink: '#1f3324', muted: '#5d7262', acc: '#3f8f3a', cab: 'helvetica', txt: 'helvetica', pildora: true, barra: true },
-  };
-  const COLORES = ['', '#9c2f22', '#e4572e', '#d4a017', '#3f8f3a', '#1f6fb2', '#7b3fa0', '#c2185b'];
-  const HOJAS = { a4: [210, 297], carta: [215.9, 279.4] };
-  const FAMILIA = { helvetica: 'Helvetica, Arial, "Liberation Sans", sans-serif', times: '"Times New Roman", Times, "Liberation Serif", serif' };
+  const { COLORES, ESTILOS, limpiar, componer, aSVG, aPDF, archivo, qrSVG, qrPNG, tarjetasPDF } = window.CartaMotor;
 
   const EJEMPLO = () => ({
     ejemplo: true,
@@ -296,229 +348,17 @@ document.addEventListener('DOMContentLoaded', () => {
   e.diseno = { ...VACIO().diseno, ...e.diseno };
 
   let tGuardar;
-  const guardar = () => {
+  const guardarYa = () => {
     clearTimeout(tGuardar);
-    tGuardar = setTimeout(() => {
-      try { localStorage.setItem(CLAVE, JSON.stringify(e)); }
-      catch { estado('No se pudo guardar en este dispositivo (¿logo muy pesado?). La carta igual se puede descargar.'); }
-    }, 300);
+    try { localStorage.setItem(CLAVE, JSON.stringify(e)); return true; }
+    catch { estado('No se pudo guardar en este dispositivo (¿logo muy pesado?). La carta igual se puede descargar.'); return false; }
   };
+  const guardar = () => { clearTimeout(tGuardar); tGuardar = setTimeout(guardarYa, 300); };
   const estado = (t) => { $('#estado').textContent = t; };
 
-  // ---------- Texto: limpieza, medidas y cortes de línea ----------
-  // El PDF usa las letras estándar (Helvetica y Times), que traen tildes, ñ, ¿ y ¡, pero no emojis.
-  const limpiar = (s) => String(s || '').replace(/[“”«»]/g, '"').replace(/[‘’´]/g, "'").replace(/[–—]/g, '-').replace(/…/g, '...').replace(/[•·]/g, '·')
-    .replace(/[^\x20-\x7E\xA0-\xFF]/g, '').replace(/\s+/g, ' ').trim();
-  const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  const precioTxt = (p) => {
-    const t = limpiar(p);
-    if (!t) return '';
-    const d = t.replace(/[$.\s]/g, '');
-    return /^\d+$/.test(d) ? '$' + miles(Number(d)) : t;
-  };
-  let medidor = null;
-  const lienzo = document.createElement('canvas').getContext('2d');
-  const ancho = (s, fuente, estilo, tam) => {
-    if (!medidor && window.jspdf) { try { medidor = new window.jspdf.jsPDF({ unit: 'mm' }); } catch { medidor = null; } }
-    if (medidor) { medidor.setFont(fuente, estilo); medidor.setFontSize(tam); return medidor.getTextWidth(s); }
-    lienzo.font = (estilo.includes('italic') ? 'italic ' : '') + (estilo.includes('bold') ? 'bold ' : '') + (tam * PT * 10) + 'px ' + FAMILIA[fuente];
-    return lienzo.measureText(s).width / 10;
-  };
-  const partir = (s, w, f) => {
-    const lineas = [];
-    let l = '';
-    for (const p of String(s).split(' ').filter(Boolean)) {
-      const prueba = l ? l + ' ' + p : p;
-      if (!l || ancho(prueba, ...f) <= w) l = prueba;
-      else { lineas.push(l); l = p; }
-    }
-    if (l) lineas.push(l);
-    return lineas;
-  };
-
-  // ---------- Armado de la carta: una lista de dibujos por hoja, en milímetros ----------
-  function componer() {
-    const est = { ...(ESTILOS[e.diseno.estilo] || ESTILOS.clasico) };
-    if (e.diseno.color) est.acc = e.diseno.color;
-    const [W, H] = HOJAS[e.diseno.hoja] || HOJAS.a4;
-    const cols = Number(e.diseno.cols) === 2 ? 2 : 1;
-    const M = est.marco ? 18 : 16;
-    const GAP = 12;
-    const colW = (W - 2 * M - (cols - 1) * GAP) / cols;
-    const L = e.local;
-    const nombre = limpiar(L.nombre) || 'Nombre de tu local';
-    const contacto = [L.dir, L.tel, L.ig, L.horario].map(limpiar).filter(Boolean);
-    const fPie = [est.txt, 'normal', 9];
-    const pieL = contacto.length ? partir(contacto.join('   ·   '), W - 2 * M, fPie).slice(0, 3) : [];
-    const abajo = est.marco ? H - 12.5 : H - 7;
-    const pie1 = abajo - 5.5 - (pieL.length - 1) * 4.2;
-    const yMax = pieL.length ? pie1 - 9 : abajo - 8;
-    const arriba = est.marco ? 20 : 17;
-    const fNom = [est.txt, 'bold', 11.5];
-    const fPr = [est.txt, 'bold', 11.5];
-    const fDesc = [est.txt, est.marco ? 'italic' : 'normal', 9.5];
-
-    const paginas = [];
-    let ops, col, y, yCuerpo;
-    const T = (x, yy, s, f, color, align) => ops.push({ t: 'text', x, y: yy, s, font: f[0], style: f[1], size: f[2], color, align: align || 'left' });
-
-    const nuevaHoja = (primera) => {
-      ops = [];
-      paginas.push(ops);
-      col = 0;
-      ops.push({ t: 'rect', x: 0, y: 0, w: W, h: H, fill: est.bg });
-      if (est.marco) {
-        ops.push({ t: 'rect', x: 7, y: 7, w: W - 14, h: H - 14, stroke: est.acc, lw: 0.8 });
-        ops.push({ t: 'rect', x: 9, y: 9, w: W - 18, h: H - 18, stroke: est.acc, lw: 0.25 });
-      }
-      if (est.barra) ops.push({ t: 'rect', x: 0, y: 0, w: W, h: 4, fill: est.acc });
-      if (pieL.length) {
-        ops.push({ t: 'line', x1: W / 2 - 18, y1: pie1 - 5.5, x2: W / 2 + 18, y2: pie1 - 5.5, color: est.acc, lw: 0.4 });
-        pieL.forEach((l, i) => T(W / 2, pie1 + i * 4.2, l, fPie, est.muted, 'center'));
-      }
-      T(W / 2, abajo, 'Carta hecha gratis en stpyme.cl/herramientas/menu-restaurante', ['helvetica', 'normal', 6.5], est.muted, 'center');
-      y = arriba;
-      if (primera) {
-        if (L.logo) {
-          const r = Number(L.logoR) || 1;
-          let h = 26, w = h * r;
-          if (w > 70) { w = 70; h = w / r; }
-          ops.push({ t: 'img', x: (W - w) / 2, y, w, h, src: L.logo });
-          y += h + 6;
-        }
-        let tam = 32;
-        while (tam > 20 && ancho(nombre, est.cab, 'bold', tam) > W - 2 * M) tam -= 1;
-        for (const l of partir(nombre, W - 2 * M, [est.cab, 'bold', tam])) {
-          T(W / 2, y + tam * PT * 0.78, l, [est.cab, 'bold', tam], est.ink, 'center');
-          y += tam * PT * 1.12;
-        }
-        const frase = limpiar(L.frase);
-        if (frase) { y += 1.5; T(W / 2, y + 4, frase, [est.txt, 'italic', 12], est.muted, 'center'); y += 6.5; }
-        y += 4;
-        ops.push({ t: 'line', x1: W / 2 - 20, y1: y, x2: W / 2 + 20, y2: y, color: est.acc, lw: 0.7 });
-        y += 10;
-      } else {
-        T(W / 2, y + 3, nombre, [est.cab, 'bold', 11], est.muted, 'center');
-        y += 11;
-      }
-      yCuerpo = y;
-    };
-    const xCol = () => M + col * (colW + GAP);
-    const hacerEspacio = (h) => {
-      if (y + h <= yMax || y === yCuerpo) return;
-      if (col < cols - 1) { col += 1; y = yCuerpo; }
-      else nuevaHoja(false);
-    };
-    const medir = (it) => {
-      const pr = precioTxt(it.precio);
-      const prW = pr ? ancho(pr, ...fPr) : 0;
-      const nomL = partir(limpiar(it.nombre) || ' ', colW - prW - (pr ? 9 : 0), fNom);
-      const descL = it.desc ? partir(limpiar(it.desc), colW - (pr ? 12 : 0), fDesc) : [];
-      const alto = 4 + (nomL.length - 1) * 4.9 + (descL.length ? 4.4 + (descL.length - 1) * 4.2 : 0) + 4.4;
-      return { pr, prW, nomL, descL, alto };
-    };
-
-    nuevaHoja(true);
-    let alguno = false;
-    for (const s of e.secciones) {
-      const items = s.items.filter((it) => limpiar(it.nombre) || precioTxt(it.precio)).map(medir);
-      let tit = limpiar(s.titulo);
-      if (!tit && !items.length) continue;
-      alguno = true;
-      if (est.mayus) tit = tit.toUpperCase();
-      const fTit = [est.cab, 'bold', est.mayus ? 13.5 : 15];
-      const notaL = s.nota && limpiar(s.nota) ? partir(limpiar(s.nota), colW, [est.txt, 'italic', 9.5]) : [];
-      const altoTit = (tit ? 11 : 0) + notaL.length * 4.2 + (notaL.length ? 2 : 0);
-      if (y !== yCuerpo) y += 5;
-      // Si la sección completa cabe en una columna nueva pero no en lo que queda, empieza en la siguiente columna.
-      const altoSec = altoTit + items.reduce((t, m) => t + m.alto, 0);
-      if (y + altoSec > yMax && yCuerpo + altoSec <= yMax) hacerEspacio(altoSec);
-      else hacerEspacio(altoTit + (items[0] ? items[0].alto : 0));
-      let x = xCol();
-      if (tit) {
-        if (est.pildora) {
-          const tw = ancho(tit, ...fTit);
-          ops.push({ t: 'rect', x, y, w: Math.min(colW, tw + 9), h: 8.4, fill: est.acc, r: 4.2 });
-          T(x + 4.5, y + 5.9, tit, fTit, '#ffffff');
-        } else if (est.centro) {
-          const tw = ancho(tit, ...fTit);
-          const cx = x + colW / 2;
-          T(cx, y + 6, tit, fTit, est.acc, 'center');
-          const lado = Math.min(22, (colW - tw) / 2 - 4);
-          if (lado > 4) {
-            ops.push({ t: 'line', x1: cx - tw / 2 - 3 - lado, y1: y + 4.6, x2: cx - tw / 2 - 3, y2: y + 4.6, color: est.acc, lw: 0.3 });
-            ops.push({ t: 'line', x1: cx + tw / 2 + 3, y1: y + 4.6, x2: cx + tw / 2 + 3 + lado, y2: y + 4.6, color: est.acc, lw: 0.3 });
-          }
-        } else {
-          T(x, y + 6, tit, fTit, est.acc);
-          ops.push({ t: 'line', x1: x, y1: y + 8.8, x2: x + colW, y2: y + 8.8, color: est.acc, lw: 0.35 });
-        }
-        y += 11;
-      }
-      notaL.forEach((l) => { T(est.centro ? x + colW / 2 : x, y + 2.6, l, [est.txt, 'italic', 9.5], est.muted, est.centro ? 'center' : 'left'); y += 4.2; });
-      if (notaL.length) y += 2;
-      for (const m of items) {
-        hacerEspacio(m.alto);
-        x = xCol();
-        const b = y + 4;
-        m.nomL.forEach((l, i) => T(x, b + i * 4.9, l, fNom, est.ink));
-        const bl = b + (m.nomL.length - 1) * 4.9;
-        if (m.pr) {
-          T(x + colW, bl, m.pr, fPr, est.acc, 'right');
-          const fin = x + ancho(m.nomL[m.nomL.length - 1], ...fNom) + 2;
-          const ini = x + colW - m.prW - 2;
-          if (ini - fin > 4) ops.push({ t: 'line', x1: fin, y1: bl - 0.5, x2: ini, y2: bl - 0.5, color: est.muted, lw: 0.4, dash: [0.01, 1.4] });
-        }
-        m.descL.forEach((l, i) => T(x, bl + 4.4 + i * 4.2, l, fDesc, est.muted));
-        y += m.alto;
-      }
-    }
-    if (!alguno) T(W / 2, yCuerpo + 20, 'Agrega tus platos y aquí aparece tu carta', [est.txt, 'italic', 12], est.muted, 'center');
-    return { paginas, W, H, nombre };
-  }
-
-  // ---------- Vista previa (SVG) ----------
-  const NS = 'http://www.w3.org/2000/svg';
-  function aSVG(ops, W, H) {
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.setAttribute('class', 'hoja');
-    svg.setAttribute('role', 'img');
-    for (const o of ops) {
-      let el;
-      const a = (k, v) => el.setAttribute(k, v);
-      if (o.t === 'rect') {
-        el = document.createElementNS(NS, 'rect');
-        a('x', o.x); a('y', o.y); a('width', o.w); a('height', o.h);
-        if (o.r) { a('rx', o.r); a('ry', o.r); }
-        a('fill', o.fill || 'none');
-        if (o.stroke) { a('stroke', o.stroke); a('stroke-width', o.lw); }
-      } else if (o.t === 'line') {
-        el = document.createElementNS(NS, 'line');
-        a('x1', o.x1); a('y1', o.y1); a('x2', o.x2); a('y2', o.y2);
-        a('stroke', o.color); a('stroke-width', o.lw);
-        if (o.dash) { a('stroke-dasharray', o.dash.join(' ')); a('stroke-linecap', 'round'); }
-      } else if (o.t === 'text') {
-        el = document.createElementNS(NS, 'text');
-        a('x', o.x); a('y', o.y); a('fill', o.color);
-        a('font-family', FAMILIA[o.font]); a('font-size', o.size * PT);
-        if (o.style.includes('bold')) a('font-weight', 'bold');
-        if (o.style.includes('italic')) a('font-style', 'italic');
-        a('text-anchor', { left: 'start', center: 'middle', right: 'end' }[o.align]);
-        el.textContent = o.s;
-      } else if (o.t === 'img') {
-        el = document.createElementNS(NS, 'image');
-        a('x', o.x); a('y', o.y); a('width', o.w); a('height', o.h);
-        a('preserveAspectRatio', 'none'); a('href', o.src);
-      }
-      if (el) svg.append(el);
-    }
-    return svg;
-  }
-  let ultima;
+  // ---------- Vista previa ----------
   const dibujar = () => {
-    ultima = componer();
-    const { paginas, W, H } = ultima;
+    const { paginas, W, H } = componer(e);
     $('#hojas').replaceChildren(...paginas.map((ops, i) => { const s = aSVG(ops, W, H); s.setAttribute('aria-label', `Hoja ${i + 1} de ${paginas.length}`); return s; }));
     $('#vista-sub').textContent = paginas.length > 1
       ? `Tu carta ocupa ${paginas.length} hojas.` + (Number(e.diseno.cols) === 1 ? ' Con 2 columnas cabe más en cada hoja.' : '')
@@ -526,43 +366,13 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#pagina-impresion').textContent = `@media print{@page{size:${W}mm ${H}mm;margin:0}.hoja{width:${W}mm;height:${H}mm}}`;
   };
   let tDibujo;
-  const cambio = () => { guardar(); clearTimeout(tDibujo); tDibujo = setTimeout(dibujar, 120); };
+  const cambio = () => { guardar(); clearTimeout(tDibujo); tDibujo = setTimeout(() => { dibujar(); revisarCambios(); }, 120); };
 
   // ---------- PDF ----------
-  function aPDF() {
-    const { paginas, W, H } = componer();
-    const doc = new window.jspdf.jsPDF({ unit: 'mm', format: [W, H], orientation: 'portrait', compress: true });
-    paginas.forEach((ops, i) => {
-      if (i) doc.addPage([W, H], 'portrait');
-      for (const o of ops) {
-        if (o.t === 'rect') {
-          if (o.fill) doc.setFillColor(o.fill);
-          if (o.stroke) { doc.setDrawColor(o.stroke); doc.setLineWidth(o.lw); }
-          const modo = o.fill && o.stroke ? 'FD' : o.fill ? 'F' : 'S';
-          if (o.r) doc.roundedRect(o.x, o.y, o.w, o.h, o.r, o.r, modo); else doc.rect(o.x, o.y, o.w, o.h, modo);
-        } else if (o.t === 'line') {
-          doc.setDrawColor(o.color); doc.setLineWidth(o.lw);
-          doc.setLineCap(o.dash ? 'round' : 'butt');
-          doc.setLineDashPattern(o.dash || [], 0);
-          doc.line(o.x1, o.y1, o.x2, o.y2);
-          doc.setLineDashPattern([], 0);
-        } else if (o.t === 'text') {
-          doc.setFont(o.font, o.style); doc.setFontSize(o.size); doc.setTextColor(o.color);
-          doc.text(o.s, o.x, o.y, { align: o.align });
-        } else if (o.t === 'img') {
-          doc.addImage(o.src, 'PNG', o.x, o.y, o.w, o.h, 'logo', 'FAST');
-        }
-      }
-    });
-    doc.setProperties({ title: 'Carta - ' + limpiar(e.local.nombre || 'mi local'), creator: 'STPyme - stpyme.cl/herramientas/menu-restaurante' });
-    return doc;
-  }
-  const archivo = () => 'carta-' + (limpiar(e.local.nombre).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'mi-local') + '.pdf';
   const sinLibreria = () => { estado('No se pudo preparar el PDF (revisa tu internet). Usa "Imprimir" y elige "Guardar como PDF".'); };
-
   $('#pdf').addEventListener('click', () => {
     if (!window.jspdf) return sinLibreria();
-    try { aPDF().save(archivo()); estado('✓ Listo, tu carta se descargó en PDF.'); }
+    try { aPDF(e).save(archivo(e)); estado('✓ Listo, tu carta se descargó en PDF.'); }
     catch { estado('No se pudo crear el PDF. Intenta de nuevo o usa "Imprimir".'); }
   });
   const puedeCompartir = !!(navigator.canShare && window.File && navigator.canShare({ files: [new File(['x'], 'x.pdf', { type: 'application/pdf' })] }));
@@ -570,16 +380,161 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#compartir').addEventListener('click', async () => {
     if (!window.jspdf) return sinLibreria();
     try {
-      const f = new File([aPDF().output('blob')], archivo(), { type: 'application/pdf' });
+      const f = new File([aPDF(e).output('blob')], archivo(e), { type: 'application/pdf' });
       await navigator.share({ files: [f], title: 'Carta ' + limpiar(e.local.nombre) });
     } catch (err) { if (err && err.name !== 'AbortError') estado('No se pudo compartir. Descarga el PDF y envíalo desde tus archivos.'); }
   });
   $('#imprimir').addEventListener('click', () => { dibujar(); window.print(); });
 
+  // ---------- Carta publicada con QR (stpyme.cl/carta/<local>) ----------
+  const API = '/api/publico/carta';
+  const aLink = (s) => limpiar(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40).replace(/-+$/, '');
+  const linkValido = (s) => s.length >= 3 && s.length <= 40 && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(s);
+  const qEstado = (t) => { $('#q-estado').textContent = t; };
+  // Lo que se publica: la carta sin los ids internos. El logo se achica para que la carta cargue rápido en el celular.
+  let logoListo = { de: '', src: '' };
+  const logoLiviano = () => new Promise((ok) => {
+    const src = e.local.logo;
+    if (!src) return ok('');
+    if (logoListo.de === src) return ok(logoListo.src);
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 360 / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.naturalWidth * k));
+      c.height = Math.max(1, Math.round(img.naturalHeight * k));
+      const g = c.getContext('2d');
+      g.drawImage(img, 0, 0, c.width, c.height);
+      let r = c.toDataURL('image/png');
+      if (r.length > 200000) {
+        const c2 = document.createElement('canvas');
+        c2.width = c.width; c2.height = c.height;
+        const g2 = c2.getContext('2d');
+        g2.fillStyle = '#ffffff'; g2.fillRect(0, 0, c2.width, c2.height); g2.drawImage(c, 0, 0);
+        r = c2.toDataURL('image/jpeg', 0.85);
+      }
+      logoListo = { de: src, src: r };
+      ok(r);
+    };
+    img.onerror = () => ok('');
+    img.src = src;
+  });
+  const paraPublicar = async () => ({
+    local: { ...e.local, logo: await logoLiviano() },
+    diseno: e.diseno,
+    secciones: e.secciones.map((s) => ({ titulo: s.titulo, nota: s.nota, items: s.items.map((it) => ({ nombre: it.nombre, desc: it.desc, precio: it.precio })) })),
+  });
+  const firma = () => JSON.stringify({ l: { ...e.local, logo: e.local.logo.length }, d: e.diseno, s: e.secciones.map((s) => [s.titulo, s.nota, s.items.map((it) => [it.nombre, it.desc, it.precio])]) });
+  const revisarCambios = () => { if (e.publicada) $('#q-cambios').hidden = e.publicada.firma === firma(); };
+
+  let linkTocado = false;
+  const sugerirLink = () => { if (!linkTocado && !e.publicada) { $('#p-local').value = aLink(e.local.nombre); revisarLink(); } };
+  let tLink, pedidoLink = 0;
+  const revisarLink = () => {
+    clearTimeout(tLink);
+    const v = $('#p-local').value;
+    const disp = $('#p-disp');
+    disp.className = 'chico';
+    if (!v) { disp.textContent = ''; return; }
+    if (!linkValido(v)) { disp.textContent = 'Usa de 3 a 40 letras o números, separados por guiones (ej: picada-don-tito).'; disp.classList.add('mal'); return; }
+    disp.textContent = 'Revisando…';
+    const n = ++pedidoLink;
+    tLink = setTimeout(async () => {
+      try {
+        const r = await fetch(API + '?local=' + encodeURIComponent(v));
+        if (n !== pedidoLink) return;
+        if (r.status === 404) { disp.textContent = '✓ stpyme.cl/carta/' + v + ' está disponible'; disp.classList.add('bien'); }
+        else if (r.status === 503) { disp.textContent = 'La publicación de cartas se está activando. Vuelve a intentarlo en un rato.'; disp.classList.add('mal'); }
+        else { disp.textContent = 'Ese link ya está ocupado. Prueba con otro.'; disp.classList.add('mal'); }
+      } catch { if (n === pedidoLink) disp.textContent = ''; }
+    }, 400);
+  };
+  $('#p-local').addEventListener('input', (ev) => {
+    linkTocado = true;
+    const limpio = ev.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-{2,}/g, '-').replace(/^-/, '').slice(0, 40);
+    if (limpio !== ev.target.value) ev.target.value = limpio;
+    revisarLink();
+  });
+
+  const verPublicada = () => {
+    const p = e.publicada;
+    $('#qr-nuevo').hidden = Boolean(p);
+    $('#qr-listo').hidden = !p;
+    if (!p) return;
+    $('#q-link').href = p.url;
+    $('#q-link').textContent = p.url.replace('https://', '');
+    $('#q-wsp').href = 'https://wa.me/?text=' + encodeURIComponent('Mira nuestra carta: ' + p.url);
+    $('#qr-img').replaceChildren(window.qrcode ? qrSVG(p.url) : document.createTextNode('No se pudo cargar el QR. Revisa tu internet y recarga la página.'));
+    revisarCambios();
+  };
+
+  $('#form-pub').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const err = $('#p-error');
+    err.textContent = '';
+    const local = $('#p-local').value;
+    const nombre = $('#p-nombre').value.trim();
+    const whatsapp = $('#p-wsp').value;
+    if (e.ejemplo || limpiar(e.local.nombre) === 'Picada Don Tito') { err.textContent = 'Primero cambia la carta de ejemplo por la de tu local (o toca "Empezar de cero").'; return; }
+    if (!limpiar(e.local.nombre)) { err.textContent = 'Escribe el nombre de tu local arriba, en "Tu local".'; $('#l-nombre').focus(); return; }
+    if (!linkValido(local)) { err.textContent = 'Elige tu link: de 3 a 40 letras o números, separados por guiones.'; $('#p-local').focus(); return; }
+    if (!nombre) { err.textContent = 'Escribe tu nombre.'; $('#p-nombre').focus(); return; }
+    if (!/^(569\d{8}|9\d{8})$/.test(whatsapp.replace(/\D/g, ''))) { err.textContent = 'Revisa tu WhatsApp: debe ser un celular chileno, como 9 1234 5678.'; $('#p-wsp').focus(); return; }
+    const btn = $('#p-enviar');
+    btn.disabled = true; btn.textContent = 'Publicando…';
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'publicar', local, nombre, whatsapp, web: $('#p-web').value, carta: await paraPublicar() }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo publicar. Intenta de nuevo.');
+      e.publicada = { local: j.local, clave: j.clave, url: j.url, firma: firma(), fecha: new Date().toISOString() };
+      guardarYa();
+      verPublicada();
+      qEstado('✓ ¡Listo! Tu carta ya está publicada. Descarga el QR y ponlo en tus mesas.');
+      $('#publicar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (x) {
+      err.textContent = x.message;
+      if (/ocupado/.test(x.message)) revisarLink();
+    } finally {
+      btn.disabled = false; btn.textContent = 'Publicar mi carta con QR';
+    }
+  });
+  $('#q-actualizar').addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget;
+    btn.disabled = true;
+    qEstado('Actualizando…');
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'actualizar', local: e.publicada.local, clave: e.publicada.clave, carta: await paraPublicar() }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo actualizar. Intenta de nuevo.');
+      e.publicada.firma = firma();
+      guardarYa();
+      revisarCambios();
+      qEstado('✓ Listo. Tu carta publicada ya tiene los cambios (en el celular puede tardar hasta un minuto en verse).');
+    } catch (x) { qEstado(x.message); }
+    btn.disabled = false;
+  });
+  $('#q-copiar').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(e.publicada.url); qEstado('✓ Link copiado.'); }
+    catch { qEstado('Copia el link: ' + e.publicada.url); }
+  });
+  $('#q-png').addEventListener('click', () => {
+    if (!window.qrcode) return qEstado('No se pudo cargar el QR. Revisa tu internet y recarga la página.');
+    const a = document.createElement('a');
+    a.href = qrPNG(e.publicada.url, e);
+    a.download = 'qr-' + e.publicada.local + '.png';
+    document.body.append(a); a.click(); a.remove();
+    qEstado('✓ QR descargado. Imprímelo o súbelo a tus redes.');
+  });
+  $('#q-tarjetas').addEventListener('click', () => {
+    if (!window.qrcode || !window.jspdf) return qEstado('No se pudo preparar el PDF. Revisa tu internet y recarga la página.');
+    tarjetasPDF(e.publicada.url, e).save('qr-mesas-' + e.publicada.local + '.pdf');
+    qEstado('✓ Listo: 4 tarjetas por hoja, para recortar y poner en las mesas.');
+  });
+
   // ---------- Formulario: datos del local ----------
   document.querySelectorAll('[data-local]').forEach((inp) => {
     inp.value = e.local[inp.dataset.local] || '';
-    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; cambio(); });
+    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; if (inp.dataset.local === 'nombre') { dejarEjemplo(); sugerirLink(); } cambio(); });
   });
   const verLogo = () => {
     $('#logo-mini').hidden = !e.local.logo;
@@ -754,8 +709,9 @@ document.addEventListener('DOMContentLoaded', () => {
     enfocar(titulo ? `[data-sec="${s.id}"] .p-nom` : `[data-sec="${s.id}"] .sec-tit`);
   });
   $('#de-cero').addEventListener('click', () => {
-    const d = e.diseno;
+    const d = e.diseno, publicada = e.publicada;
     e = VACIO(); e.diseno = d;
+    if (publicada) e.publicada = publicada;
     document.querySelectorAll('[data-local]').forEach((inp) => { inp.value = ''; });
     $('#l-logo').value = ''; verLogo();
     $('#aviso-ejemplo').hidden = true;
@@ -766,6 +722,8 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#aviso-ejemplo').hidden = !e.ejemplo;
   pintarSecciones();
   dibujar();
+  verPublicada();
+  if (!e.ejemplo) sugerirLink();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(dibujar);
 });
 </script>
