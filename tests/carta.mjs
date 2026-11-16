@@ -67,6 +67,13 @@ ok((await subir('cafe-subido', ja.clave, 0, 2, JPG, 'text/html')).status === 400
 ok((await subir('cafe-subido', ja.clave, 0, 11)).status === 400, 'máximo 10 páginas');
 ok((await subir('cafe-subido', ja.clave, 0, 2, JPG, 'image/jpeg', 'https://otro.com')).status === 403, 'no sube desde otro sitio');
 ok((await subir('cafe-subido', ja.clave, 0, 2)).status === 200 && (await subir('cafe-subido', ja.clave, 1, 2)).status === 200, 'sube 2 páginas');
+// En Vercel la ruta api/publico/[accion].js agrega ?accion=carta a la URL: la subida tiene que funcionar igual.
+const { default: router } = await import('../api/publico/[accion].js');
+const comoVercel = (orden) => router.fetch(new Request(`${O}/api/publico/carta?${orden}&local=cafe-subido&n=1&total=2&w=1200&h=1700`, {
+  method: 'POST', headers: { 'content-type': 'image/jpeg', 'x-clave': ja.clave, origin: O }, body: JPG,
+}));
+ok((await comoVercel('accion=carta&accion=pagina')).status === 200 && (await comoVercel('accion=pagina&accion=carta')).status === 200 && (await comoVercel('accion=carta')).status === 200, 'sube páginas aunque Vercel agregue ?accion=carta');
+ok((await router.fetch(new Request(`${O}/api/publico/carta?accion=carta`, { method: 'POST', headers: { 'content-type': 'application/json', origin: O }, body: JSON.stringify({ accion: 'reportar', local: 'cafe-subido', motivo: 'prueba' }) }))).status === 200, 'las acciones en JSON siguen pasando por el router');
 vj = await (await ver('cafe-subido')).json();
 ok(vj.carta.tipo === 'archivo' && vj.carta.paginas.length === 2 && vj.carta.paginas[0].url.includes('img=0') && vj.carta.paginas[0].w === 1200 && !JSON.stringify(vj).includes('cartas/'), 'la carta pública trae los links de las páginas, sin rutas internas');
 let ri = await img('cafe-subido', 1);

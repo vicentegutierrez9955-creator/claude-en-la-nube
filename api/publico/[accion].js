@@ -8,9 +8,24 @@ import carta from '../_lib/publico/carta.js';
 
 const RUTAS = { contacto, whatsapp, cliente, carta };
 
+// Vercel agrega ?accion=<ruta> por el nombre de este archivo ([accion].js), y eso puede tapar el ?accion propio
+// de una ruta (las cartas suben sus páginas con ?accion=pagina). Se quita lo agregado antes de pasar el pedido;
+// si Vercel reemplazó el valor, una imagen enviada a /carta es una página de carta.
+export function sinAccionDeVercel(request, ruta) {
+  const url = new URL(request.url);
+  if (!url.searchParams.has('accion')) return request;
+  const propias = url.searchParams.getAll('accion').filter((a) => a !== ruta);
+  if (!propias.length && ruta === 'carta' && request.method === 'POST' && /^image\//i.test(request.headers.get('content-type') || '')) propias.push('pagina');
+  url.searchParams.delete('accion');
+  propias.forEach((a) => url.searchParams.append('accion', a));
+  const conCuerpo = request.method !== 'GET' && request.method !== 'HEAD';
+  return new Request(url, { method: request.method, headers: request.headers, ...(conCuerpo ? { body: request.body, duplex: 'half' } : {}) });
+}
+
 export default {
   fetch(request) {
-    const h = RUTAS[new URL(request.url).pathname.split('/').filter(Boolean).pop()];
-    return h ? h.fetch(request) : new Response('No encontrado', { status: 404 });
+    const ruta = new URL(request.url).pathname.split('/').filter(Boolean).pop();
+    const h = RUTAS[ruta];
+    return h ? h.fetch(sinAccionDeVercel(request, ruta)) : new Response('No encontrado', { status: 404 });
   },
 };
