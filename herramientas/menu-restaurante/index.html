@@ -134,6 +134,18 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
 .acciones{display:flex;flex-wrap:wrap;gap:8px}
 .cambios{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;background:rgba(242,193,78,.12);border:1px solid rgba(242,193,78,.45);border-radius:12px;padding:10px 12px;margin-top:12px;font-size:15px}
 @media (max-width:420px){.qr-fila{grid-template-columns:110px minmax(0,1fr)}}
+.fondo-foto{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 6px}
+.fondo-foto img{width:40px;height:52px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.color.foto{background-size:cover;background-position:center}
+/* Ventana de "crear carta con QR" */
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:22px;width:min(520px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.9)}
+dialog::backdrop{background:rgba(5,10,6,.7)}
+dialog h2{padding-right:34px}
+.dlg-x{position:absolute;right:10px;top:10px}
+.qr-grande{background:#fff;border-radius:14px;padding:10px;width:min(240px,70%);margin:14px auto 6px;line-height:0}
+.qr-grande svg{width:100%;height:auto}
+#dlg-listo .link-final{text-align:center}
+#dlg-listo .barra .btn{flex:1 1 200px}
 .solo-cel{display:none}
 
 @media (max-width:980px){
@@ -205,6 +217,15 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
         <div class="estilos" id="estilos" role="group" aria-label="Estilo"></div>
         <p class="lbl" style="font-weight:600;font-size:14px;margin:0 0 6px">Color</p>
         <div class="colores" id="colores" role="group" aria-label="Color"></div>
+        <p class="lbl" style="font-weight:600;font-size:14px;margin:0 0 6px">Fondo</p>
+        <div class="colores" id="fondos" role="group" aria-label="Fondo"></div>
+        <div class="fondo-foto">
+          <img id="fondo-mini" alt="" hidden>
+          <label class="btn btn-chico" for="d-fondo" style="margin:0;font-weight:600">Usar una foto de fondo</label>
+          <input id="d-fondo" type="file" accept="image/*" class="oculto">
+          <button type="button" class="btn btn-chico" id="quitar-fondo" hidden>Quitar foto</button>
+        </div>
+        <p class="sub" style="margin:0 0 14px">Una foto de tu local, de madera o de pizarra. Le ponemos un velo encima para que la carta se lea bien.</p>
         <div class="grid">
           <div class="campo"><p style="font-weight:600;font-size:14px;margin:0 0 6px">Columnas</p><div class="segm" id="cols" role="group" aria-label="Columnas"><button type="button" class="btn btn-chico" data-v="1">1 columna</button><button type="button" class="btn btn-chico" data-v="2">2 columnas</button></div></div>
           <div class="campo"><p style="font-weight:600;font-size:14px;margin:0 0 6px">Tamaño de hoja</p><div class="segm" id="hoja" role="group" aria-label="Tamaño de hoja"><button type="button" class="btn btn-chico" data-v="a4">A4</button><button type="button" class="btn btn-chico" data-v="carta">Carta</button></div></div>
@@ -227,8 +248,9 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
       <h2 id="t-vista" style="margin:0 0 4px">Así queda tu carta</h2>
       <p class="sub" id="vista-sub">Se actualiza sola mientras escribes.</p>
       <div class="hojas" id="hojas" aria-label="Vista previa de la carta"></div>
+      <button type="button" class="btn btn-primario btn-grande" id="crear" data-abrir style="width:100%;margin-top:12px">✓ Mi carta está lista: crear página y QR</button>
       <div class="barra">
-        <button type="button" class="btn btn-primario btn-grande" id="pdf">⬇ Descargar PDF</button>
+        <button type="button" class="btn" id="pdf">⬇ Descargar PDF</button>
         <button type="button" class="btn btn-wa" id="compartir" hidden>Compartir</button>
         <button type="button" class="btn" id="imprimir">Imprimir</button>
       </div>
@@ -237,21 +259,9 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
       <section class="card qr-card" id="publicar" aria-labelledby="t-qr">
         <h2 id="t-qr">Tu carta con código QR</h2>
         <div id="qr-nuevo">
-          <p class="sub">Publica tu carta en un link propio y descarga el QR para tus mesas. Cuando cambies un precio, actualizas la carta y el mismo QR muestra la nueva, sin volver a imprimir. Gratis.</p>
-          <p class="chico" style="margin:-6px 0 14px">¿Ya tienes tu carta hecha en PDF o fotos? <a href="/herramientas/carta-qr">Súbela y publícala con QR →</a></p>
-          <form id="form-pub" novalidate>
-            <label for="p-local">Tu link</label>
-            <div class="link-campo"><span>stpyme.cl/carta/</span><input id="p-local" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="tu-local"></div>
-            <p class="chico" id="p-disp" aria-live="polite"></p>
-            <div class="grid">
-              <div class="campo"><label for="p-nombre">Tu nombre</label><input id="p-nombre" maxlength="60" autocomplete="name"></div>
-              <div class="campo"><label for="p-wsp">Tu WhatsApp</label><input id="p-wsp" type="tel" inputmode="tel" placeholder="9 1234 5678" maxlength="20" autocomplete="tel"></div>
-            </div>
-            <div class="oculto" aria-hidden="true"><label for="p-web">No llenar</label><input id="p-web" tabindex="-1" autocomplete="off"></div>
-            <button class="btn btn-primario btn-grande" type="submit" id="p-enviar" style="width:100%">Publicar mi carta con QR</button>
-            <p class="error" id="p-error" role="alert"></p>
-            <p class="muted chico" style="margin:6px 0 0">Tu WhatsApp no aparece en la carta: lo usamos para avisarte si hay un problema con ella y para contarte de nuestras páginas web. Revisamos las cartas publicadas y podemos pausar las que no sean de un negocio real o tengan contenido inapropiado. <a href="/privacidad">Privacidad</a></p>
-          </form>
+          <p class="sub">Cuando tu carta esté lista, toca el botón: creamos su página y te damos al tiro el link y el código QR para imprimir y poner en tus mesas. Si después cambias un precio, el mismo QR muestra la carta nueva. Gratis.</p>
+          <button type="button" class="btn btn-primario" data-abrir style="width:100%">Crear página y QR</button>
+          <p class="chico" style="margin:12px 0 0">¿Ya tienes tu carta hecha en PDF o fotos? <a href="/herramientas/carta-qr">Súbela y publícala con QR →</a></p>
         </div>
         <div id="qr-listo" hidden>
           <div class="qr-fila">
@@ -259,12 +269,8 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
             <div>
               <p class="chico muted" style="margin:0">Tu carta está publicada en:</p>
               <p class="link-final"><a id="q-link" target="_blank" rel="noopener"></a></p>
-              <div class="acciones"><button type="button" class="btn btn-chico" id="q-copiar">Copiar link</button><a class="btn btn-chico btn-wa" id="q-wsp" target="_blank" rel="noopener">Compartir</a></div>
+              <div class="acciones"><button type="button" class="btn btn-chico btn-primario" data-abrir>Ver QR e imprimir</button><button type="button" class="btn btn-chico" id="q-copiar">Copiar link</button></div>
             </div>
-          </div>
-          <div class="barra" style="margin-top:0">
-            <button type="button" class="btn btn-primario" id="q-png">⬇ Descargar QR</button>
-            <button type="button" class="btn" id="q-tarjetas">⬇ Tarjetas para mesas (PDF)</button>
           </div>
           <div class="cambios" id="q-cambios" hidden><span>Tienes cambios que aún no están en tu carta publicada.</span><button type="button" class="btn btn-primario btn-chico" id="q-actualizar">Actualizar carta publicada</button></div>
           <p class="estado" id="q-estado" role="status"></p>
@@ -295,6 +301,40 @@ footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
   </section>
 </main>
 
+<dialog id="dlg" aria-labelledby="dlg-t">
+  <button type="button" class="btn-x dlg-x" id="dlg-cerrar" aria-label="Cerrar">✕</button>
+  <div id="dlg-form">
+    <h2 id="dlg-t">Crea tu carta con QR</h2>
+    <p class="sub">Solo falta esto y te damos al tiro el link y el QR para tus mesas.</p>
+    <form id="form-pub" novalidate>
+      <div class="grid">
+        <div class="campo"><label for="p-nombre">Tu nombre</label><input id="p-nombre" maxlength="60" autocomplete="name"></div>
+        <div class="campo"><label for="p-wsp">Tu WhatsApp</label><input id="p-wsp" type="tel" inputmode="tel" placeholder="9 1234 5678" maxlength="20" autocomplete="tel"></div>
+      </div>
+      <label for="p-local">Link de tu carta</label>
+      <div class="link-campo"><span>stpyme.cl/carta/</span><input id="p-local" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="tu-local"></div>
+      <p class="chico" id="p-disp" aria-live="polite"></p>
+      <div class="oculto" aria-hidden="true"><label for="p-web">No llenar</label><input id="p-web" tabindex="-1" autocomplete="off"></div>
+      <button class="btn btn-primario btn-grande" type="submit" id="p-enviar" style="width:100%">Crear mi carta con QR</button>
+      <p class="error" id="p-error" role="alert"></p>
+      <p class="muted chico" style="margin:6px 0 0">Tu WhatsApp no aparece en la carta: lo usamos para avisarte si hay un problema con ella y para contarte de nuestras páginas web. Revisamos las cartas publicadas y podemos pausar las que no sean de un negocio real o tengan contenido inapropiado. <a href="/privacidad">Privacidad</a></p>
+    </form>
+  </div>
+  <div id="dlg-listo" hidden>
+    <h2>¡Listo! Tu carta ya está en línea</h2>
+    <p class="sub" style="margin:0">Escanea el QR con tu celular para verla, e imprímelo para tus mesas.</p>
+    <div class="qr-grande" id="dlg-qr"></div>
+    <p class="link-final"><a id="dlg-link" target="_blank" rel="noopener"></a></p>
+    <div class="barra">
+      <button type="button" class="btn btn-primario btn-grande" id="q-imprimir">Imprimir QR para las mesas</button>
+      <a class="btn" id="dlg-ver" target="_blank" rel="noopener">Ver mi carta</a>
+      <button type="button" class="btn" id="q-png">⬇ Descargar QR</button>
+      <a class="btn btn-wa" id="q-wsp" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+    </div>
+    <p class="estado" id="dlg-estado" role="status"></p>
+  </div>
+</dialog>
+
 <footer class="sitio wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a>: ayudamos a crecer a las pymes de Chile. · <a href="/herramientas">Más herramientas</a> · STP CHILE SpA · RUT 78.534.708-0 · <a href="/privacidad">Privacidad</a></footer>
 
 <script>
@@ -303,12 +343,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const CLAVE = 'stpyme-menu-v1';
   const uid = () => Math.random().toString(36).slice(2, 9);
 
-  const { COLORES, ESTILOS, limpiar, componer, aSVG, aPDF, archivo, qrSVG, qrPNG, tarjetasPDF } = window.CartaMotor;
+  const { COLORES, FONDOS, ESTILOS, limpiar, componer, aSVG, aPDF, archivo, qrSVG, qrPNG, tarjetasPDF } = window.CartaMotor;
 
   const EJEMPLO = () => ({
     ejemplo: true,
     local: { nombre: 'Picada Don Tito', frase: 'Comida casera desde 1998', tel: '+56 9 1234 5678', ig: '@picadadontito', dir: 'Av. Principal 123', horario: 'Lunes a sábado, 12:00 a 22:00', logo: '', logoR: 1 },
-    diseno: { estilo: 'clasico', color: '', cols: 2, hoja: 'a4' },
+    diseno: { estilo: 'clasico', color: '', cols: 2, hoja: 'a4', fondo: '', fondoImg: '', fondoR: 0 },
     secciones: [
       { id: uid(), titulo: 'Sándwiches', nota: 'En pan frica o marraqueta', items: [
         { id: uid(), nombre: 'Barros Luco', desc: 'Carne de vacuno y queso fundido', precio: '7990' },
@@ -340,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const VACIO = () => ({
     ejemplo: false,
     local: { nombre: '', frase: '', tel: '', ig: '', dir: '', horario: '', logo: '', logoR: 1 },
-    diseno: { estilo: 'clasico', color: '', cols: 1, hoja: 'a4' },
+    diseno: { estilo: 'clasico', color: '', cols: 1, hoja: 'a4', fondo: '', fondoImg: '', fondoR: 0 },
     secciones: [{ id: uid(), titulo: 'Platos de fondo', nota: '', items: [{ id: uid(), nombre: '', desc: '', precio: '' }] }],
   });
 
@@ -389,10 +429,13 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#imprimir').addEventListener('click', () => { dibujar(); window.print(); });
 
   // ---------- Carta publicada con QR (stpyme.cl/carta/<local>) ----------
+  // Un solo botón: si la carta no está publicada, pide nombre y WhatsApp (se recuerdan) y busca un link libre;
+  // al publicar muestra al tiro el QR para imprimir. Si ya está publicada, actualiza los cambios y muestra el QR.
   const API = '/api/publico/carta';
   const aLink = (s) => limpiar(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40).replace(/-+$/, '');
   const linkValido = (s) => s.length >= 3 && s.length <= 40 && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(s);
   const qEstado = (t) => { $('#q-estado').textContent = t; };
+  const dEstado = (t) => { $('#dlg-estado').textContent = t; };
   // Lo que se publica: la carta sin los ids internos. El logo se achica para que la carta cargue rápido en el celular.
   let logoListo = { de: '', src: '' };
   const logoLiviano = () => new Promise((ok) => {
@@ -426,29 +469,52 @@ document.addEventListener('DOMContentLoaded', () => {
     diseno: e.diseno,
     secciones: e.secciones.map((s) => ({ titulo: s.titulo, nota: s.nota, items: s.items.map((it) => ({ nombre: it.nombre, desc: it.desc, precio: it.precio })) })),
   });
-  const firma = () => JSON.stringify({ l: { ...e.local, logo: e.local.logo.length }, d: e.diseno, s: e.secciones.map((s) => [s.titulo, s.nota, s.items.map((it) => [it.nombre, it.desc, it.precio])]) });
-  const revisarCambios = () => { if (e.publicada) $('#q-cambios').hidden = e.publicada.firma === firma(); };
+  const firma = () => JSON.stringify({ l: { ...e.local, logo: e.local.logo.length }, d: { ...e.diseno, fondoImg: (e.diseno.fondoImg || '').length }, s: e.secciones.map((s) => [s.titulo, s.nota, s.items.map((it) => [it.nombre, it.desc, it.precio])]) });
+  const hayCambios = () => Boolean(e.publicada) && e.publicada.firma !== firma();
+  const revisarCambios = () => {
+    if (!e.publicada) return;
+    $('#q-cambios').hidden = !hayCambios();
+    $('#crear').textContent = hayCambios() ? '✓ Actualizar mi carta publicada y ver el QR' : 'Ver el QR de mi carta';
+  };
 
-  let linkTocado = false;
-  const sugerirLink = () => { if (!linkTocado && !e.publicada) { $('#p-local').value = aLink(e.local.nombre); revisarLink(); } };
-  let tLink, pedidoLink = 0;
+  // El link se arma con el nombre del local; si está ocupado se prueba con -2, -3...
+  const disponible = async (v) => {
+    const r = await fetch(API + '?local=' + encodeURIComponent(v));
+    if (r.status === 503) throw new Error('La publicación de cartas se está activando. Vuelve a intentarlo en un rato.');
+    return r.status === 404;
+  };
+  const marcarLink = (t, clase) => { const d = $('#p-disp'); d.className = 'chico' + (clase ? ' ' + clase : ''); d.textContent = t; };
+  let linkTocado = false, tLink, pedidoLink = 0;
+  async function sugerirLink() {
+    if (linkTocado) return;
+    const base = aLink(e.local.nombre);
+    const n = ++pedidoLink;
+    $('#p-local').value = base;
+    if (!linkValido(base)) return marcarLink(base ? 'Usa de 3 a 40 letras o números, separados por guiones.' : '', 'mal');
+    marcarLink('Buscando un link libre…');
+    try {
+      for (const v of [base, ...[2, 3, 4, 5, 6, 7, 8, 9].map((i) => base.slice(0, 37).replace(/-+$/, '') + '-' + i)]) {
+        const libre = await disponible(v);
+        if (n !== pedidoLink || linkTocado) return;
+        if (libre) { $('#p-local').value = v; return marcarLink('✓ stpyme.cl/carta/' + v + ' está disponible', 'bien'); }
+      }
+      marcarLink('Ese link ya está ocupado. Escribe otro.', 'mal');
+    } catch (x) { if (n === pedidoLink) marcarLink(x.message || '', 'mal'); }
+  }
   const revisarLink = () => {
     clearTimeout(tLink);
     const v = $('#p-local').value;
-    const disp = $('#p-disp');
-    disp.className = 'chico';
-    if (!v) { disp.textContent = ''; return; }
-    if (!linkValido(v)) { disp.textContent = 'Usa de 3 a 40 letras o números, separados por guiones (ej: picada-don-tito).'; disp.classList.add('mal'); return; }
-    disp.textContent = 'Revisando…';
+    if (!v) return marcarLink('');
+    if (!linkValido(v)) return marcarLink('Usa de 3 a 40 letras o números, separados por guiones (ej: picada-don-tito).', 'mal');
+    marcarLink('Revisando…');
     const n = ++pedidoLink;
     tLink = setTimeout(async () => {
       try {
-        const r = await fetch(API + '?local=' + encodeURIComponent(v));
+        const libre = await disponible(v);
         if (n !== pedidoLink) return;
-        if (r.status === 404) { disp.textContent = '✓ stpyme.cl/carta/' + v + ' está disponible'; disp.classList.add('bien'); }
-        else if (r.status === 503) { disp.textContent = 'La publicación de cartas se está activando. Vuelve a intentarlo en un rato.'; disp.classList.add('mal'); }
-        else { disp.textContent = 'Ese link ya está ocupado. Prueba con otro.'; disp.classList.add('mal'); }
-      } catch { if (n === pedidoLink) disp.textContent = ''; }
+        if (libre) marcarLink('✓ stpyme.cl/carta/' + v + ' está disponible', 'bien');
+        else marcarLink('Ese link ya está ocupado. Prueba con otro.', 'mal');
+      } catch (x) { if (n === pedidoLink) marcarLink(x.message || '', 'mal'); }
     }, 400);
   };
   $('#p-local').addEventListener('input', (ev) => {
@@ -458,17 +524,74 @@ document.addEventListener('DOMContentLoaded', () => {
     revisarLink();
   });
 
+  const dlg = $('#dlg');
+  $('#dlg-cerrar').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (ev) => { if (ev.target === dlg) dlg.close(); });
+  const abrirListo = () => {
+    const p = e.publicada;
+    $('#dlg-form').hidden = true;
+    $('#dlg-listo').hidden = false;
+    $('#dlg-qr').replaceChildren(window.qrcode ? qrSVG(p.url) : document.createTextNode('No se pudo cargar el QR. Revisa tu internet y recarga la página.'));
+    $('#dlg-link').href = p.url;
+    $('#dlg-link').textContent = p.url.replace('https://', '');
+    $('#dlg-ver').href = p.url;
+    $('#q-wsp').href = 'https://wa.me/?text=' + encodeURIComponent('Mira nuestra carta: ' + p.url);
+    if (!dlg.open) dlg.showModal();
+  };
   const verPublicada = () => {
     const p = e.publicada;
     $('#qr-nuevo').hidden = Boolean(p);
     $('#qr-listo').hidden = !p;
-    if (!p) return;
+    if (!p) { $('#crear').textContent = '✓ Mi carta está lista: crear página y QR'; return; }
     $('#q-link').href = p.url;
     $('#q-link').textContent = p.url.replace('https://', '');
-    $('#q-wsp').href = 'https://wa.me/?text=' + encodeURIComponent('Mira nuestra carta: ' + p.url);
     $('#qr-img').replaceChildren(window.qrcode ? qrSVG(p.url) : document.createTextNode('No se pudo cargar el QR. Revisa tu internet y recarga la página.'));
     revisarCambios();
   };
+  const faltaParaPublicar = () => {
+    if (e.ejemplo || limpiar(e.local.nombre) === 'Picada Don Tito') return 'Primero cambia la carta de ejemplo por la de tu local (o toca "Empezar de cero" arriba).';
+    if (!limpiar(e.local.nombre)) return 'Escribe el nombre de tu local arriba, en "Tu local".';
+    if (!e.secciones.some((s) => s.items.some((it) => limpiar(it.nombre) || limpiar(it.precio)))) return 'Agrega al menos un plato a tu carta.';
+    return '';
+  };
+  async function actualizar(btn) {
+    if (btn) btn.disabled = true;
+    estado('Actualizando tu carta publicada…');
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'actualizar', local: e.publicada.local, clave: e.publicada.clave, carta: await paraPublicar() }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo actualizar. Intenta de nuevo.');
+      e.publicada.firma = firma();
+      guardarYa();
+      revisarCambios();
+      const t = '✓ Listo. Tu carta publicada ya tiene los cambios (en el celular puede tardar hasta un minuto en verse).';
+      estado(t); qEstado(t);
+      return true;
+    } catch (x) { estado(x.message); qEstado(x.message); return false; }
+    finally { if (btn) btn.disabled = false; }
+  }
+  document.querySelectorAll('[data-abrir]').forEach((b) => b.addEventListener('click', async () => {
+    const falta = faltaParaPublicar();
+    if (falta) {
+      estado(falta); qEstado(falta);
+      if (!limpiar(e.local.nombre) || e.ejemplo || limpiar(e.local.nombre) === 'Picada Don Tito') { $('#l-nombre').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('#l-nombre').focus({ preventScroll: true }); }
+      return;
+    }
+    if (e.publicada) {
+      if (hayCambios() && !(await actualizar(b))) return;
+      dEstado('');
+      return abrirListo();
+    }
+    $('#dlg-form').hidden = false;
+    $('#dlg-listo').hidden = true;
+    $('#p-error').textContent = '';
+    const c = e.contacto || {};
+    if (!$('#p-nombre').value) $('#p-nombre').value = c.nombre || '';
+    if (!$('#p-wsp').value) $('#p-wsp').value = c.whatsapp || '';
+    dlg.showModal();
+    sugerirLink();
+    (!$('#p-nombre').value ? $('#p-nombre') : !$('#p-wsp').value ? $('#p-wsp') : $('#p-enviar')).focus();
+  }));
 
   $('#form-pub').addEventListener('submit', async (ev) => {
     ev.preventDefault();
@@ -477,13 +600,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const local = $('#p-local').value;
     const nombre = $('#p-nombre').value.trim();
     const whatsapp = $('#p-wsp').value;
-    if (e.ejemplo || limpiar(e.local.nombre) === 'Picada Don Tito') { err.textContent = 'Primero cambia la carta de ejemplo por la de tu local (o toca "Empezar de cero").'; return; }
-    if (!limpiar(e.local.nombre)) { err.textContent = 'Escribe el nombre de tu local arriba, en "Tu local".'; $('#l-nombre').focus(); return; }
-    if (!linkValido(local)) { err.textContent = 'Elige tu link: de 3 a 40 letras o números, separados por guiones.'; $('#p-local').focus(); return; }
     if (!nombre) { err.textContent = 'Escribe tu nombre.'; $('#p-nombre').focus(); return; }
     if (!/^(569\d{8}|9\d{8})$/.test(whatsapp.replace(/\D/g, ''))) { err.textContent = 'Revisa tu WhatsApp: debe ser un celular chileno, como 9 1234 5678.'; $('#p-wsp').focus(); return; }
+    if (!linkValido(local)) { err.textContent = 'Elige el link de tu carta: de 3 a 40 letras o números, separados por guiones.'; $('#p-local').focus(); return; }
+    e.contacto = { nombre, whatsapp };
+    guardarYa();
     const btn = $('#p-enviar');
-    btn.disabled = true; btn.textContent = 'Publicando…';
+    btn.disabled = true; btn.textContent = 'Creando tu carta…';
     try {
       const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'publicar', local, nombre, whatsapp, web: $('#p-web').value, carta: await paraPublicar() }) });
       const j = await r.json().catch(() => ({}));
@@ -491,52 +614,46 @@ document.addEventListener('DOMContentLoaded', () => {
       e.publicada = { local: j.local, clave: j.clave, url: j.url, firma: firma(), fecha: new Date().toISOString() };
       guardarYa();
       verPublicada();
-      qEstado('✓ ¡Listo! Tu carta ya está publicada. Descarga el QR y ponlo en tus mesas.');
-      $('#publicar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      dEstado('');
+      abrirListo();
+      qEstado('✓ ¡Listo! Tu carta ya está publicada.');
     } catch (x) {
       err.textContent = x.message;
-      if (/ocupado/.test(x.message)) revisarLink();
+      if (/ocupado/.test(x.message)) { linkTocado = false; sugerirLink(); }
     } finally {
-      btn.disabled = false; btn.textContent = 'Publicar mi carta con QR';
+      btn.disabled = false; btn.textContent = 'Crear mi carta con QR';
     }
   });
-  $('#q-actualizar').addEventListener('click', async (ev) => {
-    const btn = ev.currentTarget;
-    btn.disabled = true;
-    qEstado('Actualizando…');
-    try {
-      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'actualizar', local: e.publicada.local, clave: e.publicada.clave, carta: await paraPublicar() }) });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo actualizar. Intenta de nuevo.');
-      e.publicada.firma = firma();
-      guardarYa();
-      revisarCambios();
-      qEstado('✓ Listo. Tu carta publicada ya tiene los cambios (en el celular puede tardar hasta un minuto en verse).');
-    } catch (x) { qEstado(x.message); }
-    btn.disabled = false;
-  });
+  $('#q-actualizar').addEventListener('click', (ev) => actualizar(ev.currentTarget));
   $('#q-copiar').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(e.publicada.url); qEstado('✓ Link copiado.'); }
     catch { qEstado('Copia el link: ' + e.publicada.url); }
   });
   $('#q-png').addEventListener('click', () => {
-    if (!window.qrcode) return qEstado('No se pudo cargar el QR. Revisa tu internet y recarga la página.');
+    if (!window.qrcode) return dEstado('No se pudo cargar el QR. Revisa tu internet y recarga la página.');
     const a = document.createElement('a');
     a.href = qrPNG(e.publicada.url, e);
     a.download = 'qr-' + e.publicada.local + '.png';
     document.body.append(a); a.click(); a.remove();
-    qEstado('✓ QR descargado. Imprímelo o súbelo a tus redes.');
+    dEstado('✓ QR descargado. Imprímelo o súbelo a tus redes.');
   });
-  $('#q-tarjetas').addEventListener('click', () => {
-    if (!window.qrcode || !window.jspdf) return qEstado('No se pudo preparar el PDF. Revisa tu internet y recarga la página.');
-    tarjetasPDF(e.publicada.url, e).save('qr-mesas-' + e.publicada.local + '.pdf');
-    qEstado('✓ Listo: 4 tarjetas por hoja, para recortar y poner en las mesas.');
+  // Imprimir: hoja con 4 tarjetas de mesa. En computador se abre lista para imprimir; en el celular se descarga.
+  $('#q-imprimir').addEventListener('click', () => {
+    if (!window.qrcode || !window.jspdf) return dEstado('No se pudo preparar el PDF. Revisa tu internet y recarga la página.');
+    const doc = tarjetasPDF(e.publicada.url, e);
+    if (!matchMedia('(pointer: coarse)').matches) {
+      doc.autoPrint();
+      const v = window.open(doc.output('bloburl'), '_blank');
+      if (v) return dEstado('✓ Se abrió para imprimir: 4 tarjetas por hoja, para recortar y poner en las mesas.');
+    }
+    doc.save('qr-mesas-' + e.publicada.local + '.pdf');
+    dEstado('✓ Se descargó el PDF con 4 tarjetas por hoja: ábrelo e imprímelo, o llévalo a imprimir.');
   });
 
   // ---------- Formulario: datos del local ----------
   document.querySelectorAll('[data-local]').forEach((inp) => {
     inp.value = e.local[inp.dataset.local] || '';
-    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; if (inp.dataset.local === 'nombre') { dejarEjemplo(); sugerirLink(); } cambio(); });
+    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; if (inp.dataset.local === 'nombre') dejarEjemplo(); cambio(); });
   });
   const verLogo = () => {
     $('#logo-mini').hidden = !e.local.logo;
@@ -581,7 +698,15 @@ document.addEventListener('DOMContentLoaded', () => {
     else { b.textContent = 'Auto'; b.setAttribute('aria-label', 'Color del estilo'); b.title = 'El color del estilo'; }
     return b;
   }));
+  $('#fondos').replaceChildren(...FONDOS.map((c) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'color'; b.dataset.v = c;
+    if (c) { b.style.background = c; b.setAttribute('aria-label', 'Fondo ' + c); }
+    else { b.textContent = 'Auto'; b.setAttribute('aria-label', 'Fondo del estilo'); b.title = 'El fondo del estilo'; }
+    return b;
+  }));
   const marcar = () => {
+    document.querySelectorAll('#fondos .color').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === (e.diseno.fondo || ''))));
     document.querySelectorAll('#estilos .estilo').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === e.diseno.estilo)));
     document.querySelectorAll('#colores .color').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === (e.diseno.color || ''))));
     document.querySelectorAll('#cols .btn').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.v) === Number(e.diseno.cols))));
@@ -593,8 +718,43 @@ document.addEventListener('DOMContentLoaded', () => {
     e.diseno[campo] = num ? Number(b.dataset.v) : b.dataset.v;
     marcar(); cambio();
   });
-  elegir('#estilos', 'estilo'); elegir('#colores', 'color'); elegir('#cols', 'cols', true); elegir('#hoja', 'hoja');
+  elegir('#estilos', 'estilo'); elegir('#colores', 'color'); elegir('#fondos', 'fondo'); elegir('#cols', 'cols', true); elegir('#hoja', 'hoja');
   marcar();
+  // Foto de fondo: se achica en el celular para que la carta cargue rápido (y quepa al publicarla).
+  const verFondo = () => {
+    const f = e.diseno.fondoImg;
+    $('#fondo-mini').hidden = !f;
+    $('#quitar-fondo').hidden = !f;
+    if (f) $('#fondo-mini').src = f;
+  };
+  verFondo();
+  $('#d-fondo').addEventListener('change', (ev) => {
+    const f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    const img = new Image();
+    img.onload = () => {
+      let lado = 1300, calidad = 0.72, r = '';
+      for (let i = 0; i < 5; i++) {
+        const k = Math.min(1, lado / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.naturalWidth * k));
+        c.height = Math.max(1, Math.round(img.naturalHeight * k));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        r = c.toDataURL('image/jpeg', calidad);
+        if (r.length <= 400000) break;
+        lado = Math.round(lado * 0.8); calidad = Math.max(0.5, calidad - 0.06);
+      }
+      e.diseno.fondoImg = r;
+      e.diseno.fondoR = img.naturalWidth / img.naturalHeight;
+      URL.revokeObjectURL(img.src);
+      ev.target.value = '';
+      verFondo(); cambio();
+      estado('✓ Foto de fondo lista. Si cuesta leer la carta, prueba otra foto o elige un fondo de color.');
+    };
+    img.onerror = () => estado('No se pudo leer esa imagen. Prueba con un JPG o PNG.');
+    img.src = URL.createObjectURL(f);
+  });
+  $('#quitar-fondo').addEventListener('click', () => { e.diseno.fondoImg = ''; e.diseno.fondoR = 0; verFondo(); cambio(); });
 
   // ---------- Secciones y platos ----------
   const crear = (tag, props) => {
@@ -711,9 +871,10 @@ document.addEventListener('DOMContentLoaded', () => {
     enfocar(titulo ? `[data-sec="${s.id}"] .p-nom` : `[data-sec="${s.id}"] .sec-tit`);
   });
   $('#de-cero').addEventListener('click', () => {
-    const d = e.diseno, publicada = e.publicada;
+    const d = e.diseno, publicada = e.publicada, contacto = e.contacto;
     e = VACIO(); e.diseno = d;
     if (publicada) e.publicada = publicada;
+    if (contacto) e.contacto = contacto;
     document.querySelectorAll('[data-local]').forEach((inp) => { inp.value = ''; });
     $('#l-logo').value = ''; verLogo();
     $('#aviso-ejemplo').hidden = true;
@@ -725,7 +886,6 @@ document.addEventListener('DOMContentLoaded', () => {
   pintarSecciones();
   dibujar();
   verPublicada();
-  if (!e.ejemplo) sugerirLink();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(dibujar);
 });
 </script>

@@ -10,7 +10,10 @@
     fresco: { nombre: 'Fresco', bg: '#f2f7ee', ink: '#1f3324', muted: '#5d7262', acc: '#3f8f3a', cab: 'helvetica', txt: 'helvetica', pildora: true, barra: true },
   };
   const COLORES = ['', '#9c2f22', '#e4572e', '#d4a017', '#3f8f3a', '#1f6fb2', '#7b3fa0', '#c2185b'];
+  // Fondos de la hoja ('' = el del estilo). El texto cambia solo a claro u oscuro para que se lea.
+  const FONDOS = ['', '#ffffff', '#fbf6ec', '#ead9bf', '#f2f7ee', '#23272b', '#111111', '#1f3b2c', '#4a1c1c', '#1b2a41'];
   const HOJAS = { a4: [210, 297], carta: [215.9, 279.4] };
+  const W_H = 210 / 297;
   const FAMILIA = { helvetica: 'Helvetica, Arial, "Liberation Sans", sans-serif', times: '"Times New Roman", Times, "Liberation Serif", serif' };
   const SITIO = 'stpyme.cl';
 
@@ -24,9 +27,30 @@
     const d = t.replace(/[$.\s]/g, '');
     return /^\d+$/.test(d) ? '$' + miles(Number(d)) : t;
   };
+  const hex = (c) => /^#[0-9a-f]{6}$/i.test(String(c || ''));
+  const luz = (c) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contraste = (a, b) => { const x = luz(a), y = luz(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
   const estiloDe = (e) => {
-    const est = { ...(ESTILOS[e.diseno && e.diseno.estilo] || ESTILOS.clasico) };
-    if (e.diseno && e.diseno.color) est.acc = e.diseno.color;
+    const d = e.diseno || {};
+    const base = ESTILOS[d.estilo] || ESTILOS.clasico;
+    const est = { ...base };
+    if (hex(d.color)) est.acc = d.color;
+    if (hex(d.fondo)) {
+      est.bg = d.fondo;
+      const osc = luz(d.fondo) < 0.18;
+      if (contraste(base.ink, d.fondo) < 7 || contraste(base.muted, d.fondo) < 3.5) {
+        est.ink = osc ? '#f4f1ea' : '#1d1d1f';
+        est.muted = osc ? '#c9c2b6' : '#5f5a55';
+      }
+      if (!hex(d.color) && contraste(est.acc, d.fondo) < 3) est.acc = osc ? '#f2c14e' : '#9c2f22';
+    }
+    est.oscuro = luz(est.bg) < 0.18;
+    est.sobreAcc = luz(est.acc) > 0.45 ? '#1d1d1f' : '#ffffff';
+    est.fondoImg = /^data:image\/(png|jpeg|webp);base64,/.test(String(d.fondoImg || '')) ? d.fondoImg : '';
+    est.fondoR = Number(d.fondoR) > 0.1 && Number(d.fondoR) < 10 ? Number(d.fondoR) : W_H;
     return est;
   };
 
@@ -82,6 +106,13 @@
       paginas.push(ops);
       col = 0;
       ops.push({ t: 'rect', x: 0, y: 0, w: W, h: H, fill: est.bg });
+      if (est.fondoImg) {
+        // Foto de fondo que cubre la hoja (lo que sobra queda fuera), con un velo del color de fondo para que se lea.
+        const r = est.fondoR;
+        const w = r > W / H ? H * r : W, h = r > W / H ? H : W / r;
+        ops.push({ t: 'img', x: (W - w) / 2, y: (H - h) / 2, w, h, src: est.fondoImg, alias: 'fondo' });
+        ops.push({ t: 'rect', x: 0, y: 0, w: W, h: H, fill: est.bg, op: 0.8 });
+      }
       if (est.marco) {
         ops.push({ t: 'rect', x: 7, y: 7, w: W - 14, h: H - 14, stroke: est.acc, lw: 0.8 });
         ops.push({ t: 'rect', x: 9, y: 9, w: W - 18, h: H - 18, stroke: est.acc, lw: 0.25 });
@@ -98,7 +129,7 @@
           const r = Number(L.logoR) || 1;
           let h = 26, w = h * r;
           if (w > 70) { w = 70; h = w / r; }
-          ops.push({ t: 'img', x: (W - w) / 2, y, w, h, src: L.logo });
+          ops.push({ t: 'img', x: (W - w) / 2, y, w, h, src: L.logo, alias: 'logo' });
           y += h + 6;
         }
         let tam = 32;
@@ -154,7 +185,7 @@
         if (est.pildora) {
           const tw = ancho(tit, ...fTit);
           ops.push({ t: 'rect', x, y, w: Math.min(colW, tw + 9), h: 8.4, fill: est.acc, r: 4.2 });
-          T(x + 4.5, y + 5.9, tit, fTit, '#ffffff');
+          T(x + 4.5, y + 5.9, tit, fTit, est.sobreAcc);
         } else if (est.centro) {
           const tw = ancho(tit, ...fTit);
           const cx = x + colW / 2;
@@ -207,6 +238,7 @@
         a('x', o.x); a('y', o.y); a('width', o.w); a('height', o.h);
         if (o.r) { a('rx', o.r); a('ry', o.r); }
         a('fill', o.fill || 'none');
+        if (o.op) a('fill-opacity', o.op);
         if (o.stroke) { a('stroke', o.stroke); a('stroke-width', o.lw); }
       } else if (o.t === 'line') {
         el = document.createElementNS(NS, 'line');
@@ -239,7 +271,9 @@
         if (o.fill) doc.setFillColor(o.fill);
         if (o.stroke) { doc.setDrawColor(o.stroke); doc.setLineWidth(o.lw); }
         const modo = o.fill && o.stroke ? 'FD' : o.fill ? 'F' : 'S';
+        if (o.op) doc.setGState(new doc.GState({ opacity: o.op }));
         if (o.r) doc.roundedRect(o.x, o.y, o.w, o.h, o.r, o.r, modo); else doc.rect(o.x, o.y, o.w, o.h, modo);
+        if (o.op) doc.setGState(new doc.GState({ opacity: 1 }));
       } else if (o.t === 'line') {
         doc.setDrawColor(o.color); doc.setLineWidth(o.lw);
         doc.setLineCap(o.dash ? 'round' : 'butt');
@@ -250,7 +284,7 @@
         doc.setFont(o.font, o.style); doc.setFontSize(o.size); doc.setTextColor(o.color);
         doc.text(o.s, o.x, o.y, { align: o.align });
       } else if (o.t === 'img') {
-        doc.addImage(o.src, formatoImg(o.src), o.x, o.y, o.w, o.h, 'logo', 'FAST');
+        doc.addImage(o.src, formatoImg(o.src), o.x, o.y, o.w, o.h, o.alias || 'img', 'FAST');
       }
     }
   }
@@ -366,5 +400,5 @@
     qr: 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js',
   };
 
-  window.CartaMotor = { PT, ESTILOS, COLORES, HOJAS, FAMILIA, limpiar, precioTxt, estiloDe, componer, aSVG, aPDF, archivo, qrSVG, qrPNG, tarjetasPDF, cargar, LIB };
+  window.CartaMotor = { PT, ESTILOS, COLORES, FONDOS, HOJAS, FAMILIA, limpiar, precioTxt, estiloDe, componer, aSVG, aPDF, archivo, qrSVG, qrPNG, tarjetasPDF, cargar, LIB };
 })();

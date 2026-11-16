@@ -18,6 +18,10 @@ ok(localValido('picada-don-tito') && !localValido('Picada') && !localValido('ab'
 const c = limpiarCarta(carta());
 ok(c && c.local.logo === '' && c.secciones[0].items.length === 1 && !('extra' in c.secciones[0].items[0]) && !('id' in c.secciones[0]), 'limpia la carta: sin logo inválido, sin campos extra ni platos vacíos');
 ok(limpiarCarta({ local: { nombre: 'X' }, secciones: [] }) === null, 'rechaza carta sin platos');
+const conFondo = limpiarCarta({ ...carta(), diseno: { estilo: 'moderno', fondo: '#1f3b2c', fondoImg: 'data:image/jpeg;base64,/9j/AAAA', fondoR: 0.75 } });
+ok(conFondo.diseno.fondo === '#1f3b2c' && conFondo.diseno.fondoImg.startsWith('data:image/jpeg') && conFondo.diseno.fondoR === 0.75, 'guarda el color y la foto de fondo');
+const malFondo = limpiarCarta({ ...carta(), diseno: { fondo: 'red;x', fondoImg: 'javascript:alert(1)' } });
+ok(malFondo.diseno.fondo === '' && malFondo.diseno.fondoImg === '', 'descarta fondos inválidos');
 ok((await ver('picada-don-tito')).status === 404, 'carta que no existe: 404');
 ok((await post({ accion: 'publicar' }, { origin: 'https://otro.com' })).status === 403, 'rechaza otro sitio');
 ok((await pub({ whatsapp: '1234' })).status === 400, 'pide WhatsApp válido');
@@ -93,5 +97,5 @@ ok(r.status === 400, 'tope de 3 cartas por WhatsApp');
 let ultimo;
 for (let i = 0; i < 45; i++) ultimo = await pub({ local: 'local-n' + i, whatsapp: '95' + String(i).padStart(7, '0') });
 ok(ultimo.status === 429, 'tope de cartas nuevas por día');
-ok((await post({ accion: 'publicar', local: 'pesada', nombre: 'A', whatsapp: '922222222', carta: { ...carta(), relleno: 'x'.repeat(500000) } })).status === 413, 'rechaza cartas muy pesadas');
+ok((await post({ accion: 'publicar', local: 'pesada', nombre: 'A', whatsapp: '922222222', carta: { ...carta(), relleno: 'x'.repeat(1000000) } })).status === 413, 'rechaza cartas muy pesadas');
 

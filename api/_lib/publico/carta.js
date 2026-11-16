@@ -24,7 +24,7 @@ const SITIO = 'https://stpyme.cl';
 const INDICE = 'cartas/_indice.json';
 const TOPE_DIARIO = 40; // cartas nuevas por día en total
 const TOPE_POR_WHATSAPP = 3;
-const MAX_BYTES = 450 * 1024;
+const MAX_BYTES = 900 * 1024; // con logo y foto de fondo
 const MAX_PAGINAS = 10;
 const MAX_IMAGEN = 4 * 1024 * 1024; // Vercel acepta hasta 4,5 MB por pedido
 const IMAGENES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
@@ -148,7 +148,16 @@ export function limpiarCarta(c) {
     color: /^#[0-9a-f]{6}$/i.test(String(D.color || '')) ? D.color : '',
     cols: Number(D.cols) === 2 ? 2 : 1,
     hoja: D.hoja === 'carta' ? 'carta' : 'a4',
+    fondo: /^#[0-9a-f]{6}$/i.test(String(D.fondo || '')) ? D.fondo : '',
+    fondoImg: '',
+    fondoR: 0,
   };
+  // Foto de fondo (la herramienta la achica antes de publicar).
+  if (typeof D.fondoImg === 'string' && D.fondoImg.length <= 450000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+=*$/.test(D.fondoImg)) {
+    diseno.fondoImg = D.fondoImg;
+    const r = Number(D.fondoR);
+    diseno.fondoR = r > 0.1 && r < 10 ? r : 0;
+  }
   let total = 0;
   const secciones = (Array.isArray(c.secciones) ? c.secciones : []).slice(0, 30).map((s) => ({
     titulo: texto(s?.titulo, 40),
@@ -383,7 +392,7 @@ export default {
         return await subirPagina(request);
       }
       const crudo = await request.text();
-      if (crudo.length > MAX_BYTES) return json({ error: 'La carta es muy pesada. Prueba con un logo más liviano.' }, 413);
+      if (crudo.length > MAX_BYTES) return json({ error: 'La carta es muy pesada. Prueba con un logo o una foto de fondo más liviana.' }, 413);
       let b;
       try { b = JSON.parse(crudo); } catch { return json({ error: 'Datos inválidos' }, 400); }
       if (!b || typeof b !== 'object') return json({ error: 'Datos inválidos' }, 400);

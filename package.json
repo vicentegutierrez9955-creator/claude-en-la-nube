@@ -13,6 +13,7 @@
     "dev:os": "node scripts/dev-os.mjs",
     "test:mcp": "node tests/mcp.mjs",
     "test:contacto": "PANEL_STORE=memory node tests/contacto.mjs",
-    "test:carta": "PANEL_STORE=memory node tests/carta.mjs"
+    "test:carta": "PANEL_STORE=memory node tests/carta.mjs",
+    "test:carta-navegador": "PANEL_STORE=memory node tests/carta-navegador.mjs"
   }
 }
