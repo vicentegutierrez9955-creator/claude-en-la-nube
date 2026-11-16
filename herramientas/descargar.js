@@ -7,6 +7,7 @@
   const HERRAMIENTAS = {
     'boleta-honorarios': { archivo: 'calculadora-boleta-honorarios-stpyme.html', ancla: 'maqueta', boton: 'Quiero ver mi web gratis' },
     'presupuesto-taller': { archivo: 'presupuestos-taller-stpyme.html', ancla: 'tuerkit', boton: 'Quiero conocer Tuerkit' },
+    'punto-de-venta': { archivo: 'punto-de-venta-stpyme.html', ancla: '', boton: '' },
   };
 
   const aDataUrl = (blob) => new Promise((ok, mal) => {

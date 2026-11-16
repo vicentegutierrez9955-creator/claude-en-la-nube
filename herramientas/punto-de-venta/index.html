@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Punto de venta gratis con control de stock para almacenes | STPyme</title>
+<meta name="description" content="Punto de venta gratis para almacenes y negocios chicos de Chile: registra ventas, calcula el vuelto, controla el stock y mira cuánto vendiste en el día. Sin registrarte y sin mensualidad.">
+<link rel="canonical" href="https://stpyme.cl/herramientas/punto-de-venta">
+<meta property="og:url" content="https://stpyme.cl/herramientas/punto-de-venta">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Punto de venta gratis con control de stock">
+<meta property="og:description" content="Registra ventas, calcula el vuelto y controla tu stock. Gratis, sin registrarte y sin mensualidad.">
+<meta property="og:locale" content="es_CL">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Colores de STPyme, iguales a stpyme.cl */
+:root{
+  color-scheme:dark;
+  --bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--soft:#1b2b1f;
+  --acc:#c5f33b;--acc-soft:rgba(197,243,59,.12);--ok:#c5f33b;--ok-bg:rgba(197,243,59,.12);--warn:#f2cf5b;--warn-bg:#352d12;--red:#ff8a80;--red-bg:#3a1c1a;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+header.wrap{padding-top:18px;padding-bottom:18px}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.025em}
+h2{font-size:20px;margin:0 0 12px;letter-spacing:-.015em}
+h3{font-size:16px;margin:0 0 8px}
+.bajada{color:var(--muted);margin:0 0 16px;font-size:17px;max-width:720px}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.descarga{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;touch-action:manipulation}
+.btn:hover{border-color:var(--acc)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primario{background:var(--acc);border-color:var(--acc);color:#0f1a12;font-weight:800}
+.btn-primario:hover{background:#d6fa6e;border-color:#d6fa6e}
+.btn-peligro{border-color:var(--red);color:var(--red)}
+.btn-chico{padding:6px 10px;font-size:14px}
+.btn-grande{width:100%;padding:14px 16px;font-size:18px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+label .opc{font-weight:400;color:var(--muted)}
+input,select{width:100%;font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.campo{margin-bottom:12px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px}
+.fila{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* Pestañas */
+.tabs{display:flex;gap:4px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:4px;margin:0 0 16px;overflow-x:auto}
+.tabs button{flex:1 0 auto;border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:15px;padding:10px 14px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--acc);color:#0f1a12}
+.tabs .num{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:999px;background:var(--red);color:#2a0f0d;font-size:12px;line-height:20px}
+
+/* Vender */
+.vender{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+.buscar{display:flex;gap:8px;margin-bottom:12px}
+.buscar input{font-size:17px}
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;max-height:520px;overflow:auto;padding:2px}
+.prod{text-align:left;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-height:86px;touch-action:manipulation}
+.prod:hover{border-color:var(--acc)}
+.prod b{font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.prod .p{font-weight:800;color:var(--acc);font-variant-numeric:tabular-nums}
+.prod .s{font-size:12.5px;color:var(--muted);margin-top:auto}
+.prod.bajo{border-color:var(--red)}
+.prod.bajo .s{color:var(--red);font-weight:700}
+.vacio{color:var(--muted);font-size:15px;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:center}
+.carro{position:sticky;top:12px}
+.lineas{display:grid;gap:0;margin:0 0 12px}
+.linea{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.linea:first-child{border-top:0}
+.linea .n{font-weight:700;overflow-wrap:anywhere}
+.linea .n small{display:block;font-weight:500;color:var(--muted);font-size:13px}
+.linea .t{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;min-width:72px}
+.cant{display:flex;align-items:center;gap:4px}
+.cant button{width:34px;height:34px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:9px;font:inherit;font-weight:800;font-size:18px;cursor:pointer;touch-action:manipulation}
+.cant input{width:64px;text-align:center;padding:6px 4px;font-variant-numeric:tabular-nums}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--ink);padding-top:10px;margin-bottom:12px}
+.total span{font-weight:700}
+.total b{font-size:clamp(28px,6vw,36px);letter-spacing:-.02em;color:var(--acc);font-variant-numeric:tabular-nums}
+.medios{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:12px}
+.medios button{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:9px 4px;font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.medios button[aria-pressed="true"]{border-color:var(--acc);background:var(--acc-soft);color:var(--acc)}
+.efectivo{background:var(--soft);border-radius:12px;padding:12px;margin-bottom:12px}
+.billetes{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.billetes button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 11px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.vuelto{display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.vuelto b{font-size:24px;font-variant-numeric:tabular-nums}
+.vuelto.falta b{color:var(--red)}
+.vuelto.ok b{color:var(--acc)}
+.otro{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:8px;margin:0 0 12px}
+
+/* Productos */
+.barra{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px}
+.barra input[type=search]{flex:1 1 220px;width:auto}
+.check{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin:0;cursor:pointer}
+.check input{width:18px;height:18px}
+.tabla-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.bajo td.st{color:var(--red);font-weight:800}
+.acc{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.ingreso{display:flex;gap:6px;align-items:center}
+.ingreso input{width:90px}
+.form-prod{border:1px solid var(--acc);border-radius:14px;padding:16px;margin:0 0 14px;background:var(--soft)}
+.form-prod input,.form-prod select{background:var(--card)}
+
+/* Resumen */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 16px}
+.kpi{background:var(--soft);border-radius:12px;padding:12px 14px}
+.kpi small{display:block;color:var(--muted);font-weight:600;font-size:13px}
+.kpi b{font-size:clamp(20px,4vw,28px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.venta-items{color:var(--muted);font-size:13.5px}
+.aviso{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;font-size:14.5px;margin:0 0 14px}
+.peligro{background:var(--red-bg);color:var(--red);border-radius:12px;padding:12px 14px;font-size:14.5px;margin:12px 0 0}
+
+/* Escáner */
+.camara{position:fixed;inset:0;z-index:50;background:rgba(5,10,6,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+.camara video{width:min(520px,100%);border-radius:14px;background:#000;aspect-ratio:4/3;object-fit:cover}
+.camara p{margin:0;color:var(--ink);text-align:center}
+
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--acc);color:#0f1a12;font-weight:800;padding:12px 18px;border-radius:12px;z-index:60;transition:.25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center;box-shadow:var(--shadow)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+details{border-top:1px solid var(--line);padding:12px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--muted)}
+ol.pasos{margin:0;padding-left:20px;display:grid;gap:6px}
+footer{padding:10px 0 40px;color:var(--muted);font-size:14px}
+.ir-cobrar{display:none}
+@media (max-width:820px){
+  .ir-cobrar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;justify-content:space-between;align-items:center;background:var(--acc);color:#0f1a12;border:0;border-radius:14px;padding:14px 18px;font:inherit;font-weight:800;font-size:17px;box-shadow:0 12px 30px -10px rgba(0,0,0,.8);cursor:pointer}
+  .ir-cobrar[hidden]{display:none!important}
+  body.con-barra .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  body.con-barra main{padding-bottom:70px}
+  .vender{grid-template-columns:minmax(0,1fr)}
+  .carro{position:static}
+  .dos{grid-template-columns:minmax(0,1fr)}
+  .prods{max-height:none}
+}
+@media (max-width:520px){
+  .card{padding:16px}
+  .grid2,.grid3{grid-template-columns:minmax(0,1fr)}
+  .kpis{grid-template-columns:minmax(0,1fr)}
+  .medios{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .otro{grid-template-columns:minmax(0,1fr) 100px}
+  .otro .btn{grid-column:1/-1}
+  .prods{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Punto de venta gratis con control de stock","applicationCategory":"BusinessApplication","operatingSystem":"Navegador web","url":"https://stpyme.cl/herramientas/punto-de-venta","offers":{"@type":"Offer","price":"0","priceCurrency":"CLP"},"publisher":{"@type":"Organization","name":"STPyme","url":"https://stpyme.cl/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿El punto de venta es gratis?","acceptedAnswer":{"@type":"Answer","text":"Sí. Se usa gratis, sin registrarte y sin mensualidad, en el celular o en el computador."}},
+{"@type":"Question","name":"¿Dónde se guardan mis ventas y mi stock?","acceptedAnswer":{"@type":"Answer","text":"En el mismo celular o computador donde lo usas, dentro del navegador. No se envían a ningún servidor. Por eso conviene descargar un respaldo seguido desde la pestaña Respaldo."}},
+{"@type":"Question","name":"¿Reemplaza la boleta electrónica?","acceptedAnswer":{"@type":"Answer","text":"No. Sirve para llevar tu control de ventas y stock. La boleta se sigue emitiendo con el sistema del SII o con la máquina de tu banco."}},
+{"@type":"Question","name":"¿Funciona con lector de código de barras?","acceptedAnswer":{"@type":"Answer","text":"Sí. Un lector USB o Bluetooth escribe el código en el buscador y el producto se agrega solo. En celulares Android con Chrome también puedes escanear con la cámara."}}
+]}
+</script>
+</head>
+<body>
+<header class="wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
+
+<main class="wrap">
+  <h1>Punto de venta gratis con control de stock</h1>
+  <p class="bajada">Registra cada venta, calcula el vuelto y controla tu stock. Al final del día ves cuánto vendiste y qué se está acabando. Para almacenes y negocios chicos, gratis y sin registrarte.</p>
+  <!-- descarga:inicio -->
+  <p class="descarga"><button type="button" class="btn" data-descargar="punto-de-venta">⬇ Descargar para usar sin internet</button><span class="muted chico">Un archivo liviano que se abre con tu navegador, sin internet.</span></p>
+  <!-- descarga:fin -->
+
+  <p class="aviso" id="sin-guardar" hidden>Este navegador no deja guardar datos (puede ser una ventana privada). Puedes probarlo, pero las ventas se pierden al cerrar.</p>
+
+  <div class="tabs" role="tablist" aria-label="Secciones del punto de venta">
+    <button role="tab" id="tab-vender" aria-controls="sec-vender" aria-selected="true" data-tab="vender">Vender</button>
+    <button role="tab" id="tab-productos" aria-controls="sec-productos" aria-selected="false" data-tab="productos">Productos<span class="num" id="num-bajo" hidden></span></button>
+    <button role="tab" id="tab-resumen" aria-controls="sec-resumen" aria-selected="false" data-tab="resumen">Resumen</button>
+    <button role="tab" id="tab-respaldo" aria-controls="sec-respaldo" aria-selected="false" data-tab="respaldo">Respaldo</button>
+  </div>
+
+  <!-- VENDER -->
+  <section id="sec-vender" role="tabpanel" aria-labelledby="tab-vender">
+    <div class="vender">
+      <div class="card">
+        <div class="buscar">
+          <input type="search" id="buscar" placeholder="Busca o escanea el código" autocomplete="off" aria-label="Buscar producto o escanear código">
+          <button type="button" class="btn" id="cam-vender" hidden title="Escanear con la cámara">📷</button>
+        </div>
+        <div class="prods" id="prods"></div>
+        <div class="vacio" id="prods-vacio" hidden>
+          <p style="margin:0 0 10px">Todavía no tienes productos.</p>
+          <div class="fila" style="justify-content:center">
+            <button type="button" class="btn btn-primario" data-ir="productos">Agregar mis productos</button>
+            <button type="button" class="btn" data-ejemplo>Cargar productos de ejemplo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card carro" aria-labelledby="t-carro">
+        <h2 id="t-carro">Venta actual</h2>
+        <div class="lineas" id="lineas"></div>
+        <p class="muted chico" id="carro-vacio" style="margin:0 0 12px">Toca un producto para agregarlo.</p>
+        <form class="otro" id="form-otro" autocomplete="off">
+          <input id="otro-n" placeholder="Otro (sin producto)" aria-label="Descripción de otro cobro" maxlength="40">
+          <input id="otro-m" inputmode="numeric" placeholder="$ monto" aria-label="Monto">
+          <button class="btn" type="submit">Agregar</button>
+        </form>
+        <div class="total"><span>Total</span><b id="total">$0</b></div>
+        <div class="medios" id="medios" role="group" aria-label="Medio de pago">
+          <button type="button" data-m="Efectivo" aria-pressed="true">Efectivo</button>
+          <button type="button" data-m="Débito" aria-pressed="false">Débito</button>
+          <button type="button" data-m="Crédito" aria-pressed="false">Crédito</button>
+          <button type="button" data-m="Transferencia" aria-pressed="false">Transfer.</button>
+        </div>
+        <div class="efectivo" id="efectivo">
+          <label for="paga">Paga con</label>
+          <input id="paga" inputmode="numeric" placeholder="$0" autocomplete="off">
+          <div class="billetes" id="billetes">
+            <button type="button" data-b="exacto">Exacto</button>
+            <button type="button" data-b="1000">$1.000</button>
+            <button type="button" data-b="2000">$2.000</button>
+            <button type="button" data-b="5000">$5.000</button>
+            <button type="button" data-b="10000">$10.000</button>
+            <button type="button" data-b="20000">$20.000</button>
+          </div>
+          <div class="vuelto" id="vuelto"><span>Vuelto</span><b id="vuelto-n">—</b></div>
+        </div>
+        <button type="button" class="btn btn-primario btn-grande" id="cobrar" disabled>Cobrar</button>
+        <button type="button" class="btn btn-chico" id="vaciar" style="margin-top:8px;width:100%" hidden>Vaciar venta</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTOS -->
+  <section id="sec-productos" role="tabpanel" aria-labelledby="tab-productos" hidden>
+    <div class="card">
+      <div class="barra">
+        <button type="button" class="btn btn-primario" id="nuevo">+ Agregar producto</button>
+        <input type="search" id="filtro" placeholder="Buscar producto" aria-label="Buscar producto">
+        <label class="check" for="solo-bajo"><input type="checkbox" id="solo-bajo"> Solo stock bajo</label>
+      </div>
+
+      <form class="form-prod" id="form-prod" hidden autocomplete="off">
+        <h3 id="form-t">Nuevo producto</h3>
+        <div class="grid2">
+          <div class="campo"><label for="p-nombre">Nombre</label><input id="p-nombre" maxlength="60" placeholder="Ej: Pan batido" required></div>
+          <div class="campo"><label for="p-precio">Precio de venta</label><input id="p-precio" inputmode="numeric" placeholder="$0" required></div>
+        </div>
+        <div class="grid3">
+          <div class="campo"><label for="p-unidad">Se vende por</label><select id="p-unidad"><option value="u">Unidad</option><option value="kg">Kilo</option></select></div>
+          <div class="campo"><label for="p-stock">Stock actual</label><input id="p-stock" inputmode="decimal" placeholder="0"></div>
+          <div class="campo"><label for="p-min">Avisar cuando queden <span class="opc">(mínimo)</span></label><input id="p-min" inputmode="decimal" placeholder="0"></div>
+        </div>
+        <div class="campo"><label for="p-codigo">Código de barras <span class="opc">(opcional)</span></label>
+          <div class="fila" style="flex-wrap:nowrap"><input id="p-codigo" inputmode="numeric" maxlength="32" placeholder="Escanéalo o escríbelo"><button type="button" class="btn" id="cam-form" hidden title="Escanear con la cámara">📷</button></div></div>
+        <div class="fila">
+          <button class="btn btn-primario" type="submit">Guardar</button>
+          <button class="btn" type="button" id="cancelar">Cancelar</button>
+        </div>
+        <p class="peligro" id="form-error" hidden></p>
+      </form>
+
+      <div class="tabla-wrap"><table>
+        <thead><tr><th>Producto</th><th>Precio</th><th>Stock</th><th style="text-align:right">Acciones</th></tr></thead>
+        <tbody id="tabla-prod"></tbody>
+      </table></div>
+      <div class="vacio" id="tabla-vacia" hidden style="margin-top:12px">
+        <p style="margin:0 0 10px">No hay productos que mostrar.</p>
+        <button type="button" class="btn" data-ejemplo>Cargar productos de ejemplo</button>
+      </div>
+      <p class="muted chico" id="valor-stock" style="margin:12px 0 0"></p>
+    </div>
+  </section>
+
+  <!-- RESUMEN -->
+  <section id="sec-resumen" role="tabpanel" aria-labelledby="tab-resumen" hidden>
+    <div class="card">
+      <div class="barra">
+        <label for="dia" style="margin:0">Día</label>
+        <input type="date" id="dia" style="width:auto">
+        <button type="button" class="btn btn-chico" id="hoy">Hoy</button>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><small>Vendido</small><b id="k-total">$0</b></div>
+        <div class="kpi"><small>Ventas</small><b id="k-ventas">0</b></div>
+        <div class="kpi"><small>Venta promedio</small><b id="k-prom">$0</b></div>
+      </div>
+      <div class="dos">
+        <div>
+          <h3>Por medio de pago</h3>
+          <table><tbody id="r-medios"></tbody></table>
+          <p class="muted chico" style="margin:8px 0 0">El efectivo es lo que debería haber en la caja por las ventas del día.</p>
+        </div>
+        <div>
+          <h3>Lo más vendido</h3>
+          <table><tbody id="r-top"></tbody></table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Se está acabando</h3>
+      <table><tbody id="r-bajo"></tbody></table>
+    </div>
+    <div class="card">
+      <h3>Ventas del día</h3>
+      <div class="tabla-wrap"><table>
+        <thead><tr><th>Hora</th><th>Detalle</th><th>Pago</th><th>Total</th><th></th></tr></thead>
+        <tbody id="r-ventas"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- RESPALDO -->
+  <section id="sec-respaldo" role="tabpanel" aria-labelledby="tab-respaldo" hidden>
+    <div class="card">
+      <h2>Tus datos quedan en este equipo</h2>
+      <p class="muted" style="margin:0 0 14px">Tus productos y ventas se guardan en este navegador, en este celular o computador. No se mandan a ningún lado. Si borras el historial del navegador o cambias de equipo, se pierden. Por eso <b>descarga un respaldo seguido</b>, por ejemplo al cerrar cada día.</p>
+      <div class="fila" style="margin-bottom:16px">
+        <button type="button" class="btn btn-primario" id="bajar-respaldo">⬇ Descargar respaldo</button>
+        <label class="btn" for="subir-respaldo" style="margin:0">⬆ Cargar un respaldo</label>
+        <input type="file" id="subir-respaldo" accept=".json,application/json" hidden>
+      </div>
+      <h3>Para Excel</h3>
+      <div class="fila" style="margin-bottom:16px">
+        <button type="button" class="btn" id="csv-ventas">Ventas a Excel</button>
+        <button type="button" class="btn" id="csv-prod">Productos y stock a Excel</button>
+      </div>
+      <p class="muted chico" id="ultimo-respaldo" style="margin:0"></p>
+      <div id="confirmar-carga" class="peligro" hidden>
+        <p style="margin:0 0 8px">Este respaldo trae <b id="cc-p"></b> productos y <b id="cc-v"></b> ventas. Va a reemplazar lo que tienes ahora en este equipo.</p>
+        <div class="fila"><button type="button" class="btn btn-peligro" id="cc-si">Sí, reemplazar</button><button type="button" class="btn" id="cc-no">Cancelar</button></div>
+      </div>
+      <details style="margin-top:16px">
+        <summary>Borrar todo</summary>
+        <p>Borra todos tus productos y ventas de este equipo. No se puede deshacer, así que descarga un respaldo antes.</p>
+        <div class="fila" style="margin-top:10px"><button type="button" class="btn btn-peligro" id="borrar-todo">Borrar todo</button></div>
+      </details>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="t-como">
+    <h2 id="t-como">Cómo se usa</h2>
+    <ol class="pasos">
+      <li>En <b>Productos</b>, agrega lo que vendes con su precio y cuánto tienes. Si se vende a granel, como el pan, elige «Kilo».</li>
+      <li>En <b>Vender</b>, toca los productos (o escanea el código), elige cómo te pagan y toca <b>Cobrar</b>. Si es en efectivo, te dice el vuelto.</li>
+      <li>Cada venta descuenta el stock sola. Lo que llega a su mínimo aparece en rojo.</li>
+      <li>Cuando llegue mercadería, súmala con <b>+ Ingreso</b> en Productos.</li>
+      <li>Al cerrar, revisa el <b>Resumen</b> del día y descarga un respaldo.</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="t-faq">
+    <h2 id="t-faq">Preguntas frecuentes</h2>
+    <details><summary>¿Es gratis de verdad?</summary><p>Sí. Se usa gratis, sin registrarte y sin mensualidad, en el celular o en el computador.</p></details>
+    <details><summary>¿Dónde se guardan mis ventas y mi stock?</summary><p>En el mismo celular o computador donde lo usas, dentro del navegador. No se envían a ningún servidor. Por eso conviene descargar un respaldo seguido desde la pestaña Respaldo.</p></details>
+    <details><summary>¿Reemplaza la boleta electrónica?</summary><p>No. Sirve para llevar tu control de ventas y stock. La boleta se sigue emitiendo con el sistema del SII o con la máquina de tu banco.</p></details>
+    <details><summary>¿Funciona con lector de código de barras?</summary><p>Sí. Un lector USB o Bluetooth escribe el código en el buscador y el producto se agrega solo. En celulares Android con Chrome también puedes escanear con la cámara.</p></details>
+    <details><summary>¿Puedo usarlo en dos equipos a la vez?</summary><p>Cada equipo guarda sus propios datos. Para pasar tus productos y ventas a otro equipo, descarga un respaldo y cárgalo en el otro.</p></details>
+  </section>
+</main>
+
+<div class="camara" id="camara" hidden role="dialog" aria-modal="true" aria-label="Escanear código de barras">
+  <video id="video" playsinline muted></video>
+  <p>Apunta al código de barras</p>
+  <button type="button" class="btn" id="cerrar-cam">Cerrar</button>
+</div>
+<button type="button" class="ir-cobrar" id="ir-cobrar" hidden><span id="ir-n">Ver venta</span><span id="ir-t">$0</span></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer class="wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a>: ayudamos a crecer a las pymes de Chile. · <a href="/herramientas">Más herramientas</a> · STP CHILE SpA · RUT 78.534.708-0 · <a href="/privacidad">Privacidad</a></footer>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
+  const CLAVE = 'stpyme-punto-de-venta-v1';
+  const clp = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  const pesos = (n) => clp.format(Math.round(n || 0));
+  const num = (v) => { const s = String(v ?? '').replace(/\$/g, '').replace(/\s/g, ''); if (!s) return 0; const n = Number(s.includes(',') ? s.replace(/\./g, '').replace(',', '.') : (/^\d{1,3}(\.\d{3})+$/.test(s) ? s.replace(/\./g, '') : s)); return Number.isFinite(n) ? n : 0; };
+  const entero = (v) => Math.round(Number(String(v ?? '').replace(/\D/g, '')) || 0);
+  const cant = (n, u) => u === 'kg' ? (Math.round(n * 1000) / 1000).toLocaleString('es-CL', { maximumFractionDigits: 3 }) + ' kg' : (Math.round(n * 1000) / 1000).toLocaleString('es-CL', { maximumFractionDigits: 3 });
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const diaDe = (iso) => { const d = new Date(iso); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  const hoyISO = () => diaDe(new Date().toISOString());
+  const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const toast = (t) => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.x); toast.x = setTimeout(() => el.classList.remove('on'), 2600); };
+
+  // ---------- Datos ----------
+  let guarda = true;
+  let D = { productos: [], ventas: [], respaldo: null };
+  try { const t = localStorage.getItem(CLAVE); if (t) D = Object.assign(D, JSON.parse(t)); localStorage.setItem(CLAVE + '-prueba', '1'); localStorage.removeItem(CLAVE + '-prueba'); }
+  catch { guarda = false; $('#sin-guardar').hidden = false; }
+  const guardar = () => { if (!guarda) return; try { localStorage.setItem(CLAVE, JSON.stringify(D)); } catch { $('#sin-guardar').hidden = false; $('#sin-guardar').textContent = 'No se pudo guardar el último cambio: el espacio del navegador está lleno. Descarga un respaldo.'; } };
+  const prod = (id) => D.productos.find((p) => p.id === id);
+  const bajo = (p) => (p.min || 0) > 0 ? p.stock <= p.min : p.stock <= 0;
+
+  const EJEMPLO = [
+    ['Pan batido', 1990, 'kg', 8, 2, ''], ['Marraqueta', 2190, 'kg', 6, 2, ''], ['Leche entera 1 L', 1150, 'u', 24, 6, ''],
+    ['Huevos (bandeja 12)', 3490, 'u', 10, 3, ''], ['Bebida cola 1,5 L', 1990, 'u', 18, 6, ''], ['Agua mineral 1,6 L', 990, 'u', 20, 6, ''],
+    ['Aceite 1 L', 2990, 'u', 8, 3, ''], ['Arroz 1 kg', 1390, 'u', 15, 4, ''], ['Azúcar 1 kg', 1290, 'u', 4, 4, ''],
+    ['Fideos 400 g', 890, 'u', 22, 6, ''], ['Té 20 bolsitas', 1490, 'u', 9, 3, ''], ['Galletas de soda', 690, 'u', 30, 8, ''],
+    ['Jamón', 9990, 'kg', 2.5, 0.5, ''], ['Queso laminado', 11990, 'kg', 1.8, 0.5, ''], ['Papel higiénico 4 rollos', 2290, 'u', 2, 3, ''],
+  ];
+  const cargarEjemplo = () => {
+    if (D.productos.length && !confirmarEjemplo) { confirmarEjemplo = true; toast('Ya tienes productos. Toca de nuevo para sumar los de ejemplo.'); return; }
+    EJEMPLO.forEach(([nombre, precio, unidad, stock, min, codigo]) => D.productos.push({ id: uid(), nombre, precio, unidad, stock, min, codigo }));
+    confirmarEjemplo = false; guardar(); todo(); toast('Listo: 15 productos de ejemplo cargados');
+  };
+  let confirmarEjemplo = false;
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-ejemplo]')) cargarEjemplo(); const ir = e.target.closest('[data-ir]'); if (ir) { abrirTab(ir.dataset.ir); if (ir.dataset.ir === 'productos') abrirForm(); } });
+
+  // ---------- Pestañas ----------
+  const abrirTab = (t) => {
+    $$('.tabs button').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
+    ['vender', 'productos', 'resumen', 'respaldo'].forEach((x) => { $('#sec-' + x).hidden = x !== t; });
+    pintarCarro();
+    if (t === 'resumen') pintarResumen();
+    if (t === 'respaldo') pintarRespaldo();
+  };
+  $$('.tabs button').forEach((b) => b.addEventListener('click', () => abrirTab(b.dataset.tab)));
+  $('#ir-cobrar').addEventListener('click', () => $('#t-carro').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+
+  // ---------- Vender ----------
+  let carro = []; let medio = 'Efectivo';
+  const totalCarro = () => carro.reduce((a, l) => a + Math.round(l.precio * l.cant), 0);
+  const pintarProds = () => {
+    const q = norm($('#buscar').value.trim());
+    const lista = D.productos.filter((p) => !q || norm(p.nombre).includes(q) || (p.codigo && p.codigo.includes(q))).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    $('#prods-vacio').hidden = D.productos.length > 0;
+    const el = $('#prods'); el.textContent = '';
+    if (D.productos.length && !lista.length) { const v = document.createElement('p'); v.className = 'vacio'; v.style.gridColumn = '1/-1'; v.textContent = 'No encontré ese producto.'; el.append(v); return; }
+    lista.forEach((p) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'prod' + (bajo(p) ? ' bajo' : ''); b.dataset.id = p.id;
+      const n = document.createElement('b'); n.textContent = p.nombre;
+      const pr = document.createElement('span'); pr.className = 'p'; pr.textContent = pesos(p.precio) + (p.unidad === 'kg' ? ' / kg' : '');
+      const s = document.createElement('span'); s.className = 's'; s.textContent = 'Stock: ' + cant(p.stock, p.unidad) + (bajo(p) ? ' · ¡queda poco!' : '');
+      b.append(n, pr, s); el.append(b);
+    });
+  };
+  const agregar = (p) => {
+    const l = carro.find((x) => x.pid === p.id);
+    const paso = p.unidad === 'kg' ? 0.25 : 1;
+    if (l) l.cant = Math.round((l.cant + paso) * 1000) / 1000; else carro.push({ pid: p.id, nombre: p.nombre, precio: p.precio, unidad: p.unidad, cant: paso });
+    pintarCarro();
+  };
+  $('#prods').addEventListener('click', (e) => { const b = e.target.closest('.prod'); if (b) { const p = prod(b.dataset.id); if (p) agregar(p); } });
+  $('#buscar').addEventListener('input', pintarProds);
+  $('#buscar').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return; e.preventDefault();
+    const q = $('#buscar').value.trim(); if (!q) return;
+    const porCodigo = D.productos.find((p) => p.codigo && p.codigo === q);
+    const lista = D.productos.filter((p) => norm(p.nombre).includes(norm(q)));
+    const p = porCodigo || (lista.length === 1 ? lista[0] : null);
+    if (p) { agregar(p); $('#buscar').value = ''; pintarProds(); }
+    else if (/^\d{6,}$/.test(q)) codigoNuevo(q);
+  });
+  const codigoNuevo = (c) => { toast('Ese código no está cargado. Agrégalo como producto.'); abrirTab('productos'); abrirForm(null, c); };
+
+  const pintarCarro = () => {
+    const el = $('#lineas'); el.textContent = '';
+    carro.forEach((l, i) => {
+      const f = document.createElement('div'); f.className = 'linea';
+      const n = document.createElement('div'); n.className = 'n'; n.textContent = l.nombre;
+      const sm = document.createElement('small'); sm.textContent = pesos(l.precio) + (l.unidad === 'kg' ? ' el kilo' : (l.pid ? ' c/u' : '')); n.append(sm);
+      const t = document.createElement('div'); t.className = 't'; t.textContent = pesos(l.precio * l.cant);
+      const c = document.createElement('div'); c.className = 'cant';
+      if (l.pid) {
+        const m = document.createElement('button'); m.type = 'button'; m.textContent = '−'; m.setAttribute('aria-label', 'Quitar uno'); m.dataset.menos = i;
+        const inp = document.createElement('input'); inp.inputMode = 'decimal'; inp.value = String(l.cant).replace('.', ','); inp.setAttribute('aria-label', 'Cantidad de ' + l.nombre); inp.dataset.cant = i;
+        const mas = document.createElement('button'); mas.type = 'button'; mas.textContent = '+'; mas.setAttribute('aria-label', 'Agregar uno'); mas.dataset.mas = i;
+        c.append(m, inp, mas);
+      } else { const x = document.createElement('button'); x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Quitar'); x.dataset.quitar = i; c.append(x); }
+      f.append(n, c, t); el.append(f);
+    });
+    $('#carro-vacio').hidden = carro.length > 0; $('#vaciar').hidden = !carro.length;
+    $('#total').textContent = pesos(totalCarro());
+    const nItems = carro.length, enVender = !$('#sec-vender').hidden;
+    $('#ir-cobrar').hidden = !nItems || !enVender; document.body.classList.toggle('con-barra', !!nItems && enVender);
+    $('#ir-n').textContent = 'Cobrar · ' + nItems + (nItems === 1 ? ' producto' : ' productos'); $('#ir-t').textContent = pesos(totalCarro());
+    calcVuelto();
+  };
+  $('#lineas').addEventListener('click', (e) => {
+    const t = e.target; let i;
+    if ((i = t.dataset.menos) !== undefined) { const l = carro[i]; const paso = l.unidad === 'kg' ? 0.25 : 1; l.cant = Math.round((l.cant - paso) * 1000) / 1000; if (l.cant <= 0) carro.splice(i, 1); pintarCarro(); }
+    else if ((i = t.dataset.mas) !== undefined) { const l = carro[i]; l.cant = Math.round((l.cant + (l.unidad === 'kg' ? 0.25 : 1)) * 1000) / 1000; pintarCarro(); }
+    else if ((i = t.dataset.quitar) !== undefined) { carro.splice(i, 1); pintarCarro(); }
+  });
+  $('#lineas').addEventListener('change', (e) => {
+    const i = e.target.dataset.cant; if (i === undefined) return;
+    const v = num(e.target.value); if (v <= 0) carro.splice(i, 1); else carro[i].cant = carro[i].unidad === 'kg' ? Math.round(v * 1000) / 1000 : Math.round(v);
+    pintarCarro();
+  });
+  $('#form-otro').addEventListener('submit', (e) => {
+    e.preventDefault(); const m = entero($('#otro-m').value); if (!m) { $('#otro-m').focus(); return; }
+    carro.push({ pid: null, nombre: $('#otro-n').value.trim() || 'Otro', precio: m, unidad: 'u', cant: 1 });
+    $('#otro-n').value = ''; $('#otro-m').value = ''; pintarCarro();
+  });
+  $('#vaciar').addEventListener('click', () => { carro = []; $('#paga').value = ''; pintarCarro(); });
+
+  $('#medios').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-m]'); if (!b) return; medio = b.dataset.m;
+    $$('#medios [data-m]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    $('#efectivo').hidden = medio !== 'Efectivo'; calcVuelto();
+  });
+  const calcVuelto = () => {
+    const t = totalCarro(), paga = entero($('#paga').value), v = $('#vuelto');
+    v.classList.remove('falta', 'ok');
+    if (!paga || !t) $('#vuelto-n').textContent = '—';
+    else if (paga < t) { v.classList.add('falta'); $('#vuelto-n').textContent = 'Faltan ' + pesos(t - paga); }
+    else { v.classList.add('ok'); $('#vuelto-n').textContent = pesos(paga - t); }
+    $('#cobrar').disabled = !t || (medio === 'Efectivo' && paga > 0 && paga < t);
+    $('#cobrar').textContent = t ? 'Cobrar ' + pesos(t) : 'Cobrar';
+  };
+  $('#paga').addEventListener('input', (e) => { const n = entero(e.target.value); e.target.value = n ? n.toLocaleString('es-CL') : ''; calcVuelto(); });
+  $('#billetes').addEventListener('click', (e) => { const b = e.target.closest('[data-b]'); if (!b) return; const t = totalCarro(); const n = b.dataset.b === 'exacto' ? t : Number(b.dataset.b); $('#paga').value = n ? n.toLocaleString('es-CL') : ''; calcVuelto(); });
+
+  $('#cobrar').addEventListener('click', () => {
+    const t = totalCarro(); if (!t) return;
+    const paga = medio === 'Efectivo' ? (entero($('#paga').value) || t) : t;
+    const venta = { id: uid(), fecha: new Date().toISOString(), medio, total: t, paga, vuelto: medio === 'Efectivo' ? paga - t : 0,
+      items: carro.map((l) => ({ pid: l.pid, nombre: l.nombre, precio: l.precio, unidad: l.unidad, cant: l.cant })) };
+    venta.items.forEach((it) => { const p = it.pid && prod(it.pid); if (p) p.stock = Math.round((p.stock - it.cant) * 1000) / 1000; });
+    D.ventas.push(venta); guardar();
+    const avisos = venta.items.map((it) => it.pid && prod(it.pid)).filter((p) => p && bajo(p)).map((p) => p.nombre);
+    toast('Venta registrada: ' + pesos(t) + (venta.vuelto ? ' · vuelto ' + pesos(venta.vuelto) : '') + (avisos.length ? ' · Queda poco: ' + avisos.slice(0, 2).join(', ') : ''));
+    carro = []; $('#paga').value = ''; todo();
+  });
+
+  // ---------- Productos ----------
+  let editando = null; let borrando = null; let ingresando = null;
+  const abrirForm = (p = null, codigo = '') => {
+    editando = p ? p.id : null; $('#form-prod').hidden = false; $('#form-error').hidden = true;
+    $('#form-t').textContent = p ? 'Editar producto' : 'Nuevo producto';
+    $('#p-nombre').value = p ? p.nombre : ''; $('#p-precio').value = p ? p.precio.toLocaleString('es-CL') : '';
+    $('#p-unidad').value = p ? p.unidad : 'u'; $('#p-stock').value = p ? String(p.stock).replace('.', ',') : '';
+    $('#p-min').value = p ? String(p.min || '').replace('.', ',') : ''; $('#p-codigo').value = p ? (p.codigo || '') : codigo;
+    $('#p-nombre').focus();
+  };
+  $('#nuevo').addEventListener('click', () => abrirForm());
+  $('#cancelar').addEventListener('click', () => { $('#form-prod').hidden = true; editando = null; });
+  $('#p-precio').addEventListener('input', (e) => { const n = entero(e.target.value); e.target.value = n ? n.toLocaleString('es-CL') : ''; });
+  $('#form-prod').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = $('#p-nombre').value.trim().replace(/\s+/g, ' '), precio = entero($('#p-precio').value);
+    const unidad = $('#p-unidad').value, codigo = $('#p-codigo').value.trim();
+    const err = (t) => { $('#form-error').textContent = t; $('#form-error').hidden = false; };
+    if (!nombre) return err('Escribe el nombre del producto.');
+    if (!precio) return err('Escribe el precio de venta.');
+    if (codigo && D.productos.some((p) => p.codigo === codigo && p.id !== editando)) return err('Ese código de barras ya lo tiene otro producto.');
+    const datos = { nombre, precio, unidad, stock: num($('#p-stock').value), min: num($('#p-min').value), codigo };
+    if (editando) Object.assign(prod(editando), datos); else D.productos.push({ id: uid(), ...datos });
+    guardar(); $('#form-prod').hidden = true; toast(editando ? 'Producto actualizado' : 'Producto agregado: ' + nombre); editando = null; todo();
+  });
+  const pintarTabla = () => {
+    const q = norm($('#filtro').value.trim()), solo = $('#solo-bajo').checked;
+    const lista = D.productos.filter((p) => (!q || norm(p.nombre).includes(q) || (p.codigo || '').includes(q)) && (!solo || bajo(p)))
+      .sort((a, b) => (bajo(b) - bajo(a)) || a.nombre.localeCompare(b.nombre, 'es'));
+    const tb = $('#tabla-prod'); tb.textContent = '';
+    lista.forEach((p) => {
+      const tr = document.createElement('tr'); if (bajo(p)) tr.className = 'bajo';
+      const td = (t, c) => { const x = document.createElement('td'); if (c) x.className = c; if (t !== undefined) x.textContent = t; tr.append(x); return x; };
+      const n = td(p.nombre); if (p.codigo) { const s = document.createElement('small'); s.className = 'muted'; s.style.display = 'block'; s.textContent = p.codigo; n.append(s); }
+      td(pesos(p.precio) + (p.unidad === 'kg' ? '/kg' : ''), 'n');
+      td(cant(p.stock, p.unidad) + (bajo(p) ? ' ⚠' : ''), 'n st');
+      const ac = td(undefined); const box = document.createElement('div'); box.className = 'acc';
+      if (ingresando === p.id) {
+        const f = document.createElement('form'); f.className = 'ingreso'; f.dataset.ingreso = p.id;
+        const i = document.createElement('input'); i.inputMode = 'decimal'; i.placeholder = p.unidad === 'kg' ? 'kilos' : 'cantidad'; i.setAttribute('aria-label', 'Cantidad que llegó de ' + p.nombre);
+        const ok = document.createElement('button'); ok.className = 'btn btn-primario btn-chico'; ok.textContent = 'Sumar';
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'btn btn-chico'; no.textContent = 'Cancelar'; no.dataset.noIngreso = '1';
+        f.append(i, ok, no); box.append(f); setTimeout(() => i.focus(), 0);
+      } else if (borrando === p.id) {
+        const si = document.createElement('button'); si.type = 'button'; si.className = 'btn btn-peligro btn-chico'; si.textContent = 'Sí, eliminar'; si.dataset.siBorrar = p.id;
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'btn btn-chico'; no.textContent = 'No'; no.dataset.noBorrar = '1';
+        box.append(si, no);
+      } else {
+        const b = (t, k, c) => { const x = document.createElement('button'); x.type = 'button'; x.className = 'btn btn-chico' + (c ? ' ' + c : ''); x.textContent = t; x.dataset[k] = p.id; box.append(x); };
+        b('+ Ingreso', 'ingresar', 'btn-primario'); b('Editar', 'editar'); b('Eliminar', 'borrar');
+      }
+      ac.append(box); tb.append(tr);
+    });
+    $('#tabla-vacia').hidden = lista.length > 0;
+    const valor = D.productos.reduce((a, p) => a + Math.max(0, p.stock) * p.precio, 0);
+    $('#valor-stock').textContent = D.productos.length ? `${D.productos.length} productos · Tu stock vale ${pesos(valor)} a precio de venta.` : '';
+    const nb = D.productos.filter(bajo).length; $('#num-bajo').hidden = !nb; $('#num-bajo').textContent = nb;
+  };
+  $('#filtro').addEventListener('input', pintarTabla);
+  $('#solo-bajo').addEventListener('change', pintarTabla);
+  $('#tabla-prod').addEventListener('click', (e) => {
+    const d = e.target.dataset;
+    if (d.editar) { abrirForm(prod(d.editar)); window.scrollTo({ top: $('#form-prod').offsetTop - 20, behavior: 'smooth' }); }
+    else if (d.borrar) { borrando = d.borrar; ingresando = null; pintarTabla(); }
+    else if (d.noBorrar) { borrando = null; pintarTabla(); }
+    else if (d.siBorrar) { const p = prod(d.siBorrar); D.productos = D.productos.filter((x) => x.id !== d.siBorrar); borrando = null; guardar(); todo(); toast('Eliminado: ' + p.nombre); }
+    else if (d.ingresar) { ingresando = d.ingresar; borrando = null; pintarTabla(); }
+    else if (d.noIngreso) { ingresando = null; pintarTabla(); }
+  });
+  $('#tabla-prod').addEventListener('submit', (e) => {
+    e.preventDefault(); const f = e.target.closest('[data-ingreso]'); if (!f) return;
+    const p = prod(f.dataset.ingreso), n = num(f.querySelector('input').value);
+    if (!n) { f.querySelector('input').focus(); return; }
+    p.stock = Math.round((p.stock + n) * 1000) / 1000; ingresando = null; guardar(); todo(); toast(`Sumaste ${cant(n, p.unidad)} a ${p.nombre}. Ahora hay ${cant(p.stock, p.unidad)}.`);
+  });
+
+  // ---------- Resumen ----------
+  $('#dia').value = hoyISO();
+  $('#dia').addEventListener('change', () => pintarResumen());
+  $('#hoy').addEventListener('click', () => { $('#dia').value = hoyISO(); pintarResumen(); });
+  let anulando = null;
+  const fila = (tb, celdas) => { const tr = document.createElement('tr'); celdas.forEach(([t, c]) => { const td = document.createElement('td'); if (c) td.className = c; td.textContent = t; tr.append(td); }); tb.append(tr); return tr; };
+  const pintarResumen = () => {
+    const dia = $('#dia').value || hoyISO();
+    const vs = D.ventas.filter((v) => diaDe(v.fecha) === dia);
+    const total = vs.reduce((a, v) => a + v.total, 0);
+    $('#k-total').textContent = pesos(total); $('#k-ventas').textContent = vs.length; $('#k-prom').textContent = pesos(vs.length ? total / vs.length : 0);
+    const med = {}; vs.forEach((v) => { med[v.medio] = (med[v.medio] || 0) + v.total; });
+    const tm = $('#r-medios'); tm.textContent = '';
+    ['Efectivo', 'Débito', 'Crédito', 'Transferencia'].forEach((m) => fila(tm, [[m], [pesos(med[m] || 0), 'n']]));
+    const top = {}; vs.forEach((v) => v.items.forEach((it) => { const k = it.nombre; const x = top[k] || (top[k] = { n: k, c: 0, m: 0, u: it.unidad }); x.c += it.cant; x.m += Math.round(it.precio * it.cant); }));
+    const tt = $('#r-top'); tt.textContent = '';
+    const lt = Object.values(top).sort((a, b) => b.m - a.m).slice(0, 8);
+    if (!lt.length) fila(tt, [['Sin ventas este día', 'muted']]); else lt.forEach((x) => fila(tt, [[x.n], [cant(x.c, x.u), 'n'], [pesos(x.m), 'n']]));
+    const tbj = $('#r-bajo'); tbj.textContent = '';
+    const lb = D.productos.filter(bajo).sort((a, b) => a.stock - b.stock);
+    if (!lb.length) fila(tbj, [['Nada por ahora. Todo con stock sobre el mínimo.', 'muted']]); else lb.forEach((p) => fila(tbj, [[p.nombre], ['Quedan ' + cant(p.stock, p.unidad), 'n'], ['Mínimo ' + cant(p.min || 0, p.unidad), 'n muted']]));
+    const tv = $('#r-ventas'); tv.textContent = '';
+    if (!vs.length) fila(tv, [['Todavía no hay ventas este día.', 'muted']]);
+    vs.slice().reverse().forEach((v) => {
+      const hora = new Date(v.fecha).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', hour12: false });
+      const det = v.items.map((it) => (it.pid ? cant(it.cant, it.unidad) + ' ' : '') + it.nombre).join(', ');
+      const tr = fila(tv, [[hora, 'n'], [det, 'venta-items'], [v.medio], [pesos(v.total), 'n']]);
+      const td = document.createElement('td'); const box = document.createElement('div'); box.className = 'acc';
+      if (anulando === v.id) {
+        const si = document.createElement('button'); si.type = 'button'; si.className = 'btn btn-peligro btn-chico'; si.textContent = 'Sí, anular'; si.dataset.siAnular = v.id;
+        const no = document.createElement('button'); no.type = 'button'; no.className = 'btn btn-chico'; no.textContent = 'No'; no.dataset.noAnular = '1'; box.append(si, no);
+      } else { const a = document.createElement('button'); a.type = 'button'; a.className = 'btn btn-chico'; a.textContent = 'Anular'; a.dataset.anular = v.id; box.append(a); }
+      td.append(box); tr.append(td);
+    });
+  };
+  $('#r-ventas').addEventListener('click', (e) => {
+    const d = e.target.dataset;
+    if (d.anular) { anulando = d.anular; pintarResumen(); }
+    else if (d.noAnular) { anulando = null; pintarResumen(); }
+    else if (d.siAnular) {
+      const v = D.ventas.find((x) => x.id === d.siAnular); if (!v) return;
+      v.items.forEach((it) => { const p = it.pid && prod(it.pid); if (p) p.stock = Math.round((p.stock + it.cant) * 1000) / 1000; });
+      D.ventas = D.ventas.filter((x) => x.id !== v.id); anulando = null; guardar(); todo(); pintarResumen(); toast('Venta anulada. El stock volvió a su lugar.');
+    }
+  });
+
+  // ---------- Respaldo ----------
+  const bajar = (nombre, texto, tipo) => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([texto], { type: tipo })); a.download = nombre; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); };
+  const pintarRespaldo = () => { $('#ultimo-respaldo').textContent = D.respaldo ? 'Último respaldo descargado: ' + new Date(D.respaldo).toLocaleString('es-CL') : 'Todavía no descargas ningún respaldo en este equipo.'; };
+  $('#bajar-respaldo').addEventListener('click', () => {
+    D.respaldo = new Date().toISOString(); guardar();
+    bajar(`respaldo-punto-de-venta-${hoyISO()}.json`, JSON.stringify({ app: 'stpyme-punto-de-venta', version: 1, fecha: D.respaldo, productos: D.productos, ventas: D.ventas }, null, 1), 'application/json');
+    pintarRespaldo(); toast('Respaldo descargado');
+  });
+  let pendiente = null;
+  $('#subir-respaldo').addEventListener('change', async (e) => {
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    try {
+      const j = JSON.parse(await f.text());
+      if (!Array.isArray(j.productos) || !Array.isArray(j.ventas)) throw new Error();
+      pendiente = j; $('#cc-p').textContent = j.productos.length; $('#cc-v').textContent = j.ventas.length; $('#confirmar-carga').hidden = false;
+    } catch { toast('Ese archivo no es un respaldo de este punto de venta.'); }
+  });
+  $('#cc-no').addEventListener('click', () => { pendiente = null; $('#confirmar-carga').hidden = true; });
+  $('#cc-si').addEventListener('click', () => {
+    if (!pendiente) return;
+    D.productos = pendiente.productos.map((p) => ({ id: String(p.id || uid()), nombre: String(p.nombre || 'Sin nombre').slice(0, 60), precio: entero(p.precio), unidad: p.unidad === 'kg' ? 'kg' : 'u', stock: Number(p.stock) || 0, min: Number(p.min) || 0, codigo: String(p.codigo || '').slice(0, 32) }));
+    D.ventas = pendiente.ventas.filter((v) => v && v.fecha && Array.isArray(v.items)).map((v) => ({ ...v, total: entero(v.total) }));
+    pendiente = null; $('#confirmar-carga').hidden = true; guardar(); todo(); toast('Respaldo cargado');
+  });
+  const csv = (filas) => '﻿' + filas.map((f) => f.map((c) => { const s = String(c ?? ''); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(';')).join('\r\n');
+  const dec = (n) => String(Math.round(n * 1000) / 1000).replace('.', ',');
+  $('#csv-ventas').addEventListener('click', () => {
+    const filas = [['Fecha', 'Hora', 'Venta', 'Producto', 'Cantidad', 'Unidad', 'Precio', 'Subtotal', 'Medio de pago', 'Total venta']];
+    D.ventas.forEach((v, i) => { const d = new Date(v.fecha); v.items.forEach((it) => filas.push([diaDe(v.fecha), d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', hour12: false }), i + 1, it.nombre, dec(it.cant), it.unidad === 'kg' ? 'kg' : 'unidad', it.precio, Math.round(it.precio * it.cant), v.medio, v.total])); });
+    bajar(`ventas-${hoyISO()}.csv`, csv(filas), 'text/csv;charset=utf-8'); toast('Ventas descargadas para Excel');
+  });
+  $('#csv-prod').addEventListener('click', () => {
+    const filas = [['Producto', 'Código', 'Precio', 'Unidad', 'Stock', 'Mínimo', 'Stock bajo']];
+    D.productos.forEach((p) => filas.push([p.nombre, p.codigo || '', p.precio, p.unidad === 'kg' ? 'kg' : 'unidad', dec(p.stock), dec(p.min || 0), bajo(p) ? 'Sí' : 'No']));
+    bajar(`productos-${hoyISO()}.csv`, csv(filas), 'text/csv;charset=utf-8'); toast('Productos descargados para Excel');
+  });
+  let borrarTodo = false;
+  $('#borrar-todo').addEventListener('click', (e) => {
+    if (!borrarTodo) { borrarTodo = true; e.target.textContent = 'Toca otra vez para borrar todo'; setTimeout(() => { borrarTodo = false; e.target.textContent = 'Borrar todo'; }, 4000); return; }
+    D = { productos: [], ventas: [], respaldo: null }; carro = []; borrarTodo = false; e.target.textContent = 'Borrar todo'; guardar(); todo(); toast('Se borraron todos los datos de este equipo');
+  });
+
+  // ---------- Cámara (Chrome en Android) ----------
+  let flujo = null; let destino = null;
+  const hayCamara = 'BarcodeDetector' in window && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
+  $('#cam-vender').hidden = !hayCamara; $('#cam-form').hidden = !hayCamara;
+  const cerrarCam = () => { if (flujo) flujo.getTracks().forEach((t) => t.stop()); flujo = null; $('#camara').hidden = true; };
+  const abrirCam = async (para) => {
+    destino = para;
+    try {
+      const det = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39'] });
+      flujo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      const v = $('#video'); v.srcObject = flujo; await v.play(); $('#camara').hidden = false;
+      const buscar = async () => {
+        if (!flujo) return;
+        try { const r = await det.detect(v); if (r.length) { const c = r[0].rawValue; cerrarCam(); leido(c); return; } } catch {}
+        setTimeout(buscar, 250);
+      };
+      buscar();
+    } catch { cerrarCam(); toast('No se pudo abrir la cámara. Revisa los permisos.'); }
+  };
+  const leido = (c) => {
+    if (destino === 'form') { $('#p-codigo').value = c; return; }
+    const p = D.productos.find((x) => x.codigo === c);
+    if (p) { agregar(p); toast('Agregado: ' + p.nombre); } else codigoNuevo(c);
+  };
+  $('#cam-vender').addEventListener('click', () => abrirCam('vender'));
+  $('#cam-form').addEventListener('click', () => abrirCam('form'));
+  $('#cerrar-cam').addEventListener('click', cerrarCam);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && flujo) cerrarCam(); });
+
+  const todo = () => { pintarProds(); pintarCarro(); pintarTabla(); if (!$('#sec-resumen').hidden) pintarResumen(); };
+  addEventListener('storage', (e) => { if (e.key === CLAVE) { try { D = Object.assign({ productos: [], ventas: [], respaldo: null }, JSON.parse(e.newValue)); todo(); } catch {} } });
+  todo();
+})();
+</script>
+<script src="/herramientas/descargar.js" defer></script>
+</body>
+</html>
