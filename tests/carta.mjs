@@ -52,6 +52,34 @@ ok(r.status === 200 && (await ver('picada-don-tito')).status === 410, 'el panel 
 ok((await post({ accion: 'actualizar', local: 'picada-don-tito', clave: j.clave, carta: carta() })).status === 403, 'una carta pausada no se puede editar');
 await post({ accion: 'ocultar', local: 'picada-don-tito', oculta: false }, { cookie });
 ok((await ver('picada-don-tito')).status === 200, 'y volver a mostrarla');
+// ---------- Cartas subidas en PDF o fotos ----------
+const JPG = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 1, 2, 3, 4, 5, 6]);
+const subir = (local, clave, n, total, cuerpo = JPG, tipo = 'image/jpeg', origin = O) => api.fetch(new Request(`${O}/api/publico/carta?accion=pagina&local=${local}&n=${n}&total=${total}&w=1200&h=1700`, {
+  method: 'POST', headers: { 'content-type': tipo, 'x-clave': clave, ...(origin ? { origin } : {}) }, body: cuerpo,
+}));
+const img = (local, n) => api.fetch(new Request(`${O}/api/publico/carta?local=${local}&img=${n}`));
+r = await post({ accion: 'publicar', local: 'cafe-subido', nombre: 'Rosa', whatsapp: '933333333', carta: { tipo: 'archivo', local: { nombre: 'Café Subido', tel: '9 1111 2222' } } });
+const ja = await r.json();
+ok(r.status === 200 && ja.clave, 'publica una carta subida (solo datos del local)');
+ok((await subir('cafe-subido', 'mala', 0, 2)).status === 403, 'no sube páginas sin la clave');
+ok((await subir('cafe-subido', ja.clave, 0, 2, new Uint8Array([60, 104, 116, 109, 108, 62]), 'image/jpeg')).status === 400, 'rechaza archivos que no son imágenes');
+ok((await subir('cafe-subido', ja.clave, 0, 2, JPG, 'text/html')).status === 400, 'rechaza tipos que no son imagen');
+ok((await subir('cafe-subido', ja.clave, 0, 11)).status === 400, 'máximo 10 páginas');
+ok((await subir('cafe-subido', ja.clave, 0, 2, JPG, 'image/jpeg', 'https://otro.com')).status === 403, 'no sube desde otro sitio');
+ok((await subir('cafe-subido', ja.clave, 0, 2)).status === 200 && (await subir('cafe-subido', ja.clave, 1, 2)).status === 200, 'sube 2 páginas');
+vj = await (await ver('cafe-subido')).json();
+ok(vj.carta.tipo === 'archivo' && vj.carta.paginas.length === 2 && vj.carta.paginas[0].url.includes('img=0') && vj.carta.paginas[0].w === 1200 && !JSON.stringify(vj).includes('cartas/'), 'la carta pública trae los links de las páginas, sin rutas internas');
+let ri = await img('cafe-subido', 1);
+ok(ri.status === 200 && ri.headers.get('content-type') === 'image/jpeg' && (await ri.arrayBuffer()).byteLength === JPG.length, 'entrega la imagen de cada página');
+ok((await img('cafe-subido', 5)).status === 404, 'página que no existe: 404');
+r = await post({ accion: 'actualizar', local: 'cafe-subido', clave: ja.clave, carta: { tipo: 'archivo', local: { nombre: 'Café Subido 2' } } });
+vj = await (await ver('cafe-subido')).json();
+ok(r.status === 200 && vj.carta.local.nombre === 'Café Subido 2' && vj.carta.paginas.length === 2, 'actualiza los datos del local sin perder las páginas');
+ok((await subir('cafe-subido', ja.clave, 0, 1)).status === 200 && (await (await ver('cafe-subido')).json()).carta.paginas.length === 1, 'al subir menos páginas, quedan solo las nuevas');
+ok((await subir('picada-don-tito', j.clave, 0, 1)).status === 400, 'no sube páginas a una carta hecha con la herramienta');
+await post({ accion: 'ocultar', local: 'cafe-subido', oculta: true }, { cookie });
+ok((await img('cafe-subido', 0)).status === 404, 'una carta pausada no muestra sus imágenes');
+
 for (const n of ['dos', 'tres']) await pub({ local: 'local-' + n });
 r = await pub({ local: 'local-cuatro' });
 ok(r.status === 400, 'tope de 3 cartas por WhatsApp');
@@ -59,3 +87,4 @@ let ultimo;
 for (let i = 0; i < 45; i++) ultimo = await pub({ local: 'local-n' + i, whatsapp: '95' + String(i).padStart(7, '0') });
 ok(ultimo.status === 429, 'tope de cartas nuevas por día');
 ok((await post({ accion: 'publicar', local: 'pesada', nombre: 'A', whatsapp: '922222222', carta: { ...carta(), relleno: 'x'.repeat(500000) } })).status === 413, 'rechaza cartas muy pesadas');
+

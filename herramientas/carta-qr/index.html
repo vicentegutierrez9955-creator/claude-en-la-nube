@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carta con código QR gratis para tu restaurante: sube tu PDF o fotos | STPyme</title>
+<meta name="description" content="¿Ya tienes la carta de tu restaurante? Súbela en PDF o fotos y obtén gratis un link y un código QR para tus mesas. Si cambias precios, el mismo QR muestra la carta nueva.">
+<link rel="canonical" href="https://stpyme.cl/herramientas/carta-qr">
+<meta property="og:url" content="https://stpyme.cl/herramientas/carta-qr">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tu carta con código QR, gratis">
+<meta property="og:description" content="Sube tu carta en PDF o fotos y obtén un link y un QR para tus mesas. Gratis.">
+<meta property="og:locale" content="es_CL">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+<script src="/herramientas/menu-restaurante/motor.js" defer></script>
+<style>
+/* Colores de STPyme, iguales a stpyme.cl */
+:root{
+  color-scheme:dark;
+  --bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--soft:#1b2b1f;
+  --acc:#c5f33b;--acc-soft:rgba(197,243,59,.12);--wa:#1aa34a;--red:#ff8a80;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+header.sitio{padding:18px 0}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.02em}
+h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em;display:flex;gap:10px;align-items:center}
+h2 i{font-style:normal;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#0f1a12;font-size:14px;font-weight:800;flex:none}
+.bajada{color:var(--muted);margin:0 0 8px;font-size:17px;max-width:740px}
+.otra{margin:0 0 22px;font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+label .opc{font-weight:400;color:var(--muted)}
+.campo{margin-bottom:14px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+input{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+input:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--acc)}
+.btn-primario{background:var(--acc);border-color:var(--acc);color:#0f1a12}
+.btn-primario:hover{background:#d6fa6e;border-color:#d6fa6e}
+.btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn-chico{padding:6px 10px;font-size:14px}
+.btn-grande{padding:13px 18px;font-size:17px;width:100%}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btn-x{border:0;background:rgba(0,0,0,.55);color:#fff;font:inherit;font-size:13px;line-height:1;padding:6px 8px;cursor:pointer;border-radius:8px}
+.btn-x:hover{background:rgba(0,0,0,.8)}
+.error{color:var(--red);font-size:14px;margin:8px 0 0;min-height:1em}
+.estado{min-height:1.3em;margin:8px 0 0;font-size:14px;color:var(--muted)}
+.oculto{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.lienzo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:22px;align-items:start}
+.lado{position:sticky;top:12px}
+
+/* Subir archivos */
+.zona{display:grid;place-items:center;text-align:center;gap:6px;border:2px dashed var(--line);border-radius:14px;padding:26px 16px;cursor:pointer;background:var(--bg);transition:border-color .2s,background .2s}
+.zona:hover,.zona.encima{border-color:var(--acc);background:var(--acc-soft)}
+.zona b{font-size:17px}
+.zona input{position:absolute;opacity:0;pointer-events:none;width:1px}
+.paginas{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:14px}
+.pag{position:relative;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line);aspect-ratio:3/4}
+.pag img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.pag .n{position:absolute;left:6px;top:6px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:2px 7px}
+.pag .acc{position:absolute;right:4px;bottom:4px;display:flex;gap:3px}
+.procesando{color:var(--muted);font-size:14px;margin:10px 0 0}
+
+/* Link y QR */
+.link-campo{display:flex;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.link-campo span{padding:10px 0 10px 12px;color:var(--muted);white-space:nowrap;font-size:15px}
+.link-campo input{border:0;background:transparent;padding-left:2px;font-weight:700;min-width:0}
+.link-campo:focus-within{outline:2px solid var(--acc);outline-offset:1px}
+.link-campo input:focus{outline:none}
+#p-disp{min-height:1.4em;margin:6px 0 12px}
+#p-disp.bien{color:var(--acc)}
+#p-disp.mal{color:var(--red)}
+.qr-card{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft),var(--card) 45%)}
+.qr-fila{display:grid;grid-template-columns:140px minmax(0,1fr);gap:16px;align-items:center;margin:0 0 14px}
+.qr-img{background:#fff;border-radius:12px;padding:6px;line-height:0}
+.qr-img svg{width:100%;height:auto}
+.link-final{margin:2px 0 10px;font-weight:800;font-size:17px;overflow-wrap:anywhere}
+.acciones{display:flex;flex-wrap:wrap;gap:8px}
+.barra{display:flex;gap:8px;flex-wrap:wrap}
+.barra .btn{flex:1 1 150px}
+.cambios{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;background:rgba(242,193,78,.12);border:1px solid rgba(242,193,78,.45);border-radius:12px;padding:10px 12px;margin-top:12px;font-size:15px}
+
+/* Vista en el celular */
+.cel{border:10px solid #050906;border-radius:34px;background:#fff;overflow:hidden;box-shadow:0 20px 50px -20px rgba(0,0,0,.9);max-width:330px;margin:0 auto}
+.cel-pantalla{height:560px;overflow:auto;color:#1d1d1f;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.cel-barra{height:5px;background:#e4572e}
+.cel-cab{text-align:center;padding:18px 14px 10px}
+.cel-cab b{display:block;font-size:22px;line-height:1.15}
+.cel-pags{display:grid;gap:8px;padding:0 8px 14px}
+.cel-pags img{width:100%;height:auto;display:block;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.cel-vacio{color:#777;font-size:14px;text-align:center;padding:40px 18px}
+.cel-pie{font-size:11px;color:#888;text-align:center;padding:4px 10px 16px}
+
+details{border-top:1px solid var(--line);padding:12px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--muted)}
+footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
+
+@media (max-width:900px){
+  .lienzo{grid-template-columns:minmax(0,1fr)}
+  .lado{position:static}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .card{padding:16px}
+  .qr-fila{grid-template-columns:110px minmax(0,1fr)}
+  .cel-pantalla{height:480px}
+}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿Cuánto cuesta tener la carta del restaurante con código QR?","acceptedAnswer":{"@type":"Answer","text":"Es gratis. Subes tu carta en PDF o fotos, eliges tu link y descargas el código QR para tus mesas."}},
+{"@type":"Question","name":"¿Qué pasa si cambio los precios de mi carta?","acceptedAnswer":{"@type":"Answer","text":"Subes la carta nueva y tocas Actualizar. El mismo código QR muestra la carta nueva, así que no tienes que volver a imprimirlo."}},
+{"@type":"Question","name":"¿Mis clientes tienen que descargar una aplicación?","acceptedAnswer":{"@type":"Answer","text":"No. Escanean el QR con la cámara del celular y la carta se abre en el navegador."}}
+]}
+</script>
+</head>
+<body>
+<header class="sitio wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
+
+<main class="wrap">
+  <h1>Tu carta con código QR, gratis</h1>
+  <p class="bajada">¿Ya tienes la carta de tu local? Súbela en PDF o en fotos y te damos un link y un código QR para tus mesas. Si cambias precios, subes la nueva y el mismo QR la muestra.</p>
+  <p class="otra">¿Todavía no tienes carta? <a href="/herramientas/menu-restaurante">Créala gratis aquí, con diseño y PDF →</a></p>
+
+  <div class="lienzo">
+    <div>
+      <section class="card" aria-labelledby="t-subir">
+        <h2 id="t-subir"><i>1</i>Sube tu carta</h2>
+        <p class="sub">Un PDF o fotos de tu carta, hasta 10 páginas. Si sacas fotos, que se vea derecha, completa y con buena luz.</p>
+        <label class="zona" id="zona" for="archivos">
+          <b>Elegir PDF o fotos</b>
+          <span class="muted chico">o arrástralos aquí</span>
+          <input id="archivos" type="file" accept="application/pdf,image/*" multiple>
+        </label>
+        <p class="procesando" id="procesando" role="status"></p>
+        <div class="paginas" id="paginas"></div>
+        <p class="muted chico" id="publicadas" hidden></p>
+      </section>
+
+      <section class="card" aria-labelledby="t-local">
+        <h2 id="t-local"><i>2</i>Tu local</h2>
+        <p class="sub">Aparece arriba de la carta, con botones para escribirte, seguirte y llegar.</p>
+        <div class="grid">
+          <div class="campo"><label for="l-nombre">Nombre del local</label><input id="l-nombre" data-local="nombre" maxlength="50" autocomplete="organization" placeholder="Ej: Café La Plaza"></div>
+          <div class="campo"><label for="l-tel">WhatsApp o teléfono <span class="opc">(opcional)</span></label><input id="l-tel" data-local="tel" maxlength="30" inputmode="tel" placeholder="+56 9 1234 5678"></div>
+          <div class="campo"><label for="l-ig">Instagram <span class="opc">(opcional)</span></label><input id="l-ig" data-local="ig" maxlength="40" placeholder="@tulocal"></div>
+          <div class="campo"><label for="l-dir">Dirección <span class="opc">(opcional)</span></label><input id="l-dir" data-local="dir" maxlength="80" autocomplete="street-address"></div>
+          <div class="campo"><label for="l-horario">Horario <span class="opc">(opcional)</span></label><input id="l-horario" data-local="horario" maxlength="60" placeholder="Ej: Lunes a sábado, 9:00 a 20:00"></div>
+        </div>
+      </section>
+
+      <section class="card qr-card" id="publicar" aria-labelledby="t-pub">
+        <h2 id="t-pub"><i>3</i>Publica y descarga tu QR</h2>
+        <div id="qr-nuevo">
+          <form id="form-pub" novalidate>
+            <label for="p-local">Tu link</label>
+            <div class="link-campo"><span>stpyme.cl/carta/</span><input id="p-local" maxlength="40" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="tu-local"></div>
+            <p class="chico" id="p-disp" aria-live="polite"></p>
+            <div class="grid">
+              <div class="campo"><label for="p-nombre">Tu nombre</label><input id="p-nombre" maxlength="60" autocomplete="name"></div>
+              <div class="campo"><label for="p-wsp">Tu WhatsApp</label><input id="p-wsp" type="tel" inputmode="tel" placeholder="9 1234 5678" maxlength="20" autocomplete="tel"></div>
+            </div>
+            <div class="oculto" aria-hidden="true"><label for="p-web">No llenar</label><input id="p-web" tabindex="-1" autocomplete="off"></div>
+            <button class="btn btn-primario btn-grande" type="submit" id="p-enviar">Publicar mi carta con QR</button>
+            <p class="error" id="p-error" role="alert"></p>
+            <p class="muted chico" style="margin:6px 0 0">Gratis. Tu WhatsApp no aparece en la carta: lo usamos para avisarte si hay un problema con ella y para contarte de nuestras páginas web. Revisamos las cartas publicadas y podemos pausar las que no sean de un negocio real o tengan contenido inapropiado. <a href="/privacidad">Privacidad</a></p>
+          </form>
+        </div>
+        <div id="qr-listo" hidden>
+          <div class="qr-fila">
+            <div class="qr-img" id="qr-img"></div>
+            <div>
+              <p class="chico muted" style="margin:0">Tu carta está publicada en:</p>
+              <p class="link-final"><a id="q-link" target="_blank" rel="noopener"></a></p>
+              <div class="acciones"><button type="button" class="btn btn-chico" id="q-copiar">Copiar link</button><a class="btn btn-chico btn-wa" id="q-wsp" target="_blank" rel="noopener">Compartir</a></div>
+            </div>
+          </div>
+          <div class="barra">
+            <button type="button" class="btn btn-primario" id="q-png">⬇ Descargar QR</button>
+            <button type="button" class="btn" id="q-tarjetas">⬇ Tarjetas para mesas (PDF)</button>
+          </div>
+          <div class="cambios" id="q-cambios" hidden><span id="q-cambios-txt">Tienes cambios que aún no están en tu carta publicada.</span><button type="button" class="btn btn-primario btn-chico" id="q-actualizar">Actualizar carta publicada</button></div>
+          <p class="estado" id="q-estado" role="status"></p>
+          <p class="muted chico" style="margin:6px 0 0">¿Cambiaste precios? Sube la carta nueva en el paso 1 y toca "Actualizar". El QR sigue siendo el mismo. Para editarla usa este mismo celular o computador: aquí queda guardada tu clave.</p>
+        </div>
+      </section>
+    </div>
+
+    <aside class="lado" aria-label="Vista previa en el celular">
+      <p class="sub" style="text-align:center;margin-bottom:10px">Así la verán tus clientes al escanear el QR</p>
+      <div class="cel"><div class="cel-pantalla" id="cel"></div></div>
+    </aside>
+  </div>
+
+  <section class="card" aria-labelledby="t-faq" style="margin-top:8px">
+    <h2 id="t-faq">Preguntas frecuentes</h2>
+    <details><summary>¿Cuánto cuesta?</summary><p>Nada. Subes tu carta, eliges tu link y descargas el QR gratis.</p></details>
+    <details><summary>¿Qué pasa si cambio los precios?</summary><p>Subes la carta nueva y tocas "Actualizar carta publicada". El mismo QR muestra la carta nueva, así que no tienes que volver a imprimirlo.</p></details>
+    <details><summary>¿Mis clientes tienen que descargar algo?</summary><p>No. Escanean el QR con la cámara del celular y la carta se abre en el navegador.</p></details>
+    <details><summary>Mi carta está en Word o Canva, ¿cómo la subo?</summary><p>Guárdala o descárgala como PDF (en Word: Archivo → Guardar como → PDF; en Canva: Compartir → Descargar → PDF) y súbela aquí. También puedes sacarle fotos.</p></details>
+  </section>
+</main>
+
+<footer class="sitio wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a>: ayudamos a crecer a las pymes de Chile. · <a href="/herramientas">Más herramientas</a> · STP CHILE SpA · RUT 78.534.708-0 · <a href="/privacidad">Privacidad</a></footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = (s, c = document) => c.querySelector(s);
+  const el = (tag, props, ...hijos) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...hijos.filter((h) => h != null && h !== false)); return n; };
+  const M = window.CartaMotor;
+  const CLAVE = 'stpyme-carta-qr-v1';
+  const API = '/api/publico/carta';
+  const MAX = 10;
+  const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  let e;
+  try { e = JSON.parse(localStorage.getItem(CLAVE)); } catch { e = null; }
+  if (!e || !e.local) e = { local: { nombre: '', tel: '', ig: '', dir: '', horario: '' } };
+  const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(e)); } catch { /* sin espacio: igual funciona */ } };
+  const paraQR = () => ({ local: e.local, diseno: { estilo: 'moderno', color: '' } });
+  let paginas = []; // { blob, url, w, h } elegidas en este dispositivo y aún no publicadas
+  let remotas = []; // páginas de la carta ya publicada (para la vista previa)
+
+  // ---------- 1. Archivos: el PDF se convierte en imágenes aquí mismo, las fotos se achican ----------
+  const aJpeg = (canvas) => new Promise((ok) => canvas.toBlob(ok, 'image/jpeg', 0.84));
+  const lienzo = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.fillStyle = '#ffffff'; g.fillRect(0, 0, w, h); return [c, g]; };
+  async function desdeImagen(f) {
+    const url = URL.createObjectURL(f);
+    try {
+      const img = await new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = url; });
+      const k = Math.min(1, 1800 / Math.max(img.naturalWidth, img.naturalHeight));
+      const [c, g] = lienzo(Math.round(img.naturalWidth * k), Math.round(img.naturalHeight * k));
+      g.drawImage(img, 0, 0, c.width, c.height);
+      return { blob: await aJpeg(c), w: c.width, h: c.height };
+    } finally { URL.revokeObjectURL(url); }
+  }
+  async function* desdePdf(f) {
+    await M.cargar(PDFJS);
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+    const pdf = await window.pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const pag = await pdf.getPage(i);
+      const base = pag.getViewport({ scale: 1 });
+      const vp = pag.getViewport({ scale: Math.min(3, 1500 / base.width) });
+      const [c, g] = lienzo(Math.round(vp.width), Math.round(vp.height));
+      await pag.render({ canvasContext: g, viewport: vp }).promise;
+      yield { blob: await aJpeg(c), w: c.width, h: c.height, de: pdf.numPages };
+    }
+  }
+  async function agregar(archivos) {
+    const txt = $('#procesando');
+    const lista = [...archivos];
+    let sobran = 0;
+    try {
+      for (const f of lista) {
+        if (paginas.length >= MAX) { sobran++; continue; }
+        if (f.type === 'application/pdf' || /\.pdf$/i.test(f.name)) {
+          txt.textContent = 'Leyendo el PDF…';
+          for await (const p of desdePdf(f)) {
+            if (paginas.length >= MAX) { sobran++; break; }
+            txt.textContent = `Preparando página ${paginas.length + 1}…`;
+            paginas.push({ ...p, url: URL.createObjectURL(p.blob) });
+            pintarPaginas();
+          }
+        } else if (f.type.startsWith('image/')) {
+          txt.textContent = `Preparando foto ${paginas.length + 1}…`;
+          const p = await desdeImagen(f);
+          paginas.push({ ...p, url: URL.createObjectURL(p.blob) });
+          pintarPaginas();
+        } else {
+          txt.textContent = `"${f.name}" no es un PDF ni una foto.`;
+          return;
+        }
+      }
+      txt.textContent = sobran ? `Se usaron las primeras ${MAX} páginas (es el máximo).` : '';
+    } catch {
+      txt.textContent = 'No se pudo leer ese archivo. Si es un PDF, prueba con fotos de la carta.';
+    }
+    cambio();
+  }
+  const zona = $('#zona');
+  $('#archivos').addEventListener('change', (ev) => { agregar(ev.target.files); ev.target.value = ''; });
+  ['dragenter', 'dragover'].forEach((t) => zona.addEventListener(t, (ev) => { ev.preventDefault(); zona.classList.add('encima'); }));
+  ['dragleave', 'drop'].forEach((t) => zona.addEventListener(t, (ev) => { ev.preventDefault(); zona.classList.remove('encima'); }));
+  zona.addEventListener('drop', (ev) => agregar(ev.dataTransfer.files));
+
+  function pintarPaginas() {
+    $('#paginas').replaceChildren(...paginas.map((p, i) => {
+      const quitar = el('button', { type: 'button', className: 'btn-x', textContent: '✕', title: 'Quitar página', ariaLabel: 'Quitar página ' + (i + 1) });
+      quitar.addEventListener('click', () => { URL.revokeObjectURL(p.url); paginas.splice(i, 1); pintarPaginas(); cambio(); });
+      const mover = (d, t) => {
+        const b = el('button', { type: 'button', className: 'btn-x', textContent: t, title: d < 0 ? 'Mover antes' : 'Mover después' });
+        b.addEventListener('click', () => { const j = i + d; if (j < 0 || j >= paginas.length) return; [paginas[i], paginas[j]] = [paginas[j], paginas[i]]; pintarPaginas(); cambio(); });
+        return b;
+      };
+      return el('div', { className: 'pag' }, el('img', { src: p.url, alt: 'Página ' + (i + 1) }), el('span', { className: 'n', textContent: i + 1 }),
+        el('div', { className: 'acc' }, mover(-1, '←'), mover(1, '→'), quitar));
+    }));
+    const pub = $('#publicadas');
+    pub.hidden = !(e.publicada && !paginas.length);
+    if (!pub.hidden) { const n = remotas.length || e.publicada.paginas || 0; pub.textContent = `Tu carta publicada tiene ${n} página${n === 1 ? '' : 's'}. Para cambiarlas, sube la carta nueva aquí.`; }
+  }
+
+  // ---------- Vista previa en el celular ----------
+  function pintarCel() {
+    const fuentes = paginas.length ? paginas.map((p) => p.url) : remotas;
+    $('#cel').replaceChildren(
+      el('div', { className: 'cel-barra' }),
+      el('div', { className: 'cel-cab' }, el('b', { textContent: e.local.nombre || 'Nombre de tu local' })),
+      fuentes.length ? el('div', { className: 'cel-pags' }, ...fuentes.map((src) => el('img', { src, alt: '' })))
+        : el('p', { className: 'cel-vacio', textContent: 'Aquí aparece tu carta cuando la subas.' }),
+      el('p', { className: 'cel-pie', textContent: 'Carta digital hecha gratis con STPyme' }));
+  }
+
+  // ---------- 2. Datos del local ----------
+  document.querySelectorAll('[data-local]').forEach((inp) => {
+    inp.value = e.local[inp.dataset.local] || '';
+    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; guardar(); if (inp.dataset.local === 'nombre') sugerirLink(); cambio(); });
+  });
+
+  // ---------- 3. Publicar ----------
+  const aLink = (s) => M.limpiar(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40).replace(/-+$/, '');
+  const linkValido = (s) => s.length >= 3 && s.length <= 40 && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(s);
+  const qEstado = (t) => { $('#q-estado').textContent = t; };
+  const firmaLocal = () => JSON.stringify(e.local);
+  let linkTocado = false;
+  const sugerirLink = () => { if (!linkTocado && !e.publicada) { $('#p-local').value = aLink(e.local.nombre); revisarLink(); } };
+  let tLink, pedidoLink = 0;
+  const revisarLink = () => {
+    clearTimeout(tLink);
+    const v = $('#p-local').value;
+    const disp = $('#p-disp');
+    disp.className = 'chico';
+    if (!v) { disp.textContent = ''; return; }
+    if (!linkValido(v)) { disp.textContent = 'Usa de 3 a 40 letras o números, separados por guiones (ej: cafe-la-plaza).'; disp.classList.add('mal'); return; }
+    disp.textContent = 'Revisando…';
+    const n = ++pedidoLink;
+    tLink = setTimeout(async () => {
+      try {
+        const r = await fetch(API + '?local=' + encodeURIComponent(v));
+        if (n !== pedidoLink) return;
+        if (r.status === 404) { disp.textContent = '✓ stpyme.cl/carta/' + v + ' está disponible'; disp.classList.add('bien'); }
+        else if (r.status === 503) { disp.textContent = 'La publicación de cartas se está activando. Vuelve a intentarlo en un rato.'; disp.classList.add('mal'); }
+        else { disp.textContent = 'Ese link ya está ocupado. Prueba con otro.'; disp.classList.add('mal'); }
+      } catch { if (n === pedidoLink) disp.textContent = ''; }
+    }, 400);
+  };
+  $('#p-local').addEventListener('input', (ev) => {
+    linkTocado = true;
+    const limpio = ev.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-{2,}/g, '-').replace(/^-/, '').slice(0, 40);
+    if (limpio !== ev.target.value) ev.target.value = limpio;
+    revisarLink();
+  });
+
+  // Sube las páginas elegidas, una por una (cada pedido lleva una imagen).
+  async function subirPaginas(aviso) {
+    const p = e.publicada;
+    for (let i = 0; i < paginas.length; i++) {
+      aviso(`Subiendo página ${i + 1} de ${paginas.length}…`);
+      const pg = paginas[i];
+      const r = await fetch(`${API}?accion=pagina&local=${encodeURIComponent(p.local)}&n=${i}&total=${paginas.length}&w=${pg.w}&h=${pg.h}`, {
+        method: 'POST', headers: { 'content-type': 'image/jpeg', 'x-clave': p.clave }, body: pg.blob,
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error((j.error || 'No se pudo subir la página ' + (i + 1)) + ' Toca "Actualizar carta publicada" para reintentar.');
+    }
+    p.paginas = paginas.length;
+    remotas = paginas.map((x) => x.url);
+    paginas = [];
+    p.pendiente = false;
+    guardar();
+    pintarPaginas();
+  }
+
+  const verPublicada = () => {
+    const p = e.publicada;
+    $('#qr-nuevo').hidden = Boolean(p);
+    $('#qr-listo').hidden = !p;
+    if (!p) return;
+    $('#q-link').href = p.url;
+    $('#q-link').textContent = p.url.replace('https://', '');
+    $('#q-wsp').href = 'https://wa.me/?text=' + encodeURIComponent('Mira nuestra carta: ' + p.url);
+    $('#qr-img').replaceChildren(window.qrcode ? M.qrSVG(p.url) : document.createTextNode('No se pudo cargar el QR. Revisa tu internet y recarga la página.'));
+  };
+  function cambio() {
+    pintarCel();
+    if (!e.publicada) return;
+    const hay = paginas.length > 0 || e.publicada.firma !== firmaLocal() || e.publicada.pendiente;
+    $('#q-cambios').hidden = !hay;
+    $('#q-cambios-txt').textContent = paginas.length ? `Tienes ${paginas.length} página${paginas.length === 1 ? '' : 's'} nueva${paginas.length === 1 ? '' : 's'} para publicar.` : e.publicada.pendiente ? 'Faltan páginas por subir.' : 'Cambiaste los datos de tu local.';
+  }
+
+  $('#form-pub').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const err = $('#p-error');
+    err.textContent = '';
+    const local = $('#p-local').value;
+    const nombre = $('#p-nombre').value.trim();
+    const whatsapp = $('#p-wsp').value;
+    if (!paginas.length) { err.textContent = 'Primero sube tu carta en el paso 1 (PDF o fotos).'; $('#zona').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (!M.limpiar(e.local.nombre)) { err.textContent = 'Escribe el nombre de tu local en el paso 2.'; $('#l-nombre').focus(); return; }
+    if (!linkValido(local)) { err.textContent = 'Elige tu link: de 3 a 40 letras o números, separados por guiones.'; $('#p-local').focus(); return; }
+    if (!nombre) { err.textContent = 'Escribe tu nombre.'; $('#p-nombre').focus(); return; }
+    if (!/^(569\d{8}|9\d{8})$/.test(whatsapp.replace(/\D/g, ''))) { err.textContent = 'Revisa tu WhatsApp: debe ser un celular chileno, como 9 1234 5678.'; $('#p-wsp').focus(); return; }
+    const btn = $('#p-enviar');
+    btn.disabled = true; btn.textContent = 'Publicando…';
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'publicar', local, nombre, whatsapp, web: $('#p-web').value, carta: { tipo: 'archivo', local: e.local } }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo publicar. Intenta de nuevo.');
+      e.publicada = { local: j.local, clave: j.clave, url: j.url, firma: firmaLocal(), pendiente: true, fecha: new Date().toISOString() };
+      guardar();
+      verPublicada();
+      await subirPaginas(qEstado);
+      qEstado('✓ ¡Listo! Tu carta ya está publicada. Descarga el QR y ponlo en tus mesas.');
+      $('#publicar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (x) {
+      if (e.publicada) qEstado(x.message); else err.textContent = x.message;
+      if (/ocupado/.test(x.message)) revisarLink();
+    } finally {
+      btn.disabled = false; btn.textContent = 'Publicar mi carta con QR';
+      cambio();
+    }
+  });
+  $('#q-actualizar').addEventListener('click', async (ev) => {
+    const btn = ev.currentTarget;
+    if (e.publicada.pendiente && !paginas.length) { qEstado('Faltan páginas por subir: elige de nuevo tu carta en el paso 1 y toca "Actualizar".'); $('#zona').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    btn.disabled = true;
+    qEstado('Actualizando…');
+    try {
+      if (e.publicada.firma !== firmaLocal()) {
+        const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ accion: 'actualizar', local: e.publicada.local, clave: e.publicada.clave, carta: { tipo: 'archivo', local: e.local } }) });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j.ok) throw new Error(j.error || 'No se pudo actualizar. Intenta de nuevo.');
+        e.publicada.firma = firmaLocal();
+        guardar();
+      }
+      if (paginas.length) await subirPaginas(qEstado);
+      qEstado('✓ Listo. Tu carta publicada ya tiene los cambios (en el celular puede tardar hasta un minuto en verse).');
+    } catch (x) { qEstado(x.message); }
+    btn.disabled = false;
+    cambio();
+  });
+  $('#q-copiar').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(e.publicada.url); qEstado('✓ Link copiado.'); }
+    catch { qEstado('Copia el link: ' + e.publicada.url); }
+  });
+  $('#q-png').addEventListener('click', () => {
+    if (!window.qrcode) return qEstado('No se pudo cargar el QR. Revisa tu internet y recarga la página.');
+    const a = el('a', { href: M.qrPNG(e.publicada.url, paraQR()), download: 'qr-' + e.publicada.local + '.png' });
+    document.body.append(a); a.click(); a.remove();
+    qEstado('✓ QR descargado. Imprímelo o súbelo a tus redes.');
+  });
+  $('#q-tarjetas').addEventListener('click', () => {
+    if (!window.qrcode || !window.jspdf) return qEstado('No se pudo preparar el PDF. Revisa tu internet y recarga la página.');
+    M.tarjetasPDF(e.publicada.url, paraQR()).save('qr-mesas-' + e.publicada.local + '.pdf');
+    qEstado('✓ Listo: 4 tarjetas por hoja, para recortar y poner en las mesas.');
+  });
+
+  // Si ya publicó desde este dispositivo, muestra su carta actual en la vista previa.
+  async function traerPublicada() {
+    if (!e.publicada) return;
+    try {
+      const r = await fetch(API + '?local=' + encodeURIComponent(e.publicada.local));
+      if (!r.ok) return;
+      const j = await r.json();
+      remotas = (j.carta.paginas || []).map((p) => p.url);
+      pintarPaginas(); pintarCel();
+    } catch { /* sin internet: queda la vista previa vacía */ }
+  }
+
+  verPublicada();
+  pintarPaginas();
+  cambio();
+  sugerirLink();
+  traerPublicada();
+});
+</script>
+</body>
+</html>

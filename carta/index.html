@@ -38,6 +38,10 @@ a{color:var(--acc)}
 .fila i{flex:1;border-bottom:2px dotted var(--linea);transform:translateY(-4px);min-width:12px}
 .fila span{font-weight:700;color:var(--acc);white-space:nowrap}
 .plato p{margin:3px 0 0;color:var(--muted);font-size:15px}
+.paginas{display:grid;gap:12px;margin:10px -6px 0}
+.paginas a{display:block;line-height:0}
+.paginas img{width:100%;height:auto;display:block;border-radius:8px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.14)}
+.paginas .estado{line-height:1.5}
 .datos{margin:26px 0 0;padding:18px;border-radius:16px;background:var(--tarjeta);border:1px solid var(--linea);text-align:center}
 .datos p{margin:0 0 6px;color:var(--muted);font-size:15px}
 .botones{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
@@ -107,7 +111,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (est.mayus) document.body.classList.add('mayus');
   document.title = L.nombre + ' · Carta';
 
-  const secciones = c.secciones.filter((s) => s.items.length || s.titulo);
+  // Carta subida en PDF o fotos: se muestran sus páginas como imágenes.
+  const archivo = c.tipo === 'archivo';
+  const secciones = archivo ? [] : c.secciones.filter((s) => s.items.length || s.titulo);
+  const paginas = archivo ? el('section', { className: 'paginas', ariaLabel: 'Carta' },
+    ...((c.paginas || []).length ? c.paginas.map((p, i) => {
+      const im = el('img', { src: p.url, alt: `Carta de ${L.nombre}, página ${i + 1}`, loading: i ? 'lazy' : 'eager', decoding: 'async' });
+      if (p.w && p.h) { im.width = p.w; im.height = p.h; }
+      return el('a', { href: p.url, target: '_blank', rel: 'noopener', title: 'Abrir en grande' }, im);
+    }) : [el('p', { className: 'estado', textContent: 'El local está subiendo su carta. Vuelve a mirar en un rato.' })])) : null;
   const idSec = (i) => 'sec-' + (i + 1);
   const nav = secciones.length > 1 ? el('nav', { className: 'nav', ariaLabel: 'Secciones de la carta' },
     ...secciones.map((s, i) => el('a', { href: '#' + idSec(i), textContent: s.titulo || 'Sección ' + (i + 1) }))) : null;
@@ -160,6 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       L.frase ? el('p', { textContent: L.frase }) : null,
       el('hr', { className: 'raya' })),
     nav,
+    paginas,
     ...secciones.map((s, i) => el('section', { className: 'sec', id: idSec(i) },
       s.titulo ? el('h2', { textContent: s.titulo }) : null,
       s.nota ? el('p', { className: 'nota', textContent: s.nota }) : null,
@@ -170,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       L.horario ? el('p', { textContent: L.horario }) : null,
       L.dir ? el('p', { textContent: L.dir }) : null,
       botones.length ? el('div', { className: 'botones' }, ...botones) : null,
-      el('div', { className: 'botones' }, btnPdf, btnCompartir),
+      el('div', { className: 'botones' }, archivo ? null : btnPdf, btnCompartir),
       estado),
     el('footer', { className: 'pie' },
       el('p', { style: 'margin:0' }, 'Carta digital hecha gratis con ', el('a', { href: HERRAMIENTA, textContent: 'STPyme' }), '.'),

@@ -8,6 +8,9 @@
 //   POST {accion:'publicar', local, carta, nombre, whatsapp}  → crea la carta y devuelve su clave de edición
 //   POST {accion:'actualizar', local, clave, carta}           → reemplaza la carta (solo con la clave)
 //   POST {accion:'reportar', local, motivo}                   → avisa al equipo
+// Cartas subidas (PDF o fotos, desde /herramientas/carta-qr): carta.tipo = 'archivo'. Las páginas llegan como
+// imágenes, una por pedido: POST ?accion=pagina&local=&n=&total=&w=&h= con la clave en x-clave y la imagen
+// en el cuerpo. Se muestran con GET ?local=&img=<n>.
 // Panel (con sesión del panel):
 //   POST {accion:'lista'} y {accion:'ocultar', local, oculta}
 //
@@ -22,6 +25,9 @@ const INDICE = 'cartas/_indice.json';
 const TOPE_DIARIO = 40; // cartas nuevas por día en total
 const TOPE_POR_WHATSAPP = 3;
 const MAX_BYTES = 450 * 1024;
+const MAX_PAGINAS = 10;
+const MAX_IMAGEN = 4 * 1024 * 1024; // Vercel acepta hasta 4,5 MB por pedido
+const IMAGENES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
 const RESERVADAS = new Set(['admin', 'api', 'panel', 'stpyme', 'carta', 'cartas', 'herramientas', 'nueva', 'nuevo', 'editar', 'ejemplo', 'test', 'prueba', 'www', 'indice', 'menu', 'qr', 'login', 'ayuda', 'soporte', 'contacto']);
 const ESTILOS = ['clasico', 'moderno', 'pizarra', 'fresco'];
 
@@ -96,11 +102,41 @@ async function modificar(ruta, vacio, cambio) {
 }
 const indiceVacio = () => ({ cartas: [] });
 
+// Imágenes de las cartas subidas (el nombre lleva una parte al azar, así cada versión se puede guardar en caché).
+async function guardarImagen(ruta, bytes, tipo) {
+  if (enMemoria()) { memoria.docs[ruta] = { bytes, tipo }; return; }
+  await put(ruta, bytes, { access: 'private', addRandomSuffix: false, allowOverwrite: true, contentType: tipo, token: token() });
+}
+async function leerImagen(ruta) {
+  if (enMemoria()) { const m = memoria.docs[ruta]; return m ? { cuerpo: m.bytes, tipo: m.tipo } : null; }
+  try {
+    const r = await get(ruta, { access: 'private', token: token() });
+    return r && r.statusCode === 200 ? { cuerpo: r.stream, tipo: r.blob.contentType } : null;
+  } catch (e) {
+    if (e instanceof BlobNotFoundError) return null;
+    throw e;
+  }
+}
+const esImagen = (b, tipo) => (tipo === 'image/jpeg' ? b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff
+  : tipo === 'image/png' ? b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47
+    : tipo === 'image/webp' ? String.fromCharCode(...b.slice(0, 4)) === 'RIFF' && String.fromCharCode(...b.slice(8, 12)) === 'WEBP' : false);
+
 // ---------- La carta: solo los campos conocidos, cortos y limpios ----------
+const limpiarLocal = (L = {}) => ({ nombre: texto(L.nombre, 50), frase: texto(L.frase, 70), tel: texto(L.tel, 30), ig: texto(L.ig, 40), dir: texto(L.dir, 80), horario: texto(L.horario, 60), logo: '', logoR: 1 });
+
+// Carta subida en PDF o fotos: solo los datos del local; las páginas las agrega el servidor al recibir cada imagen.
+export function limpiarCartaArchivo(c) {
+  if (!c || typeof c !== 'object') return null;
+  const local = limpiarLocal(c.local);
+  if (!local.nombre) return null;
+  return { tipo: 'archivo', local, diseno: { estilo: 'moderno', color: '', cols: 1, hoja: 'a4' }, paginas: [] };
+}
+const cartaDe = (c) => (c && c.tipo === 'archivo' ? limpiarCartaArchivo(c) : limpiarCarta(c));
+
 export function limpiarCarta(c) {
   if (!c || typeof c !== 'object') return null;
   const L = c.local || {};
-  const local = { nombre: texto(L.nombre, 50), frase: texto(L.frase, 70), tel: texto(L.tel, 30), ig: texto(L.ig, 40), dir: texto(L.dir, 80), horario: texto(L.horario, 60), logo: '', logoR: 1 };
+  const local = limpiarLocal(L);
   if (typeof L.logo === 'string' && L.logo.length <= 300000 && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+=*$/.test(L.logo)) {
     local.logo = L.logo;
     const r = Number(L.logoR);
@@ -167,7 +203,70 @@ async function ver(request) {
   const { data } = await leer(rutaCarta(local));
   if (!data) return json({ error: 'No existe' }, 404, { 'cache-control': 'public, max-age=0, s-maxage=10' });
   if (data.oculta) return json({ error: 'Esta carta está pausada.' }, 410, { 'cache-control': 'public, max-age=0, s-maxage=30' });
-  return json({ local, carta: data.carta, actualizada: data.actualizada }, 200, { 'cache-control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=300' });
+  const carta = data.carta.tipo === 'archivo'
+    ? { ...data.carta, paginas: (data.carta.paginas || []).map((p, i) => (p ? { url: `/api/publico/carta?local=${local}&img=${i}&v=${p.archivo.split('-').pop().split('.')[0]}`, w: p.w, h: p.h } : null)).filter(Boolean) }
+    : data.carta;
+  return json({ local, carta, actualizada: data.actualizada }, 200, { 'cache-control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=300' });
+}
+
+async function verImagen(request) {
+  const u = new URL(request.url).searchParams;
+  const local = u.get('local') || '';
+  const n = Number(u.get('img'));
+  if (!localValido(local) || !Number.isInteger(n) || n < 0 || n >= MAX_PAGINAS || !activo()) return new Response('No existe', { status: 404 });
+  const { data } = await leer(rutaCarta(local));
+  const p = data && !data.oculta && data.carta.tipo === 'archivo' ? (data.carta.paginas || [])[n] : null;
+  const img = p ? await leerImagen(p.archivo) : null;
+  if (!img) return new Response('No existe', { status: 404, headers: { 'cache-control': 'public, max-age=0, s-maxage=30' } });
+  // El link lleva la versión (?v=), así que cada imagen se puede guardar mucho tiempo.
+  return new Response(img.cuerpo, { headers: { 'content-type': img.tipo || 'image/jpeg', 'cache-control': 'public, max-age=86400, s-maxage=2592000', 'x-content-type-options': 'nosniff' } });
+}
+
+async function subirPagina(request) {
+  const u = new URL(request.url).searchParams;
+  const local = u.get('local') || '';
+  const n = Number(u.get('n'));
+  const total = Number(u.get('total'));
+  const tipo = String(request.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  const clave = request.headers.get('x-clave') || '';
+  if (!localValido(local) || !clave) return json({ error: 'No autorizado' }, 403);
+  if (!Number.isInteger(total) || total < 1 || total > MAX_PAGINAS || !Number.isInteger(n) || n < 0 || n >= total) return json({ error: `Puedes subir hasta ${MAX_PAGINAS} páginas.` }, 400);
+  if (!IMAGENES[tipo]) return json({ error: 'Cada página debe ser una imagen JPG, PNG o WebP.' }, 400);
+  const largo = Number(request.headers.get('content-length') || 0);
+  if (largo > MAX_IMAGEN) return json({ error: 'Esa página pesa demasiado (máximo 4 MB).' }, 413);
+  const bytes = new Uint8Array(await request.arrayBuffer());
+  if (!bytes.length || bytes.length > MAX_IMAGEN) return json({ error: 'Esa página pesa demasiado (máximo 4 MB).' }, 413);
+  if (!esImagen(bytes, tipo)) return json({ error: 'Ese archivo no es una imagen válida.' }, 400);
+  const revisar = (d) => {
+    if (!d || !iguales(hash(clave), d.claveHash || '')) return json({ error: 'Esta carta se publicó desde otro dispositivo. Escríbenos para recuperarla.' }, 403);
+    if (d.oculta) return json({ error: 'Esta carta está pausada. Escríbenos para revisarla.' }, 403);
+    if (d.carta.tipo !== 'archivo') return json({ error: 'Esta carta se hizo con la herramienta; edítala ahí.' }, 400);
+    return null;
+  };
+  const antes = revisar((await leer(rutaCarta(local))).data);
+  if (antes) return antes;
+  const archivo = `cartas/${local}/p${n}-${randomBytes(6).toString('hex')}.${IMAGENES[tipo]}`;
+  await guardarImagen(archivo, bytes, tipo);
+  const medida = (v) => { const x = Math.round(Number(v)); return x > 0 && x < 20000 ? x : null; };
+  let cuando = '';
+  const corte = await modificar(rutaCarta(local), () => null, (d) => {
+    const mal = revisar(d);
+    if (mal) return mal;
+    const paginas = (d.carta.paginas || []).slice(0, total);
+    while (paginas.length < total) paginas.push(null);
+    paginas[n] = { archivo, w: medida(u.get('w')), h: medida(u.get('h')) };
+    d.carta.paginas = paginas;
+    d.actualizada = cuando = new Date().toISOString();
+    return null;
+  });
+  if (corte) return corte;
+  await modificar(INDICE, indiceVacio, (d) => {
+    const x = d.cartas.find((c) => c.local === local);
+    if (!x) return json({ ok: true });
+    x.actualizada = cuando;
+    return null;
+  }).catch(() => {});
+  return json({ ok: true, n, total });
 }
 
 async function publicar(b) {
@@ -175,10 +274,10 @@ async function publicar(b) {
   const local = String(b.local || '');
   const nombre = texto(b.nombre, 60);
   const whatsapp = celular(b.whatsapp);
-  const carta = limpiarCarta(b.carta);
+  const carta = cartaDe(b.carta);
   if (!localValido(local)) return json({ error: 'Elige un link de 3 a 40 letras o números, separados por guiones (ej: picada-don-tito).' }, 400);
   if (!nombre || !whatsapp) return json({ error: 'Revisa tu nombre y tu WhatsApp (celular chileno).' }, 400);
-  if (!carta) return json({ error: 'Tu carta necesita el nombre del local y al menos un plato.' }, 400);
+  if (!carta) return json({ error: b.carta && b.carta.tipo === 'archivo' ? 'Escribe el nombre de tu local.' : 'Tu carta necesita el nombre del local y al menos un plato.' }, 400);
   const fecha = hoy();
   const indice = (await leer(INDICE)).data || indiceVacio();
   if (indice.cartas.filter((x) => x.whatsapp === whatsapp).length >= TOPE_POR_WHATSAPP) return json({ error: `Ya tienes ${TOPE_POR_WHATSAPP} cartas publicadas con ese WhatsApp. Escríbenos si necesitas más.` }, 400);
@@ -188,7 +287,7 @@ async function publicar(b) {
   if (!(await guardar(rutaCarta(local), doc, null))) return json({ error: 'Ese link ya está ocupado. Prueba con otro.', ocupado: true }, 409);
   await modificar(INDICE, indiceVacio, (d) => {
     d.cartas = d.cartas.filter((x) => x.local !== local);
-    d.cartas.push({ local, negocio: carta.local.nombre, nombre, whatsapp, creada: fecha, actualizada: doc.actualizada, oculta: false, reportes: 0 });
+    d.cartas.push({ local, negocio: carta.local.nombre, nombre, whatsapp, creada: fecha, actualizada: doc.actualizada, oculta: false, reportes: 0, tipo: carta.tipo === 'archivo' ? 'archivo' : 'herramienta' });
   });
   const nuevo = await anotarProspecto({ nombre, whatsapp, negocio: carta.local.nombre, local, comuna: '' }).catch(() => false);
   await enviarCorreo({
@@ -202,12 +301,14 @@ async function publicar(b) {
 async function actualizar(b) {
   const local = String(b.local || '');
   if (!localValido(local) || typeof b.clave !== 'string') return json({ error: 'No autorizado' }, 403);
-  const carta = limpiarCarta(b.carta);
-  if (!carta) return json({ error: 'Tu carta necesita el nombre del local y al menos un plato.' }, 400);
+  const carta = cartaDe(b.carta);
+  if (!carta) return json({ error: b.carta && b.carta.tipo === 'archivo' ? 'Escribe el nombre de tu local.' : 'Tu carta necesita el nombre del local y al menos un plato.' }, 400);
   let cuando = '';
   const corte = await modificar(rutaCarta(local), () => null, (d) => {
     if (!d || !iguales(hash(b.clave), d.claveHash || '')) return json({ error: 'Esta carta se publicó desde otro dispositivo. Escríbenos para recuperarla.' }, 403);
     if (d.oculta) return json({ error: 'Esta carta está pausada. Escríbenos para revisarla.' }, 403);
+    // En una carta subida se cambian los datos del local; las páginas siguen hasta que lleguen las nuevas.
+    if (carta.tipo === 'archivo' && d.carta.tipo === 'archivo') carta.paginas = d.carta.paginas || [];
     d.carta = carta;
     d.actualizada = cuando = new Date().toISOString();
     return null;
@@ -274,9 +375,13 @@ async function panel(b) {
 export default {
   async fetch(request) {
     try {
-      if (request.method === 'GET') return await ver(request);
+      if (request.method === 'GET') return new URL(request.url).searchParams.has('img') ? await verImagen(request) : await ver(request);
       if (request.method !== 'POST') return json({ error: 'Método no permitido' }, 405);
       if (!mismoSitio(request)) return json({ error: 'No autorizado' }, 403);
+      if (new URL(request.url).searchParams.get('accion') === 'pagina') {
+        if (!activo()) return noActivo();
+        return await subirPagina(request);
+      }
       const crudo = await request.text();
       if (crudo.length > MAX_BYTES) return json({ error: 'La carta es muy pesada. Prueba con un logo más liviano.' }, 413);
       let b;

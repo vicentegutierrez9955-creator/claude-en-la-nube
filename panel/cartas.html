@@ -64,7 +64,7 @@
       });
       return el('div', { className: 'carta' },
         el('div', {},
-          el('h3', {}, c.negocio || c.local, c.oculta ? el('span', { className: 'chip pausa', textContent: 'Pausada' }) : null, c.reportes ? el('span', { className: 'chip rep', textContent: c.reportes + (c.reportes === 1 ? ' reporte' : ' reportes') }) : null),
+          el('h3', {}, c.negocio || c.local, c.oculta ? el('span', { className: 'chip pausa', textContent: 'Pausada' }) : null, c.reportes ? el('span', { className: 'chip rep', textContent: c.reportes + (c.reportes === 1 ? ' reporte' : ' reportes') }) : null, c.tipo === 'archivo' ? el('span', { className: 'chip', style: 'background:#eef2f7;color:#3b4b61', textContent: 'PDF o fotos' }) : null),
           el('div', { className: 'meta' }, el('a', { href: c.url, target: '_blank', rel: 'noopener', textContent: c.url.replace('https://', '') })),
           el('div', { className: 'meta', textContent: `${c.nombre} · +${c.whatsapp} · publicada ${fecha(c.creada)} · actualizada ${fecha(c.actualizada)}` }),
           c.ultimoReporte ? el('div', { className: 'meta', textContent: 'Último reporte: "' + c.ultimoReporte + '"' }) : null),
