@@ -165,7 +165,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch { reporteEstado.textContent = 'No se pudo enviar. Intenta de nuevo.'; }
   });
 
-  raiz.replaceChildren(
+  // replaceChildren escribiría "null" por las partes que no aplican (menú o páginas): se filtran.
+  raiz.replaceChildren(...[
     el('header', { className: 'cab' },
       L.logo ? el('img', { src: L.logo, alt: 'Logo de ' + L.nombre }) : null,
       el('h1', { textContent: L.nombre }),
@@ -189,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       el('p', { style: 'margin:0' }, 'Carta digital hecha gratis con ', el('a', { href: HERRAMIENTA, textContent: 'STPyme' }), '.'),
       el('p', { style: 'margin:4px 0 0' }, el('a', { href: HERRAMIENTA, textContent: '¿Tienes un local? Haz tu carta con QR gratis →' })),
       el('details', { className: 'reporte' }, el('summary', { textContent: 'Reportar esta carta' }), formRep)),
-  );
+  ].filter(Boolean));
 
   // Marca en el menú de arriba la sección que se está viendo.
   if (nav && 'IntersectionObserver' in window) {
