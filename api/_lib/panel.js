@@ -50,6 +50,10 @@ export function sesion(request) {
   }
 }
 
+// El Blob del panel se usa siempre con su propia clave: si el proyecto tiene BLOB_STORE_ID (por ejemplo de otro
+// almacenamiento conectado, como el de las cartas con QR), la librería lo preferiría y el CRM quedaría en el lugar equivocado.
+const conClave = (o = {}) => (process.env.BLOB_READ_WRITE_TOKEN ? { ...o, token: process.env.BLOB_READ_WRITE_TOKEN } : o);
+
 // Almacenamiento en memoria solo para pruebas locales (PANEL_STORE=memory).
 const memoria = (globalThis.__panelMemoria ??= { docs: {}, n: 0 });
 const enMemoria = () => process.env.PANEL_STORE === 'memory';
@@ -66,8 +70,8 @@ export async function leerDoc(ruta) {
   try {
     let ultimo;
     for (let intento = 0; intento < 3; intento++) {
-      const info = await head(ruta);
-      const r = await get(ruta, { access: 'private', useCache: false });
+      const info = await head(ruta, conClave());
+      const r = await get(ruta, conClave({ access: 'private', useCache: false }));
       if (!r || r.statusCode !== 200) return { data: null, etag: null };
       ultimo = { data: JSON.parse(await new Response(r.stream).text()), etag: info.etag };
       if (limpio(r.blob.etag) === limpio(info.etag)) break;
@@ -88,14 +92,14 @@ export async function guardarDoc(ruta, data, etag) {
     return { ok: true, etag: memoria.docs[ruta].etag };
   }
   try {
-    const r = await put(ruta, texto, {
+    const r = await put(ruta, texto, conClave({
       access: 'private',
       allowOverwrite: true,
       addRandomSuffix: false,
       contentType: 'application/json',
       cacheControlMaxAge: 60,
       ...(etag ? { ifMatch: etag } : {}),
-    });
+    }));
     return { ok: true, etag: r.etag };
   } catch (e) {
     if (e instanceof BlobPreconditionFailedError) return { ok: false };
@@ -111,18 +115,18 @@ export async function crearUnaVez(ruta, data = {}) {
     return true;
   }
   try {
-    await put(ruta, JSON.stringify(data), { access: 'private', allowOverwrite: false, addRandomSuffix: false, contentType: 'application/json' });
+    await put(ruta, JSON.stringify(data), conClave({ access: 'private', allowOverwrite: false, addRandomSuffix: false, contentType: 'application/json' }));
     return true;
   } catch (e) {
     // Si falló porque ya existe, no es un error: la marca ya estaba.
-    if (await head(ruta).then(() => true, () => false)) return false;
+    if (await head(ruta, conClave()).then(() => true, () => false)) return false;
     throw e;
   }
 }
 
 export async function existeDoc(ruta) {
   if (enMemoria()) return Boolean(memoria.docs[ruta]);
-  return head(ruta).then(() => true, (e) => { if (e instanceof BlobNotFoundError) return false; throw e; });
+  return head(ruta, conClave()).then(() => true, (e) => { if (e instanceof BlobNotFoundError) return false; throw e; });
 }
 
 export const leerDatos = () => leerDoc(DATA_PATH);
