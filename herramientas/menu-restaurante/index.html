@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crear menú o carta para restaurante gratis en PDF | STPyme</title>
+<meta name="description" content="Crea gratis la carta de tu restaurante, cafetería o local de comida y descárgala en PDF para imprimirla o mandarla por WhatsApp. Con tu logo, precios y 4 diseños. Sin registrarte.">
+<link rel="canonical" href="https://stpyme.cl/herramientas/menu-restaurante">
+<meta property="og:url" content="https://stpyme.cl/herramientas/menu-restaurante">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Crea la carta de tu restaurante gratis en PDF">
+<meta property="og:description" content="Escribe tus platos y precios, elige un diseño y descarga tu carta en PDF. Gratis y sin registrarte.">
+<meta property="og:locale" content="es_CL">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3Crect x='11' y='30' width='18' height='3.5' rx='1.75' fill='%23c5f33b'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<style>
+/* Colores de STPyme, iguales a stpyme.cl */
+:root{
+  color-scheme:dark;
+  --bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--soft:#1b2b1f;
+  --acc:#c5f33b;--acc-soft:rgba(197,243,59,.12);--wa:#1aa34a;--red:#ff8a80;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.sitio{padding:18px 0}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.15;margin:12px 0 8px;letter-spacing:-.02em}
+h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+.bajada{color:var(--muted);margin:0 0 20px;font-size:17px;max-width:720px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:0 0 18px}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
+label .opc{font-weight:400;color:var(--muted)}
+.campo{margin-bottom:14px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.ancho{grid-column:1/-1}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{resize:vertical;min-height:44px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:var(--acc)}
+input[type=file]{padding:8px}
+.logo-fila{display:flex;gap:10px;align-items:center}
+.logo-fila img{width:52px;height:52px;object-fit:contain;border:1px solid var(--line);border-radius:8px;background:#fff;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--acc)}
+.btn-primario{background:var(--acc);border-color:var(--acc);color:#0f1a12}
+.btn-primario:hover{background:#d6fa6e;border-color:#d6fa6e}
+.btn-wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn-chico{padding:6px 10px;font-size:14px}
+.btn-grande{padding:13px 18px;font-size:17px}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btn-x{border:0;background:transparent;color:var(--muted);font:inherit;font-size:15px;line-height:1;padding:8px;cursor:pointer;border-radius:8px;min-width:34px}
+.btn-x:hover{color:var(--ink);background:var(--soft)}
+.btn-x.borrar:hover,.btn-x.seguro{color:var(--red)}
+.btn-x.seguro{font-size:13px;font-weight:700;background:rgba(255,138,128,.1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.chip{border:1px dashed var(--line);background:var(--soft);color:var(--ink);border-radius:999px;padding:5px 11px;font:inherit;font-size:14px;cursor:pointer}
+.chip:hover{border-color:var(--acc);color:var(--acc)}
+.aviso{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--acc-soft);border:1px solid rgba(197,243,59,.35);border-radius:12px;padding:10px 14px;margin:0 0 16px;font-size:15px}
+.aviso b{color:var(--acc)}
+
+/* Dos columnas: editor y vista previa */
+.lienzo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:22px;align-items:start}
+.vista{position:sticky;top:12px}
+
+/* Estilos y colores */
+.estilos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.estilo{font:inherit;font-size:14px;font-weight:600;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;display:grid;gap:6px;justify-items:center}
+.estilo i{display:block;width:100%;height:34px;border-radius:7px;border:1px solid rgba(255,255,255,.08)}
+.estilo[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}
+.colores{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.color{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink);background:var(--bg)}
+.color[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 3px rgba(197,243,59,.3)}
+.segm{display:flex;gap:6px}
+.segm .btn{flex:1}
+.segm .btn[aria-pressed="true"]{border-color:var(--acc);color:var(--acc);background:var(--acc-soft)}
+
+/* Secciones y platos */
+.sec{border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 14px;background:var(--soft)}
+.sec-cab{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.sec-cab .sec-tit{font-weight:700;font-size:17px}
+.sec-nota{margin-bottom:10px;font-size:14px;padding:8px 12px}
+.plato{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:6px 8px;align-items:center;padding:10px 0;border-top:1px dashed var(--line)}
+.plato .p-desc{grid-column:1/-1;font-size:14px;padding:8px 12px;min-height:38px}
+.mov{display:flex;gap:2px}
+.vacio{color:var(--muted);font-size:15px;padding:6px 0 10px}
+
+/* Vista previa: hojas en blanco como el PDF */
+.hojas{display:grid;gap:14px;background:#0b140d;border:1px solid var(--line);border-radius:16px;padding:14px;max-height:calc(100vh - 210px);overflow:auto}
+.hoja{display:block;width:100%;height:auto;border-radius:3px;box-shadow:0 6px 24px rgba(0,0,0,.5);background:#fff}
+.hoja text{white-space:pre}
+.barra{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.barra .btn{flex:1 1 140px}
+.estado{min-height:1.3em;margin:8px 0 0;font-size:14px;color:var(--muted)}
+.cta{border-color:var(--acc);background:linear-gradient(180deg,var(--acc-soft),var(--card) 55%)}
+.cta ul{padding-left:20px;margin:10px 0 16px}
+.cta li{margin:4px 0}
+details{border-top:1px solid var(--line);padding:12px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:8px 0 0;color:var(--muted)}
+footer.sitio{padding:10px 0 40px;color:var(--muted);font-size:14px}
+.solo-cel{display:none}
+
+@media (max-width:980px){
+  .lienzo{grid-template-columns:minmax(0,1fr)}
+  .vista{position:static}
+  .hojas{max-height:none}
+  .hoja{max-width:520px;margin:0 auto}
+  .solo-cel{display:inline-flex}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .card{padding:16px}
+  .estilos{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .plato{grid-template-columns:minmax(0,1fr) 96px}
+  .plato .mov{grid-column:1/-1;justify-content:flex-end;order:4}
+  .sec{padding:12px 10px}
+  .hojas{padding:8px;margin:0 -8px}
+}
+@media print{
+  body{background:#fff}
+  body>*:not(main),main>*:not(.lienzo),.lienzo>*:not(.vista),.vista>*:not(.hojas){display:none!important}
+  .wrap{max-width:none;padding:0}
+  .hojas{display:block;background:none;border:0;padding:0;max-height:none;overflow:visible}
+  .hoja{box-shadow:none;border-radius:0;break-after:page;margin:0;max-width:none}
+}
+</style>
+<style id="pagina-impresion"></style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"¿Es gratis crear la carta del restaurante?","acceptedAnswer":{"@type":"Answer","text":"Sí, es gratis y no necesitas registrarte. Tu carta queda guardada solo en tu dispositivo; no se envía a ningún servidor."}},
+{"@type":"Question","name":"¿Cómo comparto la carta con mis clientes?","acceptedAnswer":{"@type":"Answer","text":"Descarga el PDF y mándalo por WhatsApp, súbelo a tus historias o al link de tu Instagram, o imprímelo para las mesas y el mostrador."}},
+{"@type":"Question","name":"¿Puedo cambiar los precios después?","acceptedAnswer":{"@type":"Answer","text":"Sí. La carta queda guardada en este dispositivo: cambias lo que necesites y descargas el PDF de nuevo."}},
+{"@type":"Question","name":"¿Qué debe tener la carta de un restaurante?","acceptedAnswer":{"@type":"Answer","text":"El nombre y logo del local, los platos ordenados por secciones con una descripción corta y su precio, y los datos para encontrarte: dirección, WhatsApp, Instagram y horario."}}
+]}
+</script>
+</head>
+<body>
+<header class="sitio wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/herramientas">Herramientas gratis</a></div></header>
+
+<main class="wrap">
+  <h1>Crea la carta de tu restaurante en PDF</h1>
+  <p class="bajada">Escribe tus platos y precios, elige un diseño y descarga tu carta en PDF para imprimirla o mandarla por WhatsApp. Gratis y sin registrarte.</p>
+
+  <div class="lienzo">
+    <div class="editor">
+      <p class="aviso" id="aviso-ejemplo" hidden><span><b>Esta es una carta de ejemplo.</b> Cambia los datos por los de tu local, o empieza con una hoja en blanco.</span><button type="button" class="btn btn-chico" id="de-cero">Empezar de cero</button></p>
+
+      <section class="card" aria-labelledby="t-local">
+        <h2 id="t-local">Tu local</h2>
+        <p class="sub">Se guarda en este dispositivo.</p>
+        <div class="grid">
+          <div class="campo"><label for="l-nombre">Nombre del local</label><input id="l-nombre" data-local="nombre" maxlength="50" autocomplete="organization" placeholder="Ej: Picada Don Tito"></div>
+          <div class="campo"><label for="l-frase">Frase <span class="opc">(opcional)</span></label><input id="l-frase" data-local="frase" maxlength="70" placeholder="Ej: Comida casera desde 1998"></div>
+          <div class="campo"><label for="l-tel">WhatsApp o teléfono <span class="opc">(opcional)</span></label><input id="l-tel" data-local="tel" maxlength="30" inputmode="tel" placeholder="+56 9 1234 5678"></div>
+          <div class="campo"><label for="l-ig">Instagram <span class="opc">(opcional)</span></label><input id="l-ig" data-local="ig" maxlength="40" placeholder="@tulocal"></div>
+          <div class="campo"><label for="l-dir">Dirección <span class="opc">(opcional)</span></label><input id="l-dir" data-local="dir" maxlength="80" autocomplete="street-address"></div>
+          <div class="campo"><label for="l-horario">Horario <span class="opc">(opcional)</span></label><input id="l-horario" data-local="horario" maxlength="60" placeholder="Ej: Lunes a sábado, 12:00 a 22:00"></div>
+          <div class="campo ancho"><label for="l-logo">Logo <span class="opc">(opcional)</span></label>
+            <div class="logo-fila"><img id="logo-mini" alt="" hidden><input id="l-logo" type="file" accept="image/*"><button type="button" class="btn-x" id="quitar-logo" title="Quitar logo" aria-label="Quitar logo" hidden>✕</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="t-diseno">
+        <h2 id="t-diseno">Diseño</h2>
+        <p class="sub">Elige un estilo y un color. La vista previa cambia al tiro.</p>
+        <div class="estilos" id="estilos" role="group" aria-label="Estilo"></div>
+        <p class="lbl" style="font-weight:600;font-size:14px;margin:0 0 6px">Color</p>
+        <div class="colores" id="colores" role="group" aria-label="Color"></div>
+        <div class="grid">
+          <div class="campo"><p style="font-weight:600;font-size:14px;margin:0 0 6px">Columnas</p><div class="segm" id="cols" role="group" aria-label="Columnas"><button type="button" class="btn btn-chico" data-v="1">1 columna</button><button type="button" class="btn btn-chico" data-v="2">2 columnas</button></div></div>
+          <div class="campo"><p style="font-weight:600;font-size:14px;margin:0 0 6px">Tamaño de hoja</p><div class="segm" id="hoja" role="group" aria-label="Tamaño de hoja"><button type="button" class="btn btn-chico" data-v="a4">A4</button><button type="button" class="btn btn-chico" data-v="carta">Carta</button></div></div>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="t-carta">
+        <h2 id="t-carta">Tus platos</h2>
+        <p class="sub">Agrega secciones y, dentro de cada una, tus platos con su precio. La descripción es opcional.</p>
+        <div id="secciones"></div>
+        <p class="sub" style="margin:4px 0 6px">Agregar sección:</p>
+        <div class="chips" id="chips-sec">
+          <button type="button" class="chip">Entradas</button><button type="button" class="chip">Platos de fondo</button><button type="button" class="chip">Sándwiches</button><button type="button" class="chip">Completos</button><button type="button" class="chip">Pizzas</button><button type="button" class="chip">Ensaladas</button><button type="button" class="chip">Menú del día</button><button type="button" class="chip">Promociones</button><button type="button" class="chip">Postres</button><button type="button" class="chip">Bebidas</button><button type="button" class="chip">Jugos naturales</button><button type="button" class="chip">Cafetería</button><button type="button" class="chip">+ Otra sección</button>
+        </div>
+        <a class="btn btn-primario solo-cel" href="#t-vista" style="width:100%">Ver mi carta ↓</a>
+      </section>
+    </div>
+
+    <section class="vista" aria-labelledby="t-vista">
+      <h2 id="t-vista" style="margin:0 0 4px">Así queda tu carta</h2>
+      <p class="sub" id="vista-sub">Se actualiza sola mientras escribes.</p>
+      <div class="hojas" id="hojas" aria-label="Vista previa de la carta"></div>
+      <div class="barra">
+        <button type="button" class="btn btn-primario btn-grande" id="pdf">⬇ Descargar PDF</button>
+        <button type="button" class="btn btn-wa" id="compartir" hidden>Compartir</button>
+        <button type="button" class="btn" id="imprimir">Imprimir</button>
+      </div>
+      <p class="estado" id="estado" role="status"></p>
+    </section>
+  </div>
+
+  <section class="card cta" aria-labelledby="t-cta" style="margin-top:10px">
+    <h2 id="t-cta">¿Quieres tu carta en internet?</h2>
+    <p style="margin:0">En STPyme hacemos páginas web para restaurantes y locales de comida:</p>
+    <ul>
+      <li>Tu carta siempre al día, con fotos de tus platos.</li>
+      <li>Pedidos directo a tu WhatsApp, sin pagar comisión a las apps.</li>
+      <li>Te ayudamos a aparecer en Google cuando buscan comida en tu comuna.</li>
+    </ul>
+    <a class="btn btn-primario" href="https://stpyme.cl/#contacto">Quiero que me escriban →</a>
+  </section>
+
+  <section class="card" aria-labelledby="t-faq">
+    <h2 id="t-faq">Preguntas frecuentes</h2>
+    <details><summary>¿Es gratis?</summary><p>Sí, es gratis y no necesitas registrarte. Tu carta queda guardada solo en tu dispositivo; no se envía a ningún servidor.</p></details>
+    <details><summary>¿Cómo comparto la carta con mis clientes?</summary><p>Descarga el PDF y mándalo por WhatsApp, súbelo a tus historias o al link de tu Instagram, o imprímelo para las mesas y el mostrador.</p></details>
+    <details><summary>¿Puedo cambiar los precios después?</summary><p>Sí. La carta queda guardada en este dispositivo: cambias lo que necesites y descargas el PDF de nuevo.</p></details>
+    <details><summary>¿Qué debe tener la carta de un restaurante?</summary><p>El nombre y logo del local, los platos ordenados por secciones con una descripción corta y su precio, y los datos para encontrarte: dirección, WhatsApp, Instagram y horario.</p></details>
+  </section>
+</main>
+
+<footer class="sitio wrap">Herramienta gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a>: ayudamos a crecer a las pymes de Chile. · <a href="/herramientas">Más herramientas</a> · STP CHILE SpA · RUT 78.534.708-0 · <a href="/privacidad">Privacidad</a></footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = (s, c = document) => c.querySelector(s);
+  const CLAVE = 'stpyme-menu-v1';
+  const PT = 0.3528; // 1 punto tipográfico en mm
+  const uid = () => Math.random().toString(36).slice(2, 9);
+
+  const ESTILOS = {
+    clasico: { nombre: 'Clásico', bg: '#fbf6ec', ink: '#2b2118', muted: '#76675a', acc: '#9c2f22', cab: 'times', txt: 'times', marco: true, mayus: true, centro: true },
+    moderno: { nombre: 'Moderno', bg: '#ffffff', ink: '#1d1d1f', muted: '#6b6b70', acc: '#e4572e', cab: 'helvetica', txt: 'helvetica', barra: true },
+    pizarra: { nombre: 'Pizarra', bg: '#23272b', ink: '#f4f1ea', muted: '#b8b2a7', acc: '#f2c14e', cab: 'helvetica', txt: 'helvetica', mayus: true },
+    fresco: { nombre: 'Fresco', bg: '#f2f7ee', ink: '#1f3324', muted: '#5d7262', acc: '#3f8f3a', cab: 'helvetica', txt: 'helvetica', pildora: true, barra: true },
+  };
+  const COLORES = ['', '#9c2f22', '#e4572e', '#d4a017', '#3f8f3a', '#1f6fb2', '#7b3fa0', '#c2185b'];
+  const HOJAS = { a4: [210, 297], carta: [215.9, 279.4] };
+  const FAMILIA = { helvetica: 'Helvetica, Arial, "Liberation Sans", sans-serif', times: '"Times New Roman", Times, "Liberation Serif", serif' };
+
+  const EJEMPLO = () => ({
+    ejemplo: true,
+    local: { nombre: 'Picada Don Tito', frase: 'Comida casera desde 1998', tel: '+56 9 1234 5678', ig: '@picadadontito', dir: 'Av. Principal 123', horario: 'Lunes a sábado, 12:00 a 22:00', logo: '', logoR: 1 },
+    diseno: { estilo: 'clasico', color: '', cols: 2, hoja: 'a4' },
+    secciones: [
+      { id: uid(), titulo: 'Sándwiches', nota: 'En pan frica o marraqueta', items: [
+        { id: uid(), nombre: 'Barros Luco', desc: 'Carne de vacuno y queso fundido', precio: '7990' },
+        { id: uid(), nombre: 'Chacarero', desc: 'Carne, porotos verdes, tomate y ají verde', precio: '8490' },
+        { id: uid(), nombre: 'Italiano', desc: 'Carne, palta, tomate y mayonesa casera', precio: '7490' },
+        { id: uid(), nombre: 'Ave palta', desc: 'Pechuga de pollo y palta', precio: '6990' },
+      ] },
+      { id: uid(), titulo: 'Completos', nota: '', items: [
+        { id: uid(), nombre: 'Completo italiano', desc: 'Tomate, palta y mayonesa', precio: '2990' },
+        { id: uid(), nombre: 'Completo dinámico', desc: 'Tomate, palta, chucrut, salsa americana y mayo', precio: '3290' },
+        { id: uid(), nombre: 'As italiano', desc: 'Carne de vacuno, tomate, palta y mayo', precio: '5990' },
+      ] },
+      { id: uid(), titulo: 'Platos de fondo', nota: '', items: [
+        { id: uid(), nombre: 'Lomo a lo pobre', desc: 'Con papas fritas, cebolla caramelizada y huevos fritos', precio: '11990' },
+        { id: uid(), nombre: 'Pastel de choclo', desc: 'Receta de la casa', precio: '8990' },
+        { id: uid(), nombre: 'Cazuela de vacuno', desc: 'Con zapallo, papa, choclo y arroz', precio: '7990' },
+      ] },
+      { id: uid(), titulo: 'Bebidas', nota: '', items: [
+        { id: uid(), nombre: 'Bebida en lata', desc: '', precio: '1800' },
+        { id: uid(), nombre: 'Jugo natural', desc: 'Frutilla, mango o piña', precio: '2990' },
+        { id: uid(), nombre: 'Café o té', desc: '', precio: '1990' },
+      ] },
+      { id: uid(), titulo: 'Postres', nota: '', items: [
+        { id: uid(), nombre: 'Leche asada', desc: '', precio: '2990' },
+        { id: uid(), nombre: 'Mote con huesillo', desc: '', precio: '2490' },
+      ] },
+    ],
+  });
+  const VACIO = () => ({
+    ejemplo: false,
+    local: { nombre: '', frase: '', tel: '', ig: '', dir: '', horario: '', logo: '', logoR: 1 },
+    diseno: { estilo: 'clasico', color: '', cols: 1, hoja: 'a4' },
+    secciones: [{ id: uid(), titulo: 'Platos de fondo', nota: '', items: [{ id: uid(), nombre: '', desc: '', precio: '' }] }],
+  });
+
+  let e;
+  try { e = JSON.parse(localStorage.getItem(CLAVE)); } catch { e = null; }
+  if (!e || !e.local || !Array.isArray(e.secciones)) e = EJEMPLO();
+  e.diseno = { ...VACIO().diseno, ...e.diseno };
+
+  let tGuardar;
+  const guardar = () => {
+    clearTimeout(tGuardar);
+    tGuardar = setTimeout(() => {
+      try { localStorage.setItem(CLAVE, JSON.stringify(e)); }
+      catch { estado('No se pudo guardar en este dispositivo (¿logo muy pesado?). La carta igual se puede descargar.'); }
+    }, 300);
+  };
+  const estado = (t) => { $('#estado').textContent = t; };
+
+  // ---------- Texto: limpieza, medidas y cortes de línea ----------
+  // El PDF usa las letras estándar (Helvetica y Times), que traen tildes, ñ, ¿ y ¡, pero no emojis.
+  const limpiar = (s) => String(s || '').replace(/[“”«»]/g, '"').replace(/[‘’´]/g, "'").replace(/[–—]/g, '-').replace(/…/g, '...').replace(/[•·]/g, '·')
+    .replace(/[^\x20-\x7E\xA0-\xFF]/g, '').replace(/\s+/g, ' ').trim();
+  const miles = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const precioTxt = (p) => {
+    const t = limpiar(p);
+    if (!t) return '';
+    const d = t.replace(/[$.\s]/g, '');
+    return /^\d+$/.test(d) ? '$' + miles(Number(d)) : t;
+  };
+  let medidor = null;
+  const lienzo = document.createElement('canvas').getContext('2d');
+  const ancho = (s, fuente, estilo, tam) => {
+    if (!medidor && window.jspdf) { try { medidor = new window.jspdf.jsPDF({ unit: 'mm' }); } catch { medidor = null; } }
+    if (medidor) { medidor.setFont(fuente, estilo); medidor.setFontSize(tam); return medidor.getTextWidth(s); }
+    lienzo.font = (estilo.includes('italic') ? 'italic ' : '') + (estilo.includes('bold') ? 'bold ' : '') + (tam * PT * 10) + 'px ' + FAMILIA[fuente];
+    return lienzo.measureText(s).width / 10;
+  };
+  const partir = (s, w, f) => {
+    const lineas = [];
+    let l = '';
+    for (const p of String(s).split(' ').filter(Boolean)) {
+      const prueba = l ? l + ' ' + p : p;
+      if (!l || ancho(prueba, ...f) <= w) l = prueba;
+      else { lineas.push(l); l = p; }
+    }
+    if (l) lineas.push(l);
+    return lineas;
+  };
+
+  // ---------- Armado de la carta: una lista de dibujos por hoja, en milímetros ----------
+  function componer() {
+    const est = { ...(ESTILOS[e.diseno.estilo] || ESTILOS.clasico) };
+    if (e.diseno.color) est.acc = e.diseno.color;
+    const [W, H] = HOJAS[e.diseno.hoja] || HOJAS.a4;
+    const cols = Number(e.diseno.cols) === 2 ? 2 : 1;
+    const M = est.marco ? 18 : 16;
+    const GAP = 12;
+    const colW = (W - 2 * M - (cols - 1) * GAP) / cols;
+    const L = e.local;
+    const nombre = limpiar(L.nombre) || 'Nombre de tu local';
+    const contacto = [L.dir, L.tel, L.ig, L.horario].map(limpiar).filter(Boolean);
+    const fPie = [est.txt, 'normal', 9];
+    const pieL = contacto.length ? partir(contacto.join('   ·   '), W - 2 * M, fPie).slice(0, 3) : [];
+    const abajo = est.marco ? H - 12.5 : H - 7;
+    const pie1 = abajo - 5.5 - (pieL.length - 1) * 4.2;
+    const yMax = pieL.length ? pie1 - 9 : abajo - 8;
+    const arriba = est.marco ? 20 : 17;
+    const fNom = [est.txt, 'bold', 11.5];
+    const fPr = [est.txt, 'bold', 11.5];
+    const fDesc = [est.txt, est.marco ? 'italic' : 'normal', 9.5];
+
+    const paginas = [];
+    let ops, col, y, yCuerpo;
+    const T = (x, yy, s, f, color, align) => ops.push({ t: 'text', x, y: yy, s, font: f[0], style: f[1], size: f[2], color, align: align || 'left' });
+
+    const nuevaHoja = (primera) => {
+      ops = [];
+      paginas.push(ops);
+      col = 0;
+      ops.push({ t: 'rect', x: 0, y: 0, w: W, h: H, fill: est.bg });
+      if (est.marco) {
+        ops.push({ t: 'rect', x: 7, y: 7, w: W - 14, h: H - 14, stroke: est.acc, lw: 0.8 });
+        ops.push({ t: 'rect', x: 9, y: 9, w: W - 18, h: H - 18, stroke: est.acc, lw: 0.25 });
+      }
+      if (est.barra) ops.push({ t: 'rect', x: 0, y: 0, w: W, h: 4, fill: est.acc });
+      if (pieL.length) {
+        ops.push({ t: 'line', x1: W / 2 - 18, y1: pie1 - 5.5, x2: W / 2 + 18, y2: pie1 - 5.5, color: est.acc, lw: 0.4 });
+        pieL.forEach((l, i) => T(W / 2, pie1 + i * 4.2, l, fPie, est.muted, 'center'));
+      }
+      T(W / 2, abajo, 'Carta hecha gratis en stpyme.cl/herramientas/menu-restaurante', ['helvetica', 'normal', 6.5], est.muted, 'center');
+      y = arriba;
+      if (primera) {
+        if (L.logo) {
+          const r = Number(L.logoR) || 1;
+          let h = 26, w = h * r;
+          if (w > 70) { w = 70; h = w / r; }
+          ops.push({ t: 'img', x: (W - w) / 2, y, w, h, src: L.logo });
+          y += h + 6;
+        }
+        let tam = 32;
+        while (tam > 20 && ancho(nombre, est.cab, 'bold', tam) > W - 2 * M) tam -= 1;
+        for (const l of partir(nombre, W - 2 * M, [est.cab, 'bold', tam])) {
+          T(W / 2, y + tam * PT * 0.78, l, [est.cab, 'bold', tam], est.ink, 'center');
+          y += tam * PT * 1.12;
+        }
+        const frase = limpiar(L.frase);
+        if (frase) { y += 1.5; T(W / 2, y + 4, frase, [est.txt, 'italic', 12], est.muted, 'center'); y += 6.5; }
+        y += 4;
+        ops.push({ t: 'line', x1: W / 2 - 20, y1: y, x2: W / 2 + 20, y2: y, color: est.acc, lw: 0.7 });
+        y += 10;
+      } else {
+        T(W / 2, y + 3, nombre, [est.cab, 'bold', 11], est.muted, 'center');
+        y += 11;
+      }
+      yCuerpo = y;
+    };
+    const xCol = () => M + col * (colW + GAP);
+    const hacerEspacio = (h) => {
+      if (y + h <= yMax || y === yCuerpo) return;
+      if (col < cols - 1) { col += 1; y = yCuerpo; }
+      else nuevaHoja(false);
+    };
+    const medir = (it) => {
+      const pr = precioTxt(it.precio);
+      const prW = pr ? ancho(pr, ...fPr) : 0;
+      const nomL = partir(limpiar(it.nombre) || ' ', colW - prW - (pr ? 9 : 0), fNom);
+      const descL = it.desc ? partir(limpiar(it.desc), colW - (pr ? 12 : 0), fDesc) : [];
+      const alto = 4 + (nomL.length - 1) * 4.9 + (descL.length ? 4.4 + (descL.length - 1) * 4.2 : 0) + 4.4;
+      return { pr, prW, nomL, descL, alto };
+    };
+
+    nuevaHoja(true);
+    let alguno = false;
+    for (const s of e.secciones) {
+      const items = s.items.filter((it) => limpiar(it.nombre) || precioTxt(it.precio)).map(medir);
+      let tit = limpiar(s.titulo);
+      if (!tit && !items.length) continue;
+      alguno = true;
+      if (est.mayus) tit = tit.toUpperCase();
+      const fTit = [est.cab, 'bold', est.mayus ? 13.5 : 15];
+      const notaL = s.nota && limpiar(s.nota) ? partir(limpiar(s.nota), colW, [est.txt, 'italic', 9.5]) : [];
+      const altoTit = (tit ? 11 : 0) + notaL.length * 4.2 + (notaL.length ? 2 : 0);
+      if (y !== yCuerpo) y += 5;
+      // Si la sección completa cabe en una columna nueva pero no en lo que queda, empieza en la siguiente columna.
+      const altoSec = altoTit + items.reduce((t, m) => t + m.alto, 0);
+      if (y + altoSec > yMax && yCuerpo + altoSec <= yMax) hacerEspacio(altoSec);
+      else hacerEspacio(altoTit + (items[0] ? items[0].alto : 0));
+      let x = xCol();
+      if (tit) {
+        if (est.pildora) {
+          const tw = ancho(tit, ...fTit);
+          ops.push({ t: 'rect', x, y, w: Math.min(colW, tw + 9), h: 8.4, fill: est.acc, r: 4.2 });
+          T(x + 4.5, y + 5.9, tit, fTit, '#ffffff');
+        } else if (est.centro) {
+          const tw = ancho(tit, ...fTit);
+          const cx = x + colW / 2;
+          T(cx, y + 6, tit, fTit, est.acc, 'center');
+          const lado = Math.min(22, (colW - tw) / 2 - 4);
+          if (lado > 4) {
+            ops.push({ t: 'line', x1: cx - tw / 2 - 3 - lado, y1: y + 4.6, x2: cx - tw / 2 - 3, y2: y + 4.6, color: est.acc, lw: 0.3 });
+            ops.push({ t: 'line', x1: cx + tw / 2 + 3, y1: y + 4.6, x2: cx + tw / 2 + 3 + lado, y2: y + 4.6, color: est.acc, lw: 0.3 });
+          }
+        } else {
+          T(x, y + 6, tit, fTit, est.acc);
+          ops.push({ t: 'line', x1: x, y1: y + 8.8, x2: x + colW, y2: y + 8.8, color: est.acc, lw: 0.35 });
+        }
+        y += 11;
+      }
+      notaL.forEach((l) => { T(est.centro ? x + colW / 2 : x, y + 2.6, l, [est.txt, 'italic', 9.5], est.muted, est.centro ? 'center' : 'left'); y += 4.2; });
+      if (notaL.length) y += 2;
+      for (const m of items) {
+        hacerEspacio(m.alto);
+        x = xCol();
+        const b = y + 4;
+        m.nomL.forEach((l, i) => T(x, b + i * 4.9, l, fNom, est.ink));
+        const bl = b + (m.nomL.length - 1) * 4.9;
+        if (m.pr) {
+          T(x + colW, bl, m.pr, fPr, est.acc, 'right');
+          const fin = x + ancho(m.nomL[m.nomL.length - 1], ...fNom) + 2;
+          const ini = x + colW - m.prW - 2;
+          if (ini - fin > 4) ops.push({ t: 'line', x1: fin, y1: bl - 0.5, x2: ini, y2: bl - 0.5, color: est.muted, lw: 0.4, dash: [0.01, 1.4] });
+        }
+        m.descL.forEach((l, i) => T(x, bl + 4.4 + i * 4.2, l, fDesc, est.muted));
+        y += m.alto;
+      }
+    }
+    if (!alguno) T(W / 2, yCuerpo + 20, 'Agrega tus platos y aquí aparece tu carta', [est.txt, 'italic', 12], est.muted, 'center');
+    return { paginas, W, H, nombre };
+  }
+
+  // ---------- Vista previa (SVG) ----------
+  const NS = 'http://www.w3.org/2000/svg';
+  function aSVG(ops, W, H) {
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('class', 'hoja');
+    svg.setAttribute('role', 'img');
+    for (const o of ops) {
+      let el;
+      const a = (k, v) => el.setAttribute(k, v);
+      if (o.t === 'rect') {
+        el = document.createElementNS(NS, 'rect');
+        a('x', o.x); a('y', o.y); a('width', o.w); a('height', o.h);
+        if (o.r) { a('rx', o.r); a('ry', o.r); }
+        a('fill', o.fill || 'none');
+        if (o.stroke) { a('stroke', o.stroke); a('stroke-width', o.lw); }
+      } else if (o.t === 'line') {
+        el = document.createElementNS(NS, 'line');
+        a('x1', o.x1); a('y1', o.y1); a('x2', o.x2); a('y2', o.y2);
+        a('stroke', o.color); a('stroke-width', o.lw);
+        if (o.dash) { a('stroke-dasharray', o.dash.join(' ')); a('stroke-linecap', 'round'); }
+      } else if (o.t === 'text') {
+        el = document.createElementNS(NS, 'text');
+        a('x', o.x); a('y', o.y); a('fill', o.color);
+        a('font-family', FAMILIA[o.font]); a('font-size', o.size * PT);
+        if (o.style.includes('bold')) a('font-weight', 'bold');
+        if (o.style.includes('italic')) a('font-style', 'italic');
+        a('text-anchor', { left: 'start', center: 'middle', right: 'end' }[o.align]);
+        el.textContent = o.s;
+      } else if (o.t === 'img') {
+        el = document.createElementNS(NS, 'image');
+        a('x', o.x); a('y', o.y); a('width', o.w); a('height', o.h);
+        a('preserveAspectRatio', 'none'); a('href', o.src);
+      }
+      if (el) svg.append(el);
+    }
+    return svg;
+  }
+  let ultima;
+  const dibujar = () => {
+    ultima = componer();
+    const { paginas, W, H } = ultima;
+    $('#hojas').replaceChildren(...paginas.map((ops, i) => { const s = aSVG(ops, W, H); s.setAttribute('aria-label', `Hoja ${i + 1} de ${paginas.length}`); return s; }));
+    $('#vista-sub').textContent = paginas.length > 1
+      ? `Tu carta ocupa ${paginas.length} hojas.` + (Number(e.diseno.cols) === 1 ? ' Con 2 columnas cabe más en cada hoja.' : '')
+      : 'Se actualiza sola mientras escribes.';
+    $('#pagina-impresion').textContent = `@media print{@page{size:${W}mm ${H}mm;margin:0}.hoja{width:${W}mm;height:${H}mm}}`;
+  };
+  let tDibujo;
+  const cambio = () => { guardar(); clearTimeout(tDibujo); tDibujo = setTimeout(dibujar, 120); };
+
+  // ---------- PDF ----------
+  function aPDF() {
+    const { paginas, W, H } = componer();
+    const doc = new window.jspdf.jsPDF({ unit: 'mm', format: [W, H], orientation: 'portrait', compress: true });
+    paginas.forEach((ops, i) => {
+      if (i) doc.addPage([W, H], 'portrait');
+      for (const o of ops) {
+        if (o.t === 'rect') {
+          if (o.fill) doc.setFillColor(o.fill);
+          if (o.stroke) { doc.setDrawColor(o.stroke); doc.setLineWidth(o.lw); }
+          const modo = o.fill && o.stroke ? 'FD' : o.fill ? 'F' : 'S';
+          if (o.r) doc.roundedRect(o.x, o.y, o.w, o.h, o.r, o.r, modo); else doc.rect(o.x, o.y, o.w, o.h, modo);
+        } else if (o.t === 'line') {
+          doc.setDrawColor(o.color); doc.setLineWidth(o.lw);
+          doc.setLineCap(o.dash ? 'round' : 'butt');
+          doc.setLineDashPattern(o.dash || [], 0);
+          doc.line(o.x1, o.y1, o.x2, o.y2);
+          doc.setLineDashPattern([], 0);
+        } else if (o.t === 'text') {
+          doc.setFont(o.font, o.style); doc.setFontSize(o.size); doc.setTextColor(o.color);
+          doc.text(o.s, o.x, o.y, { align: o.align });
+        } else if (o.t === 'img') {
+          doc.addImage(o.src, 'PNG', o.x, o.y, o.w, o.h, 'logo', 'FAST');
+        }
+      }
+    });
+    doc.setProperties({ title: 'Carta - ' + limpiar(e.local.nombre || 'mi local'), creator: 'STPyme - stpyme.cl/herramientas/menu-restaurante' });
+    return doc;
+  }
+  const archivo = () => 'carta-' + (limpiar(e.local.nombre).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'mi-local') + '.pdf';
+  const sinLibreria = () => { estado('No se pudo preparar el PDF (revisa tu internet). Usa "Imprimir" y elige "Guardar como PDF".'); };
+
+  $('#pdf').addEventListener('click', () => {
+    if (!window.jspdf) return sinLibreria();
+    try { aPDF().save(archivo()); estado('✓ Listo, tu carta se descargó en PDF.'); }
+    catch { estado('No se pudo crear el PDF. Intenta de nuevo o usa "Imprimir".'); }
+  });
+  const puedeCompartir = !!(navigator.canShare && window.File && navigator.canShare({ files: [new File(['x'], 'x.pdf', { type: 'application/pdf' })] }));
+  $('#compartir').hidden = !puedeCompartir;
+  $('#compartir').addEventListener('click', async () => {
+    if (!window.jspdf) return sinLibreria();
+    try {
+      const f = new File([aPDF().output('blob')], archivo(), { type: 'application/pdf' });
+      await navigator.share({ files: [f], title: 'Carta ' + limpiar(e.local.nombre) });
+    } catch (err) { if (err && err.name !== 'AbortError') estado('No se pudo compartir. Descarga el PDF y envíalo desde tus archivos.'); }
+  });
+  $('#imprimir').addEventListener('click', () => { dibujar(); window.print(); });
+
+  // ---------- Formulario: datos del local ----------
+  document.querySelectorAll('[data-local]').forEach((inp) => {
+    inp.value = e.local[inp.dataset.local] || '';
+    inp.addEventListener('input', () => { e.local[inp.dataset.local] = inp.value; cambio(); });
+  });
+  const verLogo = () => {
+    $('#logo-mini').hidden = !e.local.logo;
+    $('#quitar-logo').hidden = !e.local.logo;
+    if (e.local.logo) $('#logo-mini').src = e.local.logo;
+  };
+  verLogo();
+  $('#l-logo').addEventListener('change', (ev) => {
+    const f = ev.target.files && ev.target.files[0];
+    if (!f) return;
+    const img = new Image();
+    img.onload = () => {
+      const max = 600;
+      const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.naturalWidth * k));
+      c.height = Math.max(1, Math.round(img.naturalHeight * k));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      e.local.logo = c.toDataURL('image/png');
+      e.local.logoR = c.width / c.height;
+      URL.revokeObjectURL(img.src);
+      verLogo(); cambio();
+    };
+    img.onerror = () => estado('No se pudo leer esa imagen. Prueba con un JPG o PNG.');
+    img.src = URL.createObjectURL(f);
+  });
+  $('#quitar-logo').addEventListener('click', () => { e.local.logo = ''; $('#l-logo').value = ''; verLogo(); cambio(); });
+
+  // ---------- Diseño ----------
+  $('#estilos').replaceChildren(...Object.entries(ESTILOS).map(([k, s]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'estilo'; b.dataset.v = k;
+    const i = document.createElement('i');
+    i.style.background = `linear-gradient(${s.acc} 0 22%, ${s.bg} 22%)`;
+    b.append(i, s.nombre);
+    return b;
+  }));
+  $('#colores').replaceChildren(...COLORES.map((c) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'color'; b.dataset.v = c;
+    if (c) { b.style.background = c; b.setAttribute('aria-label', 'Color ' + c); }
+    else { b.textContent = 'Auto'; b.setAttribute('aria-label', 'Color del estilo'); b.title = 'El color del estilo'; }
+    return b;
+  }));
+  const marcar = () => {
+    document.querySelectorAll('#estilos .estilo').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === e.diseno.estilo)));
+    document.querySelectorAll('#colores .color').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === (e.diseno.color || ''))));
+    document.querySelectorAll('#cols .btn').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.v) === Number(e.diseno.cols))));
+    document.querySelectorAll('#hoja .btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === e.diseno.hoja)));
+  };
+  const elegir = (sel, campo, num) => $(sel).addEventListener('click', (ev) => {
+    const b = ev.target.closest('button');
+    if (!b) return;
+    e.diseno[campo] = num ? Number(b.dataset.v) : b.dataset.v;
+    marcar(); cambio();
+  });
+  elegir('#estilos', 'estilo'); elegir('#colores', 'color'); elegir('#cols', 'cols', true); elegir('#hoja', 'hoja');
+  marcar();
+
+  // ---------- Secciones y platos ----------
+  const crear = (tag, props) => {
+    const { dataset, ...resto } = props || {};
+    const el = Object.assign(document.createElement(tag), resto);
+    if (dataset) Object.assign(el.dataset, dataset);
+    return el;
+  };
+  const boton = (txt, accion, titulo, extra) => crear('button', { type: 'button', className: 'btn-x' + (extra ? ' ' + extra : ''), textContent: txt, title: titulo, ariaLabel: titulo, dataset: { accion } });
+  function pintarSecciones() {
+    const cont = $('#secciones');
+    cont.replaceChildren(...e.secciones.map((s) => {
+      const sec = crear('div', { className: 'sec' });
+      sec.dataset.sec = s.id;
+      const cab = crear('div', { className: 'sec-cab' });
+      cab.append(
+        crear('input', { className: 'sec-tit', value: s.titulo, maxLength: 40, placeholder: 'Nombre de la sección', ariaLabel: 'Nombre de la sección', dataset: { k: 'titulo' } }),
+        boton('↑', 'sec-subir', 'Subir sección'), boton('↓', 'sec-bajar', 'Bajar sección'), boton('✕', 'sec-borrar', 'Borrar sección', 'borrar'),
+      );
+      const nota = crear('input', { className: 'sec-nota', value: s.nota || '', maxLength: 90, placeholder: 'Nota de la sección (opcional). Ej: Todos con papas fritas', ariaLabel: 'Nota de la sección', dataset: { k: 'nota' } });
+      const lista = crear('div');
+      if (!s.items.length) lista.append(crear('p', { className: 'vacio', textContent: 'Aún no hay platos en esta sección.' }));
+      s.items.forEach((it) => {
+        const p = crear('div', { className: 'plato' });
+        p.dataset.item = it.id;
+        const mov = crear('div', { className: 'mov' });
+        mov.append(boton('↑', 'subir', 'Subir plato'), boton('↓', 'bajar', 'Bajar plato'), boton('✕', 'borrar', 'Borrar plato', 'borrar'));
+        p.append(
+          crear('input', { className: 'p-nom', value: it.nombre, maxLength: 60, placeholder: 'Nombre del plato', ariaLabel: 'Nombre del plato', dataset: { k: 'nombre' } }),
+          crear('input', { className: 'p-pre', value: it.precio, maxLength: 14, placeholder: 'Precio', inputMode: 'numeric', ariaLabel: 'Precio', dataset: { k: 'precio' } }),
+          mov,
+          crear('input', { className: 'p-desc', value: it.desc || '', maxLength: 120, placeholder: 'Descripción (opcional). Ej: Con papas fritas y ensalada', ariaLabel: 'Descripción del plato', dataset: { k: 'desc' } }),
+        );
+        lista.append(p);
+      });
+      const agregar = crear('button', { type: 'button', className: 'btn btn-chico', textContent: '+ Agregar plato', dataset: { accion: 'agregar' } });
+      agregar.style.marginTop = '8px';
+      sec.append(cab, nota, lista, agregar);
+      return sec;
+    }));
+    if (!e.secciones.length) cont.append(crear('p', { className: 'vacio', textContent: 'Elige una sección abajo para empezar tu carta.' }));
+  }
+  const buscar = (el) => {
+    const sec = el.closest('[data-sec]');
+    const s = sec && e.secciones.find((x) => x.id === sec.dataset.sec);
+    const fila = el.closest('[data-item]');
+    const it = s && fila ? s.items.find((x) => x.id === fila.dataset.item) : null;
+    return { s, it };
+  };
+  const mover = (arr, x, d) => { const i = arr.indexOf(x), j = i + d; if (j < 0 || j >= arr.length) return false; arr.splice(i, 1); arr.splice(j, 0, x); return true; };
+  const enfocar = (sel) => { const el = $(sel); if (el) el.focus(); };
+  const dejarEjemplo = () => { if (e.ejemplo) { e.ejemplo = false; $('#aviso-ejemplo').hidden = true; } };
+
+  $('#secciones').addEventListener('input', (ev) => {
+    const k = ev.target.dataset.k;
+    if (!k) return;
+    const { s, it } = buscar(ev.target);
+    if (it) it[k] = ev.target.value; else if (s) s[k] = ev.target.value;
+    dejarEjemplo(); cambio();
+  });
+  // Borrar pide confirmación: el primer toque cambia el botón a "¿Borrar?" por 3 segundos.
+  const confirmar = (b) => {
+    if (b.classList.contains('seguro')) return true;
+    b.classList.add('seguro'); b.textContent = '¿Borrar?';
+    setTimeout(() => { b.classList.remove('seguro'); b.textContent = '✕'; }, 3000);
+    return false;
+  };
+  $('#secciones').addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-accion]');
+    if (!b) return;
+    const { s, it } = buscar(b);
+    if (!s) return;
+    const a = b.dataset.accion;
+    if (a === 'agregar') {
+      const nuevo = { id: uid(), nombre: '', desc: '', precio: '' };
+      s.items.push(nuevo);
+      pintarSecciones(); enfocar(`[data-item="${nuevo.id}"] .p-nom`);
+    } else if (a === 'sec-subir' || a === 'sec-bajar') {
+      if (mover(e.secciones, s, a === 'sec-subir' ? -1 : 1)) { pintarSecciones(); enfocar(`[data-sec="${s.id}"] [data-accion="${a}"]`); }
+    } else if (a === 'sec-borrar') {
+      if (!confirmar(b)) return;
+      e.secciones.splice(e.secciones.indexOf(s), 1); pintarSecciones();
+    } else if (it && (a === 'subir' || a === 'bajar')) {
+      if (mover(s.items, it, a === 'subir' ? -1 : 1)) { pintarSecciones(); enfocar(`[data-item="${it.id}"] [data-accion="${a}"]`); }
+    } else if (it && a === 'borrar') {
+      if (!confirmar(b)) return;
+      s.items.splice(s.items.indexOf(it), 1); pintarSecciones();
+    } else return;
+    dejarEjemplo(); cambio();
+  });
+  $('#secciones').addEventListener('keydown', (ev) => {
+    // Enter en el nombre o precio de un plato pasa al siguiente campo; en la descripción agrega un plato nuevo.
+    if (ev.key !== 'Enter' || !ev.target.dataset.k) return;
+    ev.preventDefault();
+    const { s, it } = buscar(ev.target);
+    if (!s) return;
+    if (it && ev.target.dataset.k === 'desc') {
+      const nuevo = { id: uid(), nombre: '', desc: '', precio: '' };
+      s.items.splice(s.items.indexOf(it) + 1, 0, nuevo);
+      pintarSecciones(); enfocar(`[data-item="${nuevo.id}"] .p-nom`); cambio();
+    } else {
+      const campos = [...document.querySelectorAll('#secciones input')];
+      const sig = campos[campos.indexOf(ev.target) + 1];
+      if (sig) sig.focus();
+    }
+  });
+  $('#chips-sec').addEventListener('click', (ev) => {
+    const b = ev.target.closest('.chip');
+    if (!b) return;
+    const titulo = b.textContent.startsWith('+') ? '' : b.textContent;
+    const s = { id: uid(), titulo, nota: '', items: [{ id: uid(), nombre: '', desc: '', precio: '' }] };
+    e.secciones.push(s);
+    dejarEjemplo(); pintarSecciones(); cambio();
+    enfocar(titulo ? `[data-sec="${s.id}"] .p-nom` : `[data-sec="${s.id}"] .sec-tit`);
+  });
+  $('#de-cero').addEventListener('click', () => {
+    const d = e.diseno;
+    e = VACIO(); e.diseno = d;
+    document.querySelectorAll('[data-local]').forEach((inp) => { inp.value = ''; });
+    $('#l-logo').value = ''; verLogo();
+    $('#aviso-ejemplo').hidden = true;
+    pintarSecciones(); cambio();
+    enfocar('#l-nombre');
+  });
+
+  $('#aviso-ejemplo').hidden = !e.ejemplo;
+  pintarSecciones();
+  dibujar();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(dibujar);
+});
+</script>
+</body>
+</html>
