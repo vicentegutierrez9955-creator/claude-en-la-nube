@@ -146,7 +146,7 @@ export default {
         return json({ plantillas: r.data || [] });
       }
       // Plantilla nueva: nombre en minúsculas con guiones bajos; las variables {{1}}, {{2}}… necesitan ejemplos.
-      const nombre = String(p.nombre || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 60);
+      const nombre = String(p.nombre || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '').slice(0, 60);
       const cuerpo = String(p.cuerpo || '').trim().slice(0, 1024);
       const categoria = ['UTILITY', 'MARKETING'].includes(p.categoria) ? p.categoria : 'UTILITY';
       if (!nombre || !cuerpo) return json({ error: 'Falta el nombre o el texto de la plantilla' }, 400);
