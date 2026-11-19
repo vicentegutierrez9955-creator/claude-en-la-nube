@@ -148,10 +148,50 @@
         const verPl = document.createElement('button'); verPl.className = 'btn btn-sm'; verPl.type = 'button'; verPl.textContent = 'Plantillas';
         const caja2 = document.createElement('div'); caja2.className = 'plantillas'; caja2.hidden = true;
         verPl.onclick = () => { caja2.hidden = !caja2.hidden; if (!caja2.hidden) plantillas(c, caja2); };
-        acciones.append(panelCli, verPl);
-        fila.append(info, prueba, acciones, caja2); caja.append(fila);
+        const verTk = document.createElement('button'); verTk.className = 'btn btn-sm'; verTk.type = 'button'; verTk.textContent = c.tuerkit ? 'Tuerkit ✓' : 'Tuerkit';
+        const caja3 = document.createElement('div'); caja3.className = 'plantillas'; caja3.hidden = true;
+        verTk.onclick = () => { caja3.hidden = !caja3.hidden; if (!caja3.hidden) tuerkit(c, caja3, false); };
+        acciones.append(panelCli, verPl, verTk);
+        fila.append(info, prueba, acciones, caja2, caja3); caja.append(fila);
       }
     } catch (e) { caja.innerHTML = ''; const p = document.createElement('p'); p.className = 'error'; p.textContent = e.message; caja.append(p); }
+  }
+
+  // Avisos de Tuerkit: al cambiar el estado de un auto en Tuerkit, al cliente le llega un WhatsApp desde este número.
+  // Aquí se crea la clave del taller (se muestra una sola vez), se mandan las plantillas a Meta y se ven los últimos avisos.
+  const ESTADOS_PL = { APPROVED: '✅ aprobada', PENDING: '⏳ en revisión de Meta', REJECTED: '❌ rechazada', PAUSED: '⏸ pausada', DISABLED: '⛔ desactivada', NO_CREADA: 'sin crear', ERROR: '❌ no se pudo crear' };
+  async function tuerkit(c, caja, nueva) {
+    const el = (tag, props, ...hijos) => { const n = Object.assign(document.createElement(tag), props || {}); n.append(...hijos.filter(Boolean)); return n; };
+    caja.replaceChildren(el('p', { className: 'muted', textContent: nueva ? 'Creando la clave…' : 'Revisando plantillas y avisos…' }));
+    let r;
+    try { r = await api({ accion: 'tuerkit', waba: c.waba, nueva }); }
+    catch (e) { caja.replaceChildren(el('p', { className: 'error', textContent: e.message })); return; }
+    const partes = [el('p', { style: 'margin:0 0 8px' }, el('b', { textContent: 'Avisos de Tuerkit por WhatsApp. ' }), 'Cuando el taller cambia el estado de un auto en Tuerkit, al cliente le llega un WhatsApp desde este número.')];
+    const filas = (r.plantillas || []).map((p) => el('tr', {}, el('td', { textContent: p.nombre }), el('td', { textContent: (ESTADOS_PL[p.estado] || p.estado) + (p.motivo ? ` (${p.motivo})` : '') })));
+    partes.push(el('table', {}, ...filas));
+    if (r.errorPlantillas) partes.push(el('p', { className: 'error', textContent: 'No se pudieron revisar las plantillas: ' + r.errorPlantillas }));
+    if (r.clave) {
+      const campo = el('input', { value: r.clave, readOnly: true, style: 'width:100%;font-family:monospace;margin:6px 0' });
+      const copiar = el('button', { type: 'button', className: 'btn btn-sm btn-primary', textContent: 'Copiar clave' });
+      copiar.onclick = async () => { try { await navigator.clipboard.writeText(r.clave); copiar.textContent = 'Copiada ✓'; } catch { campo.select(); } };
+      partes.push(el('div', { style: 'background:#fff7e0;border:1px solid #f0d58a;border-radius:8px;padding:10px;margin:10px 0' },
+        el('b', { textContent: 'Clave del taller para Tuerkit' }), campo, copiar,
+        el('p', { className: 'muted', style: 'margin:8px 0 0', textContent: 'Cópiala ahora: no se vuelve a mostrar. Pásala a Tuerkit por un medio privado (no por un grupo). Si se pierde o se filtra, crea una nueva y la anterior deja de funcionar.' })));
+    } else {
+      partes.push(el('p', { className: 'muted', style: 'margin:10px 0 6px', textContent: r.tieneClave ? `El taller tiene clave desde el ${new Date(r.creada).toLocaleString('es-CL')}.` : 'El taller todavía no tiene clave para Tuerkit.' }));
+    }
+    const crear = el('button', { type: 'button', className: 'btn btn-sm' + (r.tieneClave ? '' : ' btn-primary'), textContent: r.tieneClave ? 'Crear clave nueva (la anterior deja de funcionar)' : 'Crear clave para Tuerkit' });
+    crear.onclick = () => { if (!r.tieneClave || confirm('La clave anterior dejará de funcionar y habrá que poner la nueva en Tuerkit. ¿Seguir?')) tuerkit(c, caja, true); };
+    partes.push(crear);
+    if ((r.avisos || []).length) {
+      partes.push(el('p', { style: 'margin:12px 0 4px', textContent: 'Últimos avisos:' }));
+      partes.push(el('table', {}, ...r.avisos.map((a) => el('tr', {},
+        el('td', { textContent: new Date(a.fecha).toLocaleString('es-CL') }),
+        el('td', { textContent: `${a.patente} → ${a.estado}` }),
+        el('td', { textContent: a.telefono }),
+        el('td', { textContent: a.ok ? '✅ enviado' : `❌ ${a.motivo || 'no se envió'}` })))));
+    }
+    caja.replaceChildren(...partes);
   }
 
   // Plantillas de mensaje de la cuenta: lista con su estado y formulario para crear una (Meta la revisa).

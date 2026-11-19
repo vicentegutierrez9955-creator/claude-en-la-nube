@@ -12,9 +12,12 @@
 // accion=acceso { waba, nuevo }                    → link del panel del negocio (/mi-whatsapp); con nuevo, invalida el anterior.
 // accion=plantillas { waba }                       → plantillas de mensaje de la cuenta y su estado de aprobación.
 // accion=crearPlantilla { waba, nombre, categoria, idioma, cuerpo, ejemplos } → la manda a revisión de Meta.
+// accion=tuerkit { waba, nueva }                  → avisos de Tuerkit: crea las plantillas que falten, muestra su estado
+//                                                   y los últimos avisos; con nueva, crea la clave del taller (se ve una vez).
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { sesion, json } from '../_lib/panel.js';
 import { enviar, leerRegistro, numero, graph, graphCon, conectarCuenta, leerCuentas, guardarCuenta, crearInvitacion, leerInvitaciones } from '../_lib/whatsapp.js';
+import { nuevaClave, plantillas as plantillasTuerkit, leerAvisos } from '../_lib/tuerkit.js';
 
 const id = (v) => String(v || '').replace(/\D/g, '').slice(0, 20);
 
@@ -66,9 +69,9 @@ export default {
     }
     if (p.accion === 'cuentas') {
       const { cuentas } = await leerCuentas();
-      return json({ cuentas: Object.values(cuentas).map(({ token, pin, acceso, bot, ...c }) => ({ ...c, panelCliente: Boolean(acceso), botActivo: Boolean(bot?.activo) })) });
+      return json({ cuentas: Object.values(cuentas).map(({ token, pin, acceso, bot, tuerkit, ...c }) => ({ ...c, panelCliente: Boolean(acceso), botActivo: Boolean(bot?.activo), tuerkit: tuerkit ? { creada: tuerkit.creada } : null })) });
     }
-    if (['conectar', 'probar', 'invitar', 'acceso', 'crearPlantilla'].includes(p.accion)) {
+    if (['conectar', 'probar', 'invitar', 'acceso', 'crearPlantilla', 'tuerkit'].includes(p.accion)) {
       // Solo desde el panel con sesión: el código del registro insertado lo entrega el navegador de quien conecta.
       if (porToken || request.method !== 'POST') return json({ error: 'Usa POST desde el panel' }, 405);
     }
@@ -106,6 +109,23 @@ export default {
         ? await enviar(para, { plantilla: String(p.plantilla), idioma: String(p.idioma || 'en_US') }, cuenta)
         : await enviar(para, { texto: String(p.texto || '') }, cuenta);
       return json(r, r.ok ? 200 : 502);
+    }
+    if (p.accion === 'tuerkit') {
+      const { cuentas } = await leerCuentas();
+      const cuenta = cuentas[id(p.waba)];
+      if (!cuenta?.phoneNumberId) return json({ error: 'Esa cuenta no está conectada' }, 404);
+      let clave = null;
+      if (p.nueva) {
+        clave = await nuevaClave(cuenta.waba);
+        if (!clave) return json({ error: 'No se pudo guardar la clave, intenta de nuevo' }, 503);
+      }
+      const pl = await plantillasTuerkit(cuenta, { crear: true });
+      const { avisos } = await leerAvisos();
+      return json({
+        ok: true, clave, tieneClave: Boolean(clave || cuenta.tuerkit), creada: clave ? new Date().toISOString() : cuenta.tuerkit?.creada || null,
+        plantillas: pl.plantillas || [], errorPlantillas: pl.error || null,
+        avisos: avisos.filter((a) => a.waba === cuenta.waba).slice(-15).reverse(),
+      });
     }
     if (p.accion === 'acceso' || p.accion === 'plantillas' || p.accion === 'crearPlantilla') {
       const { cuentas } = await leerCuentas();

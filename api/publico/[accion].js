@@ -1,12 +1,14 @@
 // Endpoints públicos en una sola función (el plan Hobby de Vercel permite 12 por deploy).
 // Rutas: /api/publico/contacto (formularios de la web), /api/publico/whatsapp (página /conectar-whatsapp)
-// /api/publico/cliente (panel del negocio /mi-whatsapp: chats y bot) y /api/publico/carta (cartas con QR, /carta/<local>).
+// /api/publico/cliente (panel del negocio /mi-whatsapp: chats y bot), /api/publico/carta (cartas con QR, /carta/<local>)
+// y /api/publico/tuerkit (avisos por WhatsApp cuando Tuerkit cambia el estado de un auto).
 import contacto from '../_lib/publico/contacto.js';
 import whatsapp from '../_lib/publico/whatsapp.js';
 import cliente from '../_lib/publico/cliente.js';
 import carta from '../_lib/publico/carta.js';
+import tuerkit from '../_lib/publico/tuerkit.js';
 
-const RUTAS = { contacto, whatsapp, cliente, carta };
+const RUTAS = { contacto, whatsapp, cliente, carta, tuerkit };
 
 // Vercel agrega ?accion=<ruta> por el nombre de este archivo ([accion].js), y eso puede tapar el ?accion propio
 // de una ruta (las cartas suben sus páginas con ?accion=pagina). Se quita lo agregado antes de pasar el pedido;
