@@ -41,7 +41,7 @@ export default function middleware(request) {
     if (path === '/') return rewrite(EMPRESA.dir, url);
     if (EMPRESA.raiz.includes(path)) return rewrite(EMPRESA.dir + path, url);
     if (/^\/stpyme(\/(index(\.html)?)?)?$/.test(path)) return Response.redirect(new URL('/', url), 301);
-    return undefined;
+    return redirigirACliente(url);
   }
 
   if (sitio) {
@@ -56,10 +56,13 @@ export default function middleware(request) {
     return rewrite(path === '/' ? sitio.dir : sitio.dir + path, url);
   }
 
-  // Las maquetas antiguas (plantillas-omega.vercel.app/<carpeta>) llevan al dominio del cliente
-  const de = SITIOS.find((s) => enCarpeta(path, s.dir));
-  if (de) {
-    const limpia = urlLimpia(url, de);
-    if (limpia) return Response.redirect(limpia, 301);
-  }
+  return redirigirACliente(url);
+}
+
+// Las páginas de un cliente abiertas desde otro dominio (stpyme.cl/<carpeta> o la maqueta antigua en
+// plantillas-omega.vercel.app/<carpeta>) llevan a su dominio: así Google ve una sola copia de cada página.
+function redirigirACliente(url) {
+  const de = SITIOS.find((s) => enCarpeta(url.pathname, s.dir));
+  const limpia = de && urlLimpia(url, de);
+  return limpia ? Response.redirect(limpia, 301) : undefined;
 }
