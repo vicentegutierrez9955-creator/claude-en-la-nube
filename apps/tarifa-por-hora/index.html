@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de tarifa por hora para independientes | STPyme</title>
+<meta name="description" content="Calcula gratis cuánto cobrar por hora: pones tus gastos fijos, las horas que puedes facturar y lo que quieres ganar, y te dice tu tarifa con la retención de la boleta.">
+<link rel="canonical" href="https://stpyme.cl/apps/tarifa-por-hora">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/app.css">
+<style>
+@media(min-width:800px){.dos{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;align-items:start}}
+.campo{margin-bottom:14px}
+.rango{display:flex;gap:10px;align-items:center}
+.rango input[type=range]{flex:1;padding:0;accent-color:var(--acc);background:none;border:0}
+.rango output{min-width:74px;text-align:right;font-weight:700}
+.tarifa{font-size:clamp(44px,9vw,64px);font-weight:800;letter-spacing:-.03em;color:var(--acc);line-height:1}
+.tarifa small{font-size:20px;color:var(--ink)}
+.barra{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:14px 0 8px;background:var(--soft)}
+.barra span{display:block}
+.ley{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.ley i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header class="wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/apps">Apps gratis</a></div></header>
+<main class="wrap">
+  <span class="etiqueta">APP 02/05</span>
+  <h1>Calculadora de tarifa por hora</h1>
+  <p class="bajada">Pones tus gastos fijos, las horas que puedes facturar y lo que quieres ganar, y te dice cuánto tienes que cobrar.</p>
+  <div class="dos">
+    <section class="card" aria-labelledby="t-datos">
+      <h2 id="t-datos">Tus números</h2>
+      <div class="campo"><label for="sueldo">Quiero ganar líquido al mes</label><input id="sueldo" data-monto inputmode="numeric" value="1.200.000"></div>
+      <div class="campo"><label for="gastos">Gastos fijos del mes (arriendo, internet, programas, transporte)</label><input id="gastos" data-monto inputmode="numeric" value="250.000"></div>
+      <div class="campo"><label for="horas">Horas que puedes cobrar por semana</label><div class="rango"><input id="horas" type="range" min="5" max="50" value="25"><output for="horas" id="o-horas"></output></div><p class="muted chico" style="margin:4px 0 0">Solo las horas que le cobras a un cliente. Responder correos o buscar clientes no cuenta.</p></div>
+      <div class="campo"><label for="vacas">Semanas sin trabajar al año (vacaciones, feriados, licencias)</label><div class="rango"><input id="vacas" type="range" min="0" max="12" value="5"><output for="vacas" id="o-vacas"></output></div></div>
+      <div class="campo"><label for="ret">¿Emites boleta de honorarios?</label><select id="ret"><option value="0">No, no retienen</option><option value="0.1525" selected>Sí, retención 2026 (15,25%)</option><option value="0.16">Sí, retención 2027 (16%)</option></select></div>
+    </section>
+    <section class="card" aria-live="polite">
+      <h2>Tienes que cobrar</h2>
+      <div class="tarifa" id="tarifa">$0<small>/hora</small></div>
+      <p class="muted chico" id="detalle" style="margin:8px 0 0"></p>
+      <div class="barra" id="barra"></div>
+      <div class="ley"><span><i style="background:var(--acc)"></i>Tu sueldo</span><span><i style="background:#6fb6ff"></i>Gastos fijos</span><span><i style="background:#f2cf5b"></i>Retención</span></div>
+      <div class="kpis" style="margin:16px 0 0">
+        <div class="kpi"><small>Por día (8 h)</small><b id="dia">$0</b></div>
+        <div class="kpi"><small>Facturar al mes</small><b id="mes">$0</b></div>
+        <div class="kpi"><small>Horas al mes</small><b id="hmes">0</b></div>
+      </div>
+      <h2 style="margin-top:18px">¿Cuánto cobrar por un trabajo?</h2>
+      <div class="fila"><div><label for="hproy">Horas que te va a tomar</label><input id="hproy" type="number" min="1" value="10"></div><div><label>Precio del trabajo</label><div class="tarifa" style="font-size:28px" id="proy">$0</div></div></div>
+    </section>
+  </div>
+  <section class="card guia"><h2>¿Quieres hacer tu propia app con Claude?</h2><p>Esta app la hicimos con Claude. Te dejamos los prompts para que hagas la tuya.</p><a class="btn btn-primario" href="/apps/guia-claude">Ver la guía de prompts →</a></section>
+</main>
+<footer class="wrap">App gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a> · Cálculo referencial · <a href="/apps">Más apps gratis</a> · <a href="/herramientas/boleta-honorarios">Calculadora de boleta</a> · <a href="/privacidad">Privacidad</a></footer>
+<script src="/apps/comun.js"></script>
+<script>
+(() => {
+  const { clp, num, cargar, guardar, montos } = App;
+  const $ = (s) => document.querySelector(s);
+  const CAMPOS = ['sueldo', 'gastos', 'horas', 'vacas', 'ret', 'hproy'];
+  const previo = cargar('tarifa', null);
+  if (previo) CAMPOS.forEach((k) => { if (previo[k] != null) $('#' + k).value = previo[k]; });
+  montos();
+  const redondear = (n) => Math.ceil(n / 500) * 500;
+
+  function calcular() {
+    const sueldo = num($('#sueldo').value), gastos = num($('#gastos').value);
+    const horas = Number($('#horas').value), vacas = Number($('#vacas').value), r = Number($('#ret').value);
+    $('#o-horas').textContent = horas + ' h';
+    $('#o-vacas').textContent = vacas + ' sem.';
+    const horasMes = horas * (52 - vacas) / 12;
+    const brutoMes = (sueldo + gastos) / (1 - r);
+    const hora = horasMes ? redondear(brutoMes / horasMes) : 0;
+    $('#tarifa').firstChild.textContent = clp(hora);
+    $('#dia').textContent = clp(hora * 8);
+    $('#mes').textContent = clp(brutoMes);
+    $('#hmes').textContent = Math.round(horasMes);
+    $('#proy').textContent = clp(hora * Math.max(0, Number($('#hproy').value) || 0));
+    $('#detalle').textContent = `Con ${horas} horas cobrables por semana y ${vacas} semanas sin trabajar, facturas unas ${Math.round(horasMes)} horas al mes.` + (r ? ` La retención de la boleta se lleva ${clp(brutoMes - sueldo - gastos)} al mes.` : '');
+    const tot = brutoMes || 1;
+    $('#barra').innerHTML = [[sueldo, 'var(--acc)'], [gastos, '#6fb6ff'], [brutoMes - sueldo - gastos, '#f2cf5b']].map(([v, c]) => `<span style="width:${(v / tot) * 100}%;background:${c}"></span>`).join('');
+    guardar('tarifa', Object.fromEntries(CAMPOS.map((k) => [k, $('#' + k).value])));
+  }
+  CAMPOS.forEach((k) => $('#' + k).addEventListener('input', calcular));
+  calcular();
+})();
+</script>
+</body>
+</html>

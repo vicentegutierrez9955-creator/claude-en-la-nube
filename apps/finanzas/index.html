@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App de finanzas personales gratis: en qué se te va la plata | STPyme</title>
+<meta name="description" content="Anota tus gastos e ingresos y mira en un gráfico en qué se te va la plata cada mes. Gratis, sin registrarte y sin conectar tu banco.">
+<link rel="canonical" href="https://stpyme.cl/apps/finanzas">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/app.css">
+<style>
+.tipo{display:flex;gap:6px}
+.tipo button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.tipo button[aria-pressed=true]{background:var(--acc);color:#0f1a12;border-color:var(--acc)}
+@media(min-width:800px){.dos{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}}
+.dona{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dona svg{width:170px;height:170px;flex:0 0 auto}
+.dona ul{list-style:none;margin:0;padding:0;flex:1;min-width:160px;font-size:14px}
+.dona li{display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
+.dona li i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.barras{display:flex;gap:8px;align-items:end;height:150px;padding-top:6px}
+.barras div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;gap:4px;font-size:12px;color:var(--muted)}
+.barras span{display:block;width:100%;max-width:38px;border-radius:6px 6px 0 0;background:var(--acc);min-height:2px}
+.barras div.actual span{background:#f2cf5b}
+td.menos{color:var(--red)}
+td.mas{color:var(--acc)}
+</style>
+</head>
+<body>
+<header class="wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/apps">Apps gratis</a></div></header>
+<main class="wrap">
+  <span class="etiqueta">APP 03/05</span>
+  <h1>App de finanzas personales</h1>
+  <p class="bajada">Anotas tus gastos y te hace un gráfico de en qué se te va la plata. Sin conectar tu banco.</p>
+
+  <div class="fila" style="margin-bottom:12px"><div style="flex:0 1 220px"><label for="mes">Mes</label><input id="mes" type="month"></div></div>
+  <div class="kpis">
+    <div class="kpi acc"><small>Ingresos</small><b id="k-ing">$0</b></div>
+    <div class="kpi"><small>Gastos</small><b id="k-gas">$0</b></div>
+    <div class="kpi"><small>Te queda</small><b id="k-saldo">$0</b></div>
+  </div>
+
+  <div class="dos">
+    <section class="card" aria-labelledby="t-form">
+      <h2 id="t-form">Anotar</h2>
+      <form id="form" class="grid" autocomplete="off">
+        <div class="tipo" role="group" aria-label="Tipo"><button type="button" data-tipo="gasto" aria-pressed="true">Gasto</button><button type="button" data-tipo="ingreso" aria-pressed="false">Ingreso</button></div>
+        <div class="grid g2">
+          <div><label for="f-monto">Monto</label><input id="f-monto" data-monto inputmode="numeric" required placeholder="$"></div>
+          <div><label for="f-cat">Categoría</label><select id="f-cat"></select></div>
+          <div><label for="f-fecha">Fecha</label><input id="f-fecha" type="date" required></div>
+          <div><label for="f-desc">Detalle (opcional)</label><input id="f-desc" maxlength="80" placeholder="Ej: supermercado"></div>
+        </div>
+        <button class="btn btn-primario" type="submit">Anotar</button>
+      </form>
+    </section>
+    <section class="card" aria-labelledby="t-dona">
+      <h2 id="t-dona">En qué se te va la plata</h2>
+      <div class="dona" id="dona"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="t-meses">
+    <h2 id="t-meses">Gastos de los últimos 6 meses</h2>
+    <div class="barras" id="barras"></div>
+  </section>
+
+  <section class="card" aria-labelledby="t-lista">
+    <h2 id="t-lista">Movimientos del mes</h2>
+    <div id="lista"></div>
+  </section>
+
+  <div class="datos" data-respaldo>
+    <p class="muted chico">Tus datos quedan solo en este navegador. Descarga una copia de vez en cuando para no perderlos.</p>
+    <button class="btn btn-chico" type="button" data-descargar-copia>⬇ Descargar copia</button>
+    <button class="btn btn-chico" type="button" data-cargar-copia>⬆ Cargar copia</button>
+    <input type="file" accept=".json,application/json" hidden>
+  </div>
+  <section class="card guia"><h2>¿Quieres hacer tu propia app con Claude?</h2><p>Esta app la hicimos con Claude. Te dejamos los prompts para que hagas la tuya.</p><a class="btn btn-primario" href="/apps/guia-claude">Ver la guía de prompts →</a></section>
+</main>
+<footer class="wrap">App gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a> · <a href="/apps">Más apps gratis</a> · <a href="/herramientas">Herramientas</a> · <a href="/privacidad">Privacidad</a></footer>
+<script src="/apps/comun.js"></script>
+<script>
+(() => {
+  const { clp, num, id, hoy, cargar, guardar, aviso, montos, respaldo, esc } = App;
+  const $ = (s) => document.querySelector(s);
+  const CAT = { gasto: ['Comida', 'Supermercado', 'Arriendo o dividendo', 'Cuentas', 'Transporte', 'Salud', 'Ocio', 'Ropa', 'Deudas', 'Otros'], ingreso: ['Sueldo', 'Ventas', 'Boletas', 'Otros'] };
+  const COLORES = ['#c5f33b', '#6fb6ff', '#f2cf5b', '#ff8a80', '#b79cff', '#5fd3b8', '#ffb36b', '#e98fd0', '#9aa89c', '#7ec4ff'];
+  let movs = cargar('finanzas', []);
+  let tipo = 'gasto';
+  $('#mes').value = hoy().slice(0, 7);
+  $('#f-fecha').value = hoy();
+  montos();
+
+  function categorias() { $('#f-cat').innerHTML = CAT[tipo].map((c) => `<option>${c}</option>`).join(''); }
+  const delMes = (m) => movs.filter((x) => x.fecha.slice(0, 7) === m);
+  const suma = (l, t) => l.filter((x) => x.tipo === t).reduce((s, x) => s + x.monto, 0);
+
+  function dona(gastos) {
+    const por = {};
+    gastos.forEach((g) => { por[g.cat] = (por[g.cat] || 0) + g.monto; });
+    const items = Object.entries(por).sort((a, b) => b[1] - a[1]);
+    const total = items.reduce((s, x) => s + x[1], 0);
+    if (!total) return '<p class="vacio" style="flex:1">Cuando anotes gastos, aquí ves en qué se te va la plata.</p>';
+    let ang = 0;
+    const R = 70, C = 2 * Math.PI * R;
+    const arcos = items.map(([, v], i) => { const largo = (v / total) * C; const s = `<circle r="${R}" cx="85" cy="85" fill="none" stroke="${COLORES[i % 10]}" stroke-width="26" stroke-dasharray="${largo} ${C - largo}" stroke-dashoffset="${-ang}" transform="rotate(-90 85 85)"/>`; ang += largo; return s; }).join('');
+    return `<svg viewBox="0 0 170 170" role="img" aria-label="Gastos por categoría">${arcos}<text x="85" y="82" text-anchor="middle" fill="#9aa89c" font-size="11">Gastos</text><text x="85" y="100" text-anchor="middle" fill="#f1f5ee" font-size="15" font-weight="800">${clp(total)}</text></svg><ul>${items.map(([c, v], i) => `<li><span><i style="background:${COLORES[i % 10]}"></i>${c}</span><b>${Math.round((v / total) * 100)}%</b></li>`).join('')}</ul>`;
+  }
+
+  function pintar() {
+    const m = $('#mes').value || hoy().slice(0, 7);
+    const lista = delMes(m).sort((a, b) => b.fecha.localeCompare(a.fecha));
+    const ing = suma(lista, 'ingreso'), gas = suma(lista, 'gasto');
+    $('#k-ing').textContent = clp(ing); $('#k-gas').textContent = clp(gas); $('#k-saldo').textContent = clp(ing - gas);
+    $('#k-saldo').style.color = ing - gas < 0 ? 'var(--red)' : '';
+    $('#dona').innerHTML = dona(lista.filter((x) => x.tipo === 'gasto'));
+    const meses = [];
+    const [a, mm] = m.split('-').map(Number);
+    for (let i = 5; i >= 0; i--) { const d = new Date(a, mm - 1 - i, 1); meses.push(d.toLocaleDateString('sv-SE').slice(0, 7)); }
+    const vals = meses.map((x) => suma(delMes(x), 'gasto'));
+    const max = Math.max(...vals, 1);
+    $('#barras').innerHTML = meses.map((x, i) => `<div class="${x === m ? 'actual' : ''}" title="${clp(vals[i])}"><small>${vals[i] ? Math.round(vals[i] / 1000) + 'k' : ''}</small><span style="height:${(vals[i] / max) * 100}%"></span>${new Date(x + '-15').toLocaleDateString('es-CL', { month: 'short' })}</div>`).join('');
+    $('#lista').innerHTML = lista.length ? `<table><thead><tr><th>Fecha</th><th>Categoría</th><th class="num">Monto</th><th></th></tr></thead><tbody>${lista.map((x) =>
+      `<tr><td>${new Date(x.fecha + 'T12:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'short' })}</td><td>${esc(x.cat)}${x.desc ? `<br><small class="muted">${esc(x.desc)}</small>` : ''}</td><td class="num ${x.tipo === 'gasto' ? 'menos' : 'mas'}">${x.tipo === 'gasto' ? '−' : '+'}${clp(x.monto)}</td><td class="num"><button class="btn btn-chico btn-borrar" type="button" data-borrar="${x.id}" aria-label="Borrar">✕</button></td></tr>`).join('')}</tbody></table>` : '<p class="vacio">No hay movimientos este mes.</p>';
+  }
+
+  document.querySelectorAll('[data-tipo]').forEach((b) => b.addEventListener('click', () => {
+    tipo = b.dataset.tipo;
+    document.querySelectorAll('[data-tipo]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    categorias();
+  }));
+  $('#form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const monto = num($('#f-monto').value);
+    if (!monto) { aviso('Escribe el monto'); return; }
+    movs.push({ id: id(), tipo, monto, cat: $('#f-cat').value, fecha: $('#f-fecha').value || hoy(), desc: $('#f-desc').value.trim() });
+    guardar('finanzas', movs);
+    $('#f-monto').value = ''; $('#f-desc').value = '';
+    $('#mes').value = ($('#f-fecha').value || hoy()).slice(0, 7);
+    aviso(tipo === 'gasto' ? 'Gasto anotado' : 'Ingreso anotado');
+    pintar();
+  });
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-borrar]');
+    if (!b) return;
+    movs = movs.filter((x) => x.id !== b.dataset.borrar);
+    guardar('finanzas', movs); pintar();
+  });
+  $('#mes').addEventListener('input', pintar);
+  respaldo('finanzas', 'finanzas-stpyme', (d) => { movs = Array.isArray(d) ? d : []; pintar(); });
+  categorias(); pintar();
+})();
+</script>
+</body>
+</html>

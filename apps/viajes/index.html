@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de viajes gratis: qué % del mundo conoces | STPyme</title>
+<meta name="description" content="Guarda todos los viajes que has hecho, píntalos en el mapa y mira qué porcentaje del mundo conoces. Gratis y sin registrarte.">
+<link rel="canonical" href="https://stpyme.cl/apps/viajes">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/apps/app.css">
+<style>
+.mapa{background:#122017;border-radius:12px;overflow:hidden}
+.mapa svg{display:block;width:100%;height:auto}
+.mapa path{fill:#2a3d2e;stroke:#0f1a12;stroke-width:.5;cursor:pointer;transition:fill .15s}
+.mapa path:hover{fill:#3d5a42}
+.mapa path.visitado{fill:var(--acc)}
+@media(min-width:800px){.dos{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}}
+.barras{display:flex;gap:6px;align-items:end;height:120px}
+.barras div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;font-size:11px;color:var(--muted);gap:3px}
+.barras span{display:block;width:100%;max-width:30px;background:#f2cf5b;border-radius:6px 6px 0 0;min-height:2px}
+</style>
+</head>
+<body>
+<header class="wrap"><div class="marca"><a href="https://stpyme.cl/" aria-label="STPyme, inicio"><img src="https://cdn.jsdelivr.net/gh/vicentegutierrez9955-creator/claude-en-la-nube@67abc61620dbd1420a11a3c4fe6ce927f64c1189/stpyme/img/logo.webp" alt="STPyme" width="408" height="96"></a><a class="marca-sub" href="/apps">Apps gratis</a></div></header>
+<main class="wrap">
+  <span class="etiqueta">APP 05/05</span>
+  <h1>Mapa de viajes</h1>
+  <p class="bajada">Guarda todos los viajes que has hecho y te dice qué % del mundo conoces.</p>
+  <div class="kpis">
+    <div class="kpi acc"><small>Del mundo conoces</small><b id="k-pct">0%</b></div>
+    <div class="kpi"><small>Países</small><b id="k-paises">0</b></div>
+    <div class="kpi"><small>Viajes</small><b id="k-viajes">0</b></div>
+    <div class="kpi"><small>Este año</small><b id="k-anio">0</b></div>
+  </div>
+  <section class="card" aria-labelledby="t-mapa">
+    <h2 id="t-mapa">Mi mapa de viajes</h2>
+    <div class="mapa" id="mapa"><p class="vacio">Cargando el mapa…</p></div>
+    <p class="muted chico" style="margin:8px 0 0">Toca un país en el mapa para agregarlo.</p>
+  </section>
+  <div class="dos">
+    <section class="card" aria-labelledby="t-form">
+      <h2 id="t-form">Agregar viaje</h2>
+      <form id="form" class="grid" autocomplete="off">
+        <div><label for="f-pais">País</label><select id="f-pais" required></select></div>
+        <div class="grid g2">
+          <div><label for="f-lugar">Ciudad o lugar (opcional)</label><input id="f-lugar" maxlength="60" placeholder="Ej: Cusco"></div>
+          <div><label for="f-anio">Año</label><input id="f-anio" type="number" min="1950" max="2100" required></div>
+        </div>
+        <button class="btn btn-primario" type="submit">Guardar viaje</button>
+      </form>
+      <h2 style="margin-top:18px">Viajes por año</h2>
+      <div class="barras" id="barras"></div>
+    </section>
+    <section class="card" aria-labelledby="t-lista">
+      <h2 id="t-lista">Viajes guardados</h2>
+      <div id="lista"></div>
+    </section>
+  </div>
+  <div class="datos" data-respaldo>
+    <p class="muted chico">Tus datos quedan solo en este navegador. Descarga una copia de vez en cuando para no perderlos.</p>
+    <button class="btn btn-chico" type="button" data-descargar-copia>⬇ Descargar copia</button>
+    <button class="btn btn-chico" type="button" data-cargar-copia>⬆ Cargar copia</button>
+    <input type="file" accept=".json,application/json" hidden>
+  </div>
+  <section class="card guia"><h2>¿Quieres hacer tu propia app con Claude?</h2><p>Esta app la hicimos con Claude. Te dejamos los prompts para que hagas la tuya.</p><a class="btn btn-primario" href="/apps/guia-claude">Ver la guía de prompts →</a></section>
+</main>
+<footer class="wrap">App gratuita de <a href="https://stpyme.cl/"><b>STPyme</b></a> · El porcentaje se calcula sobre los 195 países del mundo · <a href="/apps">Más apps gratis</a> · <a href="/privacidad">Privacidad</a></footer>
+<script src="https://cdn.jsdelivr.net/npm/d3-array@3.2.4/dist/d3-array.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-geo@3.1.1/dist/d3-geo.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script src="/apps/comun.js"></script>
+<script>
+(() => {
+  const { id, hoy, cargar, guardar, aviso, respaldo, esc } = App;
+  const $ = (s) => document.querySelector(s);
+  // Código numérico del mapa (world-atlas) → código de país de 2 letras, para mostrar los nombres en español.
+  const ISO = {"242":"FJ","834":"TZ","732":"EH","124":"CA","840":"US","398":"KZ","860":"UZ","598":"PG","360":"ID","032":"AR","152":"CL","180":"CD","706":"SO","404":"KE","729":"SD","148":"TD","332":"HT","214":"DO","643":"RU","044":"BS","238":"FK","578":"NO","304":"GL","260":"TF","626":"TL","710":"ZA","426":"LS","484":"MX","858":"UY","076":"BR","068":"BO","604":"PE","170":"CO","591":"PA","188":"CR","558":"NI","340":"HN","222":"SV","320":"GT","084":"BZ","862":"VE","328":"GY","740":"SR","250":"FR","218":"EC","630":"PR","388":"JM","192":"CU","716":"ZW","072":"BW","516":"NA","686":"SN","466":"ML","478":"MR","204":"BJ","562":"NE","566":"NG","120":"CM","768":"TG","288":"GH","384":"CI","324":"GN","624":"GW","430":"LR","694":"SL","854":"BF","140":"CF","178":"CG","266":"GA","226":"GQ","894":"ZM","454":"MW","508":"MZ","748":"SZ","024":"AO","108":"BI","376":"IL","422":"LB","450":"MG","275":"PS","270":"GM","788":"TN","012":"DZ","400":"JO","784":"AE","634":"QA","414":"KW","368":"IQ","512":"OM","548":"VU","116":"KH","764":"TH","418":"LA","104":"MM","704":"VN","408":"KP","410":"KR","496":"MN","356":"IN","050":"BD","064":"BT","524":"NP","586":"PK","004":"AF","762":"TJ","417":"KG","795":"TM","364":"IR","760":"SY","051":"AM","752":"SE","112":"BY","804":"UA","616":"PL","040":"AT","348":"HU","498":"MD","642":"RO","440":"LT","428":"LV","233":"EE","276":"DE","100":"BG","300":"GR","792":"TR","008":"AL","191":"HR","756":"CH","442":"LU","056":"BE","528":"NL","620":"PT","724":"ES","372":"IE","540":"NC","090":"SB","554":"NZ","036":"AU","144":"LK","156":"CN","158":"TW","380":"IT","208":"DK","826":"GB","352":"IS","031":"AZ","268":"GE","608":"PH","458":"MY","096":"BN","705":"SI","246":"FI","703":"SK","203":"CZ","232":"ER","392":"JP","600":"PY","887":"YE","682":"SA","010":"AQ","196":"CY","504":"MA","818":"EG","434":"LY","231":"ET","262":"DJ","800":"UG","646":"RW","070":"BA","807":"MK","688":"RS","499":"ME","780":"TT","728":"SS"};
+  const nombres = new Intl.DisplayNames(['es'], { type: 'region' });
+  const nombre = (cc) => { try { return nombres.of(cc); } catch { return cc; } };
+  const PAISES = [...new Set([...Object.values(ISO), 'XK'])].map((cc) => [cc, nombre(cc)]).sort((a, b) => a[1].localeCompare(b[1], 'es'));
+  let viajes = cargar('viajes', []);
+  const anioActual = Number(hoy().slice(0, 4));
+  $('#f-pais').innerHTML = '<option value="">Elige un país</option>' + PAISES.map(([cc, n]) => `<option value="${cc}">${n}</option>`).join('');
+  $('#f-anio').value = anioActual;
+
+  let rutas = null;
+  async function mapa() {
+    try {
+      const w = await (await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')).json();
+      const geo = topojson.feature(w, w.objects.countries).features.filter((f) => f.properties.name !== 'Antarctica');
+      const proy = d3.geoEqualEarth().fitSize([960, 470], { type: 'FeatureCollection', features: geo });
+      const camino = d3.geoPath(proy);
+      $('#mapa').innerHTML = '<svg viewBox="0 0 960 470" role="img" aria-label="Mapa del mundo con los países visitados">' + geo.map((f) => {
+        const cc = ISO[f.id] || (f.properties.name === 'Kosovo' ? 'XK' : '');
+        return `<path d="${camino(f)}" data-cc="${cc}"><title>${cc ? nombre(cc) : esc(f.properties.name)}</title></path>`;
+      }).join('') + '</svg>';
+      rutas = true;
+      pintar();
+    } catch { $('#mapa').innerHTML = '<p class="vacio">No se pudo cargar el mapa. Revisa tu conexión.</p>'; }
+  }
+
+  function pintar() {
+    const paises = new Set(viajes.map((v) => v.cc));
+    $('#k-pct').textContent = Math.round((paises.size / 195) * 1000) / 10 + '%';
+    $('#k-paises').textContent = paises.size;
+    $('#k-viajes').textContent = viajes.length;
+    $('#k-anio').textContent = viajes.filter((v) => v.anio === anioActual).length;
+    if (rutas) document.querySelectorAll('#mapa path').forEach((p) => p.classList.toggle('visitado', paises.has(p.dataset.cc)));
+    const orden = [...viajes].sort((a, b) => b.anio - a.anio || nombre(a.cc).localeCompare(nombre(b.cc)));
+    $('#lista').innerHTML = orden.length ? `<table><tbody>${orden.map((v) => `<tr><td>${v.anio}</td><td><b>${nombre(v.cc)}</b>${v.lugar ? ` · <span class="muted">${esc(v.lugar)}</span>` : ''}</td><td class="num"><button class="btn btn-chico btn-borrar" type="button" data-borrar="${v.id}" aria-label="Borrar viaje">✕</button></td></tr>`).join('')}</tbody></table>` : '<p class="vacio">Tus viajes aparecen aquí.</p>';
+    const anios = [];
+    for (let a = anioActual - 9; a <= anioActual; a++) anios.push(a);
+    const vals = anios.map((a) => viajes.filter((v) => v.anio === a).length);
+    const max = Math.max(...vals, 1);
+    $('#barras').innerHTML = anios.map((a, i) => `<div><small>${vals[i] || ''}</small><span style="height:${(vals[i] / max) * 85}%"></span>${String(a).slice(2)}</div>`).join('');
+  }
+
+  $('#form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const cc = $('#f-pais').value, anio = Number($('#f-anio').value);
+    if (!cc) { aviso('Elige un país'); return; }
+    if (!(anio >= 1950 && anio <= 2100)) { aviso('Revisa el año'); return; }
+    viajes.push({ id: id(), cc, lugar: $('#f-lugar').value.trim(), anio });
+    guardar('viajes', viajes);
+    $('#f-lugar').value = '';
+    aviso('Viaje a ' + nombre(cc) + ' guardado ✈️');
+    pintar();
+  });
+  document.addEventListener('click', (e) => {
+    const p = e.target.closest('#mapa path');
+    if (p && p.dataset.cc) { $('#f-pais').value = p.dataset.cc; $('#f-lugar').focus(); $('#t-form').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    const b = e.target.closest('[data-borrar]');
+    if (b) { viajes = viajes.filter((v) => v.id !== b.dataset.borrar); guardar('viajes', viajes); pintar(); }
+  });
+  respaldo('viajes', 'viajes-stpyme', (d) => { viajes = Array.isArray(d) ? d : []; pintar(); });
+  pintar();
+  mapa();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+/* Apps gratis de STPyme: colores iguales a stpyme.cl */
+:root{color-scheme:dark;--bg:#0f1a12;--card:#16241a;--soft:#1b2b1f;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--acc:#c5f33b;--acc-soft:rgba(197,243,59,.12);--red:#ff8a80;--shadow:0 1px 2px rgba(0,0,0,.35),0 18px 40px -24px rgba(0,0,0,.85)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 420px at 85% -10%,rgba(197,243,59,.08),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.5 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--acc)}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+header.wrap{padding-top:18px;padding-bottom:10px}
+.marca{display:flex;align-items:center;gap:12px}
+.marca img{height:28px;width:auto;display:block}
+.marca-sub{color:var(--muted);font-weight:600;font-size:15px;text-decoration:none;padding-left:12px;border-left:1px solid var(--line)}
+.marca-sub:hover{color:var(--acc)}
+.etiqueta{display:inline-block;font:700 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:var(--bg);background:var(--acc);padding:5px 8px;border-radius:6px;margin-top:14px}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.12;margin:10px 0 6px;letter-spacing:-.025em}
+h2{font-size:19px;margin:0 0 10px;letter-spacing:-.015em}
+.bajada{color:var(--muted);margin:0 0 18px;font-size:17px;max-width:640px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.grid{display:grid;gap:12px}
+@media(min-width:720px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}}
+label{display:block;font-weight:600;font-size:14px;margin:0 0 5px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px;border-color:transparent}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.fila>*{flex:1 1 140px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;flex:0 0 auto}
+.btn:hover{border-color:var(--acc)}
+.btn-primario{background:var(--acc);color:#0f1a12;border-color:var(--acc)}
+.btn-chico{padding:6px 10px;font-size:14px}
+.btn-borrar{color:var(--red)}
+.muted{color:var(--muted)}
+.chico{font-size:14px}
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi small{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.kpi b{display:block;font-size:26px;letter-spacing:-.02em;margin-top:2px}
+.kpi.acc b{color:var(--acc)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-size:13px;font-weight:600}
+td.num,th.num{text-align:right;white-space:nowrap}
+.vacio{color:var(--muted);text-align:center;padding:22px 8px}
+.datos{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 16px}
+.datos p{margin:0;flex:1 1 260px}
+.aviso{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--acc);color:#0f1a12;font-weight:700;padding:10px 16px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.aviso.ver{opacity:1}
+.guia{border:1px dashed var(--acc);background:var(--acc-soft)}
+.guia p{margin:0 0 12px}
+footer{padding:20px 0 40px;color:var(--muted);font-size:14px}
+.oculto{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
