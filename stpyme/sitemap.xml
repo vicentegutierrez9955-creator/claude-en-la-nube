@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://stpyme.cl/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://stpyme.cl/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://stpyme.cl/cursos</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://stpyme.cl/ebook</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://stpyme.cl/herramientas</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://stpyme.cl/herramientas/punto-de-venta</loc><lastmod>2026-11-16</lastmod></url>
   <url><loc>https://stpyme.cl/herramientas/menu-restaurante</loc><lastmod>2026-11-16</lastmod></url>
@@ -14,5 +16,5 @@
   <url><loc>https://stpyme.cl/apps/gym</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://stpyme.cl/apps/viajes</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://stpyme.cl/apps/guia-claude</loc><lastmod>2026-11-20</lastmod></url>
-  <url><loc>https://stpyme.cl/privacidad</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://stpyme.cl/privacidad</loc><lastmod>2026-11-23</lastmod></url>
 </urlset>

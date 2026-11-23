@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gracias por tu compra | STPyme</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0f1a12">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230f1a12'/%3E%3Ctext x='20' y='26' font-family='Arial,sans-serif' font-weight='800' font-size='18' text-anchor='middle' fill='%23fff'%3EST%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0f1a12;--card:#16241a;--ink:#f1f5ee;--muted:#9aa89c;--line:#26382a;--acc:#c5f33b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(700px 420px at 50% -10%,rgba(197,243,59,.12),transparent 70%) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,sans-serif;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left)) 40px max(16px,env(safe-area-inset-right))}
+.caja{width:100%;max-width:520px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:32px 28px;text-align:center;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em;color:#fff;text-decoration:none}.logo span{color:var(--acc)}
+.icono{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;margin:22px auto 16px;background:rgba(197,243,59,.14);color:var(--acc);font-size:34px;font-weight:800}
+h1{font-size:28px;line-height:1.15;letter-spacing:-.025em;margin:0 0 10px}
+p{color:var(--muted);margin:0 0 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--acc);color:#0f1a12;font-weight:800;font-size:17px;text-decoration:none;padding:16px 26px;border-radius:14px;margin:8px 0 14px}
+.giro{width:34px;height:34px;border:4px solid var(--line);border-top-color:var(--acc);border-radius:50%;margin:24px auto 16px;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+.chico{font-size:14px}
+a{color:var(--acc)}
+@media (prefers-reduced-motion:reduce){.giro{animation:none}}
+</style>
+</head>
+<body>
+<main class="caja" id="caja" aria-live="polite">
+  <a class="logo" href="/">ST<span>Pyme</span></a>
+  <div class="giro" id="giro"></div>
+  <h1 id="titulo">Confirmando tu pago…</h1>
+  <p id="texto">Esto toma unos segundos. No cierres esta página.</p>
+  <div id="accion"></div>
+  <p class="chico" id="pie"></p>
+</main>
+<script src="/js/tienda.js" defer></script>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var orden = q.get('orden'), t = q.get('t');
+  var $ = function (id) { return document.getElementById(id); };
+  var intentos = 0;
+  function poner(titulo, texto, html, pie) { $('titulo').textContent = titulo; $('texto').textContent = texto; $('accion').innerHTML = html || ''; $('pie').innerHTML = pie || ''; }
+  if (!orden || !t) { $('giro').remove(); poner('No encontramos tu compra', 'Este link no está completo.', '', '¿Ya pagaste? Escríbenos en <a href="/#contacto">stpyme.cl</a> y te ayudamos.'); return; }
+  function consultar() {
+    var extra = intentos === 0 ? ['payment_id', 'collection_id'].map(function (k) { return q.get(k) ? '&' + k + '=' + encodeURIComponent(q.get(k)) : ''; }).join('') : '';
+    fetch('/api/publico/tienda?op=estado&orden=' + encodeURIComponent(orden) + '&t=' + encodeURIComponent(t) + extra)
+      .then(function (r) { return r.json(); })
+      .then(function (e) {
+        intentos++;
+        if (e.estado === 'pagado') {
+          $('giro').remove();
+          $('caja').querySelector('.icono') || $('titulo').insertAdjacentHTML('beforebegin', '<div class="icono">✓</div>');
+          poner('¡Listo, ' + (e.comprador || '') + '!', 'Tu compra está confirmada. Descarga tu ebook acá:', '', 'Guarda este link para bajarlo de nuevo cuando quieras. Si tienes un problema, escríbenos en <a href="/#contacto">stpyme.cl</a>.');
+          var a = document.createElement('a'); a.className = 'btn'; a.href = e.descarga; a.textContent = '⬇ Descargar mi ebook';
+          $('accion').appendChild(a);
+          try { if (!localStorage.getItem('stp-compra-' + orden)) { localStorage.setItem('stp-compra-' + orden, '1'); window.STP && STP.evento('Purchase', { producto: e.producto, valor: e.monto }, orden); } } catch (x) { window.STP && STP.evento('Purchase', { producto: e.producto, valor: e.monto }, orden); }
+          return;
+        }
+        if (e.estado === 'rechazado') { $('giro').remove(); poner('El pago no se completó', 'Mercado Pago no aprobó el pago. Puedes intentarlo de nuevo con otro medio.', '<a class="btn" href="/ebook#comprar">Intentar de nuevo</a>'); return; }
+        if (e.error) { $('giro').remove(); poner('No encontramos tu compra', e.error, '', 'Si ya pagaste, escríbenos en <a href="/#contacto">stpyme.cl</a> con el correo de tu compra.'); return; }
+        if (intentos < 40) { if (intentos === 6) $('texto').textContent = 'Mercado Pago todavía está confirmando. Si pagaste con transferencia o efectivo puede tardar un poco más.'; setTimeout(consultar, 3000); }
+        else { $('giro').remove(); poner('Tu pago sigue pendiente', 'Apenas Mercado Pago lo confirme, puedes volver a esta misma página y descargar tu ebook.', '', 'Guarda este link. ¿Dudas? Escríbenos en <a href="/#contacto">stpyme.cl</a>.'); }
+      })
+      .catch(function () { setTimeout(consultar, 4000); });
+  }
+  consultar();
+})();
+</script>
+</body>
+</html>

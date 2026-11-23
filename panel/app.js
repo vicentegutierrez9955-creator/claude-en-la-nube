@@ -4,6 +4,7 @@ import {
 import { iniciarProspectos } from '/panel/prospectos.js';
 import { iniciarMaquetas } from '/panel/maquetas.js';
 import { iniciarEstrategia } from '/panel/estrategia.js';
+import { iniciarTienda } from '/panel/tienda.js';
 
 const $ = (s) => document.querySelector(s);
 const ETIQUETA = { atrasado: 'Atrasado', pronto: 'Pronto', mes: 'Este mes', ok: 'Al día' };
@@ -12,6 +13,7 @@ let pestana = 'resumen';
 let prospectos = null;
 let maquetas = null;
 let estrategia = null;
+let tienda = null;
 // Filtro de unidad de negocio ('' = todas). Se recuerda en este navegador.
 let unidad = '';
 try { unidad = localStorage.getItem('panel-unidad') || ''; } catch { /* sin storage */ }
@@ -141,6 +143,7 @@ function render() {
   prospectos?.render();
   maquetas?.render();
   estrategia?.render();
+  tienda?.render();
   renderPagos();
   renderTrabajos();
   const t = $('#transferencia');
@@ -627,5 +630,7 @@ estrategia = iniciarEstrategia({
   h, $, badge, abrir, kv, fechaLarga, toast, hoy, estado: () => estado, unidad: () => unidad,
   verPestana: (t) => { pestana = t; render(); window.scrollTo(0, 0); },
 });
+
+tienda = iniciarTienda({ h, $, toast, badge });
 
 cargar();

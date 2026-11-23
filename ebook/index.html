@@ -435,7 +435,7 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
     <div class="centro"><span class="kicker">Cómo comprar</span><h2>Tres pasos y empiezas hoy</h2><p class="lead">Sin crear cuentas raras ni suscripciones.</p></div>
     <div class="pasos">
       <div><b>Paga con Mercado Pago</b><p>Toca el botón "Quiero mi ebook" y paga $5.000 con los medios de pago que te ofrece Mercado Pago.</p></div>
-      <div><b>Recibe tu PDF</b><p>Te enviamos el ebook al correo que usaste en tu compra.</p></div>
+      <div><b>Descárgalo al tiro</b><p>Apenas pagas vuelves a una página con tu ebook listo para descargar, y te queda el link para bajarlo de nuevo.</p></div>
       <div><b>Haz tu web esta tarde</b><p>Sigue los capítulos en orden y termina con tu web publicada en internet.</p></div>
     </div>
   </div>
@@ -445,7 +445,7 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
   <div class="env">
     <div class="garantia">
       <div class="sello-g"><div><b>7</b><span>días de<br>garantía</span></div></div>
-      <div><span class="kicker">Compra sin riesgo</span><h2>Si no te sirve, te devolvemos tu plata</h2><p>Tienes 7 días desde tu compra para probar la guía. Si no te convence, responde el correo con el que te enviamos el ebook y te devolvemos tus $5.000. Sin preguntas.</p></div>
+      <div><span class="kicker">Compra sin riesgo</span><h2>Si no te sirve, te devolvemos tu plata</h2><p>Tienes 7 días desde tu compra para probar la guía. Si no te convence, escríbenos en <a href="https://stpyme.cl/#contacto">stpyme.cl</a> con el correo de tu compra y te devolvemos tus $5.000. Sin preguntas.</p></div>
     </div>
   </div>
 </section>
@@ -458,8 +458,8 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
       <details><summary>¿De verdad es gratis hacer y publicar la web?</summary><p>Sí. La app OpenCode es gratis, el modelo de IA DeepSeek V4.1 Flash es gratis en OpenCode y publicar en Cloudflare es gratis. *OpenCode ofrece ese modelo gratis "por tiempo limitado": si cambia, el ebook te muestra qué otro modelo gratuito usar. Lo único opcional que se paga es un dominio .cl propio ($9.990 al año en NIC Chile).</p></details>
       <details><summary>¿Funciona en Mac?</summary><p>Sí. OpenCode tiene app de escritorio para Windows y Mac. Las capturas del ebook son de Windows, pero los pasos son los mismos.</p></details>
       <details><summary>¿Puedo hacer una tienda online?</summary><p>Sí, una tienda donde muestras tus productos con precio y el cliente te compra por WhatsApp o con un link de pago de Mercado Pago. Lo que no trae es un carrito con stock automático: para eso se necesita otro tipo de sistema.</p></details>
-      <details><summary>¿Cómo recibo el ebook?</summary><p>Después de pagar con Mercado Pago te lo enviamos en PDF al correo que usaste en la compra. Lo puedes leer en el computador, la tablet o el celular.</p></details>
-      <details><summary>¿Y si no me sirve?</summary><p>Tienes garantía de 7 días: responde el correo con el que te enviamos el ebook y te devolvemos tus $5.000, sin preguntas.</p></details>
+      <details><summary>¿Cómo recibo el ebook?</summary><p>Apenas pagas con Mercado Pago lo descargas en PDF en la página de confirmación, y te queda el link para bajarlo de nuevo cuando quieras. Lo puedes leer en el computador, la tablet o el celular.</p></details>
+      <details><summary>¿Y si no me sirve?</summary><p>Tienes garantía de 7 días: escríbenos en <a href="https://stpyme.cl/#contacto">stpyme.cl</a> con el correo de tu compra y te devolvemos tus $5.000, sin preguntas.</p></details>
       <details><summary>¿Y si me complico?</summary><p>El ebook va paso a paso y con capturas, pero si prefieres que lo hagamos nosotros, en <a href="https://stpyme.cl">STPyme</a> hacemos webs para pymes y te mostramos una maqueta gratis antes de que pagues.</p></details>
     </div>
   </div>
@@ -484,11 +484,7 @@ footer{background:var(--osc);border-top:1px solid #1c2b20}
 <div class="barra" id="barra"><span>$5.000<small>Lanzamiento · garantía 7 días</small></span><a class="btn pagar" href="#comprar">Comprar</a></div>
 
 <script>
-// Link de pago de Mercado Pago (Tus ventas > Link de pago). Pegar aquí el link de $5.000.
-var LINK_PAGO = 'https://mpago.la/2WHqKQt';
-document.querySelectorAll('a.pagar').forEach(function (a) {
-  if (LINK_PAGO) { a.href = LINK_PAGO; a.target = '_blank'; a.rel = 'noopener'; }
-});
+// Los botones "pagar" abren el formulario de compra de /js/tienda.js (Mercado Pago Checkout Pro).
 var fin = new Date('2026-12-01T00:00:00-03:00'), dias = Math.ceil((fin - new Date()) / 864e5);
 if (dias > 1) document.getElementById('dias').textContent = ' (quedan ' + dias + ' días)';
 else if (dias === 1) document.getElementById('dias').textContent = ' (último día)';
@@ -510,5 +506,6 @@ addEventListener('scroll', function () {
   barra.classList.toggle('ver', y > 600 && !fin);
 }, { passive: true });
 </script>
+<script src="/js/tienda.js" data-producto="ebook-web-ia" data-respaldo="https://mpago.la/2WHqKQt" defer></script>
 </body>
 </html>

@@ -15,6 +15,8 @@
     "test:contacto": "PANEL_STORE=memory node tests/contacto.mjs",
     "test:carta": "PANEL_STORE=memory node tests/carta.mjs",
     "test:carta-navegador": "PANEL_STORE=memory node tests/carta-navegador.mjs",
-    "test:tuerkit": "PANEL_STORE=memory node tests/tuerkit.mjs"
+    "test:tuerkit": "PANEL_STORE=memory node tests/tuerkit.mjs",
+    "test:tienda": "PANEL_STORE=memory node tests/tienda.mjs",
+    "test:tienda-navegador": "PANEL_STORE=memory node tests/tienda-navegador.mjs"
   }
 }
