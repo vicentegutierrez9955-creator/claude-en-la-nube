@@ -14,7 +14,7 @@
 <section id="login" class="login" hidden>
   <form id="login-form" class="login-card">
     <div class="brand"><span class="brand-mark">P</span><b>Panel de clientes</b></div>
-    <p class="muted">Entra con tu nombre y la clave del equipo.</p>
+    <p class="muted">Para cambiar datos, entra con tu nombre y la clave del equipo. Para solo mirar no hace falta: <button id="solo-ver" type="button" class="link">ver el panel</button>.</p>
     <label>Tu nombre<input id="login-nombre" autocomplete="name" required maxlength="40" placeholder="Ej: Vicente"></label>
     <label>Clave del equipo<input id="login-clave" type="password" autocomplete="current-password" required></label>
     <p id="login-error" class="error" role="alert" hidden></p>
@@ -173,5 +173,6 @@
 <div id="toast" class="toast" role="status" hidden></div>
 
 <script type="module" src="/panel/app.js"></script>
+<script type="module" src="/panel/vista.js"></script>
 </body>
 </html>

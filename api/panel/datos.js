@@ -3,12 +3,13 @@ import { sesion, leerDatos, guardarDatos, datosValidos, datosIniciales, json, MA
 export default {
   async fetch(request) {
     const s = sesion(request);
-    if (!s) return json({ error: 'Sesión expirada' }, 401);
 
+    // Ver el panel no pide clave (lo pidió el equipo); cambiar datos sí.
     if (request.method === 'GET') {
       const { data, etag } = await leerDatos();
-      return json({ data: data || datosIniciales(), etag, usuario: s.nombre });
+      return json({ data: data || datosIniciales(), etag, usuario: s?.nombre || '' });
     }
+    if (!s) return json({ error: 'Sesión expirada' }, 401);
 
     if (request.method === 'PUT') {
       const texto = await request.text();
