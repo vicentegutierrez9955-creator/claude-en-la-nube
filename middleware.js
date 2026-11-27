@@ -61,7 +61,9 @@ export default function middleware(request) {
 
 // Las páginas de un cliente abiertas desde otro dominio (stpyme.cl/<carpeta> o la maqueta antigua en
 // plantillas-omega.vercel.app/<carpeta>) llevan a su dominio: así Google ve una sola copia de cada página.
+// Excepción: con ?vitrina se quedan aquí, para verlas en vivo dentro de la Vitrina (/vitrina) sin cambiar de dominio.
 function redirigirACliente(url) {
+  if (url.searchParams.has('vitrina')) return undefined;
   const de = SITIOS.find((s) => enCarpeta(url.pathname, s.dir));
   const limpia = de && urlLimpia(url, de);
   return limpia ? Response.redirect(limpia, 301) : undefined;

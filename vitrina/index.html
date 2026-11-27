@@ -179,8 +179,8 @@ button,input,select{font:inherit;color:inherit}
 <script>
 (() => {
   const WEBS = [
-    { slug: 'taller-torque', ruta: '/vitrina/demo/taller-torque/', nombre: 'Taller Torque', rubro: 'Taller mecánico', lugar: 'Maipú', grupo: 'Demo', url: '', dominio: 'tallertorque.cl' },
-    { slug: 'web-generica', ruta: '/vitrina/demo/web-generica/', nombre: 'Web genérica', rubro: 'Plantilla común, para comparar', lugar: 'Ejemplo', grupo: 'Demo', url: '', dominio: 'webpro-agency.com/taller' },
+    { slug: 'taller-torque', ruta: '/vitrina/demo/taller-torque', nombre: 'Taller Torque', rubro: 'Taller mecánico', lugar: 'Maipú', grupo: 'Demo', url: '', dominio: 'tallertorque.cl' },
+    { slug: 'web-generica', ruta: '/vitrina/demo/web-generica', nombre: 'Web genérica', rubro: 'Plantilla común, para comparar', lugar: 'Ejemplo', grupo: 'Demo', url: '', dominio: 'webpro-agency.com/taller' },
     { slug: 'gustavo-parra-podologia', nombre: 'Gustavo Parra Podología', rubro: 'Podólogo', lugar: 'Estación Central', grupo: 'Webs de negocios', url: 'https://gparrapodologia.cl/' },
     { slug: 'asesorias-contables-jc', nombre: 'Asesorías Contables JC', rubro: 'Contador', lugar: 'Melipilla', grupo: 'Webs de negocios', url: 'https://asesoriascontables-jc.cl/' },
     { slug: 'ttm-service', nombre: 'TTM Service', rubro: 'Mecánica y serviteca', lugar: 'Melipilla', grupo: 'Webs de negocios' },
@@ -201,7 +201,7 @@ button,input,select{font:inherit;color:inherit}
   const COLORES = { 'taller-torque': '#10263b', 'web-generica': '#6a5af9', 'gustavo-parra-podologia': '#0f766e', 'asesorias-contables-jc': '#1f95d8', 'ttm-service': '#204e9c', 'piscinas-martol': '#0e7490', 'st-motor': '#c2410c', '5-stars-barber-shop': '#a16207', 'active-gym': '#4d7c0f', 'buddha-sushi': '#b91c1c', 'costa-dent': '#0369a1', 'kine-rehabilita-sports': '#0b1f3a', 'veterinaria-san-agustin': '#0f766e', 'petcare-puente-alto': '#4f46e5', 'plantilla-salud': '#0284c7', 'plantilla-veterinaria': '#15803d', 'plantilla-gimnasio': '#a16207', 'plantilla-hogar': '#166534' };
   WEBS.forEach((w) => {
     w.color = COLORES[w.slug] || '#253629';
-    if (!w.ruta) w.ruta = `/${w.slug}/`;
+    if (!w.ruta) w.ruta = `/${w.slug}?vitrina=1`;
     if (w.url === undefined) w.url = `https://stpyme.cl/${w.slug}`;
     if (!w.dominio) w.dominio = w.url.replace(/^https:\/\//, '').replace(/\/$/, '');
   });
@@ -285,8 +285,8 @@ button,input,select{font:inherit;color:inherit}
   // ---- las dos pantallas se mueven juntas, en proporción al largo de cada una
   let moviendo = false;
   const ventana = (f) => { try { return f.contentWindow; } catch (e) { return null; } };
-  const frac = (f) => { const w = ventana(f); const h = w && w.document && w.document.documentElement; if (!h) return 0; return w.scrollY / Math.max(1, h.scrollHeight - w.innerHeight); };
-  const llevar = (f, x) => { const w = ventana(f); const h = w && w.document && w.document.documentElement; if (!h) return; w.scrollTo(0, x * (h.scrollHeight - w.innerHeight)); };
+  const frac = (f) => { let w, h; try { w = ventana(f); h = w && w.document && w.document.documentElement; } catch (e) { return 0; } if (!h) return 0; return w.scrollY / Math.max(1, h.scrollHeight - w.innerHeight); };
+  const llevar = (f, x) => { let w, h; try { w = ventana(f); h = w && w.document && w.document.documentElement; } catch (e) { return; } if (!h) return; w.scrollTo(0, x * (h.scrollHeight - w.innerHeight)); };
   function alMover(origen) {
     if (moviendo || anim) return;
     const destino = origen === fPc ? fCel : fPc;
