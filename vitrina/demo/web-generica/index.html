@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>Taller Torque web ofrecida</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+<style>
+/* La web "de plantilla" que le ofrecieron al taller: bonita, centrada, genérica. Un solo tema claro a propósito. */
+:root{
+  --bg:#ffffff; --tinta:#1f2340; --gris:#6b6f86; --suave:#f4f5fb; --linea:#e6e8f2;
+  --a1:#6a5af9; --a2:#3fa7ff; --blanco:#ffffff;
+  --f:"Poppins",system-ui,sans-serif;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--tinta);font:15px/1.7 var(--f)}
+.ancho{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+nav{display:flex;align-items:center;justify-content:space-between;padding-block:18px;gap:16px;flex-wrap:wrap}
+.logo{font-weight:700;font-size:20px;color:var(--a1)}
+nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav a{color:var(--tinta);text-decoration:none;font-size:14px}
+.hero{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--blanco);text-align:center;margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 0px)}
+.hero .ancho{padding-block:84px 96px;display:grid;gap:18px;justify-items:center}
+.hero h1{font-size:clamp(30px,5vw,50px);line-height:1.15;margin:0;max-width:18ch}
+.hero p{margin:0;max-width:56ch;opacity:.9}
+.btn{display:inline-block;background:var(--blanco);color:var(--a1);font-weight:600;border-radius:40px;padding:12px 30px;text-decoration:none;border:0;font:600 15px var(--f);cursor:pointer}
+.btn.lleno{background:var(--a1);color:var(--blanco)}
+section{padding-block:72px}
+.titulo{text-align:center;display:grid;gap:8px;margin-bottom:40px}
+.titulo h2{margin:0;font-size:30px}
+.titulo p{margin:0 auto;color:var(--gris);max-width:56ch}
+.tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.tarjeta{background:var(--blanco);border-radius:16px;box-shadow:0 10px 30px rgba(60,60,120,.08);padding:30px 24px;text-align:center;display:grid;gap:10px}
+.tarjeta .ico{font-size:34px}
+.tarjeta h3{margin:0;font-size:18px}
+.tarjeta p{margin:0;color:var(--gris);font-size:14px}
+.gris{background:var(--suave)}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;align-items:center}
+.foto{aspect-ratio:4/3;max-width:100%;border-radius:16px;background:linear-gradient(135deg,#d9dcf3,#eef0fb);display:grid;place-items:center;color:var(--gris);font-size:14px}
+.dos h2{margin:0 0 12px;font-size:28px}
+.dos p{margin:0 0 12px;color:var(--gris)}
+.testimonio{background:var(--blanco);border-radius:16px;box-shadow:0 10px 30px rgba(60,60,120,.08);padding:28px;text-align:center;display:grid;gap:10px}
+.testimonio p{margin:0;color:var(--gris);font-style:italic}
+.testimonio b{font-size:14px}
+form{max-width:520px;margin:0 auto;display:grid;gap:14px}
+input,textarea{font:15px var(--f);border:1px solid var(--linea);border-radius:10px;padding:12px 14px;color:var(--tinta);background:var(--blanco)}
+input:focus-visible,textarea:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid var(--a1);outline-offset:2px}
+.ok{text-align:center;color:var(--a1);font-weight:600;margin:0}
+footer{background:var(--tinta);color:#c9cbe0;text-align:center;font-size:13px}
+footer .ancho{padding-block:28px;display:grid;gap:4px}
+</style>
+
+<nav class="ancho" aria-label="Principal">
+  <span class="logo">⚙️ Taller Torque</span>
+  <ul><li><a href="#servicios">Inicio</a></li><li><a href="#servicios">Servicios</a></li><li><a href="#nosotros">Nosotros</a></li><li><a href="#contacto">Contacto</a></li></ul>
+</nav>
+
+<header class="hero">
+  <div class="ancho">
+    <h1>Bienvenidos a Taller Torque</h1>
+    <p>Somos líderes en soluciones automotrices integrales, comprometidos con la excelencia, la calidad y la satisfacción de nuestros clientes.</p>
+    <a class="btn" href="#nosotros">Conócenos</a>
+  </div>
+</header>
+
+<section id="servicios">
+  <div class="ancho">
+    <div class="titulo"><h2>Nuestros servicios</h2><p>Ofrecemos una amplia gama de servicios para satisfacer todas las necesidades de su vehículo.</p></div>
+    <div class="tarjetas">
+      <article class="tarjeta"><span class="ico" aria-hidden="true">🔧</span><h3>Mecánica general</h3><p>Soluciones integrales con los más altos estándares de calidad.</p></article>
+      <article class="tarjeta"><span class="ico" aria-hidden="true">🚗</span><h3>Mantención</h3><p>Cuidamos su vehículo como si fuera nuestro.</p></article>
+      <article class="tarjeta"><span class="ico" aria-hidden="true">🛞</span><h3>Frenos y suspensión</h3><p>Seguridad y confianza en cada kilómetro.</p></article>
+      <article class="tarjeta"><span class="ico" aria-hidden="true">⚡</span><h3>Electricidad</h3><p>Diagnóstico profesional con tecnología de punta.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="gris">
+  <div class="ancho dos">
+    <div class="foto" role="img" aria-label="Espacio para una foto del taller">Foto del taller</div>
+    <div>
+      <h2>Sobre nosotros</h2>
+      <p>Somos una empresa con años de experiencia en el rubro automotriz. Nuestra misión es entregar un servicio de excelencia, con un equipo de profesionales altamente capacitados y comprometidos.</p>
+      <p>Nuestra visión es ser referentes en el mercado, brindando soluciones innovadoras y de calidad.</p>
+      <a class="btn lleno" href="#contacto">Contáctanos</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="ancho">
+    <div class="titulo"><h2>Lo que dicen nuestros clientes</h2></div>
+    <div class="tarjetas">
+      <div class="testimonio"><p>"Excelente servicio, muy recomendados."</p><b>Cliente satisfecho</b></div>
+      <div class="testimonio"><p>"Muy buena atención y profesionalismo."</p><b>Cliente frecuente</b></div>
+      <div class="testimonio"><p>"Los recomiendo 100%."</p><b>Cliente</b></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="gris">
+  <div class="ancho">
+    <div class="titulo"><h2>Contáctanos</h2><p>Déjanos tu mensaje y te responderemos a la brevedad.</p></div>
+    <form id="form-contacto">
+      <input id="c-nombre" placeholder="Nombre" aria-label="Nombre">
+      <input id="c-correo" placeholder="Correo electrónico" aria-label="Correo electrónico">
+      <textarea id="c-mensaje" rows="4" placeholder="Mensaje" aria-label="Mensaje"></textarea>
+      <button class="btn lleno" type="submit">Enviar</button>
+      <p class="ok" id="c-ok" hidden>Gracias por tu mensaje.</p>
+    </form>
+  </div>
+</section>
+
+<footer><div class="ancho"><span>© 2026 Taller Torque. Todos los derechos reservados.</span><span>Diseñado por WebPro Agency</span><span>Demo de STPyme: negocio ficticio.</span></div></footer>
+
+<script>
+document.getElementById('form-contacto').addEventListener('submit', (e) => { e.preventDefault(); document.getElementById('c-ok').hidden = false; });
+</script>

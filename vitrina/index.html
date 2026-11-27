@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Vitrina STPyme</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f1a12'/%3E%3Crect x='6' y='9' width='16' height='11' rx='2' fill='none' stroke='%23c5f33b' stroke-width='2.4'/%3E%3Crect x='20' y='14' width='7' height='12' rx='2' fill='%230f1a12' stroke='%23c5f33b' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Vitrina para mostrarle a un cliente su web EN VIVO: cada web se carga de verdad dentro de un notebook y un celular,
+   con sus animaciones. Colores de STPyme (verde noche y lima), tema oscuro para que los equipos resalten. */
+:root{
+  --fondo:#0d1610; --tarjeta:#142017; --suave:#1a2a1e; --linea:#253629; --tinta:#f1f5ee; --apagado:#9aa89c; --lima:#c5f33b; --lima-osc:#1b2600;
+  --equipo:#0a0d0b; --borde-equipo:#323d34;
+  --f-texto:"Plus Jakarta Sans",system-ui,sans-serif; --f-dato:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:15px/1.5 var(--f-texto);overflow:hidden}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--lima);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:290px minmax(0,1fr);height:100%;transition:grid-template-columns .35s cubic-bezier(.4,0,.2,1)}
+.app.presenta{grid-template-columns:0 minmax(0,1fr)}
+.app.presenta .lado{opacity:0;pointer-events:none}
+
+/* lista de webs */
+.lado{background:var(--tarjeta);border-right:1px solid var(--linea);display:grid;grid-template-rows:auto auto minmax(0,1fr);min-height:0;overflow:hidden;transition:opacity .25s}
+.cab{padding:20px 18px 14px max(18px,env(safe-area-inset-left,0px))}
+.logo{font-weight:800;font-size:21px;letter-spacing:-.02em}
+.logo span{color:var(--lima)}
+.cab p{margin:2px 0 0;color:var(--apagado);font-size:13px}
+.buscar{padding:0 14px 10px max(14px,env(safe-area-inset-left,0px))}
+.buscar input{width:100%;background:var(--fondo);border:1px solid var(--linea);border-radius:10px;padding:10px 12px}
+.buscar input::placeholder{color:var(--apagado)}
+.lista{overflow:auto;padding:0 10px 20px max(10px,env(safe-area-inset-left,0px));display:grid;gap:3px;align-content:start;scrollbar-width:thin;scrollbar-color:var(--linea) transparent}
+.grupo{font:500 11px var(--f-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--apagado);padding:14px 8px 4px}
+.web{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;text-align:left;background:transparent;border:1px solid transparent;border-radius:12px;padding:6px;cursor:pointer;transition:background .2s,border-color .2s}
+.web:hover{background:var(--suave)}
+.web[aria-current="true"]{background:var(--suave);border-color:var(--lima)}
+.ini{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff;letter-spacing:-.02em}
+.web b{display:block;font-size:14px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.web small{display:block;color:var(--apagado);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vacio{color:var(--apagado);padding:12px 8px;font-size:14px}
+
+/* escenario */
+.escena{display:grid;grid-template-rows:auto minmax(0,1fr);min-width:0;min-height:0;
+  background:radial-gradient(ellipse 55% 45% at 50% 45%,rgba(197,243,59,.08),transparent 70%),var(--fondo)}
+.barra{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:16px max(20px,env(safe-area-inset-right,0px)) 6px 22px}
+.titulo{min-width:0}
+.titulo h1{margin:0;font-size:clamp(20px,2.2vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.titulo p{margin:2px 0 0;color:var(--apagado);font-size:14px}
+.controles{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.segmento{display:inline-flex;border:1px solid var(--linea);border-radius:999px;padding:3px;background:var(--tarjeta)}
+.segmento button{border:0;background:transparent;border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:700;font-size:14px;color:var(--apagado);transition:background .2s,color .2s}
+.segmento button[aria-pressed="true"]{background:var(--tinta);color:var(--fondo)}
+.boton{border:1px solid var(--linea);background:var(--tarjeta);color:var(--tinta);border-radius:999px;padding:8px 15px;cursor:pointer;font-weight:700;font-size:14px;text-decoration:none;display:inline-flex;gap:8px;align-items:center;transition:border-color .2s,transform .15s}
+.boton:hover{border-color:var(--apagado)}
+.boton:active{transform:scale(.97)}
+.boton.lima{background:var(--lima);color:var(--lima-osc);border-color:var(--lima)}
+.boton svg{width:15px;height:15px}
+
+.lienzo{min-height:0;display:grid;place-items:center;padding:10px max(20px,env(safe-area-inset-right,0px)) 18px 22px;overflow:hidden}
+.equipos{position:relative;width:min(100%,calc((100dvh - 120px) * 1.62));aspect-ratio:1.62/1}
+
+/* notebook: la web se dibuja a 1280 px de ancho y se achica para caber */
+.notebook{position:absolute;left:0;top:0;width:86%;transition:width .4s cubic-bezier(.4,0,.2,1),left .4s}
+.tapa{background:var(--equipo);border:1px solid var(--borde-equipo);border-radius:16px 16px 4px 4px;padding:1.6% 1.6% 2.2%;box-shadow:0 50px 90px rgba(0,0,0,.55),inset 0 0 0 1px #1b221d}
+.camara{width:5px;height:5px;border-radius:50%;background:#2a332c;margin:-.9% auto .7%}
+.pantalla{position:relative;background:#fff;border-radius:3px;overflow:hidden}
+.pantalla-pc{aspect-ratio:1280/830}
+.navegador{height:30px;display:flex;gap:10px;align-items:center;background:#ecefeb;padding:0 10px;border-bottom:1px solid #d6dbd5;transform-origin:0 0}
+.puntos{display:flex;gap:6px}
+.puntos i{width:10px;height:10px;border-radius:50%;background:#cfd4cd}
+.puntos i:first-child{background:#ff6159}.puntos i:nth-child(2){background:#ffbd2e}.puntos i:nth-child(3){background:#28c941}
+.url{flex:1;min-width:0;max-width:520px;margin:0 auto;background:#fff;border-radius:7px;padding:4px 12px;font:500 12px var(--f-dato);color:#3d463f;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.marco{position:absolute;left:0;overflow:hidden}
+.marco iframe{border:0;display:block;transform-origin:0 0;background:#fff}
+.base{height:14px;margin:0 -6.5%;background:linear-gradient(180deg,#d2d8d1,#a9b1a8 50%,#6f776e);border-radius:1px 1px 16px 16px;position:relative;box-shadow:0 24px 40px rgba(0,0,0,.5)}
+.base::before{content:"";position:absolute;left:50%;top:0;width:15%;height:5px;transform:translateX(-50%);background:#8b938a;border-radius:0 0 7px 7px}
+
+/* celular: la web se dibuja a 390 px de ancho */
+.celular{position:absolute;right:0;bottom:0;width:23%;transition:right .4s cubic-bezier(.4,0,.2,1),width .4s,bottom .4s}
+.carcasa{background:var(--equipo);border:1px solid var(--borde-equipo);border-radius:15%/7%;padding:4.4%;box-shadow:0 40px 80px rgba(0,0,0,.65),inset 0 0 0 2px #1b221d;position:relative}
+.carcasa::before{content:"";position:absolute;left:50%;top:3.3%;width:28%;height:2.9%;transform:translateX(-50%);background:#000;border-radius:999px;z-index:3}
+.pantalla-cel{aspect-ratio:390/844;border-radius:11%/5.2%}
+.estado-cel{position:absolute;left:0;top:0;width:390px;height:47px;transform-origin:0 0;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 34px;font:700 15px var(--f-texto);color:#111;background:#fff;z-index:1}
+.estado-cel i{display:inline-block;width:24px;height:11px;border:1.5px solid #111;border-radius:3px;position:relative}
+.estado-cel i::after{content:"";position:absolute;inset:1.5px 5px 1.5px 1.5px;background:#111;border-radius:1px}
+.solo-cel .ayuda{display:none}
+
+.cargando{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:linear-gradient(100deg,#eef1ed 30%,#fafcf9 50%,#eef1ed 70%) 0 0/300% 100%;animation:brillo 1.2s linear infinite;color:#5f6b61;font-size:13px;font-weight:700;transition:opacity .3s}
+@keyframes brillo{to{background-position:-150% 0}}
+
+.solo-pc .celular{opacity:0;pointer-events:none;right:-10%}
+.solo-pc .notebook{width:100%}
+.solo-cel .notebook{opacity:0;pointer-events:none}
+.solo-cel .celular{right:50%;width:33%;transform:translateX(50%);bottom:0}
+
+.ayuda{position:absolute;left:0;bottom:-2px;font:500 12px var(--f-dato);color:var(--apagado)}
+.ayuda b{color:var(--tinta);font-weight:500}
+
+.selector-movil{display:none}
+
+@media (max-width:860px){
+  body{overflow:auto}
+  .app{grid-template-columns:1fr;height:auto;min-height:100%}
+  .lado{display:none}
+  .selector-movil{display:block;padding:4px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+  .selector-movil select{width:100%;background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;padding:11px 12px}
+  .barra,.lienzo{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .equipos{width:100%}
+  .solo-cel .celular{width:62%}
+  .equipos.solo-cel{aspect-ratio:.75/1;max-width:420px}
+  #b-presenta,.ayuda{display:none}
+}
+@media (prefers-reduced-motion:reduce){.cargando{animation:none}.notebook,.celular,.app{transition:none}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="lado" aria-label="Webs">
+    <div class="cab"><div class="logo">ST<span>Pyme</span></div><p>Vitrina de webs en vivo</p></div>
+    <div class="buscar"><input id="buscar" type="search" placeholder="Buscar por nombre, rubro o comuna" aria-label="Buscar web"></div>
+    <nav class="lista" id="lista"></nav>
+  </aside>
+
+  <main class="escena">
+    <div>
+      <div class="barra">
+        <div class="titulo"><h1 id="nombre">Taller Torque</h1><p id="detalle">Taller mecánico · Maipú</p></div>
+        <div class="controles">
+          <div class="segmento" role="group" aria-label="Qué equipos mostrar">
+            <button type="button" data-modo="ambos" aria-pressed="true">PC y celular</button>
+            <button type="button" data-modo="solo-pc" aria-pressed="false">PC</button>
+            <button type="button" data-modo="solo-cel" aria-pressed="false">Celular</button>
+          </div>
+          <button class="boton lima" type="button" id="b-recorrido"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4 2.5v11l9-5.5z"/></svg><span>Recorrer la web</span></button>
+          <button class="boton" type="button" id="b-arriba">Volver arriba</button>
+          <a class="boton" id="b-abrir" href="#" target="_blank" rel="noopener">Abrir la web <span aria-hidden="true">↗</span></a>
+          <button class="boton" type="button" id="b-presenta">Ocultar lista</button>
+        </div>
+      </div>
+      <div class="selector-movil"><select id="sel" aria-label="Elegir web"></select></div>
+    </div>
+
+    <div class="lienzo">
+      <div class="equipos" id="equipos">
+        <div class="notebook">
+          <div class="tapa">
+            <div class="camara" aria-hidden="true"></div>
+            <div class="pantalla pantalla-pc" id="pantalla-pc">
+              <div class="navegador" id="nav-pc" aria-hidden="true"><span class="puntos"><i></i><i></i><i></i></span><span class="url" id="url"></span></div>
+              <div class="marco" id="marco-pc"><iframe id="f-pc" title="La web vista en un computador" width="1280" height="800"></iframe></div>
+              <div class="cargando" id="carga-pc">Cargando la web…</div>
+            </div>
+          </div>
+          <div class="base" aria-hidden="true"></div>
+        </div>
+        <div class="celular">
+          <div class="carcasa">
+            <div class="pantalla pantalla-cel" id="pantalla-cel">
+              <div class="estado-cel" id="estado-cel" aria-hidden="true"><span>9:41</span><i></i></div>
+              <div class="marco" id="marco-cel"><iframe id="f-cel" title="La web vista en un celular" width="390" height="797"></iframe></div>
+              <div class="cargando" id="carga-cel">Cargando…</div>
+            </div>
+          </div>
+        </div>
+        <div class="ayuda">En vivo · computador <b>1280 px</b> · celular <b>390 px</b> · desliza dentro de cada pantalla</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+  const WEBS = [
+    { slug: 'taller-torque', ruta: '/vitrina/demo/taller-torque/', nombre: 'Taller Torque', rubro: 'Taller mecánico', lugar: 'Maipú', grupo: 'Demo', url: '', dominio: 'tallertorque.cl' },
+    { slug: 'web-generica', ruta: '/vitrina/demo/web-generica/', nombre: 'Web genérica', rubro: 'Plantilla común, para comparar', lugar: 'Ejemplo', grupo: 'Demo', url: '', dominio: 'webpro-agency.com/taller' },
+    { slug: 'gustavo-parra-podologia', nombre: 'Gustavo Parra Podología', rubro: 'Podólogo', lugar: 'Estación Central', grupo: 'Webs de negocios', url: 'https://gparrapodologia.cl/' },
+    { slug: 'asesorias-contables-jc', nombre: 'Asesorías Contables JC', rubro: 'Contador', lugar: 'Melipilla', grupo: 'Webs de negocios', url: 'https://asesoriascontables-jc.cl/' },
+    { slug: 'ttm-service', nombre: 'TTM Service', rubro: 'Mecánica y serviteca', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'piscinas-martol', nombre: 'Piscinas Martol', rubro: 'Construcción de piscinas', lugar: 'Talagante', grupo: 'Webs de negocios' },
+    { slug: 'st-motor', nombre: 'ST Motor', rubro: 'Taller mecánico', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: '5-stars-barber-shop', nombre: '5 Stars Barber Shop', rubro: 'Barbería', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'active-gym', nombre: 'Active Gym', rubro: 'Gimnasio', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'buddha-sushi', nombre: 'Buddha Sushi', rubro: 'Sushi y delivery', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'costa-dent', nombre: 'Costa Dent', rubro: 'Clínica dental', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'kine-rehabilita-sports', nombre: 'Kine Rehabilita Sports', rubro: 'Kinesiología', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'veterinaria-san-agustin', nombre: 'Hospital Veterinario San Agustín', rubro: 'Veterinaria', lugar: 'Melipilla', grupo: 'Webs de negocios' },
+    { slug: 'petcare-puente-alto', nombre: 'Centro Veterinario PetCare', rubro: 'Veterinaria', lugar: 'Puente Alto', grupo: 'Webs de negocios' },
+    { slug: 'plantilla-salud', nombre: 'Clínica Dental Aurora', rubro: 'Plantilla dentista', lugar: 'Ñuñoa', grupo: 'Plantillas por rubro' },
+    { slug: 'plantilla-veterinaria', nombre: 'Huellas del Sur', rubro: 'Plantilla veterinaria', lugar: 'La Florida', grupo: 'Plantillas por rubro' },
+    { slug: 'plantilla-gimnasio', nombre: 'Pulso Gym', rubro: 'Plantilla gimnasio', lugar: 'Maipú', grupo: 'Plantillas por rubro' },
+    { slug: 'plantilla-hogar', nombre: 'Jardines del Valle', rubro: 'Plantilla paisajismo y piscinas', lugar: 'Chicureo', grupo: 'Plantillas por rubro' },
+  ];
+  const COLORES = { 'taller-torque': '#10263b', 'web-generica': '#6a5af9', 'gustavo-parra-podologia': '#0f766e', 'asesorias-contables-jc': '#1f95d8', 'ttm-service': '#204e9c', 'piscinas-martol': '#0e7490', 'st-motor': '#c2410c', '5-stars-barber-shop': '#a16207', 'active-gym': '#4d7c0f', 'buddha-sushi': '#b91c1c', 'costa-dent': '#0369a1', 'kine-rehabilita-sports': '#0b1f3a', 'veterinaria-san-agustin': '#0f766e', 'petcare-puente-alto': '#4f46e5', 'plantilla-salud': '#0284c7', 'plantilla-veterinaria': '#15803d', 'plantilla-gimnasio': '#a16207', 'plantilla-hogar': '#166534' };
+  WEBS.forEach((w) => {
+    w.color = COLORES[w.slug] || '#253629';
+    if (!w.ruta) w.ruta = `/${w.slug}/`;
+    if (w.url === undefined) w.url = `https://stpyme.cl/${w.slug}`;
+    if (!w.dominio) w.dominio = w.url.replace(/^https:\/\//, '').replace(/\/$/, '');
+  });
+
+  const $ = (id) => document.getElementById(id);
+  const app = $('app'), lista = $('lista'), sel = $('sel'), equipos = $('equipos');
+  const fPc = $('f-pc'), fCel = $('f-cel');
+  const menos = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let actual = null;
+
+  // ---- tamaño: la web se dibuja a su ancho real y se achica para caber en cada pantalla
+  const ANCHO_PC = 1280, ALTO_PC = 800, NAV = 30, ANCHO_CEL = 390, ALTO_CEL = 797, BARRA_CEL = 47;
+  function ajustar() {
+    const pc = $('pantalla-pc').clientWidth, s = pc / ANCHO_PC;
+    $('nav-pc').style.transform = `scale(${s})`; $('nav-pc').style.width = ANCHO_PC + 'px';
+    const m = $('marco-pc'); m.style.top = NAV * s + 'px'; m.style.width = pc + 'px'; m.style.height = ALTO_PC * s + 'px';
+    fPc.style.transform = `scale(${s})`;
+    const cel = $('pantalla-cel').clientWidth, sc = cel / ANCHO_CEL;
+    $('estado-cel').style.transform = `scale(${sc})`;
+    const mc = $('marco-cel'); mc.style.top = BARRA_CEL * sc + 'px'; mc.style.width = cel + 'px'; mc.style.height = ALTO_CEL * sc + 'px';
+    fCel.style.transform = `scale(${sc})`;
+  }
+  new ResizeObserver(ajustar).observe(equipos);
+
+  // ---- lista de webs
+  function pintarLista(filtro = '') {
+    const f = filtro.trim().toLowerCase();
+    const visibles = WEBS.filter((w) => !f || `${w.nombre} ${w.rubro} ${w.lugar}`.toLowerCase().includes(f));
+    lista.innerHTML = '';
+    if (!visibles.length) { const p = document.createElement('p'); p.className = 'vacio'; p.textContent = `No hay webs con "${filtro}". Prueba con el rubro, como "dental" o "taller".`; lista.append(p); return; }
+    let grupo = '';
+    visibles.forEach((w) => {
+      if (w.grupo !== grupo) { grupo = w.grupo; const g = document.createElement('div'); g.className = 'grupo'; g.textContent = grupo; lista.append(g); }
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'web'; b.dataset.slug = w.slug;
+      b.setAttribute('aria-current', String(!!actual && actual.slug === w.slug));
+      b.innerHTML = '<span class="ini" aria-hidden="true"></span><span><b></b><small></small></span>';
+      const ini = b.querySelector('.ini');
+      ini.textContent = w.nombre.replace(/[^A-Za-zÁÉÍÓÚÑ0-9 ]/g, '').split(' ').filter((x) => x.length > 2 || /\d/.test(x)).slice(0, 2).map((x) => x[0]).join('').toUpperCase();
+      ini.style.background = w.color;
+      b.querySelector('b').textContent = w.nombre; b.querySelector('small').textContent = `${w.rubro} · ${w.lugar}`;
+      b.addEventListener('click', () => elegir(w.slug));
+      lista.append(b);
+    });
+  }
+  WEBS.forEach((w) => { const o = document.createElement('option'); o.value = w.slug; o.textContent = `${w.nombre} · ${w.rubro}`; sel.append(o); });
+  sel.addEventListener('change', () => elegir(sel.value));
+  $('buscar').addEventListener('input', (e) => pintarLista(e.target.value));
+
+  // ---- cargar una web en los dos equipos
+  function preparar(iframe, carga) {
+    carga.hidden = false; carga.style.opacity = 1; carga.textContent = 'Cargando la web…';
+    iframe.onload = () => {
+      try {
+        const d = iframe.contentDocument;
+        const st = d.createElement('style');
+        // sin barra de desplazamiento visible y sin desplazamiento suave (para que el recorrido sea parejo)
+        st.textContent = 'html{scrollbar-width:none;scroll-behavior:auto!important}html::-webkit-scrollbar{display:none}';
+        d.head.append(st);
+        iframe.contentWindow.addEventListener('scroll', () => alMover(iframe), { passive: true });
+        ['wheel', 'touchstart', 'keydown'].forEach((ev) => iframe.contentWindow.addEventListener(ev, parar, { passive: true }));
+      } catch (e) { /* si la web no se deja leer, igual se ve */ }
+      carga.style.opacity = 0; setTimeout(() => { carga.hidden = true; }, 300);
+    };
+  }
+  function elegir(slug) {
+    const w = WEBS.find((x) => x.slug === slug) || WEBS[0];
+    if (actual && actual.slug === w.slug) return;
+    parar(); actual = w;
+    $('nombre').textContent = w.nombre;
+    $('detalle').textContent = `${w.rubro} · ${w.lugar}`;
+    $('url').textContent = w.dominio;
+    const abrir = $('b-abrir'); abrir.href = w.url || w.ruta;
+    preparar(fPc, $('carga-pc')); preparar(fCel, $('carga-cel'));
+    fPc.src = w.ruta; fCel.src = w.ruta;
+    sel.value = w.slug;
+    lista.querySelectorAll('.web').forEach((b) => b.setAttribute('aria-current', String(b.dataset.slug === w.slug)));
+    if (location.hash.slice(1) !== w.slug) history.replaceState(null, '', '#' + w.slug);
+  }
+
+  // ---- las dos pantallas se mueven juntas, en proporción al largo de cada una
+  let moviendo = false;
+  const ventana = (f) => { try { return f.contentWindow; } catch (e) { return null; } };
+  const frac = (f) => { const w = ventana(f); const h = w && w.document && w.document.documentElement; if (!h) return 0; return w.scrollY / Math.max(1, h.scrollHeight - w.innerHeight); };
+  const llevar = (f, x) => { const w = ventana(f); const h = w && w.document && w.document.documentElement; if (!h) return; w.scrollTo(0, x * (h.scrollHeight - w.innerHeight)); };
+  function alMover(origen) {
+    if (moviendo || anim) return;
+    const destino = origen === fPc ? fCel : fPc;
+    moviendo = true; llevar(destino, frac(origen));
+    requestAnimationFrame(() => { moviendo = false; });
+  }
+
+  // ---- recorrido automático: baja por toda la web en unos 28 segundos, con las animaciones de la web
+  let anim = null;
+  const bRec = $('b-recorrido');
+  function parar() {
+    if (anim) cancelAnimationFrame(anim); anim = null;
+    bRec.querySelector('span').textContent = 'Recorrer la web';
+    bRec.querySelector('path').setAttribute('d', 'M4 2.5v11l9-5.5z');
+  }
+  function recorrer() {
+    if (anim) { parar(); return; }
+    const guia = equipos.classList.contains('solo-cel') ? fCel : fPc;
+    let f0 = frac(guia); if (f0 > 0.98) { f0 = 0; llevar(fPc, 0); llevar(fCel, 0); }
+    const dur = 28000 * (1 - f0); let t0 = null;
+    bRec.querySelector('span').textContent = 'Pausar';
+    bRec.querySelector('path').setAttribute('d', 'M4 2.5h3v11H4zM9 2.5h3v11H9z');
+    const paso = (t) => {
+      if (t0 === null) t0 = t;
+      const p = Math.min(1, (t - t0) / Math.max(1, dur));
+      const x = f0 + (1 - f0) * p;
+      moviendo = true; llevar(fPc, x); llevar(fCel, x); moviendo = false;
+      if (p < 1) anim = requestAnimationFrame(paso); else parar();
+    };
+    anim = requestAnimationFrame(paso);
+  }
+  bRec.addEventListener('click', recorrer);
+  $('b-arriba').addEventListener('click', () => { parar(); [fPc, fCel].forEach((f) => { const w = ventana(f); if (w) w.scrollTo({ top: 0, behavior: menos ? 'auto' : 'smooth' }); }); });
+
+  // ---- qué equipos se ven
+  document.querySelectorAll('[data-modo]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('[data-modo]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    equipos.classList.remove('solo-pc', 'solo-cel');
+    if (b.dataset.modo !== 'ambos') equipos.classList.add(b.dataset.modo);
+    setTimeout(ajustar, 420);
+  }));
+
+  // ---- ocultar la lista para presentar
+  const bPres = $('b-presenta');
+  bPres.addEventListener('click', () => { const on = app.classList.toggle('presenta'); bPres.textContent = on ? 'Mostrar lista' : 'Ocultar lista'; setTimeout(ajustar, 380); });
+
+  // la transición de tamaño también reajusta
+  equipos.addEventListener('transitionend', ajustar);
+
+  if (matchMedia('(max-width: 860px)').matches) document.querySelector('[data-modo="solo-cel"]').click();
+  pintarLista();
+  const inicio = location.hash.slice(1);
+  elegir(WEBS.some((w) => w.slug === inicio) ? inicio : WEBS[0].slug);
+  addEventListener('hashchange', () => { const s = location.hash.slice(1); if (s) elegir(s); });
+  ajustar();
+})();
+</script>
+</body>
+</html>
