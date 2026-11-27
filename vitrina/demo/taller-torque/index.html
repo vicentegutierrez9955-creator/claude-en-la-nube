@@ -69,11 +69,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 
 
-/* precios que corren */
-.cinta{background:var(--naranjo);color:#1b0d03;overflow:hidden;white-space:nowrap}
-.cinta .pista{display:inline-flex;gap:48px;padding-block:14px;animation:cinta 28s linear infinite;font-family:var(--f-letrero);font-weight:800;font-size:24px;text-transform:uppercase}
-.cinta .pista span::after{content:"•";margin-left:48px}
-@keyframes cinta{to{transform:translateX(-50%)}}
 
 section{padding-block:88px}
 .encab{display:grid;gap:12px;margin-bottom:40px;max-width:720px}
@@ -91,45 +86,6 @@ section{padding-block:88px}
 .precio .monto small{font-size:13px;color:var(--gris);font-weight:500}
 .nota{margin-top:16px;color:var(--gris);font-size:14px}
 
-/* estado del auto */
-.estado{background:var(--asfalto2);border-block:1px solid var(--linea)}
-.panel-estado{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
-.buscador{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.patente{font-family:var(--f-dato);font-weight:700;font-size:28px;letter-spacing:.14em;text-transform:uppercase;width:220px;max-width:100%;padding:10px 16px;border-radius:10px;border:3px solid #161b21;background:#ffffff;color:#111}
-.pista-auto{position:relative;height:70px;margin-bottom:24px}
-.pista-auto .via{position:absolute;left:0;right:0;top:46px;height:6px;border-radius:3px;background:var(--asfalto3)}
-.pista-auto .avance{position:absolute;left:0;top:46px;height:6px;border-radius:3px;background:var(--naranjo);width:0;transition:width 1s cubic-bezier(.4,0,.2,1)}
-.pista-auto .auto{position:absolute;top:8px;left:0;width:64px;transform:translateX(-10%);transition:left 1s cubic-bezier(.4,0,.2,1)}
-.pasos{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.paso{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;padding:14px 16px;border-radius:14px;border:1px solid var(--linea);background:var(--asfalto);transition:border-color .4s,background .4s,opacity .4s;opacity:.5}
-.paso .pto{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--asfalto3);font-weight:800;font-family:var(--f-dato)}
-.paso b{display:block}
-.paso small{color:var(--gris)}
-.paso .hora{font-family:var(--f-dato);font-size:13px;color:var(--gris)}
-.paso.hecho{opacity:1}
-.paso.hecho .pto{background:var(--verde);color:#ffffff}
-.paso.ahora{opacity:1;border-color:var(--naranjo);background:color-mix(in srgb,var(--naranjo) 10%,var(--asfalto))}
-.paso.ahora .pto{background:var(--naranjo);color:#1b0d03;animation:late 1.2s ease-in-out infinite}
-@keyframes late{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--naranjo) 25%,transparent)}}
-.aviso-wa{margin-top:16px;display:flex;gap:12px;align-items:center;background:var(--asfalto);border:1px solid var(--linea);border-radius:14px;padding:12px 14px;font-size:14px;color:var(--gris)}
-.aviso-wa b{color:var(--hueso)}
-
-/* cómo trabajamos */
-.tres{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px}
-.tres article{display:grid;gap:10px;align-content:start}
-.tres .n{font-family:var(--f-letrero);font-size:84px;font-weight:900;line-height:.8;color:transparent;-webkit-text-stroke:2px var(--naranjo)}
-.tres h3{font-size:30px}
-.tres p{margin:0;color:var(--gris)}
-
-/* reseñas */
-.nota-google{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:28px}
-.nota-google .grande{font-family:var(--f-letrero);font-size:96px;font-weight:900;line-height:.8;color:var(--amarillo)}
-.nota-google span{color:var(--gris)}
-.resenas{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-.resena{border:1px solid var(--linea);border-radius:18px;padding:22px;display:grid;gap:10px;background:var(--asfalto2)}
-.resena .est{color:var(--amarillo);letter-spacing:2px}
-.resena p{margin:0}
-.resena footer{font-size:13px;color:var(--gris)}
 
 /* ubicación */
 .ubica{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
@@ -171,57 +127,6 @@ section{padding-block:88px}
 .confianza b{font-size:20px;color:var(--amarillo)}
 .confianza span{font-size:12px;color:var(--gris)}
 
-/* síntomas */
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.chip{font:700 15px var(--f-texto);color:var(--hueso);background:var(--asfalto2);border:1px solid var(--linea);border-radius:999px;padding:11px 18px;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.chip:hover{transform:translateY(-2px);border-color:var(--naranjo)}
-.chip[aria-pressed="true"]{background:var(--naranjo);border-color:var(--naranjo);color:#1b0d03}
-.diag{box-shadow:0 12px 30px rgba(22,27,33,.06);display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--asfalto2);border:1px solid var(--linea);border-radius:22px;padding:28px}
-.diag.cambia{animation:cambia .55s cubic-bezier(.2,.8,.2,1)}
-@keyframes cambia{from{opacity:.2;transform:translateY(14px) scale(.99)}}
-.diag h3{font-size:36px}
-.filas{display:grid;gap:10px;margin:14px 0 18px}
-.filas div{display:grid;grid-template-columns:120px 1fr;gap:12px;font-size:15px}
-.filas small{font-family:var(--f-dato);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);padding-top:2px}
-.filas .monto{font-family:var(--f-dato);font-weight:700;color:var(--naranjo-t);font-size:18px}
-
-
-/* equipo, marcas, pagos */
-.equipo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.persona{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--asfalto2);border:1px solid var(--linea);border-radius:18px;padding:18px}
-.avatar{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-letrero);font-size:26px;font-weight:900;background:var(--asfalto3);color:var(--amarillo);position:relative}
-.avatar::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--naranjo);animation:gira 3s linear infinite}
-@keyframes gira{to{transform:rotate(360deg)}}
-.persona b{display:block;font-size:17px}
-.persona span{font-size:14px;color:var(--gris)}
-.marcas{overflow:hidden;white-space:nowrap;border-block:1px solid var(--linea);margin-top:40px}
-.marcas .pista2{display:inline-flex;gap:56px;padding-block:18px;animation:cinta-inv 32s linear infinite;font-family:var(--f-letrero);font-size:30px;font-weight:800;text-transform:uppercase;color:var(--gris)}
-@keyframes cinta-inv{from{transform:translateX(-50%)}to{transform:none}}
-.dos-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
-.caja{background:var(--asfalto2);border:1px solid var(--linea);border-radius:18px;padding:22px;display:grid;gap:8px}
-.caja h3{font-size:28px}
-.caja p{margin:0;color:var(--gris)}
-.medios{display:flex;gap:8px;flex-wrap:wrap}
-.medios span{font-family:var(--f-dato);font-size:12px;border:1px solid var(--linea);border-radius:6px;padding:4px 8px;color:var(--hueso)}
-
-/* presupuesto y preguntas */
-.presu{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-.form{display:grid;gap:12px;background:var(--asfalto2);border:1px solid var(--linea);border-radius:22px;padding:24px}
-.form label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--gris)}
-.form input,.form textarea,.form select{font:16px var(--f-texto);color:var(--hueso);background:var(--asfalto);border:1px solid var(--linea);border-radius:10px;padding:11px 12px;width:100%}
-.form .fila{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.foto-sub{display:flex;gap:12px;align-items:center;border:1px dashed var(--linea);border-radius:10px;padding:12px;cursor:pointer}
-.foto-sub img{width:56px;height:56px;object-fit:cover;border-radius:8px}
-.canales{display:flex;gap:16px;flex-wrap:wrap;font-weight:600;color:var(--hueso)}
-.listo{background:color-mix(in srgb,var(--verde) 14%,var(--asfalto));border:1px solid var(--verde);border-radius:14px;padding:14px;display:grid;gap:10px}
-.faq{display:grid;gap:10px}
-.faq details{border:1px solid var(--linea);border-radius:14px;background:var(--asfalto2);padding:0 18px}
-.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:800;display:flex;justify-content:space-between;gap:12px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-family:var(--f-dato);color:var(--naranjo);transition:transform .25s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{margin:0 0 16px;color:var(--gris)}
-.faq details[open] p{animation:aparece .4s ease}
 
 
 /* fotos */
@@ -233,27 +138,6 @@ section{padding-block:88px}
 @keyframes sube-cita{from{opacity:0;transform:translateY(20px)}}
 .cita img{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--naranjo)}
 .cita b{display:block;font-size:12px;color:var(--gris);margin-top:2px;font-weight:600}
-.foto-sint{width:220px;aspect-ratio:4/3;border-radius:16px;overflow:hidden;max-width:100%}
-.foto-sint img{width:100%;height:100%;object-fit:cover;display:block}
-.diag.cambia .foto-sint img{animation:foto-entra .7s ease both}
-@keyframes foto-entra{from{opacity:0;transform:scale(1.08)}}
-.fotos-wa{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.chat-wa{color:#e9edef;box-shadow:0 24px 50px rgba(22,27,33,.25);background:#0b141a;border:1px solid var(--linea);border-radius:22px;padding:0 0 14px;display:grid;gap:8px;overflow:hidden;max-width:440px;justify-self:center;width:100%}
-.chat-cab{display:flex;gap:10px;align-items:center;background:#1f2c33;padding:12px 14px}
-.chat-cab img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.chat-cab small{display:block;color:var(--gris);font-size:12px}
-.msg{max-width:82%;padding:8px 10px 18px;border-radius:12px;font-size:14px;line-height:1.45;position:relative;margin:0 12px}
-.msg span{position:absolute;right:8px;bottom:3px;font-size:11px;color:#8696a0}
-.msg.yo{justify-self:end;background:#005c4b}
-.msg.ellos{justify-self:start;background:#1f2c33}
-.msg.foto img{display:block;width:100%;height:auto;border-radius:8px;margin-bottom:6px;aspect-ratio:3/2;object-fit:cover}
-.chat-wa.visto .msg{animation:burbuja .45s cubic-bezier(.2,.8,.2,1) both}
-.chat-wa.visto .msg:nth-of-type(2){animation-delay:.6s}.chat-wa.visto .msg:nth-of-type(3){animation-delay:1.3s}.chat-wa.visto .msg:nth-of-type(4){animation-delay:1.9s}.chat-wa.visto .msg:nth-of-type(5){animation-delay:2.4s}
-@keyframes burbuja{from{opacity:0;transform:translateY(10px) scale(.96)}}
-.paso-foto{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:16px;margin-bottom:6px;display:block}
-.foto-taller{margin:0 0 22px;border-radius:22px;overflow:hidden;aspect-ratio:21/9;max-width:100%}
-.foto-taller img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block}
-img.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--naranjo)}
 
 
 /* ---- v4: lo hecho a mano ---- */
@@ -261,14 +145,6 @@ img.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px 
 .sello{position:absolute;top:-16px;left:-20px;z-index:2;background:var(--naranjo);color:#1b0d03;font-family:var(--f-letrero);font-weight:900;text-transform:uppercase;font-size:24px;line-height:.95;padding:14px 16px;border-radius:14px;transform:rotate(-6deg);box-shadow:0 14px 30px rgba(22,27,33,.25);animation:sello .5s cubic-bezier(.2,1.4,.4,1) .9s both}
 .sello small{display:block;font-family:var(--f-dato);font-size:13px;font-weight:700;margin-top:4px;text-transform:none}
 @keyframes sello{from{opacity:0;transform:rotate(-20deg) scale(.6)}}
-.frase{background:var(--hueso);color:#f2f4f6}
-.frase .ancho{padding-block:112px;display:grid;gap:28px}
-.frase blockquote{margin:0;font-family:var(--f-letrero);font-weight:900;text-transform:uppercase;font-size:clamp(40px,6.6vw,96px);line-height:1;max-width:17ch;text-wrap:balance}
-.frase blockquote em{font-style:normal;color:var(--naranjo)}
-.firma{display:flex;gap:14px;align-items:center}
-.firma img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--naranjo)}
-.firma b{display:block}
-.firma span{color:#aab3bd;font-size:14px}
 .icono{width:34px;height:34px;stroke:var(--naranjo-t);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .precio.destacado{grid-column:span 2;grid-row:span 2;background:var(--hueso);color:#f2f4f6;padding:32px;gap:12px}
 .precio.destacado h3{font-size:clamp(40px,4.6vw,64px)}
@@ -288,29 +164,6 @@ img.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px 
 .ad dt{font-family:var(--f-dato);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gris);padding-top:3px}
 .ad dd{margin:0}
 .ad dd.res{font-weight:800;color:var(--verde)}
-.tres{grid-template-columns:1.5fr 1fr 1fr !important;align-items:start}
-.tres article:first-child .paso-foto{aspect-ratio:4/3}
-.dueno{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:center}
-.dueno-foto{position:relative;max-width:100%}
-.dueno-foto img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:26px}
-.placa{position:absolute;right:-28px;bottom:32px;background:var(--asfalto2);border:1px solid var(--linea);border-radius:16px;padding:14px 16px;box-shadow:0 18px 40px rgba(22,27,33,.18);display:grid;gap:2px}
-.placa b{font-family:var(--f-letrero);font-size:28px;text-transform:uppercase;line-height:1}
-.placa span{font-size:13px;color:var(--gris)}
-.voz{font-size:19px;line-height:1.65;display:grid;gap:14px}
-.voz p{margin:0}
-.equipo3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:36px}
-.banda{position:relative;margin-block:72px 0}
-.banda img{display:block;width:100%;height:clamp(280px,42vw,560px);object-fit:cover;object-position:center 35%}
-.banda .sobre{position:absolute;left:0;right:0;bottom:0;padding-block:28px;background:linear-gradient(0deg,rgba(15,18,22,.78),transparent)}
-.banda .sobre p{margin:0;color:#fff;font-family:var(--f-letrero);font-weight:900;text-transform:uppercase;font-size:clamp(30px,4.4vw,60px);line-height:1;max-width:20ch}
-.clientes{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:center;margin-top:16px}
-.cl{color:var(--gris);opacity:.85;transition:opacity .2s,color .2s;white-space:nowrap}
-.cl:hover{opacity:1;color:var(--hueso)}
-.cl.c1{font-family:var(--f-letrero);font-weight:900;font-size:26px;text-transform:uppercase;letter-spacing:.04em}
-.cl.c2{font-family:Georgia,serif;font-style:italic;font-size:24px}
-.cl.c3{font-family:var(--f-dato);font-weight:700;font-size:19px;letter-spacing:-.02em}
-.cl.c4{font-family:var(--f-texto);font-weight:800;font-size:21px;text-transform:lowercase}
-.cl.c5{font-family:var(--f-letrero);font-weight:700;font-size:24px;border:2px solid currentColor;padding:2px 10px;border-radius:6px}
 .g-widget{background:var(--asfalto2);border:1px solid var(--linea);border-radius:22px;padding:24px;box-shadow:0 12px 30px rgba(22,27,33,.06);display:grid;gap:20px}
 .g-cab{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:space-between}
 .g-nota{display:flex;gap:14px;align-items:center}
@@ -476,7 +329,7 @@ img.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px 
     <span class="sello" aria-hidden="true">Pastillas<br>en 2 horas<small>desde $39.990</small></span>
     <figure class="foto-hero">
       <img src="https://images.pexels.com/photos/6870307/pexels-photo-6870307.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Raúl cambiando las pastillas de freno de un auto en el elevador" width="1400" height="933" fetchpriority="high">
-      <figcaption class="cita"><img src="data:image/webp;base64,UklGRpYGAABXRUJQVlA4IIoGAADQJACdASpwAHAAPrFInEmnJCKhMFZuUOAWCUAY7H5KJh638g/m4PZse2e+6Na8HJ47ibhI8n3gzgZk/GYOm7D1ECA6PgTyQgr3OzzlcZUuG1vPc6TYtv0ItE05dbKkegsG07ul/fGV7arNNtt4WalPq+wk02TmVCj9E+Kb/sJ0HPGrbJCCHHxs8l2bUov59Rpq8o4cl5kz+ZCqM+Ntg95dYcSyXD6AoeVBiVL78KuflVTWucwe8ByelvELLmcLSoiXaP8QX4tSbDNdbj+/aaa74ao5S8RZX4nS26uQf4ItWcBgVnun/7dn1r4JYmG0+XIrVHR3CQNc989Ri5ILJel2w3h759XE33sA/zCNQJI/PwATdHelJW3nWMfbVdk4Wsu0wF4QnflVbodPgXa1114A/vljkSWAjfVmPr5FT4tav6QDRRo+QGvcpuuZwIowFrAG+skwp8j04UBiqVHcxNYhtcuu4TjnV6knx+lgC9jl4N0J65GdgruVU1oci+bWtqLW241n8FEONXziavL0jva3AYAZyJh8ZIiSwfuRGGXexCqPmSbjwnYrEt00WdHyVLu35KDoKEDhGPU3Zxe+unlokrbd8Av3vlJGC87BGsO6lZ+SaAw1YhP6ptgHv0JrHzjyvzRsjwme3BaCSdWE/2MvlnAB6WHtO+NC8gDQYEaL9uRQf1y4zyEP25b5Md0k3oTrVSfCDoU+McpSQlya64sr1ODYBJiVUYjgkKLIiN1RopTEBlFTPfYLenXkFzQLNZ5b7oac8nYFw+MMhSHwsu9jr1aOwqHCXXzjSRxujwgr4juocuTlg5s+sThlKqJHkJfEgia7VXCVvbcRrKR36F1pCQRxe738CeyAeKBtj+fik/168Ux2iP2TijQdNm17PKpf+0ruR+UpOzLxQEz0I13CoDAQNvEdgUojTx3VRvKpmZDmo5zExtqncEz4m3EdGmV3zW+Na6XDj8/DKxemTuS1SUyR1UWHYI68H9hMBV102dRg70D5VDpdU6b59gSZa7K/h3jzu+eiC20NXhC6slhuU6KV5Wp9uiyvRyST4SyQIwBh3lp/hx2lW+ub6E6QqH50+f5GfNnXrzQwAr1Wo5TmT9z6Lm7TttRRiVc4F1BcYVd1QUdY/VNG/dx7QR6R3qdshDOq/DhWSfdMBijuUywXa4mqInC6f7jc+AAdq04iU3kLiijIPZSHXust7vrPL9hQESK8W5BiFvR6v4os9MrhUY7dfkuqRYd5jbzYcjRkdbqAonEvKLjPi6VzIFh4m2FCXBowHvV6vnf43lOKasge9VNQSvXwoNKwJWalOFrhnVEeoBGEV8GiMCRU7Ye7Plq6H0whQqNaMAUnfFxoPxrNxxbOrHV0Sz4AtJssEXRfN1JuLYcVJO7AXZzq+RqOCanVOEPvHIToEVUUNO6wmtCrQPBYTbpIQsPGPIvrxr5l0j848mHOWNxrqQGzzCPcJah4AJ5Kd17R6LOCu7FTl+xmqYeH2k4LOnWl6AXYeB1/BLnqs4oPJTrD+3lCEaemQZfVwfLJ9zYpgzgWTZVWfHEGbudLStEJZdFtGR/jvTefHqEYtZFjPZ7U36tGOU07w/GXp8xkxYrQbeQEpo4TK5YSXqbTkyYjL9n9SUn7oErNsLYByAVLYrXVq/sokulkSWf25W2q7GAOjZfkNY7EpCV54Rpujn+OWNvEK/kqW/tgNu2Yb2HIdrkI6bffp4zch1pz9Wf5mUQQvg8ze2HorlXpe1F7o6OVoY3dlNuM2DErKWTk4wV6iENXcyFojEiyCO+89DO/1C4OIcKh9iEtVEe8dziXwC08VTnD3gKB88EOsVg5HSPXjUkdadHN4nBHbytRQ3wccMljzjbzolWFqWAjHeVFvE3lWfrhtRDkdcgb7Gilsx8Z/oTC7QjUS12t90YiCS8Uy38iK6FKSpnYRha3pHgqep1EczqR6aSiKwELuHWmHIl9L0i1aV3JdkZ4s/Gor1L/NEUX+Po4CF9dHP7hzPdfN/pOGidlZafowQ6+zXXghsOmUgkWX0naoQ59FdXC0yUy4YuiTPkgawnxNg8BrPBFmLHco4v8pFVjNlYeA8aphvUMwEVq0WJxuFkCQQpXlgxpx08sJHPpdS2OHSit19Qdhpczwa1Dots1vtxGd3UOPDcKIj/qc2dbVp4ITWRjuf5qGVGas7rVcHY2GziuLlrxEgsYhKgZS0FVoN/FmfW0CNXW9RAAAAA=" alt="" width="56" height="56"><span>"Antes de cambiar cualquier pieza, te mando foto y precio."<b>Raúl Soto · dueño del taller</b></span></figcaption>
+      <figcaption class="cita"><img src="https://images.pexels.com/photos/6870324/pexels-photo-6870324.jpeg?auto=compress&cs=tinysrgb&w=640" style="object-view-box:inset(6% 44% 56% 38%)" alt="" width="56" height="56"><span>"Antes de cambiar cualquier pieza, te mando foto y precio."<b>Raúl Soto · dueño del taller</b></span></figcaption>
     </figure>
     </div>
   </div>
